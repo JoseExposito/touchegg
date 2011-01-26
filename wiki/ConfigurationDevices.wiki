@@ -1,0 +1,16 @@
+To facilitate Touchégg settings to other users, you can send me a mail with your touchpad name/pc name and your configuration to run Touchégg.
+
+ * *Apple Magic Trackpad:*
+
+ /etc/X11/xorg.conf
+ {{{
+ [...]
+ # Apple Magic Trackpad
+ Section "InputClass"
+      Identifier "Magic Trackpad"
+      MatchUSBID "05ac:030e"
+      Driver "evdev"
+ EndSection
+ [...]
+ }}}
+ All gestures and actions work well

@@ -14,3 +14,23 @@ To facilitate Touchégg settings to other users, you can send me a mail with you
  [...]
  }}}
  All gestures and actions work well
+
+ * *Asus eeepc 1000h with buildin elantech trackpad*
+
+ Changed the driver from "synaptics" to "evdev" in the file 50-synaptics.conf found in /usr/share/X11/xorg.conf.d
+
+ After it looked like this
+ {{{
+ Section "InputClass"
+    Identifier "touchpad catchall"
+    Driver "evdev"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+ EndSection
+ }}}
+
+ Then restarted and manually started touchegg alt-f2, "touchegg" or start from terminal- so you can see the recognized finger taps
+ It worked, but:
+ Sadly the evdev driver didn't support more than 3 finger tap, so i had no improvement to the synaptics driver
+
+ Thanks [http://code.google.com/p/touchegg/issues/detail?id=3 mbuess]

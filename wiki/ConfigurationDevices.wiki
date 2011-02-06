@@ -9,14 +9,12 @@ configuration to use evdev driver and _restart X._
  Simply edit the /usr/share/X11/xorg.conf.d/60-magictrackpad.conf file and
  change the driver to evdev:
  {{{
- [...]
  # Apple Magic Trackpad
  Section "InputClass"
       Identifier "Magic Trackpad"
       MatchUSBID "05ac:030e"
       Driver "evdev"
  EndSection
- [...]
  }}}
  All gestures are detected and works fine.
 

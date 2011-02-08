@@ -1,0 +1,14 @@
+ * *Touchegg v0.1:*
+
+ [http://touchegg.googlecode.com/files/touchegg_0.1-1_i386.deb - Descargar paquete DEB para Ubuntu 10.10 (i386)]
+
+ [http://touchegg.googlecode.com/files/touchegg-0.1.tar.gz - Descargar código fuente]
+
+<br/>
+<hr>
+<br/>
+
+Si quieres puedes hacer una donación para colaborar con el proyecto.... si no
+simplemente descarga lo que quieras, es gratis (y libre!)
+
+[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FT2KS37PVG8PU&lc=US&item_name=Egg%20Software&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif] 

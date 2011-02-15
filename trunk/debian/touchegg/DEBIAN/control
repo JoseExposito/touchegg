@@ -1,0 +1,16 @@
+Package: touchegg
+Version: 0.1-1
+Architecture: i386
+Maintainer: José Expósito <jose.exposito89@gmail.com>
+Installed-Size: 156
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libutouch-geis1 (>= 1.0.8), libx11-6
+Section: unknown
+Priority: optional
+Homepage: https://code.google.com/p/touchegg/
+Description: Touchégg - Multitouch gesture recognizer
+ Touchégg is a multitouch gesture recognizer for GNU/Linux, written in C++, with
+ Qt and utilizing uTouch-geis library. It allows users to define what actions
+ are initiated when a multi-touch gesture is made.
+ Providing the desired gesture is recognised by Touchégg you can assign one of a
+ number of window-related actions to it, including maximize or minimize windows,
+ resize apps, show the desktop, etc.

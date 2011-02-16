@@ -1,0 +1,46 @@
+= Introducción =
+
+A continuación puede ver una serie de formas que tiene par colaborar fácilmente
+con Touchégg, como puede ver colaborar es muy fácil, ¡anímese!
+
+Recuerde que puede puede ponerse en contacto con el desarrollador del proyecto
+fácilmente en la pestaña [https://code.google.com/p/touchegg/issues/list Issues]
+
+= Colaborando con las traducciones =
+
+Si quieres mejorar alguna traducción toda ayuda será bienvenida.
+
+= Enviando sugerencias =
+
+¿Es usuario de Touchégg y cree que al proyecto le falta algo?
+¿Algun gesto o acción que consedere útil? No lo dude, ¡hágaselo saber al
+desarrollador del proyecto!
+
+
+= Reportando errores =
+
+¿Ha encontrado algún fallo en la ejecución de Touchégg? ¡Reporte el bug!
+
+
+= Enviando su configuración =
+
+[ConfigureDevices Compartir su configuración] es una buena manera de ayudar a
+otros usuarios con su mismo trackpad u ordenador.
+
+
+= Dando a conocer Touchégg =
+
+Si tienes un blog, una página web o similares una buena forma de ayudar al
+proyecto es dándolo a conocer  a más usuarios. ¡Anímate!
+
+
+= Haciendo una donación =
+
+Por último si no puedes ayudar en nada de lo anterior, siempre puedes hacer una
+donación, aunque sean unos pocos céntimos para ayudar a que el proyecto siga
+adelante.
+
+<br/>
+
+[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FT2KS37PVG8PU&lc=US&item_name=Egg%20Software&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif]
+

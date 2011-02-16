@@ -1,0 +1,13 @@
+= Acerca de Touchégg =
+
+Touchégg es sofware libre, licenciado bajo GPL v3.
+
+Autor - José Expósito
+
+
+= Licencia GPL =
+
+Puede encontrar la descripción de la licencia en:
+http://www.gnu.org/copyleft/gpl.html
+
+[http://www.gnu.org/graphics/gplv3-127x51.png]

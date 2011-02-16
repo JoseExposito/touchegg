@@ -1,8 +1,0 @@
- * -> [Main Main page]
- * -> [AllGestures All gestures supported by Touchégg]
- * -> [ConfigureDevices How to configure your trackpad]
- * -> [CompileSourceCode How to compile source code]
- * -> [HowToHelp How to help with Touchégg project]
- * -> [ProjectMilestones Milestones]
- * -> [Changelog Changelog]
- * -> [About About Touchégg]

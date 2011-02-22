@@ -1,0 +1,28 @@
+= Introduction =
+
+In the [https://code.google.com/p/touchegg/wiki/Downloads?tm=2 Downloads] tab
+you can see two types of files, DEB packages and source code.
+
+In general, download DEB package will be most suitable for most users, since
+allows easy  installation and uninstallation, usually just a double click.
+
+However there may be other users such as developers, users with an architecture
+which is not available a DEB package or just curious users, who want to compile
+the source code.
+
+
+= How to compile source code? =
+
+Compile the source code is very simple, just follow these three steps:
+
+ * 1 - [https://code.google.com/p/touchegg/wiki/Downloads?tm=2 Download] and unzip the source code:
+ * 2 - Install Touchégg dependences, open a terminal and type:
+ {{{
+ $ sudo apt-get install build-essential libqt4-dev utouch libx11-6
+ }}}
+ * 3 - Compile and install Touchégg:
+ {{{
+ $ qmake
+ $ make
+ $ sudo make install
+ }}}

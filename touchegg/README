@@ -1,0 +1,56 @@
+1 - Install Touchégg dependences:
+    $ sudo apt-get install build-essential libqt4-dev utouch libx11-6
+
+2 - Compile and install Touchégg:
+    $ qmake
+    $ make
+    $ sudo make install
+
+3 - Go to your /usr/share/X11/xorg.conf.d/ path and check if exits any file like
+    "nn-<trackpad name>.conf".
+    If exits change the Driver "<driver name>" line to Driver "evdev".
+    For example, this is my 60-magictrackpad.conf file:
+
+    Section "InputClass"
+         Identifier "Magic Trackpad"
+         MatchUSBID "05ac:030e"
+         Driver "evdev"
+    EndSection
+
+4 - If  not  exits  you need  edit your  /etc/X11/xorg.conf  file and  add  this
+    content, obiusly change the Identifier. Check this:
+    https://code.google.com/p/touchegg/wiki/ConfigurationDevices
+
+5 - If /etc/X11/xorg.conf file don't exits create it:
+    Press CTRL+ALT+F1 (Important! press CTRL+ALT+F7 to return to the X mode) and
+    login.
+    Run "sudo service gdm stop" for Gnome or "sudo service kdm stop" for KDE.
+    Run "sudo Xorg -configure" and "sudo mv xorg.conf.new /etc/X11/xorg.conf".
+    Reestart X with "sudo service gdm start" or "sudo service kdm start"
+    Edit the /etc/X11/xorg.conf like in step 4.
+
+6 - Run Touchégg:
+    $ touchegg
+
+7 - Make a gesture, for example drag two fingers over your trackpad. If all
+    works fine, the name of the gesture will appear.
+
+8 - To use your own configuration:
+    $ mkdir $HOME/.touchegg
+    $ cp /usr/share/touchegg/touchegg.conf $HOME/.touchegg/touchegg.conf
+
+    And edit it... GUI in progress ;)
+
+
+
+--------------------------------------------------------------------------------
+
+Activar efectos KWin con RUN_COMMAND:
+
+Para ver los distintos efectos:
+
+ $ qdbus org.kde.kglobalaccel /component/kwin shortcutNames
+
+Pudiendose activar, por ejemplo, el expose:
+
+ $ qdbus org.kde.kglobalaccel /component/kwin invokeShortcut Expose

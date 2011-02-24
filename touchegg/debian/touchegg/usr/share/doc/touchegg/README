@@ -1,0 +1,14 @@
+ 
+Compilation and installation:
+$ qmake
+$ make
+$ sudo make install
+
+To run:
+$ touchegg &
+
+To use your own configuration:
+$ mkdir $HOME/.touchegg
+$ cp /usr/share/touchegg/touchegg.conf $HOME/.touchegg/touchegg.conf
+
+And edit it... GUI in progress ;)

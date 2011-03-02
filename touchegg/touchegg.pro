@@ -13,3 +13,4 @@ config.files = installation/touchegg.conf
 INSTALLS += target config
 
 include(src/touchegg/touchegg.pri)
+erttry

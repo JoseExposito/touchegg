@@ -13,3 +13,4 @@ Así pues, Touchégg es un reconocedor de gestos multitáctiles escrito en C++ h
 
 Mediante un sencillo archivo de configuración podrá asociar una acción a un determinado gesto, pudiendo de esta manera, mediante simples gestos sobre su trackpad, maximizar o minimizar ventanas, cambiar su tamaño, mostrar el escritorio o emular todas las funciones del ratón, entre otras opciones.
 
+ff

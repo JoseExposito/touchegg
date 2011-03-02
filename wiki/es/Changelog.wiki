@@ -1,0 +1,23 @@
+= Introducción =
+
+A continuación puede ver una lista con los cambios que se han ido produciendo
+entre las distintas versiones de Touchégg.
+
+= Changelog =
+
+ * *Touchégg v0.1* (23/01/2011)
+ Versión inicial, soporte para los siguientes gestos:
+  * TAP   - Con 2, 3 y 4 dedos
+  * PINCH - Con 3 dedos
+  * DRAG  - Con 3, 4 y 5 dedos
+ Soporte para las siguientes acciones:
+  * RIGHT_BUTTON_CLICK
+  * MIDDLE_BUTTON_CLICK
+  * MOUSE_WHEEL_UP
+  * MOUSE_WHEEL_DOWN
+  * MINIMIZE_WINDOW
+  * MAXIMIZE_RESTORE_WINDOW
+  * CLOSE_WINDOW
+  * RESIZE_WINDOW
+  * SHOW_DESKTOP
+  * CHANGE_DESKTOP

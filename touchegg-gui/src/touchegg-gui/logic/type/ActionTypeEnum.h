@@ -39,6 +39,7 @@ class ActionTypeEnum : public QObject {
          * Enumerated type with supported actions.
          */
         enum ActionType {
+            NO_ACTION,
             MOUSE_MOVE,
             RIGHT_BUTTON_CLICK,
             MIDDLE_BUTTON_CLICK,

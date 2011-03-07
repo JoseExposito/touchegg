@@ -38,7 +38,6 @@ GestureConfigWidget::GestureConfigWidget(
     this->configButton = new QPushButton();
     this->configButton->setMaximumWidth(32);
     this->configButton->setMinimumWidth(32);
-    //this->configButton->setIcon(QIcon::fromTheme("document-properties"));
     this->configButton->setIcon(QIcon::fromTheme("configure"));
 
     // Colocamos los componentes en el formulario
@@ -50,6 +49,10 @@ GestureConfigWidget::GestureConfigWidget(
     this->setFrameShape(QFrame::StyledPanel);
     this->setFrameShadow(QFrame::Raised);
     this->setLayout(layout);
+
+    // Conectamos signals y slots
+    connect(this->allowedActionsCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(actionChanged(int)));
 }
 
 GestureConfigWidget::~GestureConfigWidget() {
@@ -58,19 +61,19 @@ GestureConfigWidget::~GestureConfigWidget() {
     delete this->configButton;
 }
 
-
 // ************************************************************************** //
-// **********                      GET/SET/IS                      ********** //
+// **********                     PRIVATE SLOTS                    ********** //
 // ************************************************************************** //
 
-GestureTypeEnum::GestureType GestureConfigWidget::getGestureType() const {
-    return this->gestureType;
-}
+void GestureConfigWidget::actionChanged(int newAction) const {
+    // Construimos el transfer con los nuevos datos
+    QString actionText = this->allowedActionsCombo->itemText(newAction);
+    ActionTypeEnum::ActionType action = (newAction == 0)
+            ? ActionTypeEnum::NO_ACTION
+            : ActionTypeEnum::getEnum(actionText);
+    GestureTransfer transfer(this->gestureType, action, ""); // TODO this->configForm.getSettings();
 
-ActionTypeEnum::ActionType GestureConfigWidget::getAsociatedAction() const {
-    return this->asociatedAction;
-}
-
-QString GestureConfigWidget::getActionSettings() const {
-    return this->actionSettings;
+    // Actualizamos la configuración del gesto
+    GuiController* guiController = GuiController::getInstance();
+    guiController->execute(UPDATE_GESTURE, &transfer);
 }

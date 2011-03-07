@@ -62,12 +62,14 @@ class GuiController {
          * @~spanish
          * Realiza una acción dependiendo del tipo de evento que reciba.
          * @param event El evento.
+         * @param data  Datos asociados al gesto.
          *
          * @~english
          * Executes an action depending on the type of event that receive.
          * @param event The event.
+         * @param data  Data associated to the gesture.
          */
-        virtual void execute(GuiEvent event) const = 0;
+        virtual void execute(GuiEvent event, void* data) const = 0;
 
 };
 

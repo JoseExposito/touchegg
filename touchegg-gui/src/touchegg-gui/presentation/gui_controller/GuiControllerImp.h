@@ -16,6 +16,7 @@
 #define GUICONTROLLERIMP_H
 
 #include "src/touchegg-gui/presentation/gui_controller/GuiController.h"
+#include "src/touchegg-gui/logic/factory/LogicFactory.h"
 
 /**
  * @~spanish
@@ -28,7 +29,7 @@ class GuiControllerImp : public GuiController {
 
     public:
 
-        void execute(GuiEvent event) const;
+        void execute(GuiEvent event, void* data) const;
 
 };
 

@@ -18,6 +18,9 @@
 #include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/logic/type/GestureTypeEnum.h"
 #include "src/touchegg-gui/logic/type/ActionTypeEnum.h"
+#include "src/touchegg-gui/presentation/gui_controller/GuiController.h"
+#include "src/touchegg-gui/presentation/gui_event/GuiEvent.h"
+#include "src/touchegg-gui/logic/transfer/GestureTransfer.h"
 
 /**
  * @~spanish
@@ -42,24 +45,6 @@ class GestureConfigWidget : public QFrame {
          * Gesture that set up the widget.
          */
         GestureTypeEnum::GestureType gestureType;
-
-        /**
-         * @~spanish
-         * Acción asociada al gesto.
-         *
-         * @~english
-         * Action associated with the gesture.
-         */
-        ActionTypeEnum::ActionType asociatedAction;
-
-        /**
-         * @~spanish
-         * Configuración de la acción.
-         *
-         * @~english
-         * Action settings.
-         */
-        QString actionSettings;
 
         //----------------------------------------------------------------------
 
@@ -90,6 +75,23 @@ class GestureConfigWidget : public QFrame {
          */
         QPushButton* configButton;
 
+        //ConfigForm* configForm;
+
+    private slots:
+
+        /**
+         * @~spanish
+         * Se llama cada vez que la acción seleccionada en el combo box cambia,
+         * actualizando la configuración.
+         * @param newAction Nueva acción asociada al gesto.
+         *
+         * @~english
+         * It is called whenever the action selected in the combo box changes,
+         * updating the configuration.
+         * @param newAction New action associated to the gesture.
+         */
+        void actionChanged(int newAction) const;
+
     public:
 
         /**
@@ -116,42 +118,6 @@ class GestureConfigWidget : public QFrame {
          * Destructor.
          */
         ~GestureConfigWidget();
-
-        //----------------------------------------------------------------------
-
-
-        /**
-         * @~spanish
-         * Devuelve el gesto que configurará el widget.
-         * @return El gesto.
-         *
-         * @~english
-         * Returns the gesture that set up the widget.
-         * @return The gesture.
-         */
-        GestureTypeEnum::GestureType getGestureType() const;
-
-        /**
-         * @~spanish
-         * Devuelve la acción asociada al gesto.
-         * @return La acción.
-         *
-         * @~english
-         * Returns the action associated with the gesture.
-         * @return The action.
-         */
-        ActionTypeEnum::ActionType getAsociatedAction() const;
-
-        /**
-         * @~spanish
-         * Devuelve la configuración de la acción.
-         * @return La configuración.
-         *
-         * @~english
-         * Returns the action settings.
-         * @return The settings.
-         */
-        QString getActionSettings() const;
 
 };
 

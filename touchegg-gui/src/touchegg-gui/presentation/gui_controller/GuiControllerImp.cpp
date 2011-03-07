@@ -18,14 +18,27 @@
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void GuiControllerImp::execute(GuiEvent event) const {
+void GuiControllerImp::execute(GuiEvent event, void* data) const {
     switch (event) {
     case READ_GENERAL_PROPERTY:
+        break;
+
     case UPDATE_GENERAL_PROPERTY:
+        break;
+
     case READ_GESTURE:
-    case UPDATE_GESTURE:
+        break;
+
+    case UPDATE_GESTURE: {
+        LogicFactory* factory = LogicFactory::getInstance();
+        Facade* facade = factory->createFacade();
+        GestureTransfer* gt = (GestureTransfer*) data;
+        facade->updateGesture(*gt);
+        delete facade;
+        break;
+    }
+
     case COMMIT_DATA:
-    default:
         break;
     }
 }

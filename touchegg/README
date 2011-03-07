@@ -1,0 +1,14 @@
+1 - Compile and install Touchégg:
+    https://code.google.com/p/touchegg/wiki/CompileSourceCode
+
+2 - Configure your device:
+    http://code.google.com/p/touchegg/wiki/ConfigureDevices
+
+3 - Run Touchégg:
+    $ touchegg
+
+4 - Make a gesture, for example drag two fingers over your trackpad. If all
+    works fine, the name of the gesture will appear.
+
+5 - To use your own configuration edit $HOME/.touchegg/touchegg.conf
+    GUI in progress ;)

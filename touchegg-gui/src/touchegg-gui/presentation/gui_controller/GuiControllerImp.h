@@ -29,7 +29,7 @@ class GuiControllerImp : public GuiController {
 
     public:
 
-        void execute(GuiEvent event, void* data) const;
+        void* execute(GuiEvent event, void* data) const;
 
 };
 

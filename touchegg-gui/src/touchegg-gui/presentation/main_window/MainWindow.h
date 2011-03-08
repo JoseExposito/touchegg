@@ -22,6 +22,13 @@ class MainWindow : public QMainWindow {
         ~MainWindow();
 
 
+
+    private slots:
+        void on_applyButton_clicked();
+
+    protected:
+        void closeEvent(QCloseEvent* /*event*/);
+
 };
 
 #endif // MAINWINDOW_H

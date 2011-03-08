@@ -54,8 +54,6 @@ class TransactionManagerImp : public TransactionManager {
 
         void commit();
 
-        void rollback();
-
         QSettings* getResource() const;
 };
 

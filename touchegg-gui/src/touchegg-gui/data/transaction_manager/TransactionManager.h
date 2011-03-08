@@ -19,13 +19,10 @@
 
 /**
  * @~spanish
- * Facilita acciones como restablecer los cambios hechos en la configuración o
- * cancelar los cambios simulando las transacciones disponibles nativamente en
- * una base de datos.
+ * Facilita el acceso a la configuración guardada en disco.
  *
  * @~english
- * Facilitates actions such as reset the changes made to the configuration or
- * cancel changes, simulating transactions, available natively in a database.
+ * Provides access to the saved settings to disk.
  */
 class TransactionManager {
 
@@ -73,22 +70,12 @@ class TransactionManager {
 
         /**
          * @~spanish
-         * Guarda los datos efectuados en disco.
+         * Recarga Touchégg para que se apliquen los cambios.
          *
          * @~english
-         * Saves the changes made in disk.
+         * Reloads Touchégg to apply changes.
          */
         virtual void commit() = 0;
-
-        /**
-         * @~spanish
-         * Descarta los cambios efectuados y recarga la configuración desde
-         * disco.
-         *
-         * @~english
-         * Discards any changes and reloads the configuration from disk.
-         */
-        virtual void rollback() = 0;
 
         /**
          * @~spanish

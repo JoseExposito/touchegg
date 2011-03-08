@@ -18,16 +18,38 @@
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void GuiControllerImp::execute(GuiEvent event, void* data) const {
+void* GuiControllerImp::execute(GuiEvent event, void* data) const {
     switch (event) {
-    case READ_GENERAL_PROPERTY:
-        break;
+    case READ_GENERAL_PROPERTY: {
+        LogicFactory* factory = LogicFactory::getInstance();
+        Facade* facade = factory->createFacade();
+        QString* property = (QString*)data;
+        GeneralTransfer  aux = facade->readGeneralProperty(*property);
+        GeneralTransfer* ret = new GeneralTransfer(aux.getField(),
+                aux.getValue());
+        delete facade;
+        return ret;
+    }
 
-    case UPDATE_GENERAL_PROPERTY:
-        break;
+    case UPDATE_GENERAL_PROPERTY: {
+        LogicFactory* factory = LogicFactory::getInstance();
+        Facade* facade = factory->createFacade();
+        GeneralTransfer* gt = (GeneralTransfer*) data;
+        facade->updateGeneralProperty(*gt);
+        delete facade;
+        return NULL;
+    }
 
-    case READ_GESTURE:
-        break;
+    case READ_GESTURE: {
+        LogicFactory* factory = LogicFactory::getInstance();
+        Facade* facade = factory->createFacade();
+        GestureTypeEnum::GestureType* type=(GestureTypeEnum::GestureType*)data;
+        GestureTransfer aux = facade->readGesture(*type);
+        GestureTransfer* ret = new GestureTransfer(aux.getGestureType(),
+                aux.getActionType(), aux.getSettings());
+        delete facade;
+        return ret;
+    }
 
     case UPDATE_GESTURE: {
         LogicFactory* factory = LogicFactory::getInstance();
@@ -35,10 +57,18 @@ void GuiControllerImp::execute(GuiEvent event, void* data) const {
         GestureTransfer* gt = (GestureTransfer*) data;
         facade->updateGesture(*gt);
         delete facade;
-        break;
+        return NULL;
     }
 
-    case COMMIT_DATA:
-        break;
+    case COMMIT_DATA: {
+        LogicFactory* factory = LogicFactory::getInstance();
+        Facade* facade = factory->createFacade();
+        facade->commitData();
+        delete facade;
+        return NULL;
+    }
+
+    default:
+        return NULL;
     }
 }

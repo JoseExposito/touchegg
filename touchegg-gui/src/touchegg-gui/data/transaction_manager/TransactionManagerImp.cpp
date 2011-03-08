@@ -50,11 +50,13 @@ void TransactionManagerImp::loadConfig() {
 }
 
 void TransactionManagerImp::commit() {
-    this->loadConfig();
-}
-
-void TransactionManagerImp::rollback() {
-    // Nothing
+    // Matamos el proceso de Touchégg y lo volvemos a lanzar...
+    // Si, si, si, esto en un transaction manager pues como que no pega, pero en
+    // algún lado había que meterlo y si, también, el método es muy cutre
+    QProcess* myProcess = new QProcess();
+    myProcess->start("killall -9 touchegg");
+    myProcess->waitForFinished();
+    myProcess->startDetached("touchegg");
 }
 
 

@@ -147,18 +147,37 @@
      </property>
     </item>
    </widget>
-   <widget class="QDialogButtonBox" name="okCancel">
+   <widget class="QFrame" name="buttonsFrame">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>163</x>
       <y>430</y>
-      <width>151</width>
-      <height>25</height>
+      <width>491</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="standardButtons">
-     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>262</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="applyButton">
+       <property name="text">
+        <string>Apply changes</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>

@@ -53,6 +53,17 @@ GestureConfigWidget::GestureConfigWidget(
     // Conectamos signals y slots
     connect(this->allowedActionsCombo, SIGNAL(currentIndexChanged(int)),
             this, SLOT(actionChanged(int)));
+
+    // Cargamos el valor por defecto
+    GuiController* guiController = GuiController::getInstance();
+    GestureTransfer* transfer = (GestureTransfer*)guiController->execute(
+            READ_GESTURE, &gestureType);
+    int index = this->allowedActionsCombo->findText(ActionTypeEnum::getValue(
+            transfer->getActionType()));
+    delete transfer;
+    index = (index == -1) ? 0 : index;
+    this->allowedActionsCombo->setCurrentIndex(index);
+    this->actionChanged(index);
 }
 
 GestureConfigWidget::~GestureConfigWidget() {
@@ -60,6 +71,7 @@ GestureConfigWidget::~GestureConfigWidget() {
     delete this->allowedActionsCombo;
     delete this->configButton;
 }
+
 
 // ************************************************************************** //
 // **********                     PRIVATE SLOTS                    ********** //

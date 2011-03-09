@@ -9,10 +9,12 @@ UI_SOURCES_DIR += build
 //DEFINES      = QT_NO_DEBUG_OUTPUT
 
 
-//target.path  = /usr/bin
-//config.path  = /usr/share/touchegg
-//config.files = installation/touchegg.conf
-//INSTALLS += target config
+target.path = /usr/bin
+menu.path   = /usr/share/applications
+menu.files  = installation/touchegg-gui.desktop
+icon.path   = /usr/share/icons
+icon.files  = installation/touchegg-gui.png
+INSTALLS   += target menu icon
 
 
 include(src/touchegg-gui/touchegg-gui.pri)

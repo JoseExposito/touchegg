@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/main_window/TapTab.h
+ * @file /src/touchegg-gui/presentation/main_window/DragTab.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,11 +9,11 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  TapTab
+ * @class  DragTab
  * @author José Expósito
  */
-#ifndef TAPTAB_H
-#define TAPTAB_H
+#ifndef DRAGTAB_H
+#define DRAGTAB_H
 
 #include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/widgets/GestureConfigWidget.h"
@@ -21,12 +21,12 @@
 
 /**
  * @~spanish
- * Pestaña para configurar los gestos de tipo "Tap".
+ * Pestaña para configurar los gestos de tipo "Drag".
  *
  * @~english
- * Tab to configure "Tap" gestures.
+ * Tab to configure "Drag" gestures.
  */
-class TapTab : public QScrollArea {
+class DragTab : public QScrollArea  {
 
     public:
 
@@ -37,7 +37,8 @@ class TapTab : public QScrollArea {
          * @~english
          * Constructor.
          */
-        TapTab();
+        DragTab();
+
 };
 
-#endif // TAPTAB_H
+#endif // DRAGTAB_H

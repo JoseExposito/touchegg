@@ -1,6 +1,28 @@
+/**
+ * @file /src/touchegg-gui/presentation/main_window/TapTab.cpp
+ *
+ * @~spanish
+ * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
+ * y/o modificarlo bajo los téminos de la licencia GNU GPL v3.
+ *
+ * @~english
+ * This file is part of the Touchégg-GUI project, you can redistribute it and/or
+ * modify it under the terms of the GNU GPL v3.
+ *
+ * @class  TapTab
+ * @author José Expósito
+ */
 #include "TapTab.h"
 
-TapTab::TapTab() : QFrame() {
+// ************************************************************************** //
+// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
+// ************************************************************************** //
+
+TapTab::TapTab() {
+    // Estilo del panel
+    this->setFrameShape(QFrame::NoFrame);
+    this->setFrameShadow(QFrame::Plain);
+
     // Acciones permitidas
     QStringList strList;
     strList.append("No action");
@@ -38,5 +60,10 @@ TapTab::TapTab() : QFrame() {
     layout->addWidget(fourFingersTap);
     layout->addWidget(fiveFingersTap);
     layout->addStretch();
-    this->setLayout(layout);
+
+    // Ponemos los componentes dentro del scroll area
+    QFrame* aux = new QFrame;
+    aux->setLayout(layout);
+    this->setWidget(aux);
+    this->setWidgetResizable(true);
 }

@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/main_window/TapTab.h
+ * @file /src/touchegg-gui/presentation/main_window/PinchTab.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,11 +9,11 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  TapTab
+ * @class  PinchTab
  * @author José Expósito
  */
-#ifndef TAPTAB_H
-#define TAPTAB_H
+#ifndef PINCHTAB_H
+#define PINCHTAB_H
 
 #include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/widgets/GestureConfigWidget.h"
@@ -21,12 +21,12 @@
 
 /**
  * @~spanish
- * Pestaña para configurar los gestos de tipo "Tap".
+ * Pestaña para configurar los gestos de tipo "Pinch".
  *
  * @~english
- * Tab to configure "Tap" gestures.
+ * Tab to configure "Pinch" gestures.
  */
-class TapTab : public QScrollArea {
+class PinchTab : public QScrollArea  {
 
     public:
 
@@ -37,7 +37,7 @@ class TapTab : public QScrollArea {
          * @~english
          * Constructor.
          */
-        TapTab();
+        PinchTab();
 };
 
-#endif // TAPTAB_H
+#endif // PINCHTAB_H

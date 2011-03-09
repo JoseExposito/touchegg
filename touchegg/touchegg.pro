@@ -10,7 +10,11 @@ LIBS        += -lutouch-geis -lX11 -lXtst -lXext
 target.path  = /usr/bin
 config.path  = /usr/share/touchegg
 config.files = installation/touchegg.conf
-INSTALLS += target config
+menu.path    = /usr/share/applications
+menu.files   = installation/touchegg.desktop
+icon.path    = /usr/share/icons
+icon.files   = installation/touchegg.png
+INSTALLS    += target config menu icon
 
 
 include(src/touchegg/touchegg.pri)

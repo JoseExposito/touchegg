@@ -40,7 +40,7 @@ void RunCommand::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void RunCommand::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
     if(this->command != "") {
-        QProcess *myProcess = new QProcess();
-        myProcess->start(this->command);
+        QProcess* myProcess = new QProcess();
+        myProcess->startDetached(this->command);
     }
 }

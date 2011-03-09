@@ -35,6 +35,9 @@ ActionFactory* ActionFactory::getInstance() {
 Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
         const QString& settings) {
     switch(actionType) {
+    case ActionTypeEnum::NO_ACTION:
+        return NULL;
+
     case ActionTypeEnum::MOUSE_MOVE:
         return new MouseMove(settings);
 

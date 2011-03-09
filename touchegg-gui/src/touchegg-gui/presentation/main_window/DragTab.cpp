@@ -37,6 +37,10 @@ DragTab::DragTab() {
     strList.append(ActionTypeEnum::getValue(ActionTypeEnum::SEND_KEYS));
     strList.append(ActionTypeEnum::getValue(ActionTypeEnum::MOVE_WINDOW));
     strList.append(ActionTypeEnum::getValue(ActionTypeEnum::DRAG_AND_DROP));
+    strList.append(ActionTypeEnum::getValue(ActionTypeEnum::MOUSE_MOVE));
+    strList.append(ActionTypeEnum::getValue(ActionTypeEnum::LEFT_BUTTON_CLICK));
+    strList.append(ActionTypeEnum::getValue(ActionTypeEnum::RIGHT_BUTTON_CLICK));
+    strList.append(ActionTypeEnum::getValue(ActionTypeEnum::MIDDLE_BUTTON_CLICK));
 
     // Creamos los distintos widgeds para configurar los gestos
     GestureConfigWidget* twoFingersDragUp = new GestureConfigWidget(

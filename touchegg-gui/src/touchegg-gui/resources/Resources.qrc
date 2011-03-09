@@ -27,5 +27,6 @@
         <file>tap_and_hold.png</file>
         <file>three_fingers_drag_down.png</file>
         <file>tap.png</file>
+        <file>five_fingers_tap_and_hold.png</file>
     </qresource>
 </RCC>

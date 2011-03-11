@@ -7,4 +7,6 @@ Then you can see a list with the principal milestones of Touchégg project.
 || *Date* || *Event* ||
 || 23/01/2011 || Touchégg v0.1 released ||
 || 07/02/2011 || Touchégg gets more than 1000 downloads. Thanks to all! ||
-|| 23/02/2011 || Touchégg gets more than 2000 downloads. ||
+|| 23/02/2011 || Touchégg gets more than 2000 downloads ||
+|| 11/03/2011 || Touchégg gets more than 3000 downloads ||
+|| 11/03/2011 || Touchégg v0.2 released ||

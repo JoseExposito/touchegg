@@ -5,4 +5,5 @@
  * -> [HowToHelp How to help with Touchégg project]
  * -> [ProjectMilestones Milestones]
  * -> [Changelog Changelog]
+ * -> [Gallery Videos and images about Touchégg]
  * -> [About About Touchégg]

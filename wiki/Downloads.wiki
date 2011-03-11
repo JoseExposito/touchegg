@@ -4,6 +4,16 @@
 
 <br/>
 
+ * *Touchegg v0.2:*
+
+ - Download Touchégg DEB for Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg_0.2-maverick_i386.deb 32 bits] / [ 64 bits])
+ - Download Touchégg GUI DEB for Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_i386.deb 32 bits] / [ 64 bits])
+
+ [http://touchegg.googlecode.com/files/touchegg-0.2.tar.gz - Download Touchégg source code]
+ [http://touchegg.googlecode.com/files/touchegg-gui-0.2.tar.gz - Download Touchégg GUI source code]
+ 
+
+
  * *Touchegg v0.1:*
 
  [http://touchegg.googlecode.com/files/touchegg_0.1-1_i386.deb - Download DEB for Ubuntu 10.10 (i386)]

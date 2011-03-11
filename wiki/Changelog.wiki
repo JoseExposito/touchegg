@@ -9,7 +9,7 @@ diferent Touchégg versions.
  Initial release, support for the following gestures:
   * TAP   - With 2, 3 and 4 fingers
   * PINCH - With 3 fingers
-  * DRAG  - With 3, 4 y 5 fingers
+  * DRAG  - With 2, 3 and 4 fingers
  Support for the following actions:
   * RIGHT_BUTTON_CLICK
   * MIDDLE_BUTTON_CLICK
@@ -21,3 +21,22 @@ diferent Touchégg versions.
   * RESIZE_WINDOW
   * SHOW_DESKTOP
   * CHANGE_DESKTOP
+
+ * *Touchégg v0.2* (11/03/2011)
+ Solved bugs:
+  * Solved problems at shutdown
+  * Fixed _DESKTOP actions with compiz
+  * Fixes some problems with the code
+ Added support for the following gestures:
+  * TAP - With 5 fingers
+  * TAP & HOLD - With 2, 3, 4 and 5 fingers
+ Added support for the following actions:
+  * MOUSE_MOVE
+  * LEFT_BUTTON_CLICK
+  * MOVE_WINDOW
+  * RUN_COMMAND
+  * DRAG_AND_DROP
+  * SEND_KEYS
+ Other features:
+  * _Added a GUI to manage gestures and actions_
+  * Added menu entries  to launch Touchégg and touchégg GUI

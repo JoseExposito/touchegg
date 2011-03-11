@@ -5,4 +5,5 @@
  * -> [HowToHelp Cómo colaborar con Touchégg]
  * -> [ProjectMilestones Últimos eventos importantes]
  * -> [Changelog Cambios entre versiones]
+ * -> [Gallery Vídeos e imágenes de Touchégg]
  * -> [About Acerca de Touchégg]

@@ -3,7 +3,7 @@
 Touchégg is free software, licensed under GPL v3.
 
 Author - José Expósito
-
+Interface icons and logo - AlexN83
 
 = GPL license =
 

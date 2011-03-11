@@ -6,10 +6,12 @@
 
  * *Touchegg v0.2:*
 
- - Descargar paquete DEB de Touchégg para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg_0.2-maverick_i386.deb 32 bits] / [ 64 bits])
- - Descargar paquete DEB de Touchégg GUI para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_i386.deb 32 bits] / [ 64 bits])
+ - Descargar paquete DEB de Touchégg para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg_0.2-maverick_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg_0.2-maverick_amd64.deb 64 bits])
+
+ - Descargar paquete DEB de Touchégg GUI para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_amd64.deb 64 bits])
 
  [http://touchegg.googlecode.com/files/touchegg-0.2.tar.gz - Descargar el código fuente de Touchégg]
+
  [http://touchegg.googlecode.com/files/touchegg-gui-0.2.tar.gz - Descargar el código fuente de Touchégg GUI]
 
 

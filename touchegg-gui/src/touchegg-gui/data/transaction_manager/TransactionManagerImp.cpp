@@ -36,12 +36,6 @@ TransactionManagerImp::TransactionManagerImp() : TransactionManager() {
 // ************************************************************************** //
 
 void TransactionManagerImp::loadConfig() {
-    QFile configFile(QDir::homePath() + HOME_CONFIG_FILE);
-    if(!configFile.exists()) {
-        // TODO Notificar a la interfaz
-        qFatal("Configuration file not found, Touchégg is installed?");
-    }
-
     if(this->settings != NULL)
         delete this->settings;
 

@@ -21,6 +21,7 @@
 #include "src/touchegg-gui/presentation/gui_controller/GuiController.h"
 #include "src/touchegg-gui/presentation/gui_event/GuiEvent.h"
 #include "src/touchegg-gui/logic/transfer/GestureTransfer.h"
+#include "src/touchegg-gui/presentation/config_forms/ConfigFormFactory.h"
 
 /**
  * @~spanish
@@ -75,7 +76,23 @@ class GestureConfigWidget : public QFrame {
          */
         QPushButton* configButton;
 
-        //ConfigForm* configForm;
+        /**
+         * @~spanish
+         * Formulario para onfigurar la acción.
+         *
+         * @~english
+         * Form to configure the action.
+         */
+        ConfigForm* configForm;
+
+        /**
+         * @~spanish
+         * Layout usado.
+         *
+         * @~english
+         * Used layout.
+         */
+        QGridLayout* layout;
 
     private slots:
 
@@ -90,7 +107,27 @@ class GestureConfigWidget : public QFrame {
          * updating the configuration.
          * @param newAction New action associated to the gesture.
          */
-        void actionChanged(int newAction) const;
+        void actionChanged(int newAction);
+
+        /**
+         * @~spanish
+         * Se llama cada vez que se pulsa en el botón para configurar la acción.
+         * @param checked Si el botón es apretado o soltado.
+         *
+         * @~english
+         * It is called whenever the configuration button is toggled.
+         * @param checked If is pressed or released.
+         */
+        void showConfigForm(bool checked) const;
+
+        /**
+         * @~spanish
+         * Se llama cada vez que la configuración cambia.
+         *
+         * @~english
+         * It is called whenever the configuration is changed.
+         */
+        void configChanged() const;
 
     public:
 

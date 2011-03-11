@@ -27,4 +27,3 @@ DataFactory* DataFactory::getInstance() {
 
     return DataFactory::instance;
 }
-

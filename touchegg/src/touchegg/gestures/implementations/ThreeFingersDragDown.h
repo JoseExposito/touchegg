@@ -39,7 +39,6 @@ class ThreeFingersDragDown : public Gesture {
          * @param attrs  Atributos del gestos, siendo la clave el nombre del
          *        atributo (por ejemplo "focus x", "touches"...) y el valor el
          *        valor del propio atributo.
-         * @param action Acción asociada al gesto.
          *
          * @~english
          * Creates a gesture with the specified properties.
@@ -48,7 +47,6 @@ class ThreeFingersDragDown : public Gesture {
          * @param attrs  Gesture attributes, where the key is the name of the
          *        attribute (ie "focus x", "touches") and the value the value of
          *        the attribute.
-         * @param action Action associated to the gesture.
          */
         ThreeFingersDragDown(GestureTypeEnum::GestureType type, GeisGestureId id,
                 const QHash<QString, QVariant>& attrs);

@@ -110,7 +110,7 @@ class GestureFactory {
          * @param attrs Gesture attributes, where the key is the name of the
          *        attribute (ie "focus x", "touches") and the value the value of
          *        the attribute.
-         * @param The gesture.
+         * @return The gesture.
          */
         Gesture* createGesture(GeisGestureType type, GeisGestureId id,
             QHash<QString, QVariant> attrs);
@@ -136,7 +136,7 @@ class GestureFactory {
          * @param attrs Gesture attributes, where the key is the name of the
          *        attribute (ie "focus x", "touches") and the value the value of
          *        the attribute.
-         * @param The gesture.
+         * @return The gesture.
          */
         Gesture* createTapAndHold(GeisGestureType type, GeisGestureId id,
                             QHash<QString, QVariant> attrs);

@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/gestures/gesturesimp/Gesture.h
+ * @file /src/touchegg/gestures/implementations/Gesture.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
@@ -80,7 +80,6 @@ class Gesture {
          * @param attrs  Atributos del gestos, siendo la clave el nombre del
          *        atributo (por ejemplo "focus x", "touches"...) y el valor el
          *        valor del propio atributo.
-         * @param action Acción asociada al gesto.
          *
          * @~english
          * Creates a gesture with the specified properties.
@@ -89,8 +88,7 @@ class Gesture {
          * @param attrs  Gesture attributes, where the key is the name of the
          *        attribute (ie "focus x", "touches") and the value the value of
          *        the attribute.
-         * @param action Action associated to the gesture.
-         */
+          */
         Gesture(GestureTypeEnum::GestureType type, GeisGestureId id,
                 const QHash<QString, QVariant>& attrs);
 
@@ -211,11 +209,11 @@ class Gesture {
         /**
          * @~spanish
          * Establece el ID del gesto.
-         * @param type El ID.
+         * @param id El ID.
          *
          * @~english
          * Sets the gesture ID.
-         * @param type The ID.
+         * @param id The ID.
          */
         void setId(GeisGestureId id);
 

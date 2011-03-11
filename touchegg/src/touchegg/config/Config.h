@@ -109,7 +109,7 @@ class Config {
          *
          * @~english
          * Returns the associated action type with a gesture.
-         * @param  gesture The gesture.
+         * @param  gestureType The gesture.
          * @return Type of associated action.
          */
         ActionTypeEnum::ActionType getAssociatedAction(

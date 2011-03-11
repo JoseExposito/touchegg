@@ -135,12 +135,12 @@ class GestureTransfer {
 
         /**
          * @~spanish
-         * Establece el tipo de gesto a leer/escribir.
-         * @param gestureType El tipo.
+         * Establece la acción a leer/escribir.
+         * @param actionType El tipo.
          *
          * @~english
-         * Sets the type of the gesture to read/write.
-         * @param gestureType The type.
+         * Sets the action to read/write.
+         * @param actionType The type.
          */
         void setActionType(ActionTypeEnum::ActionType actionType);
 

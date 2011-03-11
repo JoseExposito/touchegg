@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/util/Include.h
+ * @file /src/touchegg-gui/util/Include.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o

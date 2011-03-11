@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/widgets/GestureConfig.h
+ * @file /src/touchegg-gui/presentation/widgets/GestureConfigWidget.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,7 +9,7 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  GestureConfig
+ * @class  GestureConfigWidget
  * @author José Expósito
  */
 #ifndef GESTURECONFIG_H

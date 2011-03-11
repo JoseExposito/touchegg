@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/logic/transfer/GestureServiceAppImp.h
+ * @file /src/touchegg-gui/logic/application_service/GestureServiceAppImp.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo

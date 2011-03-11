@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/logic/transfer/GeneralServiceAppImp.cpp
+ * @file /src/touchegg-gui/logic/application_service/GeneralServiceAppImp.cpp
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo

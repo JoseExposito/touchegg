@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/logic/transfer/GeneralServiceApp.h
+ * @file /src/touchegg-gui/logic/application_service/GeneralServiceApp.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo

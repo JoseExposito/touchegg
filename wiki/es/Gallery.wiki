@@ -3,6 +3,10 @@
  * Touchégg v0.1:
  <wiki:video url="http://www.youtube.com/watch?v=_jRiEFA7ExY"/>
 
+ * Touchégg v0.2;
+ <wiki:video url="http://www.youtube.com/watch?v=1Ek4QaFQ1qo"/>
+
+
 = Imágenes =
 
  * Touchégg GUI en KDE

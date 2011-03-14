@@ -26,10 +26,8 @@ ResizeWindow::ResizeWindow(const QString& settings)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void ResizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
-
-void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
-    // Obtenemos la ventana activa
+void ResizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    // Obtenemos la ventana activa, ventana a mover
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -39,8 +37,31 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
             XInternAtom(QX11Info::display(), "_NET_ACTIVE_WINDOW", false),
             0, 1, false, XA_WINDOW, &atomRet, &size, &numItems,
             &bytesAfterReturn, &propRet);
-    Window window = *((Window *) propRet);
+    this->window = *((Window *) propRet);
     XFree(propRet);
+
+    // Vemos si es el escritorio (para no redimensionarla)
+    if(XGetWindowProperty(QX11Info::display(), this->window,
+            XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE", false),
+            0, 100, false, XA_ATOM, &atomRet, &size, &numItems,
+            &bytesAfterReturn, &propRet) == Success) {
+        Atom* types = (Atom*)propRet;
+        Atom type = types[0]; // Solo miramos el primer tipo especificado
+
+        qDebug() << XGetAtomName(QX11Info::display(), type);
+        qDebug() << numItems;
+
+        if(type == XInternAtom(QX11Info::display(),
+                "_NET_WM_WINDOW_TYPE_DESKTOP", false)) {
+            this->window = 0;
+        }
+        XFree(propRet);
+    }
+}
+
+void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
+    if(this->window == 0)
+        return;
 
     // Ángulo
     if(!attrs.contains("boundingbox x1") || !attrs.contains("boundingbox x2") ||
@@ -68,9 +89,9 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
 
     // Redimensionamos la ventana
     XWindowAttributes xwa;
-    XGetWindowAttributes(QX11Info::display(), window, &xwa);
+    XGetWindowAttributes(QX11Info::display(), this->window, &xwa);
     int inc = (int)attrs.value("radius delta").toFloat()*3;
-    XResizeWindow(QX11Info::display(), window,
+    XResizeWindow(QX11Info::display(), this->window,
             xwa.width  + inc * incX,
             xwa.height + inc * incY);
     XFlush(QX11Info::display());

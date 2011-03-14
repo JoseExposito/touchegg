@@ -27,6 +27,17 @@
  */
 class ResizeWindow : public Action {
 
+    private:
+
+        /**
+         * @~spanish
+         * Ventana a redimensionar.
+         *
+         * @~english
+         * Window to resize.
+         */
+        Window window;
+
     public:
 
         /**

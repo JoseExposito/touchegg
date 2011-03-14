@@ -20,10 +20,10 @@
 
 /**
  * @~spanish
- * Emula la rueda del ratón.
+ * Emula el movimiento del ratón.
  *
  * @~english
- * Emulates the mouse whell.
+ * Emulates the mouse movement.
  */
 class MouseMove : public Action {
 

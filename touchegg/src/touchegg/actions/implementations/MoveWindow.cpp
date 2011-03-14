@@ -31,6 +31,24 @@ MoveWindow::MoveWindow(const QString& settings) : Action(settings) {
             &bytesAfterReturn, &propRet);
     this->window = *((Window *) propRet);
     XFree(propRet);
+
+    // Vemos si es el escritorio (para no moverla)
+    if(XGetWindowProperty(QX11Info::display(), this->window,
+            XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE", false),
+            0, 100, false, XA_ATOM, &atomRet, &size, &numItems,
+            &bytesAfterReturn, &propRet) == Success) {
+        Atom* types = (Atom*)propRet;
+        Atom type = types[0]; // Solo miramos el primer tipo especificado
+
+        qDebug() << XGetAtomName(QX11Info::display(), type);
+        qDebug() << numItems;
+
+        if(type == XInternAtom(QX11Info::display(),
+                "_NET_WM_WINDOW_TYPE_DESKTOP", false)) {
+            this->window = 0;
+        }
+        XFree(propRet);
+    }
 }
 
 
@@ -41,6 +59,9 @@ MoveWindow::MoveWindow(const QString& settings) : Action(settings) {
 void MoveWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
+    if(this->window == 0)
+        return;
+
     if(!attrs.contains("delta x") || !attrs.contains("delta y"))
         return;
 

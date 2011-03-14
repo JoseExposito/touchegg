@@ -18,7 +18,14 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MoveWindow::MoveWindow(const QString& settings) : Action(settings) {
+MoveWindow::MoveWindow(const QString& settings) : Action(settings) {}
+
+
+// ************************************************************************** //
+// **********                    PUBLIC METHODS                    ********** //
+// ************************************************************************** //
+
+void MoveWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
     // Obtenemos la ventana activa, ventana a mover
     Atom atomRet;
     int size;
@@ -50,13 +57,6 @@ MoveWindow::MoveWindow(const QString& settings) : Action(settings) {
         XFree(propRet);
     }
 }
-
-
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
-
-void MoveWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
     if(this->window == 0)

@@ -18,6 +18,7 @@
 
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/gestures/types/GestureTypeEnum.h"
+#include "src/touchegg/actions/factory/ActionFactory.h"
 #include "src/touchegg/gestures/implementations/Gesture.h"
 
 #include "src/touchegg/gestures/implementations/OneFingerTap.h"

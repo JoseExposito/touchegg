@@ -28,7 +28,9 @@ CloseWindow::CloseWindow(const QString& settings)
 
 void CloseWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {
+void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
+
+void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
     // Obtenemos la ventana activa
     Atom atomRet;
     int size;
@@ -59,5 +61,3 @@ void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {
 
     XFlush(QX11Info::display());
 }
-
-void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {}

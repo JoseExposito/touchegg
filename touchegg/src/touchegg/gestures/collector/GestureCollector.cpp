@@ -138,8 +138,8 @@ void GestureCollector::run() {
     int fd = -1;
     geis_configuration_get_value(geisInstance, GEIS_CONFIG_UNIX_FD, &fd);
 
+    fd_set read_fds;
     for(;;) {
-        fd_set read_fds;
         FD_ZERO(&read_fds);
         FD_SET(fd, &read_fds);
         int sstat = select(fd+1, &read_fds, NULL, NULL, NULL);

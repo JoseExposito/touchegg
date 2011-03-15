@@ -49,8 +49,8 @@ void MouseMove::executeUpdate(const QHash<QString, QVariant>& attrs) {
 
     if(this->speedCount >= this->speed) {
         XTestFakeRelativeMotionEvent(QX11Info::display(),
-                attrs.value("delta x").toFloat() * 3,
-                attrs.value("delta y").toFloat() * 3,
+                attrs.value("delta x").toFloat() * 5,
+                attrs.value("delta y").toFloat() * 5,
                 0);
         this->speedCount = 0;
     } else {

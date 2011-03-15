@@ -4,13 +4,13 @@ En la pestaña [https://code.google.com/p/touchegg/wiki/Downloads?tm=2 Downloads
 podrá encontrar dos tipos de archivos, paquetes DEB y código fuente.
 
 Por lo general, descargar el paquete DEB será lo más indicado para la mayoría de usuarios, ya que
-permite una instalación y desintalación fácil y limpia, normalmente basta con un doble click.
+permite una instalación y desinstalación fácil y limpia, normalmente basta con un doble click.
 
 Sin embargo puede haber otros usuarios, como los desarrolladores, usuarios con una arquitectura
 para la cual no exista un paquete DEB o simplemente usuarios curiosos, que quieran compilar el
 código fuente.
 
-= ¿Cómo commpilar el código fuente? =
+= ¿Cómo compilar el código fuente? =
 
 Compilar el código fuente es muy sencillo, basta con seguir estos tres pasos:
 

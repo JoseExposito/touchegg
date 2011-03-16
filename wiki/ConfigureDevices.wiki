@@ -81,3 +81,17 @@ $ sudo touch /etc/X11/xorg.conf
  similar to the Magic trackpad configuration.
 
  Thanks jlcleary87!
+
+ * *Acer Aspire One D255*
+
+ Only copy the content of"10-evdev.conf" in your /etc/X11/xorg.conf:
+ {{{
+ Section "InputClass"
+        Identifier "evdev touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "evdev"
+ EndSection
+ }}}
+ You can see the full issue [http://code.google.com/p/touchegg/issues/detail?id=34 here].
+

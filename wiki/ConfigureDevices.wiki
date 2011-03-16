@@ -95,3 +95,17 @@ $ sudo touch /etc/X11/xorg.conf
  }}}
  You can see the full issue [http://code.google.com/p/touchegg/issues/detail?id=34 here].
 
+ * *HP Pavilon DV6000*
+
+ As [http://code.google.com/p/touchegg/issues/detail?id=32 Virgolus] said me  is necesary copy
+ the content of /usr/share/X11/xorg.conf.d/50-synaptics.conf into /etc/X11/xorg.conf:
+ {{{ 
+ Section "InputClass"
+    Identifier "touchpad catchall"
+    Driver "evdev"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+ EndSection
+ }}}
+
+

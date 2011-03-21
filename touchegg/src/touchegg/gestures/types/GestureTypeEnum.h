@@ -40,16 +40,19 @@ class GestureTypeEnum : public QObject {
          * Enumerated type with supported gestures.
          */
         enum GestureType {
-            ONE_FINGER_TAP,
+			// TAP
             TWO_FINGERS_TAP,
             THREE_FINGERS_TAP,
             FOUR_FINGERS_TAP,
             FIVE_FINGERS_TAP,
 
+			// PINCH
+			TWO_FINGERS_PINCH,
             THREE_FINGERS_PINCH,
+			FOUR_FINGERS_PINCH,
+			FIVE_FINGERS_PINCH,
 
-            ONE_FINGER_DRAG,
-
+			// DRAG
             TWO_FINGERS_DRAG_UP,
             TWO_FINGERS_DRAG_DOWN,
             TWO_FINGERS_DRAG_LEFT,
@@ -64,8 +67,13 @@ class GestureTypeEnum : public QObject {
             FOUR_FINGERS_DRAG_DOWN,
             FOUR_FINGERS_DRAG_LEFT,
             FOUR_FINGERS_DRAG_RIGHT,
+			
+			FIVE_FINGERS_DRAG_UP,
+            FIVE_FINGERS_DRAG_DOWN,
+            FIVE_FINGERS_DRAG_LEFT,
+            FIVE_FINGERS_DRAG_RIGHT,
 
-            ONE_FINGER_TAP_AND_HOLD,
+            // TAP & HOLD
             TWO_FINGERS_TAP_AND_HOLD,
             THREE_FINGERS_TAP_AND_HOLD,
             FOUR_FINGERS_TAP_AND_HOLD,

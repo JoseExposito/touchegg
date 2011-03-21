@@ -4,10 +4,10 @@ include(config/config.pri)
 include(gestures/collector/gestures.collector.pri)
 include(gestures/handler/gestures.handler.pri)
 include(gestures/factory/gestures.factory.pri)
-include(gestures/implementations/gestures.implementations.pri)
+include(gestures/implementation/gestures.implementation.pri)
 include(gestures/types/gestures.types.pri)
 
-include(actions/implementations/actions.implementations.pri)
+include(actions/implementation/actions.implementation.pri)
 include(actions/types/actions.types.pri)
 include(actions/factory/actions.factory.pri)
 

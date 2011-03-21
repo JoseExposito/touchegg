@@ -93,7 +93,9 @@ $ sudo touch /etc/X11/xorg.conf
         Driver "evdev"
  EndSection
  }}}
- You can see the full issue [http://code.google.com/p/touchegg/issues/detail?id=34 here].
+ You can see the full issue [http://code.google.com/p/touchegg/issues/detail?id=34 here]
+ and a complete article with videos
+ [http://equimantux.wordpress.com/2011/03/21/instalar-probar-y-configirar-touchegg-en-un-acer-one-d255-con-ubuntu/ here (in spanish)].
 
  * *HP Pavilon DV6000*
 

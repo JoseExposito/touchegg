@@ -56,12 +56,6 @@ void Gesture::finish() const  {
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
 
-bool Gesture::isThisGesture(QHash<QString, QVariant> /*attrs*/) {
-    return false;
-}
-
-//------------------------------------------------------------------------------
-
 GestureTypeEnum::GestureType Gesture::getType() const {
     return this->type;
 }

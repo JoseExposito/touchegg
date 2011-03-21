@@ -17,7 +17,7 @@
 
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/gestures/types/GestureTypeEnum.h"
-#include "src/touchegg/actions/implementations/Action.h"
+#include "src/touchegg/actions/implementation/Action.h"
 
 
 /**
@@ -129,23 +129,6 @@ class Gesture {
          * Is called when the gesture is finished.
          */
         virtual void finish() const;
-
-        /**
-         * @~spanish
-         * Indica si los atributos dados definen este gesto.
-         * @param attrs  Atributos del gestos, siendo la clave el nombre del
-         *        atributo (por ejemplo "focus x", "touches"...) y el valor el
-         *        valor del propio atributo.
-         * @return Si lo definen o no.
-         *
-         * @~english
-         * Indicates if the given attributes defines this gesture.
-         * @param attrs  Gesture attributes, where the key is the name of the
-         *        attribute (ie "focus x", "touches") and the value the value of
-         *        the attribute.
-         * @return If it define the gesture or not.
-         */
-        bool isThisGesture(QHash<QString, QVariant> attrs);
 
         //----------------------------------------------------------------------
 

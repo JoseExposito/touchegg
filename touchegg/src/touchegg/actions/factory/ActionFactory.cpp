@@ -47,11 +47,11 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
     case ActionTypeEnum::MIDDLE_BUTTON_CLICK:
         return new MiddleButtonClick(settings);
 
-    case ActionTypeEnum::MOUSE_WHEEL_UP:
-        return new MouseWheelUp(settings);
+    case ActionTypeEnum::VERTICAL_SCROLL:
+        return new VerticalScroll(settings);
 
-    case ActionTypeEnum::MOUSE_WHEEL_DOWN:
-        return new MouseWheelDown(settings);
+    case ActionTypeEnum::HORIZONTAL_SCROLL:
+        return new HorizontalScroll(settings);
 
     case ActionTypeEnum::MINIMIZE_WINDOW:
         return new MinimizeWindow(settings);

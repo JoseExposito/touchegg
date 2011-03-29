@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/actions/implementation/MouseWheelUp.h
+ * @file /src/touchegg/actions/implementation/HorizontalScroll.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
@@ -9,11 +9,11 @@
  * This file is part of the Touchégg project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  MouseWheelUp
+ * @class  HorizontalScroll
  * @author José Expósito
  */
-#ifndef MOUSEWHEELUP_H
-#define MOUSEWHEELUP_H
+#ifndef HORIZONTALSCROLL_H
+#define HORIZONTALSCROLL_H
 
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/actions/implementation/Action.h"
@@ -25,7 +25,7 @@
  * @~english
  * Emulates the mouse whell.
  */
-class MouseWheelUp : public Action {
+class HorizontalScroll : public Action {
 
     private:
 
@@ -40,12 +40,21 @@ class MouseWheelUp : public Action {
 
         /**
          * @~spanish
-         * Variable auxiliar para aplicar la velocidad.
+         * Desplazamiento acumulado al hacer scroll hacia la izquierda.
          *
          * @~english
-         * Auxiliary variable to implement speed.
+         * Accumulated space to scrolling left.
          */
-        int speedCount;
+        int leftScrollSpace;
+
+        /**
+         * @~spanish
+         * Desplazamiento acumulado al hacer scroll hacia derecha.
+         *
+         * @~english
+         * Accumulated space to scrolling right.
+         */
+        int rightScrollSpace;
 
     public:
 
@@ -58,7 +67,7 @@ class MouseWheelUp : public Action {
          * Constructor
          * @param settings Action settings.
          */
-        MouseWheelUp(const QString& settings);
+        HorizontalScroll(const QString& settings);
 
         /**
          * @~spanish
@@ -107,4 +116,4 @@ class MouseWheelUp : public Action {
 
 };
 
-#endif // MOUSEWHEELUP_H
+#endif // HORIZONTALSCROLL_H

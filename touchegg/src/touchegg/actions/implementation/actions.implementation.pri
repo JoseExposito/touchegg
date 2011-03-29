@@ -3,8 +3,6 @@ HEADERS += \
     src/touchegg/actions/implementation/Action.h \
     src/touchegg/actions/implementation/RightButtonClick.h \
     src/touchegg/actions/implementation/MiddleButtonClick.h \
-    src/touchegg/actions/implementation/MouseWheelUp.h \
-    src/touchegg/actions/implementation/MouseWheelDown.h \
     src/touchegg/actions/implementation/MinimizeWindow.h \
     src/touchegg/actions/implementation/CloseWindow.h \
     src/touchegg/actions/implementation/MaximizeRestoreWindow.h \
@@ -16,13 +14,13 @@ HEADERS += \
     src/touchegg/actions/implementation/RunCommand.h \
     src/touchegg/actions/implementation/DragAndDrop.h \
     src/touchegg/actions/implementation/LeftButtonClick.h \
-    src/touchegg/actions/implementation/MouseMove.h
+    src/touchegg/actions/implementation/MouseMove.h \
+    src/touchegg/actions/implementation/VerticalScroll.h \
+    src/touchegg/actions/implementation/HorizontalScroll.h
 
 SOURCES += \
     src/touchegg/actions/implementation/RightButtonClick.cpp \
     src/touchegg/actions/implementation/MiddleButtonClick.cpp \
-    src/touchegg/actions/implementation/MouseWheelUp.cpp \
-    src/touchegg/actions/implementation/MouseWheelDown.cpp \
     src/touchegg/actions/implementation/MinimizeWindow.cpp \
     src/touchegg/actions/implementation/CloseWindow.cpp \
     src/touchegg/actions/implementation/MaximizeRestoreWindow.cpp \
@@ -34,4 +32,6 @@ SOURCES += \
     src/touchegg/actions/implementation/RunCommand.cpp \
     src/touchegg/actions/implementation/DragAndDrop.cpp \
     src/touchegg/actions/implementation/LeftButtonClick.cpp \
-    src/touchegg/actions/implementation/MouseMove.cpp
+    src/touchegg/actions/implementation/MouseMove.cpp \
+    src/touchegg/actions/implementation/VerticalScroll.cpp \
+    src/touchegg/actions/implementation/HorizontalScroll.cpp

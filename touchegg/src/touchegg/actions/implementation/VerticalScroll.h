@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/actions/implementation/MouseWheelDown.h
+ * @file /src/touchegg/actions/implementation/VerticalScroll.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
@@ -9,11 +9,11 @@
  * This file is part of the Touchégg project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  MouseWheelDown
+ * @class  VerticalScroll
  * @author José Expósito
  */
-#ifndef MOUSEWHEELDOWN_H
-#define MOUSEWHEELDOWN_H
+#ifndef VERTICALSCROLL_H
+#define VERTICALSCROLL_H
 
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/actions/implementation/Action.h"
@@ -25,7 +25,7 @@
  * @~english
  * Emulates the mouse whell.
  */
-class MouseWheelDown : public Action {
+class VerticalScroll : public Action {
 
     private:
 
@@ -38,10 +38,23 @@ class MouseWheelDown : public Action {
          */
         int speed;
 
-        // Pruebas
-        int SCROLL_SPACE;  // Espacio que hay que acumular para hacer un scroll
-        float acumSpace;
-        float acel; // Deceleración que se le aplica al movimiento de inercia, a mas crezca, meno sinercia
+        /**
+         * @~spanish
+         * Desplazamiento acumulado al hacer scroll hacia arriba.
+         *
+         * @~english
+         * Accumulated space to scrolling up.
+         */
+        int upScrollSpace;
+
+        /**
+         * @~spanish
+         * Desplazamiento acumulado al hacer scroll hacia abajo.
+         *
+         * @~english
+         * Accumulated space to scrolling down.
+         */
+        int downScrollSpace;
 
     public:
 
@@ -54,7 +67,7 @@ class MouseWheelDown : public Action {
          * Constructor
          * @param settings Action settings.
          */
-        MouseWheelDown(const QString& settings);
+        VerticalScroll(const QString& settings);
 
         /**
          * @~spanish
@@ -103,4 +116,4 @@ class MouseWheelDown : public Action {
 
 };
 
-#endif // MOUSEWHEELDOWN_H
+#endif // VERTICALSCROLL_H

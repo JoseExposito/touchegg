@@ -94,11 +94,14 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
 
         // El nuevo gesto debe ser un drag con igual número de dedos que el tap
         // en ejecución para que se considere un tap&hold
+
         if(type == GEIS_GESTURE_PRIMITIVE_DRAG
-                && attrs.contains("touches")
-                && this->currentGesture->getAttrs().contains("touches")
-                && attrs.value("touches", -1)
-                   == this->currentGesture->getAttrs().value("touches", -1)) {
+                && attrs.contains(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
+                && this->currentGesture->getAttrs().contains(
+                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES, -1)
+                   == this->currentGesture->getAttrs().value(
+                        GEIS_GESTURE_ATTRIBUTE_TOUCHES, -1)) {
             delete this->currentGesture;
             this->currentGesture = this->gestureFact->createTapAndHold(type, id,
                     attrs);
@@ -129,7 +132,6 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
         } else {
             this->executeTap();
         }
-
     }
 }
 

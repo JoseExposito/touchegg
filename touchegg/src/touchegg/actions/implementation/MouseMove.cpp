@@ -44,13 +44,14 @@ MouseMove::MouseMove(const QString& settings)
 void MouseMove::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MouseMove::executeUpdate(const QHash<QString, QVariant>& attrs) {
-    if(!attrs.contains("delta x") || !attrs.contains("delta y"))
+    if(!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X)
+            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
         return;
 
     if(this->speedCount >= this->speed) {
         XTestFakeRelativeMotionEvent(QX11Info::display(),
-                attrs.value("delta x").toFloat() * 5,
-                attrs.value("delta y").toFloat() * 5,
+                attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() * 5,
+                attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() * 5,
                 0);
         this->speedCount = 0;
     } else {

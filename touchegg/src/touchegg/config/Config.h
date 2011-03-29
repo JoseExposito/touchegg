@@ -60,8 +60,8 @@ class Config {
 
         // Hide constructors
         Config();
-        Config(const Config&){}
-        const Config& operator = (const Config& c){return c;}
+        Config(const Config&);
+        const Config& operator = (const Config&);
 
     public:
 

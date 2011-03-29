@@ -40,9 +40,7 @@
     #include <X11/extensions/XTest.h>
 
     // utouch-geis
-    extern "C" {
-        #include <geis/geis.h>
-    }
+    #include <geis/geis.h>
 
     // Others
     #include <cmath>

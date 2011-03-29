@@ -124,7 +124,6 @@ void GestureCollector::run() {
     }
     subscribe[subscribeList.size()] = ((char)NULL);
 
-
     if(geis_subscribe(geisInstance, GEIS_ALL_INPUT_DEVICES,
             (const char**)subscribe, &gestureFuncs, this)
             != GEIS_STATUS_SUCCESS)

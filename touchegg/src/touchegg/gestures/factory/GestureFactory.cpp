@@ -37,145 +37,145 @@ Gesture* GestureFactory::createGesture(GeisGestureType /*type*/,
 
     QString type = attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
 
-	//--------------------------------------------------------------------------
-	
-	if(type == GEIS_GESTURE_TYPE_TAP2)
-		return new Gesture(GestureTypeEnum::TWO_FINGERS_TAP, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_TAP3)
-		return new Gesture(GestureTypeEnum::THREE_FINGERS_TAP, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_TAP4)
-		return new Gesture(GestureTypeEnum::FOUR_FINGERS_TAP, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_TAP5)
-		return new Gesture(GestureTypeEnum::FIVE_FINGERS_TAP, id, attrs);
-	
-	//--------------------------------------------------------------------------
-	
-	if(type == GEIS_GESTURE_TYPE_PINCH2)
-		return new Gesture(GestureTypeEnum::TWO_FINGERS_PINCH, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_PINCH3)
-		return new Gesture(GestureTypeEnum::THREE_FINGERS_PINCH, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_PINCH4)
-		return new Gesture(GestureTypeEnum::FOUR_FINGERS_PINCH, id, attrs);
-		
-	if(type == GEIS_GESTURE_TYPE_PINCH5)
-		return new Gesture(GestureTypeEnum::FIVE_FINGERS_PINCH, id, attrs);
-	
-	//--------------------------------------------------------------------------
-	
-	if(type == GEIS_GESTURE_TYPE_DRAG2) {
+    //--------------------------------------------------------------------------
+
+    if(type == GEIS_GESTURE_TYPE_TAP2)
+        return new Gesture(GestureTypeEnum::TWO_FINGERS_TAP, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_TAP3)
+        return new Gesture(GestureTypeEnum::THREE_FINGERS_TAP, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_TAP4)
+        return new Gesture(GestureTypeEnum::FOUR_FINGERS_TAP, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_TAP5)
+        return new Gesture(GestureTypeEnum::FIVE_FINGERS_TAP, id, attrs);
+
+    //--------------------------------------------------------------------------
+
+    if(type == GEIS_GESTURE_TYPE_PINCH2)
+        return new Gesture(GestureTypeEnum::TWO_FINGERS_PINCH, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_PINCH3)
+        return new Gesture(GestureTypeEnum::THREE_FINGERS_PINCH, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_PINCH4)
+        return new Gesture(GestureTypeEnum::FOUR_FINGERS_PINCH, id, attrs);
+
+    if(type == GEIS_GESTURE_TYPE_PINCH5)
+        return new Gesture(GestureTypeEnum::FIVE_FINGERS_PINCH, id, attrs);
+
+    //--------------------------------------------------------------------------
+
+    if(type == GEIS_GESTURE_TYPE_DRAG2) {
         // TWO_FINGERS_DRAG_UP
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() < 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
             return new Gesture(GestureTypeEnum::TWO_FINGERS_DRAG_UP,
-                id, attrs);
+                               id, attrs);
 
         // TWO_FINGERS_DRAG_DOWN
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() > 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
             return new Gesture(GestureTypeEnum::TWO_FINGERS_DRAG_DOWN,
-                id, attrs);
+                               id, attrs);
 
         // TWO_FINGERS_DRAG_LEFT
-        if(attrs.value("delta x").toFloat() < 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::TWO_FINGERS_DRAG_LEFT,
-                id, attrs);
+                               id, attrs);
 
         // TWO_FINGERS_DRAG_RIGHT
-        if(attrs.value("delta x").toFloat() > 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::TWO_FINGERS_DRAG_RIGHT,
-                id, attrs);
+                               id, attrs);
     }
 
     if(type == GEIS_GESTURE_TYPE_DRAG3) {
         // THREE_FINGERS_DRAG_UP
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() < 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
             return new Gesture(GestureTypeEnum::THREE_FINGERS_DRAG_UP,
-                id, attrs);
+                               id, attrs);
 
         // THREE_FINGERS_DRAG_DOWN
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() > 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
             return new Gesture(GestureTypeEnum::THREE_FINGERS_DRAG_DOWN,
-                id, attrs);
+                               id, attrs);
 
         // THREE_FINGERS_DRAG_LEFT
-        if(attrs.value("delta x").toFloat() < 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::THREE_FINGERS_DRAG_LEFT,
-                id, attrs);
+                               id, attrs);
 
         // THREE_FINGERS_DRAG_RIGHT
-        if(attrs.value("delta x").toFloat() > 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::THREE_FINGERS_DRAG_RIGHT,
-                id, attrs);
+                               id, attrs);
     }
 
-	if(type == GEIS_GESTURE_TYPE_DRAG4) {
+    if(type == GEIS_GESTURE_TYPE_DRAG4) {
         // FOUR_FINGERS_DRAG_UP
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() < 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
             return new Gesture(GestureTypeEnum::FOUR_FINGERS_DRAG_UP,
-                id, attrs);
+                               id, attrs);
 
         // FOUR_FINGERS_DRAG_DOWN
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() > 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
             return new Gesture(GestureTypeEnum::FOUR_FINGERS_DRAG_DOWN,
-                id, attrs);
+                               id, attrs);
 
         // FOUR_FINGERS_DRAG_LEFT
-        if(attrs.value("delta x").toFloat() < 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::FOUR_FINGERS_DRAG_LEFT,
-                id, attrs);
+                               id, attrs);
 
         // FOUR_FINGERS_DRAG_RIGHT
-        if(attrs.value("delta x").toFloat() > 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::FOUR_FINGERS_DRAG_RIGHT,
-                id, attrs);
+                               id, attrs);
     }
-	
-	if(type == GEIS_GESTURE_TYPE_DRAG5) {
+
+    if(type == GEIS_GESTURE_TYPE_DRAG5) {
         // FIVE_FINGERS_DRAG_UP
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() < 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
             return new Gesture(GestureTypeEnum::FIVE_FINGERS_DRAG_UP,
-                id, attrs);
+                               id, attrs);
 
         // FIVE_FINGERS_DRAG_DOWN
-        if(attrs.value("delta x").toFloat() == 0
-                && attrs.value("delta y").toFloat() > 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
             return new Gesture(GestureTypeEnum::FIVE_FINGERS_DRAG_DOWN,
-                id, attrs);
+                               id, attrs);
 
         // FIVE_FINGERS_DRAG_LEFT
-        if(attrs.value("delta x").toFloat() < 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::FIVE_FINGERS_DRAG_LEFT,
-                id, attrs);
+                               id, attrs);
 
         // FIVE_FINGERS_DRAG_RIGHT
-        if(attrs.value("delta x").toFloat() > 0
-                && attrs.value("delta y").toFloat() == 0)
+        if(attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
             return new Gesture(GestureTypeEnum::FIVE_FINGERS_DRAG_RIGHT,
-                id, attrs);
+                               id, attrs);
     }
-	
-	//--------------------------------------------------------------------------
-	
-	qDebug() << "[+] Unknown gesture:";
-	qDebug() << "\tName -> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME,
-			"Unknown name");
+
+    //--------------------------------------------------------------------------
+
+    qDebug() << "[+] Unknown gesture:";
+    qDebug() << "\tName -> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME,
+                                            "Unknown name");
     return NULL;
 }
 

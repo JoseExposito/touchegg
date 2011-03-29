@@ -61,27 +61,29 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
         return;
 
     // Ángulo
-    if(!attrs.contains("boundingbox x1") || !attrs.contains("boundingbox x2") ||
-       !attrs.contains("boundingbox y1") || !attrs.contains("boundingbox y2"))
+    if(!attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1)
+            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2)
+            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y1)
+            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y2))
         return;
 
-    float co = attrs.value("boundingbox y2").toFloat()
-            - attrs.value("boundingbox y1").toFloat();
-    float cc = attrs.value("boundingbox x2").toFloat()
-            - attrs.value("boundingbox x1").toFloat();
+    float co = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y2).toFloat()
+            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y1).toFloat();
+    float cc = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2).toFloat()
+            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1).toFloat();
 
     double angle = (int)(atan(co/cc) * 100);
 
-    int incX, incY;
-    if(angle > 80) {
+    double incX, incY;
+    if(angle > 75) {
         incX = 0;
         incY = 1;
-    } else if(angle < 40) {
+    } else if(angle < 20) {
         incX = 1;
         incY = 0;
     } else {
-        incX = 1;
-        incY = 1;
+        incX = cos(angle * (3.14/180));
+        incY = sin(angle * (3.14/180));
     }
 
     // Redimensionamos la ventana

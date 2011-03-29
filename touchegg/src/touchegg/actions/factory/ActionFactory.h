@@ -57,8 +57,8 @@ class ActionFactory {
 
         // Hide constructors
         ActionFactory(){}
-        ActionFactory(const ActionFactory&){}
-        const ActionFactory& operator = (const ActionFactory& gf){return gf;}
+        ActionFactory(const ActionFactory&);
+        const ActionFactory& operator = (const ActionFactory&);
 
     public:
 

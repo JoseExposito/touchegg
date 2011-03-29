@@ -41,8 +41,8 @@ class GestureFactory {
 
         // Hide constructors
         GestureFactory(){}
-        GestureFactory(const GestureFactory&){}
-        const GestureFactory& operator = (const GestureFactory& gf){return gf;}
+        GestureFactory(const GestureFactory&);
+        const GestureFactory& operator = (const GestureFactory&);
 
     public:
 

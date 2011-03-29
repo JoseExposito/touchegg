@@ -10,5 +10,4 @@
 4 - Make a gesture, for example drag two fingers over your trackpad. If all
     works fine, the name of the gesture will appear.
 
-5 - To use your own configuration edit $HOME/.touchegg/touchegg.conf
-    GUI in progress ;)
+5 - To use your own configuration edit ~/.touchegg/touchegg.conf or use the GUI.

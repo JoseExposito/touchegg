@@ -59,11 +59,14 @@ void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs) {
     if(this->window == 0)
         return;
 
-    if(!attrs.contains("delta x") || !attrs.contains("delta y"))
+    if(!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X)
+            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
         return;
 
-    QCursor::setPos(QCursor::pos().x() + attrs.value("delta x").toFloat(),
-            QCursor::pos().y() + attrs.value("delta y").toFloat());
+    QCursor::setPos(QCursor::pos().x()
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat(),
+            QCursor::pos().y()
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat());
 
     XWindowAttributes xwa;
     XGetWindowAttributes(QX11Info::display(), window, &xwa);

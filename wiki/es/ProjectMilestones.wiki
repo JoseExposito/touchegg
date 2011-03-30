@@ -11,6 +11,6 @@ A continuación puede ver una lista de los principales eventos relaccionados con
 || 11/03/2011 || Touchégg alcanza más de 3000 descargas ||
 || 11/03/2011 || Touchégg v0.2 ||
 || 15/03/2011 || Touchégg alcanza más de 4000 descargas ||
-|| 15/03/2011 || Touchégg alcanza más de 5000 descargas ||
-|| 15/03/2011 || Touchégg alcanza más de 6000 descargas ||
+|| 16/03/2011 || Touchégg alcanza más de 5000 descargas ||
+|| 30/03/2011 || Touchégg alcanza más de 7000 descargas ||
 || 13/04/2011 || Touchégg en la [https://wiki.ubuntu.com/UbuntuAppDeveloperWeek/Timetable Ubuntu AppDeveloperWeek] ||

@@ -12,5 +12,5 @@ Then you can see a list with the principal milestones of Touchégg project.
 || 11/03/2011 || Touchégg v0.2 released ||
 || 15/03/2011 || Touchégg gets more than 4000 downloads ||
 || 16/03/2011 || Touchégg gets more than 5000 downloads ||
-|| 16/03/2011 || Touchégg gets more than 6000 downloads ||
+|| 30/03/2011 || Touchégg gets more than 7000 downloads ||
 || 13/04/2011 || Touchégg in the [https://wiki.ubuntu.com/UbuntuAppDeveloperWeek/Timetable Ubuntu AppDeveloperWeek] ||

@@ -22,7 +22,7 @@ entre las distintas versiones de Touchégg.
   * SHOW_DESKTOP
   * CHANGE_DESKTOP
 
-* *Touchégg v0.2* (11/03/2011)
+ * *Touchégg v0.2* (11/03/2011)
  Errores solucionados:
   * Arreglados los problemas al apagar el ordenador
   * Las acciones _DESKTOP ahora funcionan con Compiz

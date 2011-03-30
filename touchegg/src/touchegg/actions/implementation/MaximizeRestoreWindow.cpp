@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MaximizeRestoreWindow::MaximizeRestoreWindow(const QString& settings)
-        : Action(settings) {}
+MaximizeRestoreWindow::MaximizeRestoreWindow(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //
@@ -36,21 +36,13 @@ void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&) {
     Atom atomMaxHorz = XInternAtom(QX11Info::display(),
         "_NET_WM_STATE_MAXIMIZED_HORZ", false);
 
-    // Obtenemos la ventana activa
+    // Vemos si la ventanan está maximizada
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
     unsigned char* propRet;
 
-    XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
-            XInternAtom(QX11Info::display(), "_NET_ACTIVE_WINDOW", false),
-            0, 1, false, XA_WINDOW, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
-    Window window = *((Window *) propRet);
-    XFree(propRet);
-
-    // Vemos si la ventanan está maximizada
-    XGetWindowProperty(QX11Info::display(), window,
+    XGetWindowProperty(QX11Info::display(), this->window,
             XInternAtom(QX11Info::display(), "_NET_WM_STATE", false),
             0, 100, false, XA_ATOM, &atomRet, &size, &numItems,
             &bytesAfterReturn, &propRet);
@@ -69,7 +61,7 @@ void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&) {
 
     // Si la ventana está maximizada la restauramos
     XClientMessageEvent event;
-    event.window = window;
+    event.window =this-> window;
     event.type = ClientMessage;
     event.message_type = XInternAtom(QX11Info::display(), "_NET_WM_STATE",
                                      false);

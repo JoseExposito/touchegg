@@ -29,16 +29,43 @@
  */
 class Action {
 
+    protected:
+
+        /**
+         * @~spanish
+         * Configuración del gesto.
+         *
+         * @~english
+         * Gesture settings.
+         */
+        QString settings;
+
+        /**
+         * @~spanish
+         * Ventana sobre la que se realiza la acción.
+         *
+         * @~english
+         * Window on which execute the action.
+         */
+        Window window;
+
     public:
 
         /**
          * @~spanish
          * Constructor.
+         * @param settings     Configuración del gesto.
+         * @param window Ventana sobre la que se realiza el gesto.
          *
          * @~english
          * Constructor.
+         * @param settings     Gesture settings.
+         * @param window Window on which execute the action.
          */
-        Action(const QString& /*settings*/) {}
+        Action(const QString& settings, Window window) {
+            this->settings = settings;
+            this->window   = window;
+        }
 
         /**
          * @~spanish

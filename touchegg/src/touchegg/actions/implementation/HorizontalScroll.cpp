@@ -18,7 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-HorizontalScroll::HorizontalScroll(const QString& settings) : Action(settings) {
+HorizontalScroll::HorizontalScroll(const QString& settings, Window window)
+        : Action(settings, window) {
     this->leftScrollSpace   = 0;
     this->rightScrollSpace = 0;
     this->speed           = 30;

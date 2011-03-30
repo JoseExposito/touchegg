@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MouseMove::MouseMove(const QString& settings)
-        : Action(settings) {
+MouseMove::MouseMove(const QString& settings, Window window)
+        : Action(settings, window) {
     this->speed = 4;
 
     QStringList strl = settings.split("=");

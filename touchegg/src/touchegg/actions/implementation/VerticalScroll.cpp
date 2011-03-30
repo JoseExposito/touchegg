@@ -18,7 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-VerticalScroll::VerticalScroll(const QString& settings) : Action(settings) {
+VerticalScroll::VerticalScroll(const QString& settings, Window window)
+        : Action(settings, window) {
     this->upScrollSpace   = 0;
     this->downScrollSpace = 0;
     this->speed           = 30;

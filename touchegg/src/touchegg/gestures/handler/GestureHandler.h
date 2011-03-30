@@ -83,6 +83,34 @@ class GestureHandler : public QThread {
          */
         Config* config;
 
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
+         * Devuelve la ventana sobre la que se produce el gesto.
+         * @param  window Ventana que nos pasa GEIS.
+         * @return Dicha ventana.
+         *
+         * @~english
+         * Returns window over the gestures is make.
+         * @param  window The window that GEIS returns.
+         * @return This window.
+         */
+        Window getGestureWindow(Window window) const;
+
+        /**
+         * @~spanish
+         * Devuelve la ventana de más alto nivel de la ventana indicada.
+         * @param  window La ventana.
+         * @return Dicha ventana
+         *
+         * @~english
+         * Returns the top level window of the specified window.
+         * @param  window The window.
+         * @return This window.
+         */
+        Window getTopLevelWindow(Window window) const;
+
     private slots:
 
         /**

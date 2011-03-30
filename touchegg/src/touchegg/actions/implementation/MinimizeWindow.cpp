@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MinimizeWindow::MinimizeWindow(const QString& settings)
-        : Action(settings) {}
+MinimizeWindow::MinimizeWindow(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //
@@ -31,22 +31,9 @@ void MinimizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 void MinimizeWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MinimizeWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
-    // Obtenemos la ventana activa
-    Atom atomRet;
-    int size;
-    unsigned long numItems, bytesAfterReturn;
-    unsigned char* propRet;
-
-    XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
-            XInternAtom(QX11Info::display(), "_NET_ACTIVE_WINDOW", false),
-            0, 1, false, XA_WINDOW, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
-    Window window = *((Window *) propRet);
-    XFree(propRet);
-
     // Minimizamos la ventana
     XClientMessageEvent event;
-    event.window = window;
+    event.window = this->window;
     event.type = ClientMessage;
     event.message_type = XInternAtom(QX11Info::display(), "WM_CHANGE_STATE",
             false);

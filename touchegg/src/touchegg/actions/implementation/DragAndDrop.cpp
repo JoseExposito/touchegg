@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-DragAndDrop::DragAndDrop(const QString& settings)
-        : Action(settings) {}
+DragAndDrop::DragAndDrop(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //

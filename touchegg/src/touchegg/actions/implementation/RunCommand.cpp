@@ -19,7 +19,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-RunCommand::RunCommand(const QString& settings) : Action(settings) {
+RunCommand::RunCommand(const QString& settings, Window window)
+        : Action(settings, window) {
     this->command = "";
 
     QStringList strl = settings.split("=");

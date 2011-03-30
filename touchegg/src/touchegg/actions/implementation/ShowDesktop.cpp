@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ShowDesktop::ShowDesktop(const QString& settings)
-        : Action(settings) {}
+ShowDesktop::ShowDesktop(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //

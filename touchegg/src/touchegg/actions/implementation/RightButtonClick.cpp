@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-RightButtonClick::RightButtonClick(const QString& settings)
-        : Action(settings) {}
+RightButtonClick::RightButtonClick(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //

@@ -18,7 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-SendKeys::SendKeys(const QString& settings) : Action(settings) {
+SendKeys::SendKeys(const QString& settings, Window window)
+        : Action(settings, window) {
     if(settings.split(":").length() != 2) {
         qWarning() << "Error reading SEND_KEYS settings";
         return;

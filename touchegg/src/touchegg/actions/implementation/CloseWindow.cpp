@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-CloseWindow::CloseWindow(const QString& settings)
-        : Action(settings) {}
+CloseWindow::CloseWindow(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //
@@ -31,25 +31,12 @@ void CloseWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
-    // Obtenemos la ventana activa
-    Atom atomRet;
-    int size;
-    unsigned long numItems, bytesAfterReturn;
-    unsigned char* propRet;
-
-    XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
-            XInternAtom(QX11Info::display(), "_NET_ACTIVE_WINDOW", false),
-            0, 1, false, XA_WINDOW, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
-    Window window = *((Window *) propRet);
-    XFree(propRet);
-
     // Cerramos la ventana
     XClientMessageEvent event;
-    event.window = window;
+    event.window = this->window;
     event.type = ClientMessage;
     event.message_type = XInternAtom(QX11Info::display(), "_NET_CLOSE_WINDOW",
-                                     false);
+            false);
     event.format = 32;
     event.data.l[0] = CurrentTime;
     event.data.l[1] = 2;

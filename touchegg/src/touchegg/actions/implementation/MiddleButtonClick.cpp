@@ -18,8 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MiddleButtonClick::MiddleButtonClick(const QString& settings)
-        : Action(settings) {}
+MiddleButtonClick::MiddleButtonClick(const QString& settings, Window window)
+        : Action(settings, window) {}
 
 
 // ************************************************************************** //

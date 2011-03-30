@@ -18,7 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ChangeDesktop::ChangeDesktop(const QString& settings) : Action(settings) {
+ChangeDesktop::ChangeDesktop(const QString& settings, Window window)
+        : Action(settings, window) {
     this->toRight = true;
 
     QStringList strl = settings.split("=");

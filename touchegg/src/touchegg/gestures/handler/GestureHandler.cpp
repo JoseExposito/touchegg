@@ -38,6 +38,77 @@ GestureHandler::~GestureHandler() {
 
 
 // ************************************************************************** //
+// **********                   PRIVATE METHODS                    ********** //
+// ************************************************************************** //
+
+Window GestureHandler::getGestureWindow(Window window) const {
+    Window topIn = this->getTopLevelWindow(window);
+    if(topIn == None)
+        return None;
+
+    // Comparamos la top-level window de la ventana pasada con las de las
+    // posibles fake-top-level windows (realmente no son top-level, pero son las
+    // ventanas que guardan los atributos y de más), devolviendo la ventana que
+    // contiene el título, la clase, etc
+    Atom atomRet;
+    int size;
+    unsigned long numItems, bytesAfterReturn;
+    unsigned char* propRet;
+    long offset = 0;
+    long offsetSize = 100;
+
+    Window ret = None;
+
+    int status;
+    Atom atomList = XInternAtom(QX11Info::display(),
+            "_NET_CLIENT_LIST_STACKING", false);
+    do {
+        status = XGetWindowProperty(QX11Info::display(),
+                QX11Info::appRootWindow(), atomList,
+                offset, offsetSize, false, XA_WINDOW, &atomRet, &size,
+                &numItems, &bytesAfterReturn, &propRet);
+
+        if(status == Success) {
+
+            Window* aux = (Window*)propRet;
+            unsigned int n=0;
+            while(ret == None && n<numItems) {
+                // Vemos si la top-level window de la ventana de la lista
+                // coincide con la de la pasada como argumento
+                if(this->getTopLevelWindow(aux[n]) == topIn)
+                    ret = aux[n];
+                n++;
+            }
+            offset += offsetSize;
+            XFree(propRet);
+        }
+    } while(status == Success && bytesAfterReturn != 0);
+
+    return ret;
+}
+
+Window GestureHandler::getTopLevelWindow(Window window) const {
+    Window  root, parent;
+    Window* children;
+    unsigned int numChildren;
+
+    if(XQueryTree(QX11Info::display(), window, &root, &parent, &children,
+            &numChildren) != 0) {
+        if(children != NULL)
+            XFree(children);
+
+        if(parent == root)
+            return window;
+        else
+            return this->getTopLevelWindow(parent);
+
+    } else {
+        return None;
+    }
+}
+
+
+// ************************************************************************** //
 // **********                     PRIVATE SLOTS                    ********** //
 // ************************************************************************** //
 
@@ -63,6 +134,12 @@ void GestureHandler::executeTap() {
 
 void GestureHandler::executeGestureStart(GeisGestureType type,
         GeisGestureId id, const QHash<QString, QVariant>& attrs) {
+
+    qDebug() << "\n#################################";
+    qDebug() << hex << "0x" << this->getGestureWindow(
+                    attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
+    qDebug() << "#################################\n";
+
     // Si no se está ejecutando ningún gesto creamos uno nuevo
     if(this->currentGesture == NULL) {
         this->currentGesture = this->gestureFact->createGesture(type,id,attrs);
@@ -71,11 +148,13 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
             // Creamos y asignamos la acción asociada al gesto
             ActionTypeEnum::ActionType actionType =
                     this->config->getAssociatedAction(
-                    this->currentGesture->getType());
+                    this->currentGesture->getType()); // TODO Pasarle la clase de la ventana
             QString actionSettings = this->config->getAssociatedSettings(
                     this->currentGesture->getType());
+            Window window = this->getGestureWindow(attrs.value(
+                    GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
             this->currentGesture->setAction(this->actionFact->createAction(
-                    actionType, actionSettings));
+                    actionType, actionSettings, window));
 
             // Mostramos información sobre el gesto
             qDebug() << "[+] New gesture:";
@@ -94,7 +173,6 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
 
         // El nuevo gesto debe ser un drag con igual número de dedos que el tap
         // en ejecución para que se considere un tap&hold
-
         if(type == GEIS_GESTURE_PRIMITIVE_DRAG
                 && attrs.contains(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
                 && this->currentGesture->getAttrs().contains(
@@ -108,13 +186,16 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
 
             if(this->currentGesture != NULL) {
                 // Creamos y asignamos la acción asociada al gesto
+                // Creamos y asignamos la acción asociada al gesto
                 ActionTypeEnum::ActionType actionType =
                         this->config->getAssociatedAction(
-                        this->currentGesture->getType());
+                        this->currentGesture->getType()); // TODO Pasarle la clase de la ventana
                 QString actionSettings = this->config->getAssociatedSettings(
                         this->currentGesture->getType());
+                Window window = this->getGestureWindow(attrs.value(
+                        GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
                 this->currentGesture->setAction(this->actionFact->createAction(
-                        actionType, actionSettings));
+                        actionType, actionSettings, window));
 
                 // Mostramos información sobre el gesto
                 qDebug() << "[+] New gesture:";

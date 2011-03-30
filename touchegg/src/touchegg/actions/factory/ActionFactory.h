@@ -78,16 +78,18 @@ class ActionFactory {
          * Crea la acción indicada. IMPORTANTE: No olvidar liberar memoria.
          * @param  actionType Tipo de acción a crear.
          * @param  settings   Configuración de la acción.
+         * @param  window     Ventana sobre la que ejecutar la acción.
          * @return La acción.
          *
          * @~english
          * Creates the especific action. IMPORTANT: Don't forget to free memory.
          * @param  actionType Action type to create.
          * @param  settings   Action settings.
+         * @param  window     Window on which execute the action.
          * @return The action.
          */
         Action* createAction(ActionTypeEnum::ActionType actionType,
-                const QString& settings);
+                const QString& settings, Window window);
 
 };
 

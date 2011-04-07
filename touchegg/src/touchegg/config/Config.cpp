@@ -21,7 +21,6 @@
 const char* Config::USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
 const char* Config::HOME_CONFIG_FILE      = "/.touchegg/touchegg.conf";
 const char* Config::HOME_CONFIG_DIR       = ".touchegg";
-const char* Config::TAP_AND_HOLD_TIME     = "GENERAL_CONFIG/tap_and_hold_time";
 
 //------------------------------------------------------------------------------
 
@@ -48,13 +47,13 @@ void Config::loadConfig() {
 // ************************************************************************** //
 
 Config::Config() {
+    // Comprobamos que los archivos estén en su sitio
     QFile homeFile(QDir::homePath() + HOME_CONFIG_FILE);
     QFile usrFile(USR_SHARE_CONFIG_FILE);
 
     if(!usrFile.exists()) {
-        qDebug() << USR_SHARE_CONFIG_FILE
-                 << " not found, reinstall application can solve the problem";
-        exit(-1);
+        qFatal("%s not found, reinstall application can solve the problem\n",
+               USR_SHARE_CONFIG_FILE);
     }
 
     if(!homeFile.exists()) {
@@ -66,8 +65,51 @@ Config::Config() {
     }
 
     qDebug() << "Reading config from " << QDir::homePath() + HOME_CONFIG_FILE;
-    this->settings = new QSettings(QDir::homePath() + HOME_CONFIG_FILE,
-            QSettings::NativeFormat);
+
+    // Cargamos en memoria la configuración
+    QDomDocument document;
+    QFile cfgFile(QDir::homePath() + HOME_CONFIG_FILE);
+    if (!cfgFile.open(QIODevice::ReadOnly))
+        qFatal("Can't open file for read");
+    if (!document.setContent(&cfgFile)) {
+        cfgFile.close();
+        qFatal("Error reading configuration, please, review the format");
+    }
+    cfgFile.close();
+
+    QDomElement root = document.documentElement();
+    this->initConfig(root.firstChild(), root.toElement().tagName());
+}
+
+// ************************************************************************** //
+// **********                   PRIVATE METHODS                    ********** //
+// ************************************************************************** //
+
+void Config::initConfig(QDomNode node, const QString& keyString) {
+    while(!node.isNull()) {
+        if(!node.toElement().isNull()) {
+            QString newKey = keyString +"/"+ node.toElement().attribute("type");
+            if(!node.hasChildNodes()
+                    || (node.hasChildNodes() && node.firstChild().isText())) {
+                // Guardamos el valor en el QHash
+                QString text = node.toElement().text();
+                this->settings.insert(newKey, text);
+
+                // Si es un gesto y está en uso, lo añadimos a la lista de
+                // gestos usados
+                QStringList aux = newKey.split("/");
+                if(aux.size() == 4 && aux.at(3) == "action"
+                        && text != "" && text != "NO_ACTION") {
+                    QStringList geisEquiv = GestureTypeEnum::getGeisEquivalent(
+                            GestureTypeEnum::getEnum(aux.at(1)));
+                    this->usedGestures.append(geisEquiv);
+                }
+            } else {
+                this->initConfig(node.firstChild(), newKey);
+            }
+        }
+        node = node.nextSibling();
+    }
 }
 
 
@@ -76,38 +118,36 @@ Config::Config() {
 // ************************************************************************** //
 
 QStringList Config::getUsedGestures() const {
-    QStringList allGestures = this->settings->childGroups();
-    QStringList usedGestures;
-
-    for(int n=0; n<allGestures.size(); n++) {
-        QString action = ActionTypeEnum::getValue(getAssociatedAction(
-                GestureTypeEnum::getEnum(allGestures.at(n))));
-        if(action != "" && action != "NO_ACTION")
-            usedGestures.append(GestureTypeEnum::getGeisEquivalent(
-                    GestureTypeEnum::getEnum(allGestures.at(n))));
-    }
-
-    usedGestures.removeDuplicates();
-    return usedGestures;
+    return this->usedGestures;
 }
 
 //------------------------------------------------------------------------------
 
 int Config::getTapAndHoldTime() const {
-    return this->settings->value(TAP_AND_HOLD_TIME).toInt();
+    bool ok;
+    int ret = this->settings.value(
+            "touchegg/general_settings/tap_and_hold_time").toInt(&ok);
+    return ok ? ret : 135;
 }
 
 //------------------------------------------------------------------------------
 
 ActionTypeEnum::ActionType Config::getAssociatedAction(
-        GestureTypeEnum::GestureType gestureType) const {
+        GestureTypeEnum::GestureType gestureType, QString appClass) const {
     QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString action  = this->settings->value(gesture + "/action").toString();
-    return ActionTypeEnum::getEnum(action);
+    QString keyWithClass = "touchegg/" + gesture + "/" + appClass + "/action";
+
+    if(this->settings.contains(keyWithClass)) {
+        return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
+    } else {
+        QString keyWithClass = "touchegg/" + gesture + "/ALL/action";
+        return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
+    }
 }
 
 QString Config::getAssociatedSettings(GestureTypeEnum::GestureType
         gestureType) const {
     QString gesture = GestureTypeEnum::getValue(gestureType);
-    return this->settings->value(gesture + "/settings").toString();
+    QString key = "touchegg/" + gesture + "/ALL/settings";
+    return this->settings.value(key);
 }

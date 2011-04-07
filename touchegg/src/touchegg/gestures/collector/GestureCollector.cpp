@@ -139,7 +139,6 @@ void GestureCollector::run() {
     delete subscribe;
 
 
-
     // Thanks to the geistest developer for this code
     int fd = -1;
     geis_configuration_get_value(geisInstance, GEIS_CONFIG_UNIX_FD, &fd);

@@ -41,6 +41,45 @@ GestureHandler::~GestureHandler() {
 // **********                   PRIVATE METHODS                    ********** //
 // ************************************************************************** //
 
+Gesture* GestureHandler::createGesture(GeisGestureType type, GeisGestureId id,
+        const QHash<QString, QVariant>& attrs, bool isTapAndHold) const {
+    // Creamos el gesto sin su acción
+    Gesture* ret;
+    if(isTapAndHold)
+        ret = this->gestureFact->createTapAndHold(type, id, attrs);
+    else
+        ret = this->gestureFact->createGesture(type, id, attrs);
+    if(ret == NULL)
+        return NULL;
+
+    // Vemos sobre que ventana se ha ejecutado
+    Window gestureWindow = this->getGestureWindow(
+            attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
+    if(gestureWindow == None)
+        return NULL;
+    QString appClass = this->getAppClass(gestureWindow);
+
+    // Creamos y asignamos la acción asociada al gesto
+    ActionTypeEnum::ActionType actionType;
+    QString actionSettings;
+
+    actionType = this->config->getAssociatedAction(ret->getType(), appClass);
+    actionSettings = this->config->getAssociatedSettings(ret->getType());
+
+    ret->setAction(this->actionFact->createAction(actionType, actionSettings,
+            gestureWindow));
+
+    // Mostramos los datos sobre el gesto
+    qDebug() << "[+] New gesture:";
+    qDebug() << "\tType      -> " << GestureTypeEnum::getValue(ret->getType());
+    qDebug() << "\tAction    -> " << ActionTypeEnum::getValue(actionType);
+    qDebug() << "\tApp Class -> " << appClass;
+
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+
 Window GestureHandler::getGestureWindow(Window window) const {
     Window topIn = this->getTopLevelWindow(window);
     if(topIn == None)
@@ -107,6 +146,15 @@ Window GestureHandler::getTopLevelWindow(Window window) const {
     }
 }
 
+QString GestureHandler::getAppClass(Window window) const {
+    XClassHint* classHint = XAllocClassHint();
+    XGetClassHint(QX11Info::display(), window, classHint);
+    QString ret = classHint->res_class;
+    XFree(classHint->res_class);
+    XFree(classHint->res_name);
+    return ret;
+}
+
 
 // ************************************************************************** //
 // **********                     PRIVATE SLOTS                    ********** //
@@ -116,10 +164,13 @@ void GestureHandler::executeTap() {
     this->timerTap->stop();
 
     if(this->currentGesture != NULL) {
-        qDebug() << "    Gesture Update";
-        qDebug() << "    Gesture Finish";
+        qDebug() << "\tGesture Start";
+        this->currentGesture->start();
 
+        qDebug() << "\tGesture Update";
         this->currentGesture->update();
+
+        qDebug() << "\tGesture Finish";
         this->currentGesture->finish();
 
         delete this->currentGesture;
@@ -135,35 +186,12 @@ void GestureHandler::executeTap() {
 void GestureHandler::executeGestureStart(GeisGestureType type,
         GeisGestureId id, const QHash<QString, QVariant>& attrs) {
 
-    qDebug() << "\n#################################";
-    qDebug() << hex << "0x" << this->getGestureWindow(
-                    attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
-    qDebug() << "#################################\n";
-
     // Si no se está ejecutando ningún gesto creamos uno nuevo
     if(this->currentGesture == NULL) {
-        this->currentGesture = this->gestureFact->createGesture(type,id,attrs);
-
+        this->currentGesture = this->createGesture(type, id, attrs, false);
         if(this->currentGesture != NULL) {
-            // Creamos y asignamos la acción asociada al gesto
-            ActionTypeEnum::ActionType actionType =
-                    this->config->getAssociatedAction(
-                    this->currentGesture->getType()); // TODO Pasarle la clase de la ventana
-            QString actionSettings = this->config->getAssociatedSettings(
-                    this->currentGesture->getType());
-            Window window = this->getGestureWindow(attrs.value(
-                    GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
-            this->currentGesture->setAction(this->actionFact->createAction(
-                    actionType, actionSettings, window));
-
-            // Mostramos información sobre el gesto
-            qDebug() << "[+] New gesture:";
-            qDebug() << "\tType   -> " << GestureTypeEnum::getValue(
-                    this->currentGesture->getType());
-            qDebug() << "\tAction -> " << ActionTypeEnum::getValue(actionType);
-            qDebug() << "    Gesture Start";
-
             // Ejecutamos el gesto
+            qDebug() << "\tGesture Start";
             this->currentGesture->start();
         }
 
@@ -177,35 +205,15 @@ void GestureHandler::executeGestureStart(GeisGestureType type,
                 && attrs.contains(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
                 && this->currentGesture->getAttrs().contains(
                         GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES, -1)
+                && attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
                    == this->currentGesture->getAttrs().value(
-                        GEIS_GESTURE_ATTRIBUTE_TOUCHES, -1)) {
+                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)) {
             delete this->currentGesture;
-            this->currentGesture = this->gestureFact->createTapAndHold(type, id,
-                    attrs);
+            this->currentGesture = this->createGesture(type, id, attrs, true);
 
             if(this->currentGesture != NULL) {
-                // Creamos y asignamos la acción asociada al gesto
-                // Creamos y asignamos la acción asociada al gesto
-                ActionTypeEnum::ActionType actionType =
-                        this->config->getAssociatedAction(
-                        this->currentGesture->getType()); // TODO Pasarle la clase de la ventana
-                QString actionSettings = this->config->getAssociatedSettings(
-                        this->currentGesture->getType());
-                Window window = this->getGestureWindow(attrs.value(
-                        GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
-                this->currentGesture->setAction(this->actionFact->createAction(
-                        actionType, actionSettings, window));
-
-                // Mostramos información sobre el gesto
-                qDebug() << "[+] New gesture:";
-                qDebug() << "\tType   -> " << GestureTypeEnum::getValue(
-                        this->currentGesture->getType());
-                qDebug() << "\tAction -> "
-                         << ActionTypeEnum::getValue(actionType);
-                qDebug() << "    Gesture Start";
-
                 // Ejecutamos el gesto
+                qDebug() << "\tGesture Start";
                 this->currentGesture->start();
             }
 
@@ -220,7 +228,7 @@ void GestureHandler::executeGestureUpdate(GeisGestureType type,
         GeisGestureId id,const QHash<QString, QVariant>& attrs) {
     // Si es un update del gesto en ejecución
     if(this->currentGesture != NULL && this->currentGesture->getId() == id) {
-        qDebug() << "    Gesture Update";
+        qDebug() << "\tGesture Update";
         this->currentGesture->setAttrs(attrs);
         this->currentGesture->update();
 
@@ -228,7 +236,7 @@ void GestureHandler::executeGestureUpdate(GeisGestureType type,
     // soportado
     } else if(this->currentGesture == NULL) {
         // Si es un TAP, esperamos un poco para que se pueda usar un tap&hold
-        this->executeGestureStart(type,id,attrs);
+        this->currentGesture = this->createGesture(type, id, attrs, false);
         if(this->currentGesture != NULL) {
             this->timerTap->start();
         }
@@ -238,7 +246,7 @@ void GestureHandler::executeGestureUpdate(GeisGestureType type,
 void GestureHandler::executeGestureFinish(GeisGestureType /*type*/,
         GeisGestureId /*id*/, const QHash<QString, QVariant>& attrs) {
     if(this->currentGesture != NULL) {
-        qDebug() << "    Gesture Finish";
+        qDebug() << "\tGesture Finish";
         this->currentGesture->setAttrs(attrs);
         this->currentGesture->finish();
         delete this->currentGesture;

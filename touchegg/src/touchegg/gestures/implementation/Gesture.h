@@ -110,7 +110,7 @@ class Gesture {
          * @~english
          * Is called when the gesture is started.
          */
-        virtual void start() const;
+        void start() const;
 
         /**
          * @~spanish
@@ -119,7 +119,7 @@ class Gesture {
          * @~english
          * Is called when the gesture is updated.
          */
-        virtual void update() const;
+        void update() const;
 
         /**
          * @~spanish
@@ -128,7 +128,7 @@ class Gesture {
          * @~english
          * Is called when the gesture is finished.
          */
-        virtual void finish() const;
+        void finish() const;
 
         //----------------------------------------------------------------------
 

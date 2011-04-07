@@ -35,17 +35,50 @@ class Config {
         static const char* HOME_CONFIG_FILE; // Sumarle el $HOME por delante
         static const char* HOME_CONFIG_DIR;
 
-        static const char* TAP_AND_HOLD_TIME;
-
+        //----------------------------------------------------------------------
 
         /**
          * @~spanish
-         * Configuración usada.
+         * QHash con la configuración.
+         * @see initConfig()
          *
          * @~english
-         * Configuration used.
+         * QHash with the configuration.
+         * @see initConfig()
          */
-        QSettings* settings;
+        QHash<QString, QString> settings;
+
+        /**
+         * @~spanish
+         * Lista con los gestos utilizados por Touchégg, es decir, todos los que
+         * tengan alguna acción asociada.
+         * Se encuentran directamente en el formato utilizado por GEIS para
+         * suscribirse a los mismo.
+         *
+         * @~english
+         * List with the gestures used by Touchégg, this is, all gestures with
+         * an  asocied action to it.
+         * They are saved directly in the format used for GEIS to subscribe to
+         * this gestures.
+         */
+        QStringList usedGestures;
+
+        /**
+         * @~spanish
+         * Inicializa el QHash que contiene la configuración. Dicho QHash tendrá
+         * como clave una cadena del tipo "touchegg/TWO_FINGERS_TAP/ALL/action"
+         * y como valor, en este caso, la acción correspondiente.
+         * @param node      Primer hijo del nodo raiz.
+         * @param keyString Nombre del nodo raiz.
+         *
+         * @~english
+         * Initializes the QHas that contains the settings. This QHash will have
+         * as key a string like "touchegg/TWO_FINGERS_TAP/ALL/action" and as
+         * value, in this case, the action.
+         * @param node      First child of the root node.
+         * @param keyString Name of the root node.
+         */
+        void initConfig(QDomNode node, const QString& keyString);
 
         //----------------------------------------------------------------------
 
@@ -90,10 +123,14 @@ class Config {
         /**
          * @~spanish
          * Devuelve una lista de todos los gestos con una acción asociada.
+         * Se encuentran directamente en el formato utilizado por GEIS para
+         * suscribirse a los mismo.
          * @return Dicha lista.
          *
          * @~english
          * Returns a list with all gestures with an associate action.
+         * They are saved directly in the format used for GEIS to subscribe to
+         * this gestures.
          * @return The list.
          */
         QStringList getUsedGestures() const;
@@ -126,7 +163,8 @@ class Config {
          * @return Type of associated action.
          */
         ActionTypeEnum::ActionType getAssociatedAction(
-                GestureTypeEnum::GestureType gestureType) const;
+                GestureTypeEnum::GestureType gestureType, QString appClass)
+                const;
 
         /**
          * @~spanish

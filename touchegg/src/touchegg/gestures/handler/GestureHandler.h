@@ -87,6 +87,32 @@ class GestureHandler : public QThread {
 
         /**
          * @~spanish
+         * Crea un gesto estandar con su acción.
+         * @param  type  Tipo del gesto.
+         * @param  id    ID del gesto.
+         * @param  attrs Atributos del gestos, siendo la clave el nombre del
+         *         atributo (por ejemplo "focus x", "touches"...) y el valor el
+         *         valor del propio atributo.
+         * @param  isTapAndHold Si es o no un gesto tap&hold.
+         * @return El gesto o NULL.
+         *
+         * @~english
+         * Create a estandar gesture with their action.
+         * @param  type  Gesture type.
+         * @param  id    Gesture ID.
+         * @param  attrs Gesture attributes, where the key is the name of the
+         *         attribute (ie "focus x", "touches") and the value the value of
+         *         the attribute.
+         * @param  isTapAndHold If is or not a tap&hold gesture.
+         * @return The gesture or NULL.
+         */
+        Gesture* createGesture(GeisGestureType type, GeisGestureId id,
+                const QHash<QString, QVariant>& attrs, bool isTapAndHold) const;
+
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
          * Devuelve la ventana sobre la que se produce el gesto.
          * @param  window Ventana que nos pasa GEIS.
          * @return Dicha ventana.
@@ -110,6 +136,21 @@ class GestureHandler : public QThread {
          * @return This window.
          */
         Window getTopLevelWindow(Window window) const;
+
+        /**
+         * @~spanish
+         * Devuelve la clase de la ventana especificada, por ejemplo, para
+         * cualquier ventana de XTerm la clase será "XTerm".
+         * @param  window Dicha ventana.
+         * @return La clase.
+         *
+         * @~english
+         * Returns the class of a window, for example, "XTerm" is the class of
+         * all instances of XTerm.
+         * @param  window This window.
+         * @return The class.
+         */
+        QString getAppClass(Window window) const;
 
     private slots:
 

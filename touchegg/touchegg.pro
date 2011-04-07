@@ -1,6 +1,6 @@
 TEMPLATE     = app
 TARGET       = touchegg
-QT          += core gui
+QT          += core gui xml
 OBJECTS_DIR += build
 MOC_DIR     += build
 LIBS        += -lutouch-geis -lX11 -lXtst -lXext

@@ -34,6 +34,16 @@ class GestureCollector : public QThread {
 
         /**
          * @~spanish
+         * Semaforo que bloquea la recogida de gestos mientras que no haya
+         * dispositivos de entrada conectados.
+         *
+         * @~english
+         * Semaphore that blocks the gesture collection while not have any input device.
+         */
+        QSemaphore* semDevices;
+
+        /**
+         * @~spanish
          * Devuelve un QHash con todos los atributos de un gesto, siendo la
          * clave el nombre del atributo (por ejemplo "focus x", "touches"...) y
          * el valor el valor del propio atributo.
@@ -67,8 +77,40 @@ class GestureCollector : public QThread {
 
         /**
          * @~spanish
+         * Se llama siempre que se añada un dispositivo de entrada.
+         * @param cookie   Puntero a la propia clase.
+         * @param id     ID del dispositivo
+         * @param attrs  Lista de atributos recibidos
+         *
+         * @english
+         * Callback function that is called when a input device is added.
+         * @param cookie Pointer to the class itself.
+         * @param id     ID of the device.
+         * @param attrs  List od attributes of the device.
+         */
+        static void deviceAdded(void* cookie,GeisInputDeviceId id,void* attrs);
+
+        /**
+         * @~spanish
+         * Se llama siempre que se quite un dispositivo de entrada.
+         * @param cookie Puntero a la propia clase.
+         * @param id     ID del dispositivo
+         * @param attrs  Lista de atributos recibidos
+         *
+         * @english
+         * Callback function that is called when a input device is removed.
+         * @param cookie Pointer to the class itself.
+         * @param id     ID of the device.
+         * @param attrs  List od attributes of the device.
+         */
+        static void deviceRemoved(void*cookie,GeisInputDeviceId id,void* attrs);
+
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
          * Función callback que se llamará cuando se añada un nuevo gesto.
-         * @param cookie   Parametros extras que se pueden pasar la función.
+         * @param cookie   Puntero a la propia clase.
          * @param type     Tipo del gesto.
          * @param id       Identificador único del gesto.
          * @param numAttrs Número de atributos recibidos.

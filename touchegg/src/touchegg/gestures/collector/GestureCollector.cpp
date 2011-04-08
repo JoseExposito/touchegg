@@ -19,11 +19,25 @@
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
+void GestureCollector::deviceAdded(void* cookie, GeisInputDeviceId /*id*/,
+        void* /*attrs*/) {
+    GestureCollector* gc = (GestureCollector*)cookie;
+    gc->semDevices->release();
+}
+
+void GestureCollector::deviceRemoved(void* cookie, GeisInputDeviceId /*id*/,
+        void* /*attrs*/) {
+    GestureCollector* gc = (GestureCollector*)cookie;
+    gc->semDevices->acquire();
+}
+
+//------------------------------------------------------------------------------
+
 void GestureCollector::gestureAdded(void* /*cookie*/, GeisGestureType /*type*/,
         GeisGestureId /*id*/, GeisSize /*numAttrs*/,
         GeisGestureAttr* /*attrs*/) {}
 
-void GestureCollector::gestureRemoved(void* /*cookie*/, GeisGestureType /*type*/,
+void GestureCollector::gestureRemoved(void* /*cookie*/, GeisGestureType/*type*/,
         GeisGestureId /*id*/, GeisSize /*numAttrs*/,
         GeisGestureAttr* /*attrs*/) {}
 
@@ -87,6 +101,8 @@ QHash<QString, QVariant> GestureCollector::getGestureAttrs(GeisSize numAttrs,
 // ************************************************************************** //
 
 void GestureCollector::run() {
+    this->semDevices = new QSemaphore(0);
+
     GeisXcbWinInfo xcbWinInfo;
     xcbWinInfo.display_name = NULL;
     xcbWinInfo.screenp      = NULL;
@@ -101,6 +117,13 @@ void GestureCollector::run() {
     if(geis_init(&winInfo, &geisInstance) != GEIS_STATUS_SUCCESS) {
         qFatal("geis_init: Can't initialize utouch-geis");
     }
+
+    // Estamos atentos a si se conectan o desconectan dispositivos de entrada
+    // para no recoger gestos si no hay ninguno conectado
+    GeisInputFuncs devicesFuncs;
+    devicesFuncs.added = GestureCollector::deviceAdded;
+    devicesFuncs.removed = GestureCollector::deviceRemoved;
+    geis_input_devices(geisInstance, &devicesFuncs, this);
 
     // Establecemos las funciones de callback
     GeisGestureFuncs gestureFuncs;
@@ -138,13 +161,18 @@ void GestureCollector::run() {
     }
     delete subscribe;
 
-
-    // Thanks to the geistest developer for this code
+    // Obtenemos los gestos
     int fd = -1;
     geis_configuration_get_value(geisInstance, GEIS_CONFIG_UNIX_FD, &fd);
 
     fd_set read_fds;
     for(;;) {
+        // Si no hay dispositivos conectados esperamos
+        if(this->semDevices->available() == 0) {
+            this->semDevices->acquire();
+            this->semDevices->release();
+        }
+
         FD_ZERO(&read_fds);
         FD_SET(fd, &read_fds);
         int sstat = select(fd+1, &read_fds, NULL, NULL, NULL);
@@ -155,7 +183,7 @@ void GestureCollector::run() {
         if (FD_ISSET(fd, &read_fds))
           geis_event_dispatch(geisInstance);
     }
-    // :D
 
     geis_finish(geisInstance);
+    delete this->semDevices;
 }

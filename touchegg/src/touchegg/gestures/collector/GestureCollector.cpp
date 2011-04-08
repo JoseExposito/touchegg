@@ -168,10 +168,8 @@ void GestureCollector::run() {
     fd_set read_fds;
     for(;;) {
         // Si no hay dispositivos conectados esperamos
-        if(this->semDevices->available() == 0) {
+        if(this->semDevices->available() == 0)
             this->semDevices->acquire();
-            this->semDevices->release();
-        }
 
         FD_ZERO(&read_fds);
         FD_SET(fd, &read_fds);

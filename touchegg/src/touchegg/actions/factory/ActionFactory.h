@@ -29,6 +29,7 @@
 #include "src/touchegg/actions/implementation/ResizeWindow.h"
 #include "src/touchegg/actions/implementation/ShowDesktop.h"
 #include "src/touchegg/actions/implementation/ChangeDesktop.h"
+#include "src/touchegg/actions/implementation/ChangeViewport.h"
 #include "src/touchegg/actions/implementation/SendKeys.h"
 #include "src/touchegg/actions/implementation/MoveWindow.h"
 #include "src/touchegg/actions/implementation/RunCommand.h"

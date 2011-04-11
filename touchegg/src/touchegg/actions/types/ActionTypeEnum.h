@@ -52,6 +52,7 @@ class ActionTypeEnum : public QObject {
             RESIZE_WINDOW,
             SHOW_DESKTOP,
             CHANGE_DESKTOP,
+            CHANGE_VIEWPORT,
             SEND_KEYS,
             MOVE_WINDOW,
             RUN_COMMAND,

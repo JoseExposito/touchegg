@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/actions/implementation/ChangeDesktop.h
+ * @file /src/touchegg/actions/implementation/ChangeViewport.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
@@ -12,20 +12,20 @@
  * @class  ChangeDesktop
  * @author José Expósito
  */
-#ifndef CHANGEDESKTOP_H
-#define CHANGEDESKTOP_H
+#ifndef CHANGEVIEWPORT_H
+#define CHANGEVIEWPORT_H
 
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/actions/implementation/Action.h"
 
 /**
  * @~spanish
- * Cambia de escritorio.
+ * Cambia el viewport.
  *
  * @~english
- * Change the desktop.
+ * Change the viewport.
  */
-class ChangeDesktop : public Action {
+class ChangeViewport : public Action {
 
     private:
 
@@ -36,11 +36,11 @@ class ChangeDesktop : public Action {
          * @~english
          * Direction to switch desktops.
          */
-        bool toRight;
+        bool next;
 
     public:
 
-        ChangeDesktop(const QString& settings, Window window);
+        ChangeViewport(const QString& settings, Window window);
 
         void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -49,4 +49,4 @@ class ChangeDesktop : public Action {
         void executeFinish(const QHash<QString, QVariant>& attrs);
 };
 
-#endif // CHANGEDESKTOP_H
+#endif // CHANGEVIEWPORT_H

@@ -16,7 +16,8 @@ HEADERS += \
     src/touchegg/actions/implementation/LeftButtonClick.h \
     src/touchegg/actions/implementation/MouseMove.h \
     src/touchegg/actions/implementation/VerticalScroll.h \
-    src/touchegg/actions/implementation/HorizontalScroll.h
+    src/touchegg/actions/implementation/HorizontalScroll.h \
+    src/touchegg/actions/implementation/ChangeViewport.h
 
 SOURCES += \
     src/touchegg/actions/implementation/RightButtonClick.cpp \
@@ -34,4 +35,5 @@ SOURCES += \
     src/touchegg/actions/implementation/LeftButtonClick.cpp \
     src/touchegg/actions/implementation/MouseMove.cpp \
     src/touchegg/actions/implementation/VerticalScroll.cpp \
-    src/touchegg/actions/implementation/HorizontalScroll.cpp
+    src/touchegg/actions/implementation/HorizontalScroll.cpp \
+    src/touchegg/actions/implementation/ChangeViewport.cpp

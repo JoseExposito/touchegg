@@ -25,9 +25,9 @@ ChangeDesktop::ChangeDesktop(const QString& settings, Window window)
     QStringList strl = settings.split("=");
     if(strl.length() == 2 && strl.at(0) == "DIRECTION") {
         QString configDir = strl.at(1);
-        if(configDir == "LEFT")
+        if(configDir == "PREVIOUS")
             this->toRight = false;
-        else if(configDir == "RIGHT")
+        else if(configDir == "NEXT")
             this->toRight = true;
         else
             qWarning() << "Error reading CHANGE_DESKTOP settings, using " <<

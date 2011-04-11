@@ -71,6 +71,9 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
     case ActionTypeEnum::CHANGE_DESKTOP:
         return new ChangeDesktop(settings, window);
 
+    case ActionTypeEnum::CHANGE_VIEWPORT:
+        return new ChangeViewport(settings, window);
+
     case ActionTypeEnum::SEND_KEYS:
         return new SendKeys(settings, window);
 

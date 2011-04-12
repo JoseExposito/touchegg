@@ -38,9 +38,6 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
     case ActionTypeEnum::NO_ACTION:
         return NULL;
 
-    case ActionTypeEnum::MOUSE_MOVE:
-        return new MouseMove(settings, window);
-
     case ActionTypeEnum::RIGHT_BUTTON_CLICK:
         return new RightButtonClick(settings, window);
 

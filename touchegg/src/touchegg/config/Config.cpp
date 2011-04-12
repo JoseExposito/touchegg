@@ -140,14 +140,20 @@ ActionTypeEnum::ActionType Config::getAssociatedAction(
     if(this->settings.contains(keyWithClass)) {
         return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
     } else {
-        QString keyWithClass = "touchegg/" + gesture + "/ALL/action";
-        return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
+        QString key = "touchegg/" + gesture + "/ALL/action";
+        return ActionTypeEnum::getEnum(this->settings.value(key));
     }
 }
 
 QString Config::getAssociatedSettings(GestureTypeEnum::GestureType
-        gestureType) const {
+        gestureType, QString appClass) const {
     QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString key = "touchegg/" + gesture + "/ALL/settings";
-    return this->settings.value(key);
+    QString keyWithClass = "touchegg/" + gesture + "/" + appClass + "/settings";
+
+    if(this->settings.contains(keyWithClass)) {
+        return this->settings.value(keyWithClass);
+    } else {
+        QString key = "touchegg/" + gesture + "/ALL/settings";
+        return this->settings.value(key);
+    }
 }

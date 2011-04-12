@@ -41,7 +41,6 @@ class ActionTypeEnum : public QObject {
          */
         enum ActionType {
             NO_ACTION,
-            MOUSE_MOVE,
             RIGHT_BUTTON_CLICK,
             MIDDLE_BUTTON_CLICK,
             VERTICAL_SCROLL,

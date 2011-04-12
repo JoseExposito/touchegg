@@ -20,6 +20,8 @@
 
 SendKeys::SendKeys(const QString& settings, Window window)
         : Action(settings, window) {
+    qDebug() << settings;
+
     if(settings.split(":").length() != 2) {
         qWarning() << "Error reading SEND_KEYS settings";
         return;

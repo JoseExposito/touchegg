@@ -64,7 +64,8 @@ Gesture* GestureHandler::createGesture(GeisGestureType type, GeisGestureId id,
     QString actionSettings;
 
     actionType = this->config->getAssociatedAction(ret->getType(), appClass);
-    actionSettings = this->config->getAssociatedSettings(ret->getType());
+    actionSettings = this->config->getAssociatedSettings(
+            ret->getType(), appClass);
 
     ret->setAction(this->actionFact->createAction(actionType, actionSettings,
             gestureWindow));

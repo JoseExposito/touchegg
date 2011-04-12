@@ -154,12 +154,14 @@ class Config {
         /**
          * @~spanish
          * Devuelve el tipo de acción asociada a el gesto indicado.
-         * @param  gestureType Gesto indicado.
+         * @param  gestureType El gesto que se realiza.
+         * @param  appClass Aplicación sobre la que se realiza el gesto.
          * @return Tipo de la acción asociada.
          *
          * @~english
          * Returns the associated action type with a gesture.
-         * @param  gestureType The gesture.
+         * @param  gestureType The gesture that is made.
+         * @param  appClass Application where it is made ​​the gesture.
          * @return Type of associated action.
          */
         ActionTypeEnum::ActionType getAssociatedAction(
@@ -170,15 +172,17 @@ class Config {
          * @~spanish
          * Devuelve la configuración de la acción asocada a un gesto indicado.
          * @param  gestureType Gesto indicado.
+         * @param  appClass Aplicación sobre la que se realiza el gesto.
          * @return La configuración.
          *
          * @~english
          * Returns the associated config with the indicated gesture.
          * @param  gestureType The gesture.
+         * @param  appClass Application where it is made ​​the gesture.
          * @return The settings.
          */
         QString getAssociatedSettings(GestureTypeEnum::GestureType
-                gestureType) const;
+                gestureType, QString appClass) const;
 
 };
 

@@ -17,6 +17,7 @@
 
 #include "src/touchegg/util/Include.h"
 
+
 /**
  * @~spanish
  * Clase de la que deben heredar todas las acciones. Las acciones son
@@ -33,10 +34,10 @@ class Action {
 
         /**
          * @~spanish
-         * Configuración del gesto.
+         * Configuración de la acción.
          *
          * @~english
-         * Gesture settings.
+         * Action settings.
          */
         QString settings;
 

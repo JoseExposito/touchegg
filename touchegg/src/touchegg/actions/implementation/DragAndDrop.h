@@ -27,6 +27,17 @@
  */
 class DragAndDrop : public Action {
 
+    private:
+
+        /**
+         * @~spanish
+         * Botón a emular.
+         *
+         * @~english
+         * Button to emulate.
+         */
+        int button;
+
     public:
 
         DragAndDrop(const QString& settings, Window window);

@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg/actions/implementation/DragAndDrop.cpp
+ * @file /src/touchegg/actions/implementation/MouseClick.cpp
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
@@ -9,16 +9,16 @@
  * This file is part of the Touchégg project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  DragAndDrop
+ * @class  MouseClick
  * @author José Expósito
  */
-#include "DragAndDrop.h"
+#include "MouseClick.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-DragAndDrop::DragAndDrop(const QString& settings, Window window)
+MouseClick::MouseClick(const QString& settings, Window window)
         : Action(settings, window) {
     this->button = 1;
 
@@ -42,21 +42,12 @@ DragAndDrop::DragAndDrop(const QString& settings, Window window)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void DragAndDrop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+void MouseClick::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+
+void MouseClick::executeFinish(const QHash<QString, QVariant>& /*attrs*/){}
+
+void MouseClick::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {
     XTestFakeButtonEvent(QX11Info::display(), this->button, true, 0);
-}
-
-void DragAndDrop::executeUpdate(const QHash<QString, QVariant>& attrs) {
-    if(!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X)
-            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
-        return;
-
-    QCursor::setPos(QCursor::pos().x()
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat(),
-            QCursor::pos().y()
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat());
-}
-
-void DragAndDrop::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
     XTestFakeButtonEvent(QX11Info::display(), this->button, false, 0);
+    XFlush(QX11Info::display());
 }

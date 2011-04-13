@@ -15,11 +15,11 @@
 #ifndef ACTIONFACTORY_H
 #define ACTIONFACTORY_H
 
+#include "src/touchegg/actions/types/ActionTypeEnum.h"
 #include "src/touchegg/util/Include.h"
 #include "src/touchegg/actions/types/ActionTypeEnum.h"
 #include "src/touchegg/actions/implementation/Action.h"
-#include "src/touchegg/actions/implementation/RightButtonClick.h"
-#include "src/touchegg/actions/implementation/MiddleButtonClick.h"
+#include "src/touchegg/actions/implementation/MouseClick.h"
 #include "src/touchegg/actions/implementation/VerticalScroll.h"
 #include "src/touchegg/actions/implementation/HorizontalScroll.h"
 #include "src/touchegg/actions/implementation/MinimizeWindow.h"
@@ -33,7 +33,6 @@
 #include "src/touchegg/actions/implementation/MoveWindow.h"
 #include "src/touchegg/actions/implementation/RunCommand.h"
 #include "src/touchegg/actions/implementation/DragAndDrop.h"
-#include "src/touchegg/actions/implementation/LeftButtonClick.h"
 
 
 /**
@@ -76,14 +75,16 @@ class ActionFactory {
 
         /**
          * @~spanish
-         * Crea la acción indicada. IMPORTANTE: No olvidar liberar memoria.
+         * Crea la acción indicada, si no existe devuelve NULL.
+         * IMPORTANTE: No olvidar liberar memoria.
          * @param  actionType Tipo de acción a crear.
          * @param  settings   Configuración de la acción.
          * @param  window     Ventana sobre la que ejecutar la acción.
          * @return La acción.
          *
          * @~english
-         * Creates the especific action. IMPORTANT: Don't forget to free memory.
+         * Creates the specified action, if it not exist returns NULL.
+         * IMPORTANT: Don't forget to free memory.
          * @param  actionType Action type to create.
          * @param  settings   Action settings.
          * @param  window     Window on which execute the action.

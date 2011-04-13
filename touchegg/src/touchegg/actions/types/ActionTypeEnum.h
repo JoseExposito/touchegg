@@ -41,8 +41,7 @@ class ActionTypeEnum : public QObject {
          */
         enum ActionType {
             NO_ACTION,
-            RIGHT_BUTTON_CLICK,
-            MIDDLE_BUTTON_CLICK,
+            MOUSE_CLICK,
             VERTICAL_SCROLL,
             HORIZONTAL_SCROLL,
             MINIMIZE_WINDOW,
@@ -55,8 +54,7 @@ class ActionTypeEnum : public QObject {
             SEND_KEYS,
             MOVE_WINDOW,
             RUN_COMMAND,
-            DRAG_AND_DROP,
-            LEFT_BUTTON_CLICK
+            DRAG_AND_DROP
         };
 
         /**

@@ -14,6 +14,7 @@
  */
 #include "ActionFactory.h"
 
+
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
@@ -38,11 +39,8 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
     case ActionTypeEnum::NO_ACTION:
         return NULL;
 
-    case ActionTypeEnum::RIGHT_BUTTON_CLICK:
-        return new RightButtonClick(settings, window);
-
-    case ActionTypeEnum::MIDDLE_BUTTON_CLICK:
-        return new MiddleButtonClick(settings, window);
+    case ActionTypeEnum::MOUSE_CLICK:
+        return new MouseClick(settings, window);
 
     case ActionTypeEnum::VERTICAL_SCROLL:
         return new VerticalScroll(settings, window);
@@ -82,9 +80,6 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
 
     case ActionTypeEnum::DRAG_AND_DROP:
         return new DragAndDrop(settings, window);
-
-    case ActionTypeEnum::LEFT_BUTTON_CLICK:
-        return new LeftButtonClick(settings, window);
 
     default:
         return NULL;

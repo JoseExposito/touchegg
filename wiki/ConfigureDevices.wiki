@@ -1,14 +1,12 @@
-= Introduction =
+= Ubuntu 11.04 Natty Narwhal =
 
-To facilitate Touchégg settings to other users, you can post in
-[https://code.google.com/p/touchegg/issues/list Issues] tab your touchpad
-name/pc name and your configuration to run Touchégg correctly.
-
-Also, if you have any problem, you can ask about it in the same tab.
+In Natty isn't necessary make any change in your configuration, only install and run Touchégg.
 
 
 
-= General configuration =
+= Ubuntu 10.10 Maverick Meerkat =
+
+== General configuration ==
 
 Normally, Touchégg configuration, consists in change your touchpad configuration
 to use evdev driver and _restart X._
@@ -23,7 +21,7 @@ If the /etc/X11/xorg.conf doesn't exist create it:
 $ sudo touch /etc/X11/xorg.conf
 
 
-= Specific configuration =
+== Specific configuration ==
 
  * *Apple Magic Trackpad:*
 

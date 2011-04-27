@@ -40,3 +40,27 @@ entre las distintas versiones de Touchégg.
  Otras mejoras:
   * _Añadida una GUI para manejar los gestos y sus acciones asociadas_
   * Añadidos lanzadores en el menú para la Touchégg y su GUI
+
+ * *Touchégg v0.3* (28/04/2011)
+ Nuevas funcionalidades:
+  * Touchégg permite asignar diferentes acciones a diferentes aplicaciones
+  * Añadida compatibilidad con uTouch 2, y en consecuencia, con el driver Synaptics y Ubuntu 11.04
+  * Mejorado el uso de CPU
+  * Touchégg permite interactuar con todas las ventanas, aunque no setén activas. Es deir, ahora las acciones se ejecutan sobre la ventana bajo el cursor
+  * Solucionados los problemas cuando el trackpad es quitado o añadido
+ Errores solucionados y otras mejoras:
+  * MOVE_WINDOW no mueve la ventana de escritorio
+  * RESIZE_WINDOW no redimendiona la ventana de escritorio
+  * CLOSE_WINDOW ahora puede se usado con gestos drag o tap&hold
+  * RESIZE WINDOW se ha adaptado al ángulo del gesto
+  * MOVE_WINDOW permite usar los efectos de Kwin/Compiz como "Wobbly Windows" o "Electric Borders"
+  * La acción MOUSE_MOVE se ha eliminado
+ Añadido soporte para los siguientes gestos:
+  * PINCH - Con 2, 4 y 5 dedos
+  * DRAG - Con 5 dedos
+ Añadido soporte para las siguientes acciones:
+  * Las acciones MOUSE_WHEEL_UP y MOUSE_WHEEL_DOWN ahora son VERTICAL_SCROLL
+  * Las acciones LEFT_BUTTON_CLICK, RIGHT_BUTTON_CLICK y MIDDLE_BUTTON_CLICK ahora son MOUSE_CLICK
+  * HORIZONTAL_SCROLL
+  * CHANGE_VIEWPORT
+  * DRAG_AND_DROP ahora soporta emular cualquier botón del ratón

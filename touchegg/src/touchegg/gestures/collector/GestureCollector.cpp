@@ -136,6 +136,8 @@ void GestureCollector::run() {
     // Nos suscribimos solo a los gestos que se vayan a usar
     Config* cfg = Config::getInstance();
     QStringList subscribeList = cfg->getUsedGestures();
+    if(subscribeList.length() == 0)
+        qFatal("Exiting, no gestures added to the configuration");
     char** subscribe = new char*[subscribeList.size() + 1];
 
     // Pasamos de QStringList a char**

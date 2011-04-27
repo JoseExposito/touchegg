@@ -26,7 +26,7 @@ Touchegg::Touchegg() {
     this->gestureCollector = new GestureCollector();
     this->gestureHandler   = new GestureHandler();
 
-    // Conectamos GeisLoop con GestureHandler para que el último trate los
+    // Conectamos GestureHandler con GestureHandler para que el último trate los
     // eventos que recoge el primero.
     qRegisterMetaType<GeisGestureType>("GeisGestureType");
     qRegisterMetaType<GeisGestureId>("GeisGestureId");
@@ -44,7 +44,8 @@ Touchegg::Touchegg() {
             gestureHandler, SLOT(executeGestureFinish(
             GeisGestureType,GeisGestureId,QHash<QString,QVariant>)));
 
-    // Lanzamos GeisLoop en un hilo para no congelar el bucle de eventos de Qt
+    // Lanzamos GestureHandler en un hilo aparte para no congelar el bucle de
+    // eventos de Qt
     this->gestureCollector->start();
 }
 

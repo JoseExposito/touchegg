@@ -66,19 +66,17 @@ class Config {
         /**
          * @~spanish
          * Inicializa el QHash que contiene la configuración. Dicho QHash tendrá
-         * como clave una cadena del tipo "touchegg/TWO_FINGERS_TAP/ALL/action"
-         * y como valor, en este caso, la acción correspondiente.
-         * @param node      Primer hijo del nodo raiz.
-         * @param keyString Nombre del nodo raiz.
+         * como clave una cadena del tipo "TWO_FINGERS_TAP.ALL.action" y como
+         * valor, en este caso, la acción correspondiente.
+         * @param file Archivo desde el que leer la configuración.
          *
          * @~english
          * Initializes the QHas that contains the settings. This QHash will have
-         * as key a string like "touchegg/TWO_FINGERS_TAP/ALL/action" and as
-         * value, in this case, the action.
-         * @param node      First child of the root node.
-         * @param keyString Name of the root node.
+         * as key a string like "TWO_FINGERS_TAP.ALL.action" and as value, in
+         * this case, the action.
+         * @param file File from which to read configuration.
          */
-        void initConfig(QDomNode node, const QString& keyString);
+        void initConfig(QFile& file);
 
         //----------------------------------------------------------------------
 

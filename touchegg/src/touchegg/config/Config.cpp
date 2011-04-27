@@ -65,51 +65,40 @@ Config::Config() {
     }
 
     qDebug() << "Reading config from " << QDir::homePath() + HOME_CONFIG_FILE;
-
-    // Cargamos en memoria la configuración
-    QDomDocument document;
-    QFile cfgFile(QDir::homePath() + HOME_CONFIG_FILE);
-    if (!cfgFile.open(QIODevice::ReadOnly))
-        qFatal("Can't open file for read");
-    if (!document.setContent(&cfgFile)) {
-        cfgFile.close();
-        qFatal("Error reading configuration, please, review the format");
-    }
-    cfgFile.close();
-
-    QDomElement root = document.documentElement();
-    this->initConfig(root.firstChild(), root.toElement().tagName());
+    this->initConfig(homeFile);
 }
 
 // ************************************************************************** //
 // **********                   PRIVATE METHODS                    ********** //
 // ************************************************************************** //
 
-void Config::initConfig(QDomNode node, const QString& keyString) {
-    while(!node.isNull()) {
-        if(!node.toElement().isNull()) {
-            QString newKey = keyString +"/"+ node.toElement().attribute("type");
-            if(!node.hasChildNodes()
-                    || (node.hasChildNodes() && node.firstChild().isText())) {
-                // Guardamos el valor en el QHash
-                QString text = node.toElement().text();
-                this->settings.insert(newKey, text);
+void Config::initConfig(QFile& file) {
+    file.open(QIODevice::ReadOnly);
 
-                // Si es un gesto y está en uso, lo añadimos a la lista de
-                // gestos usados
-                QStringList aux = newKey.split("/");
-                if(aux.size() == 4 && aux.at(3) == "action"
-                        && text != "" && text != "NO_ACTION") {
-                    QStringList geisEquiv = GestureTypeEnum::getGeisEquivalent(
-                            GestureTypeEnum::getEnum(aux.at(1)));
-                    this->usedGestures.append(geisEquiv);
-                }
-            } else {
-                this->initConfig(node.firstChild(), newKey);
+    while(!file.atEnd()) {
+        QString line(file.readLine());
+        line = line.trimmed();
+        int index = line.indexOf("=");
+
+        if(line != "" && index != -1) {
+            // Guardamos el valor en el QHash
+            QString key   = line.left(index);
+            QString value = line.mid(index+1);
+            this->settings.insert(key, value);
+
+            // Si es un gesto y está en uso, lo añadimos a la usedGestures
+            QStringList aux = key.split(".");
+            if(aux.size() == 3 && aux.at(2) == "action"
+                    && value != "" && value != "NO_ACTION") {
+                QStringList geisEquiv = GestureTypeEnum::getGeisEquivalent(
+                    GestureTypeEnum::getEnum(aux.at(0)));
+                this->usedGestures.append(geisEquiv);
             }
         }
-        node = node.nextSibling();
     }
+
+    this->usedGestures.removeDuplicates();
+    file.close();
 }
 
 
@@ -126,7 +115,7 @@ QStringList Config::getUsedGestures() const {
 int Config::getTapAndHoldTime() const {
     bool ok;
     int ret = this->settings.value(
-            "touchegg/general_settings/tap_and_hold_time").toInt(&ok);
+            "general_settings.tap_and_hold_time").toInt(&ok);
     return ok ? ret : 135;
 }
 
@@ -135,12 +124,12 @@ int Config::getTapAndHoldTime() const {
 ActionTypeEnum::ActionType Config::getAssociatedAction(
         GestureTypeEnum::GestureType gestureType, QString appClass) const {
     QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString keyWithClass = "touchegg/" + gesture + "/" + appClass + "/action";
+    QString keyWithClass = gesture + "." + appClass + ".action";
 
     if(this->settings.contains(keyWithClass)) {
         return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
     } else {
-        QString key = "touchegg/" + gesture + "/ALL/action";
+        QString key = gesture + ".ALL.action";
         return ActionTypeEnum::getEnum(this->settings.value(key));
     }
 }
@@ -148,12 +137,12 @@ ActionTypeEnum::ActionType Config::getAssociatedAction(
 QString Config::getAssociatedSettings(GestureTypeEnum::GestureType
         gestureType, QString appClass) const {
     QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString keyWithClass = "touchegg/" + gesture + "/" + appClass + "/settings";
+    QString keyWithClass = gesture + "." + appClass + ".settings";
 
     if(this->settings.contains(keyWithClass)) {
         return this->settings.value(keyWithClass);
     } else {
-        QString key = "touchegg/" + gesture + "/ALL/settings";
+        QString key = gesture + ".ALL.settings";
         return this->settings.value(key);
     }
 }

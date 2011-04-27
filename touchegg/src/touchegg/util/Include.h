@@ -18,7 +18,6 @@
     #include <QtCore>
     #include <QtGui>
     #include <QtGui/QX11Info>
-    #include <QtXml>
 
     // Xlib
     #include <X11/Xlib.h>

@@ -23,8 +23,8 @@ Direction::Direction()
         : ui(new Ui::Direction) {
     ui->setupUi(this);
 
-    this->ui->comboBox->addItem(tr("Next"), "NEXT");
-    this->ui->comboBox->addItem(tr("Previous"), "PREVIOUS");
+    this->ui->comboBox->addItem(tr("Next"), "DIRECTION=NEXT");
+    this->ui->comboBox->addItem(tr("Previous"), "DIRECTION=PREVIOUS");
 
     connect(this->ui->buttonBox, SIGNAL(accepted()),
             this, SIGNAL(configChanged()));

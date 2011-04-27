@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/SendKeysConfig.h
+ * @file /src/touchegg-gui/presentation/config_forms/Speed.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,34 +9,36 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  SendKeysConfig
+ * @class  Speed
  * @author José Expósito
  */
-#ifndef SENDKEYSCONFIG_H
-#define SENDKEYSCONFIG_H
+#ifndef SPEED_H
+#define SPEED_H
 
-#include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+namespace Ui { class Speed; }
+
 
 /**
  * @~spanish
- * Implementación de ConfigForm para la acción SEND_KEYS, ver la documentación
- * en dicha clase.
+ * Permite seleccionar un botón del ratón, ver la documentación en ConfigForm.
  *
  * @~english
- * ConfigForm implementation for SEND_KEYS action, to see documentation check
- * that class.
+ * Allows to select a mouse button, see the documentation in ConfigForm.
  */
-class SendKeysConfig : public ConfigForm {
+class Speed : public ConfigForm {
+
+    Q_OBJECT
 
     private:
 
-        QLineEdit* holdDownText;
-        QLineEdit* pressText;
+        Ui::Speed *ui;
 
     public:
 
-        SendKeysConfig();
+        Speed();
+
+        ~Speed();
 
         QString getSettings() const;
 
@@ -44,4 +46,4 @@ class SendKeysConfig : public ConfigForm {
 
 };
 
-#endif // SENDKEYSCONFIG_H
+#endif // SPEED_H

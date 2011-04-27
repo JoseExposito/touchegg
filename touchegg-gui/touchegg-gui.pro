@@ -1,6 +1,6 @@
 TEMPLATE        = app
 TARGET          = touchegg-gui
-QT             += core gui
+QT             += core gui xml
 OBJECTS_DIR    += build
 MOC_DIR        += build
 RCC_DIR        += build

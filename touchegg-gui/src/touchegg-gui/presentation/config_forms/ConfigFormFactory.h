@@ -15,13 +15,12 @@
 #ifndef CONFIGFORMFACTORY_H
 #define CONFIGFORMFACTORY_H
 
-#include "src/touchegg-gui/logic/type/ActionTypeEnum.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
-#include "src/touchegg-gui/presentation/config_forms/ChangeDesktopConfig.h"
-#include "src/touchegg-gui/presentation/config_forms/MouseMoveConfig.h"
-#include "src/touchegg-gui/presentation/config_forms/MouseWhellConfig.h"
-#include "src/touchegg-gui/presentation/config_forms/RunCommandConfig.h"
-#include "src/touchegg-gui/presentation/config_forms/SendKeysConfig.h"
+#include "src/touchegg-gui/presentation/config_forms/MouseButtons.h"
+#include "src/touchegg-gui/presentation/config_forms/Direction.h"
+#include "src/touchegg-gui/presentation/config_forms/Speed.h"
+#include "src/touchegg-gui/presentation/config_forms/RunCommand.h"
+#include "src/touchegg-gui/presentation/config_forms/SendKeys.h"
 
 /**
  * @~spanish
@@ -45,10 +44,8 @@ class ConfigFormFactory {
 
         // Hide constructors
         ConfigFormFactory(){}
-        ConfigFormFactory(const ConfigFormFactory&){}
-        const ConfigFormFactory& operator=(const ConfigFormFactory& cff) {
-                return cff;
-        }
+        ConfigFormFactory(const ConfigFormFactory&);
+        const ConfigFormFactory& operator=(const ConfigFormFactory&);
 
     public:
 
@@ -67,17 +64,18 @@ class ConfigFormFactory {
 
         /**
          * @~spanish
-         * Crea un nuevo ConfigForm, no olvidar liberar memoria.
-         * @param  type Tipo de formulario a crear.
+         * Crea un nuevo ConfigForm, no olvidar liberar memoria. Devuelve NULL
+         * si la acción introducida no es configurable.
+         * @param  actionType Tipo de formulario a crear.
          * @return El ConfigForm.
          *
          * @~english
-         * Creates a new ConfigForm, don't forget free memory.
-         * @param  type Type of the form to create.
+         * Creates a new ConfigForm, don't forget free memory. Returns NULL if
+         * the introduced action is not configurable.
+         * @param  actionType Type of the form to create.
          * @return The ConfigForm.
          */
-        virtual ConfigForm* createConfigForm(ActionTypeEnum::ActionType type)
-                const = 0;
+        ConfigForm* createConfigForm(const QString& actionType) const;
 
 };
 

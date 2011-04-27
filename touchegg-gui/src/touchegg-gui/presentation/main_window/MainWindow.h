@@ -16,15 +16,10 @@
 #define MAINWINDOW_H
 
 #include "src/touchegg-gui/util/Include.h"
-#include "src/touchegg-gui/presentation/main_window/TapTab.h"
-#include "src/touchegg-gui/presentation/main_window/DragTab.h"
-#include "src/touchegg-gui/presentation/main_window/PinchTab.h"
-#include "src/touchegg-gui/presentation/main_window/TapAndHoldTab.h"
+#include "src/touchegg-gui/presentation/widgets/MenuItem.h"
+#include "src/touchegg-gui/presentation/main_window/GesturesTab.h"
 #include "src/touchegg-gui/presentation/main_window/GeneralSettingsTab.h"
-
-namespace Ui {
-    class MainWindow;
-}
+namespace Ui { class MainWindow; }
 
 /**
  * @~spanish
@@ -41,11 +36,8 @@ class MainWindow : public QMainWindow {
 
         Ui::MainWindow *ui;
 
-        // Tabs to configure gestures
-        TapTab*        tapTab;
-        DragTab*       dragTab;
-        PinchTab*      pinchTab;
-        TapAndHoldTab* tapAndHoldTab;
+        // Tabs to configure Touchégg
+        GesturesTab* gesturesTab;
         GeneralSettingsTab* generalSettingsTab;
 
     public:
@@ -57,7 +49,7 @@ class MainWindow : public QMainWindow {
          * @~english
          * Default constructor.
          */
-        explicit MainWindow(QWidget *parent = 0);
+        MainWindow(QWidget *parent = 0);
 
         /**
          * @~spanish
@@ -72,32 +64,45 @@ class MainWindow : public QMainWindow {
 
         /**
          * @~spanish
+         * Se llama cada vez que se pulse en el menu.
+         * @param row Fila.
+         * @param column Columna.
+         *
+         * @~english
+         * Is called whenever the menu is clicked.
+         * @param row Row
+         * @param column Column.
+         */
+        void on_menu_cellClicked(int row, int column);
+
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
          * Se llama cada vez que se pulse el botón aplicar.
          *
          * @~english
-         * Is called whenever apply button is clicked.
+         * Is called whenever the apply button is clicked.
          */
         void on_applyButton_clicked();
 
         /**
          * @~spanish
-         * Se llama cada vez que se pulse en el menu.
+         * Se llama cada vez que se pulse el botón aceptar.
          *
          * @~english
-         * Is called whenever the menu is clicked.
+         * Is called whenever the accept button is clicked.
          */
-        void on_menuList_clicked(QModelIndex index);
-
-    protected:
+        void on_acceptButton_clicked();
 
         /**
          * @~spanish
-         * Se llama cuando se cierra la ventana.
+         * Se llama cada vez que se pulse el botón cancelar.
          *
          * @~english
-         * Is called whenever the window is closed.
+         * Is called whenever the cancel button is clicked.
          */
-        void closeEvent(QCloseEvent* /*event*/);
+        void on_cancelButton_clicked();
 
 };
 

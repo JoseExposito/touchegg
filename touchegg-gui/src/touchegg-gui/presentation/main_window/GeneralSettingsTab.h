@@ -16,12 +16,9 @@
 #define GENERALSETTINGSTAB_H
 
 #include "src/touchegg-gui/util/Include.h"
-#include "src/touchegg-gui/presentation/gui_controller/GuiController.h"
-#include "src/touchegg-gui/logic/transfer/GeneralTransfer.h"
+#include "src/touchegg-gui/logic/facade/Facade.h"
+namespace Ui { class GeneralSettingsTab; }
 
-namespace Ui {
-    class GeneralSettingsTab;
-}
 
 /**
  * @~spanish
@@ -47,7 +44,7 @@ class GeneralSettingsTab : public QFrame {
          * @~english
          * Constructor.
          */
-        explicit GeneralSettingsTab(QWidget *parent = 0);
+        GeneralSettingsTab(QWidget *parent = 0);
 
         /**
          * @~spanish

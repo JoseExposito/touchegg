@@ -15,81 +15,43 @@
 #ifndef FACADE_H
 #define FACADE_H
 
-#include "src/touchegg-gui/logic/application_service/GeneralServiceApp.h"
-#include "src/touchegg-gui/logic/application_service/GestureServiceApp.h"
+#include "src/touchegg-gui/logic/application_service/ToucheggServiceApp.h"
 #include "src/touchegg-gui/data/transaction_manager/TransactionManager.h"
+
 
 /**
  * @~spanish
  * Fachada para agrupar las funciones visibles por la capa de presentación.
  *
  * @~english
- * Façade to group all visible functions  by the presentation tier.
+ * Façade to group all visible functions by the presentation tier.
  */
 class Facade {
 
     public:
 
-        /**
-         * @~spanish
-         * Devuelve los datos de la propiedad indicada.
-         * @param  property La propiedad.
-         * @return Dichos datos o NULL si no se ha podido acceder.
-         *
-         * @~english
-         * Returns data for the indicated property.
-         * @param  property The property.
-         * @return Such data or NULL if not able to access.
-         */
-        virtual GeneralTransfer readGeneralProperty(const QString& property)
-                const = 0;
+        /// @see ToucheggDao::read()
+        QString toucheggRead(const QString& path) const;
 
-        /**
-         * @~spanish
-         * Actualiza la propiedad indicada.
-         * @param property La propiedad.
-         *
-         * @~english
-         * Updates the configuration of the specific gesture.
-         * @param property The property.
-         */
-        virtual void updateGeneralProperty(const GeneralTransfer& property)
-                const = 0;
+        /// @see ToucheggDao::update()
+        void toucheggUpdate(const QString& path, const QString& value) const;
 
+        /// @see ToucheggDao::remove()
+        void toucheggRemove(const QString& path) const;
 
-        /**
-         * @~spanish
-         * Devuelve los datos del gestos indicado.
-         * @param  type Tipo del gesto a actualizar.
-         * @return Dichos datos o NULL si no se ha podido acceder.
-         *
-         * @~english
-         * Returns data for the indicated gesture.
-         * @param type Type of the gesture to update.
-         * @return Such data or NULL if not able to access.
-         */
-        virtual GestureTransfer readGesture(GestureTypeEnum::GestureType type)
-                const = 0;
+        /// @see ToucheggDao::getApplication()
+        QStringList getToucheggUsedApplications() const;
 
-        /**
-         * @~spanish
-         * Actualiza la configuración del gesto indicado.
-         * @param  gesture Transfer con los datos del gesto a actualizar.
-         *
-         * @~english
-         * Updates the configuration of the specific gesture.
-         * @param  gesture Transfer with the data of the gesture to update.
-         */
-        virtual void updateGesture(const GestureTransfer& gesture) const = 0;
+        /// @see ToucheggDao::getUsedGestures()
+        QStringList getToucheggUsedGestures(const QString& app) const;
 
-        /**
-         * @~spanish
-         * Guarda los cambios efectuados.
-         *
-         * @~english
-         * Save changes.
-         */
-        virtual void commitData() const = 0;
+        //----------------------------------------------------------------------
+
+        /// @see TransactionManager::commit()
+        void commitData() const;
+
+        /// @see TransactionManager::rollback()
+        void rollbackData() const;
 
 };
 

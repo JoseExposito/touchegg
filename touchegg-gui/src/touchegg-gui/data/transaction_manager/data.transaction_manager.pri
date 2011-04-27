@@ -1,9 +1,7 @@
  
 
 HEADERS += \
-    src/touchegg-gui/data/transaction_manager/TransactionManager.h \
-    src/touchegg-gui/data/transaction_manager/TransactionManagerImp.h
+    src/touchegg-gui/data/transaction_manager/TransactionManager.h
 
 SOURCES += \
-    src/touchegg-gui/data/transaction_manager/TransactionManager.cpp \
-    src/touchegg-gui/data/transaction_manager/TransactionManagerImp.cpp
+    src/touchegg-gui/data/transaction_manager/TransactionManager.cpp

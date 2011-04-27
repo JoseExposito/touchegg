@@ -13,157 +13,236 @@
  * @author José Expósito
  */
 #include "GestureConfigWidget.h"
+#include "ui_GestureConfigWidget.h"
+
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-GestureConfigWidget::GestureConfigWidget(
-        GestureTypeEnum::GestureType gestureType, const QString& gestureImage,
-        const QStringList& allowedActions) : QFrame() {
-    // Inicializamos los atributos
-    this->gestureType = gestureType;
-    this->configForm  = NULL;
-    this->setFrameShape(QFrame::StyledPanel);
-    this->setFrameShadow(QFrame::Raised);
+GestureConfigWidget::GestureConfigWidget(const QString& app,
+        const QString& gesture, const QString& action, const QString& settings,
+        QWidget* parent)
+        : QFrame(parent),
+          ui(new Ui::GestureConfigWidget),
+          app(app),
+          configForm(NULL),
+          gesture(gesture) {
+    ui->setupUi(this);
 
-    // Label con la imagen del gesto
-    this->gestureLabel = new QLabel();
-    this->gestureLabel->setMaximumSize(60, 60);
-    this->gestureLabel->setMinimumSize(60, 60);
-    this->gestureLabel->setPixmap(QPixmap(gestureImage));
+    // Ponemos los iconos del tema
+    QIcon generalSettingsIcon = QIcon::hasThemeIcon("configure")
+            ? QIcon::fromTheme("configure")
+            : QIcon::fromTheme("document-properties");
+    this->ui->configBtn->setIcon(generalSettingsIcon);
 
-    // ComboBox con las acciones permitidas
-    this->allowedActionsCombo = new QComboBox();
-    this->allowedActionsCombo->addItems(allowedActions);
+    // Cargamos el contenido de los combo-box
+    this->loadAllGestures();
+    this->loadAllActions();
 
-    // Botón para editar la acción seleccionada
-    this->configButton = new QPushButton();
-    this->configButton->setMaximumWidth(32);
-    this->configButton->setMinimumWidth(32);
-    this->configButton->setCheckable(true);
-    this->configButton->setIcon(QIcon::fromTheme("configure"));
-
-    // Cargamos la acción y la configuración inicial desde disco
-    GuiController* guiController = GuiController::getInstance();
-    GestureTransfer* transfer = (GestureTransfer*)guiController->execute(
-            READ_GESTURE, &gestureType);
-    int index = this->allowedActionsCombo->findText(ActionTypeEnum::getValue(
-            transfer->getActionType()));
-    index = (index == -1) ? 0 : index;
-    this->allowedActionsCombo->setCurrentIndex(index);
-
-    ConfigFormFactory* factory = ConfigFormFactory::getInstance();
-    this->configForm = factory->createConfigForm(transfer->getActionType());
-    this->configButton->setEnabled(this->configForm != NULL);
-    if(this->configForm != NULL) {
-        this->configForm->setSettings(transfer->getSettings());
-        this->configForm->setVisible(false);
+    // Si hay configuración por defecto la cargamos
+    if(gesture != "") {
+        int index = this->ui->gestureCombo->findData(gesture);
+        this->ui->gestureCombo->setCurrentIndex(index);
     }
 
-    delete transfer;
+    if(action != "") {
+        int index = this->ui->actionCombo->findData(action);
+        this->ui->actionCombo->setCurrentIndex(index);
+    }
 
-    // Colocamos los componentes en el formulario
-    this->layout = new QGridLayout;
-    this->layout->addWidget(this->gestureLabel, 0, 0, 1, 1);
-    this->layout->addWidget(this->allowedActionsCombo, 0, 1, 1, 1);
-    this->layout->addWidget(this->configButton, 0, 2, 1, 1);
-    if(this->configForm != NULL)
-        this->layout->addWidget(this->configForm, 1, 0, 1, 3);
-    this->setLayout(this->layout);
+    // Si corresponde añadimos un formulario para configurar la acción
+    ConfigFormFactory* cff = ConfigFormFactory::getInstance();
+    this->configForm = cff->createConfigForm(action);
+    this->ui->configBtn->setEnabled(this->configForm != NULL);
+    if(settings != "" && this->configForm != NULL)
+        this->configForm->setSettings(settings);
 
     // Conectamos signals y slots
-    connect(this->allowedActionsCombo, SIGNAL(currentIndexChanged(int)),
+    connect(this->ui->gestureCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(gestureChanged(int)));
+    connect(this->ui->actionCombo, SIGNAL(currentIndexChanged(int)),
             this, SLOT(actionChanged(int)));
-    connect(this->configButton, SIGNAL(toggled(bool)),
-            this, SLOT(showConfigForm(bool)));
-    if(this->configForm != NULL) {
+    if(this->configForm != NULL)
         connect(this->configForm, SIGNAL(configChanged()),
                 this, SLOT(configChanged()));
-    }
-
 }
 
 GestureConfigWidget::~GestureConfigWidget() {
-    delete this->gestureLabel;
-    delete this->allowedActionsCombo;
-    delete this->configButton;
+    delete ui;
     if(this->configForm != NULL)
         delete this->configForm;
 }
 
+
+// ************************************************************************** //
+// **********                   PRIVATE METHODS                    ********** //
+// ************************************************************************** //
+
+void GestureConfigWidget::loadAllGestures() {
+    this->ui->gestureCombo->addItem(tr("Select a gesture"), "");
+
+    this->ui->gestureCombo->addItem(tr("Tap:"), "");
+    this->ui->gestureCombo->addItem(tr("    Tap with 2 fingers"), "TWO_FINGERS_TAP");
+    this->ui->gestureCombo->addItem(tr("    Tap with 3 fingers"), "THREE_FINGERS_TAP");
+    this->ui->gestureCombo->addItem(tr("    Tap with 4 fingers"), "FOUR_FINGERS_TAP");
+    this->ui->gestureCombo->addItem(tr("    Tap with 5 fingers"), "FIVE_FINGERS_TAP");
+
+    this->ui->gestureCombo->addItem(tr("Pinch:"), "");
+    this->ui->gestureCombo->addItem(tr("    Pinch with 2 fingers"), "TWO_FINGERS_PINCH");
+    this->ui->gestureCombo->addItem(tr("    Pinch with 3 fingers"), "THREE_FINGERS_PINCH");
+    this->ui->gestureCombo->addItem(tr("    Pinch with 4 fingers"), "FOUR_FINGERS_PINCH");
+    this->ui->gestureCombo->addItem(tr("    Pinch with 5 fingers"), "FIVE_FINGERS_PINCH");
+
+    this->ui->gestureCombo->addItem(tr("Drag with 2 fingers:"), "");
+    this->ui->gestureCombo->addItem(tr("    Drag with 2 fingers to up"), "TWO_FINGERS_DRAG_UP");
+    this->ui->gestureCombo->addItem(tr("    Drag with 2 fingers to down"), "TWO_FINGERS_DRAG_DOWN");
+    this->ui->gestureCombo->addItem(tr("    Drag with 2 fingers to the left"), "TWO_FINGERS_DRAG_LEFT");
+    this->ui->gestureCombo->addItem(tr("    Drag with 2 fingers to the right"), "TWO_FINGERS_DRAG_RIGHT");
+
+    this->ui->gestureCombo->addItem(tr("Drag with 3 fingers:"), "");
+    this->ui->gestureCombo->addItem(tr("    Drag with 3 fingers to up"), "THREE_FINGERS_DRAG_UP");
+    this->ui->gestureCombo->addItem(tr("    Drag with 3 fingers to down"), "THREE_FINGERS_DRAG_DOWN");
+    this->ui->gestureCombo->addItem(tr("    Drag with 3 fingers to the left"), "THREE_FINGERS_DRAG_LEFT");
+    this->ui->gestureCombo->addItem(tr("    Drag with 3 fingers to the right"), "THREE_FINGERS_DRAG_RIGHT");
+
+    this->ui->gestureCombo->addItem(tr("Drag with 4 fingers:"), "");
+    this->ui->gestureCombo->addItem(tr("    Drag with 4 fingers to up"), "FOUR_FINGERS_DRAG_UP");
+    this->ui->gestureCombo->addItem(tr("    Drag with 4 fingers to down"), "FOUR_FINGERS_DRAG_DOWN");
+    this->ui->gestureCombo->addItem(tr("    Drag with 4 fingers to the left"), "FOUR_FINGERS_DRAG_LEFT");
+    this->ui->gestureCombo->addItem(tr("    Drag with 4 fingers to the right"), "FOUR_FINGERS_DRAG_RIGHT");
+
+    this->ui->gestureCombo->addItem(tr("Drag with 5 fingers:"), "");
+    this->ui->gestureCombo->addItem(tr("    Drag with 5 fingers to up"), "FIVE_FINGERS_DRAG_UP");
+    this->ui->gestureCombo->addItem(tr("    Drag with 5 fingers to down"), "FIVE_FINGERS_DRAG_DOWN");
+    this->ui->gestureCombo->addItem(tr("    Drag with 5 fingers to the left"), "FIVE_FINGERS_DRAG_LEFT");
+    this->ui->gestureCombo->addItem(tr("    Drag with 5 fingers to the right"), "FIVE_FINGERS_DRAG_RIGHT");
+
+    this->ui->gestureCombo->addItem(tr("Tap & Hold:"), "");
+    this->ui->gestureCombo->addItem(tr("    Tap & Hold with 2 fingers"), "TWO_FINGERS_TAP_AND_HOLD");
+    this->ui->gestureCombo->addItem(tr("    Tap & Hold with 3 fingers"), "THREE_FINGERS_TAP_AND_HOLD");
+    this->ui->gestureCombo->addItem(tr("    Tap & Hold with 4 fingers"), "FOUR_FINGERS_TAP_AND_HOLD");
+    this->ui->gestureCombo->addItem(tr("    Tap & Hold with 5 fingers"), "FIVE_FINGERS_TAP_AND_HOLD");
+}
+
+void GestureConfigWidget::loadAllActions() {
+    this->ui->actionCombo->addItem(tr("Without an action"), "NO_ACTION");
+    this->ui->actionCombo->addItem(tr("Simulate mouse clicks"), "MOUSE_CLICK");
+    this->ui->actionCombo->addItem(tr("Vertical scroll"), "VERTICAL_SCROLL");
+    this->ui->actionCombo->addItem(tr("Horizontal scroll"), "HORIZONTAL_SCROLL");
+    this->ui->actionCombo->addItem(tr("Simulate keyboard shortcuts"), "SEND_KEYS");
+    this->ui->actionCombo->addItem(tr("Execute a command"), "RUN_COMMAND");
+    this->ui->actionCombo->addItem(tr("Minimize a window"), "MINIMIZE_WINDOW");
+    this->ui->actionCombo->addItem(tr("Maximize or restore a window"), "MAXIMIZE_RESTORE_WINDOW");
+    this->ui->actionCombo->addItem(tr("Resize a window"), "RESIZE_WINDOW");
+    this->ui->actionCombo->addItem(tr("Move a window"), "MOVE_WINDOW");
+    this->ui->actionCombo->addItem(tr("Close a window"), "CLOSE_WINDOW");
+    this->ui->actionCombo->addItem(tr("Show the desktop"), "SHOW_DESKTOP");
+    this->ui->actionCombo->addItem(tr("Change the desktop"), "CHANGE_DESKTOP");
+    this->ui->actionCombo->addItem(tr("Change the desktop viewport"), "CHANGE_VIEWPORT");
+    this->ui->actionCombo->addItem(tr("Simulate drag&drop"), "DRAG_AND_DROP");
+}
+
+
+
+// ************************************************************************** //
+// **********                    PUBLIC METHODS                    ********** //
+// ************************************************************************** //
+
+void GestureConfigWidget::deleteConfig() {
+    Facade f;
+    if(this->gesture != "") {
+        f.toucheggRemove(this->gesture + "." + this->app + ".action");
+        f.toucheggRemove(this->gesture + "." + this->app + ".settings");
+    }
+}
 
 // ************************************************************************** //
 // **********                     PRIVATE SLOTS                    ********** //
 // ************************************************************************** //
 
-void GestureConfigWidget::actionChanged(int newAction) {
-    // Si la acción anterior usaba un formulario de configuración lo borramos
-    if(this->configForm != NULL) {
-        this->configButton->setChecked(false);
-        this->layout->removeWidget(this->configForm);
-        disconnect(this->configForm, SIGNAL(configChanged()),
-                this, SLOT(configChanged()));
-        delete this->configForm;
+void GestureConfigWidget::gestureChanged(int /*index*/) {
+    Facade f;
+
+    // Si se cambia el gesto borramos los datos guardados anteriormente porque
+    // son inválidos. Si no se borraran se empezarían a duplicar datos.
+    if(this->gesture != "") {
+        f.toucheggRemove(this->gesture + "." + this->app + ".action");
+        f.toucheggRemove(this->gesture + "." + this->app + ".settings");
     }
 
-    // Vemos que acción está seleccionada
-    QString actionText = this->allowedActionsCombo->itemText(newAction);
-    ActionTypeEnum::ActionType action = (newAction == 0)
-            ? ActionTypeEnum::NO_ACTION
-            : ActionTypeEnum::getEnum(actionText);
+    this->gesture = this->ui->gestureCombo->itemData(
+            this->ui->gestureCombo->currentIndex()).toString();
+
+    // Guardamos los cambios realizados
+    if(this->gesture != "") {
+        QString action = this->ui->actionCombo->itemData(
+                this->ui->actionCombo->currentIndex()).toString();
+        f.toucheggUpdate(this->gesture + "." + this->app + ".action", action);
+
+        if(this->configForm != NULL) {
+            QString settings = this->configForm->getSettings();
+            f.toucheggUpdate(this->gesture+"."+this->app+".settings",settings);
+        }
+    }
+}
+
+void GestureConfigWidget::actionChanged(int /*index*/) {
+    Facade f;
+
+    // Si se cambia el gesto borramos los datos guardados anteriormente porque
+    // son inválidos. Si no se borraran se empezarían a duplicar datos.
+    if(this->gesture != "") {
+        f.toucheggRemove(this->gesture + "." + this->app + ".action");
+        f.toucheggRemove(this->gesture + "." + this->app + ".settings");
+    }
+
+    // Si la acción anterior usaba un formulario de configuración lo borramos
+    if(this->configForm != NULL)
+        delete this->configForm;
 
     // Si corresponde añadimos un formulario para configurar la acción
-    ConfigFormFactory* factory = ConfigFormFactory::getInstance();
-    this->configForm = factory->createConfigForm(action);
-    this->configButton->setEnabled(this->configForm != NULL);
-
-    QString settings = "";
-    if(this->configForm != NULL) {
-        // Cargamos la configuración por defecto desde disco
-        GuiController* guiController = GuiController::getInstance();
-        GestureTransfer* transfer = (GestureTransfer*)guiController->execute(
-                READ_GESTURE, &gestureType);
-        this->configForm->setSettings(transfer->getSettings());
-        settings = this->configForm->getSettings();
-        delete transfer;
-
-        // Colocamos los componentes en el formulario
-        this->configForm->setVisible(false);
-        this->layout->addWidget(this->configForm, 1, 0, 1, 3);
-
+    QString action = this->ui->actionCombo->itemData(
+            this->ui->actionCombo->currentIndex()).toString();
+    ConfigFormFactory* cff = ConfigFormFactory::getInstance();
+    this->configForm = cff->createConfigForm(action);
+    this->ui->configBtn->setEnabled(this->configForm != NULL);
+    if(this->configForm != NULL)
         connect(this->configForm, SIGNAL(configChanged()),
                 this, SLOT(configChanged()));
-    }
 
-    // Actualizamos la configuración del gesto
-    GestureTransfer transfer(this->gestureType, action, settings);
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(UPDATE_GESTURE, &transfer);
+    // Guardamos los cambios realizados
+    if(this->gesture != "") {
+        QString action = this->ui->actionCombo->itemData(
+                this->ui->actionCombo->currentIndex()).toString();
+        f.toucheggUpdate(this->gesture + "." + this->app + ".action", action);
+
+        if(this->configForm != NULL) {
+            QString settings = this->configForm->getSettings();
+            f.toucheggUpdate(this->gesture+"."+this->app+".settings",settings);
+        }
+    }
 }
 
-void GestureConfigWidget::showConfigForm(bool checked) const {
-    if(this->configForm != NULL && checked) {
+void GestureConfigWidget::on_configBtn_clicked() {
+    if(this->configForm != NULL) {
         this->configForm->setVisible(true);
-    } else if(this->configForm != NULL && !checked) {
-        this->configForm->setVisible(false);
     }
 }
+
+//------------------------------------------------------------------------------
 
 void GestureConfigWidget::configChanged() const {
-    // Guardamos los cambios en disco
-    QString actionText = this->allowedActionsCombo->currentText();
-    ActionTypeEnum::ActionType action =
-            (this->allowedActionsCombo->currentIndex() == 0)
-            ? ActionTypeEnum::NO_ACTION
-            : ActionTypeEnum::getEnum(actionText);
+    // Guardamos los cambios realizados
+    Facade f;
+    if(this->gesture != "") {
+        QString action = this->ui->actionCombo->itemData(
+                this->ui->actionCombo->currentIndex()).toString();
+        f.toucheggUpdate(this->gesture + "." + this->app + ".action", action);
 
-    QString settings = "";
-    if(this->configForm != NULL) {
-        settings = this->configForm->getSettings();
+        if(this->configForm != NULL) {
+            QString settings = this->configForm->getSettings();
+            f.toucheggUpdate(this->gesture+"."+this->app+".settings",settings);
+        }
     }
-
-    GestureTransfer transfer(this->gestureType, action, settings);
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(UPDATE_GESTURE, &transfer);
 }

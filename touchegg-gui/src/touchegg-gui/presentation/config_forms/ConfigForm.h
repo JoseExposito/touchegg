@@ -24,7 +24,7 @@
  * @~english
  * Base class for the config forms.
  */
-class ConfigForm : public QFrame {
+class ConfigForm : public QDialog {
 
     Q_OBJECT
 

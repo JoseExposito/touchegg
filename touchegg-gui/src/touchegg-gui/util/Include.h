@@ -14,13 +14,8 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
 
-    // Qt
+    #include <QtCore>
     #include <QtGui>
-    #include <QDebug>
-    #include <QString>
-    #include <QMetaEnum>
-    #include <QSettings>
-    #include <QFile>
-    #include <QDir>
+    #include <QtXml>
 
 #endif // INCLUDE_H

@@ -56,7 +56,7 @@
       <item row="1" column="2">
        <widget class="QLabel" name="msLabel">
         <property name="text">
-         <string>msLabel</string>
+         <string>ms</string>
         </property>
        </widget>
       </item>

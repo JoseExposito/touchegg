@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/ChangeDesktopConfig.h
+ * @file /src/touchegg-gui/presentation/config_forms/RunCommand.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,33 +9,36 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  ChangeDesktopConfig
+ * @class  RunCommand
  * @author José Expósito
  */
-#ifndef CHANGEDESKTOPCONFIG_H
-#define CHANGEDESKTOPCONFIG_H
+#ifndef RUNCOMMAND_H
+#define RUNCOMMAND_H
 
-#include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+namespace Ui { class RunCommand; }
+
 
 /**
  * @~spanish
- * Implementación de ConfigForm para la acción CHANGE_DESKTOP, ver la
- * documentación en dicha clase.
+ * Permite seleccionar un comando, ver la documentación en ConfigForm.
  *
  * @~english
- * ConfigForm implementation for CHANGE_DESKTOP action, to see documentation
- * check that class.
+ * Allows to select a command, see the documentation in ConfigForm.
  */
-class ChangeDesktopConfig : public ConfigForm {
+class RunCommand : public ConfigForm {
+
+    Q_OBJECT
 
     private:
 
-        QComboBox* leftRight;
+        Ui::RunCommand *ui;
 
     public:
 
-        ChangeDesktopConfig();
+        RunCommand();
+
+        ~RunCommand();
 
         QString getSettings() const;
 
@@ -43,4 +46,5 @@ class ChangeDesktopConfig : public ConfigForm {
 
 };
 
-#endif // CHANGEDESKTOPCONFIG_H
+
+#endif // RUNCOMMAND_H

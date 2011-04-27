@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/MouseWhellConfig.h
+ * @file /src/touchegg-gui/presentation/config_forms/SendKeys.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,33 +9,35 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  MouseWhellConfig
+ * @class  SendKeys
  * @author José Expósito
  */
-#ifndef MOUSEWHELLCONFIG_H
-#define MOUSEWHELLCONFIG_H
+#ifndef SENDKEYS_H
+#define SENDKEYS_H
 
-#include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+namespace Ui { class SendKeys; }
 
 /**
  * @~spanish
- * Implementación de ConfigForm para la acción MOUSE_WHELL, ver la documentación
- * en dicha clase.
+ * Permite seleccionar un atajo de teclado, ver la documentación en ConfigForm.
  *
  * @~english
- * ConfigForm implementation for MOUSE_WHELL action, to see documentation check
- * that class.
+ * Allows to select a shortcut, see the documentation in ConfigForm.
  */
-class MouseWhellConfig : public ConfigForm {
+class SendKeys : public ConfigForm {
+
+    Q_OBJECT
 
     private:
 
-        QSlider* slider;
+        Ui::SendKeys *ui;
 
     public:
 
-        MouseWhellConfig();
+        SendKeys();
+
+        ~SendKeys();
 
         QString getSettings() const;
 
@@ -43,4 +45,4 @@ class MouseWhellConfig : public ConfigForm {
 
 };
 
-#endif // MOUSEWHELLCONFIG_H
+#endif // SENDKEYS_H

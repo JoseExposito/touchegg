@@ -26,7 +26,38 @@
  */
 class TransactionManager {
 
-    protected:
+    private:
+
+        // Constants to access to the settings
+        static const char* USR_SHARE_CONFIG_FILE;
+        static const char* HOME_CONFIG_FILE; // Sumarle el $HOME por delante
+        static const char* HOME_CONFIG_DIR;
+
+        /**
+         * @~spanish
+         * Configuración usada.
+         *
+         * @~english
+         * Configuration used.
+         */
+        QHash<QString, QString>* settings;
+
+        /**
+         * @~spanish
+         * Inicializa el QHash que contiene la configuración. Dicho QHash tendrá
+         * como clave una cadena del tipo "TWO_FINGERS_TAP.ALL.action" y como
+         * valor, en este caso, la acción correspondiente.
+         * @param file Archivo desde el que leer la configuración.
+         *
+         * @~english
+         * Initializes the QHas that contains the settings. This QHash will have
+         * as key a string like "TWO_FINGERS_TAP.ALL.action" and as value, in
+         * this case, the action.
+         * @param file File from which to read configuration.
+         */
+        void loadConfig(QFile& file);
+
+        //----------------------------------------------------------------------
 
         /**
          * @~spanish
@@ -38,11 +69,9 @@ class TransactionManager {
         static TransactionManager* instance;
 
         // Hide constructors
-        TransactionManager(){}
-        TransactionManager(const TransactionManager&){}
-        const TransactionManager& operator=(const TransactionManager& tm) {
-            return tm;
-        }
+        TransactionManager();
+        TransactionManager(const TransactionManager&);
+        const TransactionManager& operator=(const TransactionManager&);
 
     public:
 
@@ -61,21 +90,21 @@ class TransactionManager {
 
         /**
          * @~spanish
-         * (Re)carga la configuración desde disco.
+         * Guarda los cambios y recarga Touchégg.
          *
          * @~english
-         * (Re)loads the configuration from disk.
+         * Saves the changes and reloads Touchégg.
          */
-        virtual void loadConfig() = 0;
+        void commit();
 
         /**
          * @~spanish
-         * Recarga Touchégg para que se apliquen los cambios.
+         * Descarta los cambios hechos tras el último commit.
          *
          * @~english
-         * Reloads Touchégg to apply changes.
+         * Descarta los cambios hechos tras el último commit.
          */
-        virtual void commit() = 0;
+        void rollback();
 
         /**
          * @~spanish
@@ -88,7 +117,8 @@ class TransactionManager {
          * and rollback.
          * @return The configuration.
          */
-        virtual QSettings* getResource() const = 0;
+        QHash<QString, QString>* getResource() const;
+
 };
 
 #endif // TRANSACTIONMANAGER_H

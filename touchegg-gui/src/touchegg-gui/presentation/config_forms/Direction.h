@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/RunCommandConfig.h
+ * @file /src/touchegg-gui/presentation/config_forms/Direction.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,33 +9,35 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  RunCommandConfig
+ * @class  Direction
  * @author José Expósito
  */
-#ifndef RUNCOMMANDCONFIG_H
-#define RUNCOMMANDCONFIG_H
+#ifndef DIRECTION_H
+#define DIRECTION_H
 
-#include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+namespace Ui { class Direction; }
 
 /**
  * @~spanish
- * Implementación de ConfigForm para la acción RUN_COMMAND, ver la documentación
- * en dicha clase.
+ * Permite seleccionar una dirección, ver la documentación en ConfigForm.
  *
  * @~english
- * ConfigForm implementation for RUN_COMMAND action, to see documentation check
- * that class.
+ * Allows to select a direction, see the documentation in ConfigForm.
  */
-class RunCommandConfig : public ConfigForm {
+class Direction : public ConfigForm {
+
+    Q_OBJECT
 
     private:
 
-        QLineEdit* command;
+        Ui::Direction *ui;
 
     public:
 
-        RunCommandConfig();
+        Direction();
+
+        ~Direction();
 
         QString getSettings() const;
 
@@ -43,4 +45,4 @@ class RunCommandConfig : public ConfigForm {
 
 };
 
-#endif // RUNCOMMANDCONFIG_H
+#endif // DIRECTION_H

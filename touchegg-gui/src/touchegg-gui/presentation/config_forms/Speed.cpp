@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/RunCommandConfig.cpp
+ * @file /src/touchegg-gui/presentation/config_forms/Speed.cpp
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,26 +9,30 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  RunCommandConfig
+ * @class  Speed
  * @author José Expósito
  */
-#include "RunCommandConfig.h"
+#include "Speed.h"
+#include "ui_Speed.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-RunCommandConfig::RunCommandConfig() {
-    QLabel* commandLabel = new QLabel("Command");
-    this->command = new QLineEdit;
+Speed::Speed()
+        : ui(new Ui::Speed) {
+    ui->setupUi(this);
 
-    QHBoxLayout* layout = new QHBoxLayout;
-    layout->addWidget(commandLabel);
-    layout->addWidget(this->command);
-    this->setLayout(layout);
-
-    connect(this->command, SIGNAL(editingFinished()),
+    connect(this->ui->buttonBox, SIGNAL(accepted()),
             this, SIGNAL(configChanged()));
+    connect(this->ui->buttonBox, SIGNAL(accepted()),
+            this, SLOT(hide()));
+    connect(this->ui->buttonBox, SIGNAL(rejected()),
+            this, SLOT(hide()));
+}
+
+Speed::~Speed() {
+    delete ui;
 }
 
 
@@ -36,14 +40,16 @@ RunCommandConfig::RunCommandConfig() {
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
 
-QString RunCommandConfig::getSettings() const {
-    return "COMMAND=" + this->command->text();
+QString Speed::getSettings() const {
+    return "SPEED=" + QString::number(this->ui->horizontalSlider->value());
 }
 
-void RunCommandConfig::setSettings(const QString& settings) {
+void Speed::setSettings(const QString& settings) {
     QStringList strl = settings.split("=");
-    if(strl.length() == 2 && strl.at(0) == "COMMAND")
-        this->command->setText(strl.at(1));
-    else
-        this->command->setText("");
+    if(strl.length() == 2 && strl.at(0) == "SPEED") {
+        bool ok;
+        int configSpeed = QString(strl.at(1)).toInt(&ok);
+        if(ok && configSpeed >= 1 && configSpeed <= 10)
+            this->ui->horizontalSlider->setValue(configSpeed);
+    }
 }

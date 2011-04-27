@@ -12,25 +12,22 @@
  * @class  GestureConfigWidget
  * @author José Expósito
  */
-#ifndef GESTURECONFIG_H
-#define GESTURECONFIG_H
+#ifndef GESTURECONFIGWIDGET_H
+#define GESTURECONFIGWIDGET_H
 
 #include "src/touchegg-gui/util/Include.h"
-#include "src/touchegg-gui/logic/type/GestureTypeEnum.h"
-#include "src/touchegg-gui/logic/type/ActionTypeEnum.h"
-#include "src/touchegg-gui/presentation/gui_controller/GuiController.h"
-#include "src/touchegg-gui/presentation/gui_event/GuiEvent.h"
-#include "src/touchegg-gui/logic/transfer/GestureTransfer.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigFormFactory.h"
+#include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+#include "src/touchegg-gui/logic/facade/Facade.h"
+namespace Ui { class GestureConfigWidget; }
+
 
 /**
  * @~spanish
- * Widget con la imagen del geso a configurar, la acción asociada al mismo y
- * un botón para editar las propiedades de la acción.
+ * Widget para configurar las acciones asociadas a un gesto.
  *
  * @~english
- * Widget with the gesture image to configure, the associated action and a
- * button to edit the action settings.
+ * Widget to configure the actions associated to a gesture.
  */
 class GestureConfigWidget : public QFrame {
 
@@ -38,114 +35,79 @@ class GestureConfigWidget : public QFrame {
 
     private:
 
+        Ui::GestureConfigWidget *ui;
+
         /**
          * @~spanish
-         * Gesto que configurará el widget.
+         * Aplicación sobre la que se configuran los gestos.
          *
          * @~english
-         * Gesture that set up the widget.
+         * Application over configure the gestures.
          */
-        GestureTypeEnum::GestureType gestureType;
-
-        //----------------------------------------------------------------------
+        QString app;
 
         /**
          * @~spanish
-         * Label con la imagen del gesto a configurar.
+         * Formulario de configuración de la acción, si la acción no es
+         * configurable valdrá NULL.
          *
          * @~english
-         * Label with the image of the gesture to confiure.
-         */
-        QLabel* gestureLabel;
-
-        /**
-         * @~spanish
-         * ComboBox con las acciones que se pueden asociar al gesto.
-         *
-         * @~english
-         * ComboBox with the actions that can be associated to the gesture.
-         */
-        QComboBox* allowedActionsCombo;
-
-        /**
-         * @~spanish
-         * Botón para configurar la acción elegida.
-         *
-         * @~english
-         * Button to configure the selected action.
-         */
-        QPushButton* configButton;
-
-        /**
-         * @~spanish
-         * Formulario para onfigurar la acción.
-         *
-         * @~english
-         * Form to configure the action.
+         * Form to configure the action, if the action isn't configurable it
+         * will be NULL.
          */
         ConfigForm* configForm;
 
         /**
          * @~spanish
-         * Layout usado.
+         * Gesto que se está configurando.
          *
          * @~english
-         * Used layout.
+         * Gesture that is configuring.
          */
-        QGridLayout* layout;
+        QString gesture;
 
-    private slots:
-
-        /**
-         * @~spanish
-         * Se llama cada vez que la acción seleccionada en el combo box cambia,
-         * actualizando la configuración.
-         * @param newAction Nueva acción asociada al gesto.
-         *
-         * @~english
-         * It is called whenever the action selected in the combo box changes,
-         * updating the configuration.
-         * @param newAction New action associated to the gesture.
-         */
-        void actionChanged(int newAction);
+        //----------------------------------------------------------------------
 
         /**
          * @~spanish
-         * Se llama cada vez que se pulsa en el botón para configurar la acción.
-         * @param checked Si el botón es apretado o soltado.
+         * Carga en el combo-box todos los gestos disponibles.
          *
          * @~english
-         * It is called whenever the configuration button is toggled.
-         * @param checked If is pressed or released.
+         * Loads in the combo-box all available gestures.
          */
-        void showConfigForm(bool checked) const;
+        void loadAllGestures();
 
         /**
          * @~spanish
-         * Se llama cada vez que la configuración cambia.
+         * Carga en el combo-box todas las acciones disponibles.
          *
          * @~english
-         * It is called whenever the configuration is changed.
+         * Loads in the combo-box all available actions.
          */
-        void configChanged() const;
+        void loadAllActions();
 
     public:
 
         /**
          * @~spanish
          * Constructor.
-         * @param gestureType    Tipo del gesto a configurar.
-         * @param gestureImage   Ruta de la imagen del gesto.
-         * @param allowedActions Acciones que se pueden asociar al gesto.
+         * @param app      Aplicación sobre la que se configuran los gestos.
+         * @param gesture  Gesto a cargar por defecto.
+         * @param action   Acción a cargar por defecto.
+         * @param settings Configuración por defecto.
+         * @param parent   Padre del widget.
          *
          * @~english
          * Constructor.
-         * @param gestureType    Gesture type to configure.
-         * @param gestureImage   Path of the gesture image.
-         * @param allowedActions Actions that can be associated to the gesture.
+         * @param app      Application over configure the gestures.
+         * @param gesture  Gesture to load by default.
+         * @param action   Action to load by default.
+         * @param settings Settings by default.
+         * @param parent   Parent of the widget.
          */
-        GestureConfigWidget(GestureTypeEnum::GestureType gestureType,
-                const QString& gestureImage, const QStringList& allowedActions);
+        GestureConfigWidget(const QString& app, const QString& gesture = "" ,
+                const QString& action = "", const QString& settings = "",
+                QWidget* parent = 0);
 
         /**
          * @~spanish
@@ -156,6 +118,61 @@ class GestureConfigWidget : public QFrame {
          */
         ~GestureConfigWidget();
 
+        /**
+         * @~spanish
+         * Borra la configuración seleccionada en el widget.
+         *
+         * @~english
+         * Removes the confguration selected in the widget.
+         */
+        void deleteConfig();
+
+    private slots:
+
+        /**
+         * @~spanish
+         * Se llama cando se selecciona un gesto en el combo-box.
+         * @param index Índice del item seleccionado.
+         *
+         * @~english
+         * Is called whenever a gesture is selected in the combo-box.
+         * @param index The index of the selected item.
+         */
+        void gestureChanged(int index);
+
+        /**
+         * @~spanish
+         * Se llama cando se seleccioa una acción en el combo-box.
+         * @param index Índice del item seleccionado.
+         *
+         * @~english
+         * Is called whenever an action is selected in the combo-box.
+         * @param index The index of the selected item.
+         */
+        void actionChanged(int index);
+
+
+        /**
+         * @~spanish
+         * Se llama cada vez que se pulsa el botón que muestra la configuración.
+         *
+         * @~english
+         * It is called whenever the the button to change configuration is
+         * pressed.
+         */
+        void on_configBtn_clicked();
+
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
+         * Se llama cada vez que la configuración cambia.
+         *
+         * @~english
+         * It is called whenever the configuration is changed.
+         */
+        void configChanged() const;
+
 };
 
-#endif // GESTURECONFIG_H
+#endif // GESTURECONFIGWIDGET_H

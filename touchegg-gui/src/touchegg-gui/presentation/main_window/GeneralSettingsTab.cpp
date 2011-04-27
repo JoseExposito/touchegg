@@ -20,26 +20,31 @@
 // ************************************************************************** //
 
 GeneralSettingsTab::GeneralSettingsTab(QWidget *parent)
-        : QFrame(parent), ui(new Ui::GeneralSettingsTab) {
+        : QFrame(parent)
+        , ui(new Ui::GeneralSettingsTab) {
     ui->setupUi(this);
 
     // Cargamos los valores por defecto
-    GuiController* guiController = GuiController::getInstance();
-    QString property = "tap_and_hold_time";
-    GeneralTransfer* gt = (GeneralTransfer*)guiController->execute(
-            READ_GENERAL_PROPERTY, &property);
-    if(gt->getValue() == "0") {
+    Facade f;
+    QString strTime = f.toucheggRead("general_settings.tap_and_hold_time");
+    bool ok;
+    int time = strTime.toInt(&ok);
+
+    // Si el tap&hold está activado
+    if(ok && time > 0) {
+        this->ui->checkBox->setChecked(true);
+        this->ui->horizontalSlider->setValue(time);
+        this->ui->msLabel->setText(strTime + " ms");
+
+    // Si el tap&hold está desactivado o el valor es inválido
+    } else {
+        this->ui->horizontalSlider->setValue(135);
+        this->ui->msLabel->setText("135 ms");
         this->ui->checkBox->setChecked(false);
         this->ui->label->setEnabled(false);
         this->ui->horizontalSlider->setEnabled(false);
-        this->ui->msLabel->setText("");
-    } else {
-        this->ui->checkBox->setChecked(true);
-        this->ui->horizontalSlider->setValue(gt->getValue().toInt());
-        this->ui->msLabel->setText(gt->getValue() + " ms");
-    }    
-
-    delete gt;
+        this->ui->msLabel->setEnabled(false);
+    }
 }
 
 GeneralSettingsTab::~GeneralSettingsTab() {
@@ -51,20 +56,17 @@ GeneralSettingsTab::~GeneralSettingsTab() {
 // ************************************************************************** //
 
 void GeneralSettingsTab::on_checkBox_clicked(bool checked) {
+    Facade f;
     QString value;
-    value.setNum(checked ? this->ui->horizontalSlider->value() : 0, 10);
-    GeneralTransfer gt("tap_and_hold_time", value);
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(UPDATE_GENERAL_PROPERTY, &gt);
+    value.setNum(checked ? this->ui->horizontalSlider->value() : 0);
+    f.toucheggUpdate("general_settings.tap_and_hold_time", value);
 }
 
-void GeneralSettingsTab::on_horizontalSlider_valueChanged(int /*value*/) {
-    QString value;
-    bool checked = this->ui->checkBox->isChecked();
-    value.setNum(checked ? this->ui->horizontalSlider->value() : 0, 10);
-    GeneralTransfer gt("tap_and_hold_time", value);
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(UPDATE_GENERAL_PROPERTY, &gt);
+void GeneralSettingsTab::on_horizontalSlider_valueChanged(int value) {
+    Facade f;
+    QString strValue;
+    strValue.setNum(this->ui->checkBox ? value : 0);
+    f.toucheggUpdate("general_settings.tap_and_hold_time", strValue);
 
-    this->ui->msLabel->setText(value + " ms");
+    this->ui->msLabel->setText(strValue + " ms");
 }

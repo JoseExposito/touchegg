@@ -1,8 +1,7 @@
  
 
 HEADERS += \
-    src/touchegg-gui/logic/facade/Facade.h \
-    src/touchegg-gui/logic/facade/FacadeImp.h
+    src/touchegg-gui/logic/facade/Facade.h
 
 SOURCES += \
-    src/touchegg-gui/logic/facade/FacadeImp.cpp
+    src/touchegg-gui/logic/facade/Facade.cpp

@@ -1,5 +1,5 @@
 /**
- * @file /src/touchegg-gui/presentation/config_forms/MouseMoveConfig.h
+ * @file /src/touchegg-gui/presentation/config_forms/MouseButtons.h
  *
  * @~spanish
  * Este archivo es parte del proyecto Touchégg-GUI, usted puede redistribuirlo
@@ -9,33 +9,35 @@
  * This file is part of the Touchégg-GUI project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @class  MouseMoveConfig
+ * @class  MouseButtons
  * @author José Expósito
  */
-#ifndef MOUSEMOVECONFIG_H
-#define MOUSEMOVECONFIG_H
+#ifndef MOUSEBUTTONS_H
+#define MOUSEBUTTONS_H
 
-#include "src/touchegg-gui/util/Include.h"
 #include "src/touchegg-gui/presentation/config_forms/ConfigForm.h"
+namespace Ui { class MouseButtons; }
 
 /**
  * @~spanish
- * Implementación de ConfigForm para la acción MOUSE_MOVE, ver la documentación
- * en dicha clase.
+ * Permite seleccionar un botón del ratón, ver la documentación en ConfigForm.
  *
  * @~english
- * ConfigForm implementation for MOUSE_MOVE action, to see documentation check
- * that class.
+ * Allows to select a mouse button, see the documentation in ConfigForm.
  */
-class MouseMoveConfig : public ConfigForm {
+class MouseButtons : public ConfigForm {
+
+    Q_OBJECT
 
     private:
 
-        QSlider* slider;
+        Ui::MouseButtons *ui;
 
     public:
 
-        MouseMoveConfig();
+        MouseButtons();
+
+        ~MouseButtons();
 
         QString getSettings() const;
 
@@ -43,4 +45,4 @@ class MouseMoveConfig : public ConfigForm {
 
 };
 
-#endif // MOUSEMOVECONFIG_H
+#endif // MOUSEBUTTONS_H

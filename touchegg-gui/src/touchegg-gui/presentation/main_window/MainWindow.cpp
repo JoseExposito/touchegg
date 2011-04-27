@@ -23,45 +23,49 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
         ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    // Ponemos los iconos del tema
-    QListWidgetItem* aux = this->ui->menuList->item(4);
-    QPixmap pixmap(QIcon::fromTheme("configure").pixmap(35, 50));
-    aux->setIcon(QIcon(pixmap));
-    this->ui->applyButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    // Ponemos los distintos items del menu
+    this->ui->menu->insertRow(0);
+    this->ui->menu->insertRow(1);
 
-    // creamos los distintos paneles con los widgeds de configuración
-    this->tapTab        = new TapTab;
-    this->dragTab       = new DragTab;
-    this->pinchTab      = new PinchTab;
-    this->tapAndHoldTab = new TapAndHoldTab;
-    this->generalSettingsTab = new GeneralSettingsTab;
+    QWidget* gesturesItem = new MenuItem(
+            QIcon(":/images/three_fingers_pinch.png"), tr("Gestures"), this);
+
+    QIcon generalSettingsIcon = QIcon::hasThemeIcon("configure")
+            ? QIcon::fromTheme("configure")
+            : QIcon::fromTheme("document-properties");
+    QWidget* generalSettingsItem = new MenuItem(
+            generalSettingsIcon, tr("General settings"), this);
+
+    this->ui->menu->setCellWidget(0, 0, gesturesItem);
+    this->ui->menu->setCellWidget(1, 0, generalSettingsItem);
+    this->ui->menu->selectRow(0);
+
+    // Ponemos los iconos del tema
+    this->ui->acceptButton->setIcon(QIcon::fromTheme("dialog-ok"));
+    this->ui->cancelButton->setIcon(QIcon::fromTheme("dialog-cancel"));
+    if(QIcon::hasThemeIcon("dialog-ok-apply"))
+        this->ui->applyButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    else
+        this->ui->applyButton->setIcon(QIcon::fromTheme("dialog-apply"));
+
+    // Creamos los distintos paneles con los widgeds de configuración
+    this->gesturesTab = new GesturesTab(this);
+    this->generalSettingsTab = new GeneralSettingsTab(this);
 
     QGridLayout* layout = new QGridLayout;
-    layout->addWidget(this->ui->menuList, 0, 0, 2, 1);
-
-    layout->addWidget(this->tapTab, 0, 1, 1, 1);
-    layout->addWidget(this->dragTab, 0, 1, 1, 1);
-    layout->addWidget(this->pinchTab, 0, 1, 1, 1);
-    layout->addWidget(this->tapAndHoldTab, 0, 1, 1, 1);
-    layout->addWidget(this->generalSettingsTab, 0, 1, 1, 1);
-
+    layout->addWidget(this->ui->menu, 0, 0, 2, 1);
     layout->addWidget(this->ui->buttonsFrame, 1, 1, 1, 1);
+    layout->addWidget(this->gesturesTab, 0, 1, 1, 1);
+    layout->addWidget(this->generalSettingsTab, 0, 1, 1, 1);
     this->ui->centralwidget->setLayout(layout);
 
-    // Dejamos visible por defecto el de Tap
-    //this->tapTab->setVisible(false);
-    this->dragTab->setVisible(false);
-    this->pinchTab->setVisible(false);
-    this->tapAndHoldTab->setVisible(false);
+    // Dejamos visible por defecto la primera solapa
+    //this->gesturesTab->setVisible(false);
     this->generalSettingsTab->setVisible(false);
 }
 
 MainWindow::~MainWindow() {
     delete this->ui;
-    delete this->tapTab;
-    delete this->dragTab;
-    delete this->pinchTab;
-    delete this->tapAndHoldTab;
 }
 
 
@@ -69,58 +73,34 @@ MainWindow::~MainWindow() {
 // **********                     PRIVATE SLOTS                    ********** //
 // ************************************************************************** //
 
-void MainWindow::on_applyButton_clicked() {
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(COMMIT_DATA, NULL);
-}
-
-
-// ************************************************************************** //
-// **********                  PROTECCTED METHODS                  ********** //
-// ************************************************************************** //
-
-void MainWindow::closeEvent(QCloseEvent* /*event*/) {
-    GuiController* guiController = GuiController::getInstance();
-    guiController->execute(COMMIT_DATA, NULL);
-}
-
-
-void MainWindow::on_menuList_clicked(QModelIndex index) {
-    switch(index.row()) {
+void MainWindow::on_menu_cellClicked(int row, int /*column*/) {
+    switch(row) {
     case 0:
-        this->tapTab->setVisible(true);
-        this->dragTab->setVisible(false);
-        this->pinchTab->setVisible(false);
-        this->tapAndHoldTab->setVisible(false);
+        this->gesturesTab->setVisible(true);
         this->generalSettingsTab->setVisible(false);
         break;
     case 1:
-        this->tapTab->setVisible(false);
-        this->dragTab->setVisible(true);
-        this->pinchTab->setVisible(false);
-        this->tapAndHoldTab->setVisible(false);
-        this->generalSettingsTab->setVisible(false);
-        break;
-    case 2:
-        this->tapTab->setVisible(false);
-        this->dragTab->setVisible(false);
-        this->pinchTab->setVisible(true);
-        this->tapAndHoldTab->setVisible(false);
-        this->generalSettingsTab->setVisible(false);
-        break;
-    case 3:
-        this->tapTab->setVisible(false);
-        this->dragTab->setVisible(false);
-        this->pinchTab->setVisible(false);
-        this->tapAndHoldTab->setVisible(true);
-        this->generalSettingsTab->setVisible(false);
-        break;
-    case 4:
-        this->tapTab->setVisible(false);
-        this->dragTab->setVisible(false);
-        this->pinchTab->setVisible(false);
-        this->tapAndHoldTab->setVisible(false);
+        this->gesturesTab->setVisible(false);
         this->generalSettingsTab->setVisible(true);
         break;
     }
+}
+
+//------------------------------------------------------------------------------
+
+void MainWindow::on_applyButton_clicked() {
+    Facade f;
+    f.commitData();
+}
+
+void MainWindow::on_acceptButton_clicked() {
+    Facade f;
+    f.commitData();
+    this->close();
+}
+
+void MainWindow::on_cancelButton_clicked() {
+    Facade f;
+    f.rollbackData();
+    this->close();
 }

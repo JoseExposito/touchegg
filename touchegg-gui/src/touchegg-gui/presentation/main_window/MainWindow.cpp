@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     this->ui->menu->insertRow(1);
 
     QWidget* gesturesItem = new MenuItem(
-            QIcon(":/images/three_fingers_pinch.png"), tr("Gestures"), this);
+            QIcon(":/images/gestures-icon.png"), tr("Gestures"), this);
 
     QIcon generalSettingsIcon = QIcon::hasThemeIcon("configure")
             ? QIcon::fromTheme("configure")

@@ -1,32 +1,6 @@
 <RCC>
     <qresource prefix="/images">
-        <file>drag.png</file>
-        <file>five_fingers_tap.png</file>
-        <file>four_fingers_drag_down.png</file>
-        <file>four_fingers_drag_left.png</file>
-        <file>four_fingers_drag_right.png</file>
-        <file>four_fingers_drag_up.png</file>
-        <file>four_fingers_tap_and_hold.png</file>
-        <file>four_fingers_tap.png</file>
-        <file>three_fingers_drag_left.png</file>
-        <file>three_fingers_drag_right.png</file>
-        <file>three_fingers_drag_up.png</file>
-        <file>three_fingers_pinch.png</file>
-        <file>three_fingers_tap_and_hold.png</file>
-        <file>three_fingers_tap.png</file>
         <file>touchegg-logo.png</file>
-        <file>two_fingers_drag_down.png</file>
-        <file>two_fingers_drag_left.png</file>
-        <file>two_fingers_drag_right.png</file>
-        <file>two_fingers_drag_up.png</file>
-        <file>two_fingers_tap_and_hold.png</file>
-        <file>two_fingers_tap.png</file>
-        <file>one_finger_drag.png</file>
-        <file>one_finger_tap.png</file>
-        <file>pinch.png</file>
-        <file>tap_and_hold.png</file>
-        <file>three_fingers_drag_down.png</file>
-        <file>tap.png</file>
-        <file>five_fingers_tap_and_hold.png</file>
+        <file>gestures-icon.png</file>
     </qresource>
 </RCC>

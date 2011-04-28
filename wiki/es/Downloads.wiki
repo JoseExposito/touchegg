@@ -6,7 +6,7 @@
 
  * *Touchegg v0.3:*
 
- *[https://code.google.com/p/touchegg/wiki/ConfigureDevices ¡IMPORTANTE!] Ahora no es necesario hacer ningún cambio en la configuración*
+ * [https://code.google.com/p/touchegg/wiki/ConfigureDevices ¡IMPORTANTE!] Ahora no es necesario hacer ningún cambio en la configuración*
 
  - Descargar paquete DEB de Touchégg para Ubuntu 11.04 ([http://touchegg.googlecode.com/files/touchegg_0.3-Natty_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg_0.3-Natty_amd64.deb 64 bits])
 

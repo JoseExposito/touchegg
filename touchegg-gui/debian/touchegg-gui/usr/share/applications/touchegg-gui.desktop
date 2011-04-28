@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Touchégg GUI
+Comment=Configure easily Touchégg
+Comment[es]=Configure fácilmente Touchégg
+Type=Application
+Exec=/usr/bin/touchegg-gui
+Terminal=false
+Icon=touchegg-gui.png
+Categories=Settings
+StartupWMClass=touchegg-gui
+StartupNotify=true

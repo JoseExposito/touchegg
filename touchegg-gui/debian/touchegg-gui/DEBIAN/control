@@ -1,0 +1,11 @@
+Package: touchegg-gui
+Version: 0.3-Natty
+Architecture: i386
+Maintainer: José Expósito <jose.exposito89@gmail.com>
+Installed-Size: 208
+Depends: libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.1.1), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.7.0~beta1), libqtgui4 (>= 4:4.6.1), libstdc++6 (>= 4.1.1)
+Section: x11
+Priority: optional
+Homepage: https://code.google.com/p/touchegg/
+Description: Touchégg-GUI
+ Touchégg-GUI allows you to configure easily Touchégg.

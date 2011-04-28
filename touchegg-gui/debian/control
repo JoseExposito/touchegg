@@ -1,0 +1,13 @@
+Source: touchegg-gui
+Section: x11
+Priority: optional
+Maintainer: José Expósito <jose.exposito89@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.1
+Homepage: https://code.google.com/p/touchegg/
+
+Package: touchegg-gui
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Touchégg-GUI
+ Touchégg-GUI allows you to configure easily Touchégg.

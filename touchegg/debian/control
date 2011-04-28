@@ -1,0 +1,20 @@
+Source: touchegg
+Section: x11
+Priority: optional
+Maintainer: José Expósito <jose.exposito89@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.1
+Homepage: https://code.google.com/p/touchegg/
+
+Package: touchegg
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Touchégg: Multitouch gesture recognizer
+ Touchégg is a multitouch gesture recognizer that allows you to associate 
+ actions to multi-touch gestures. It can be used to assign gestures to 
+ actions like maximize or minimize windows, resize windows, show the desktop, 
+ emulate all mouse functions and more.
+ .
+ In adition Touchégg allows you to add specific application actions and
+ global actions. This allow you to make the same gesture in diferent 
+ applications getting differents results.

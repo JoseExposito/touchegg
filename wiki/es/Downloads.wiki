@@ -4,23 +4,35 @@
 
 <br/>
 
+ * *Touchegg v0.3:*
+
+ *[https://code.google.com/p/touchegg/wiki/ConfigureDevices ¡IMPORTANTE!] Ahora no es necesario hacer ningún cambio en la configuración*
+
+ - Descargar paquete DEB de Touchégg para Ubuntu 11.04 ([http://touchegg.googlecode.com/files/touchegg_0.3-Natty_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg_0.3-Natty_amd64.deb 64 bits])
+
+ - Descargar paquete DEB de Touchégg GUI para Ubuntu 11.04 ([http://touchegg.googlecode.com/files/touchegg-gui_0.3-Natty_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg-gui_0.3-Natty_amd64.deb 64 bits])
+
+ - [http://touchegg.googlecode.com/files/touchegg-0.3.tar.gz Descargar el código fuente de Touchégg]
+
+ - [http://touchegg.googlecode.com/files/touchegg-gui-0.3.tar.gz Descargar el código fuente de Touchégg GUI]
+
  * *Touchegg v0.2:*
 
  - Descargar paquete DEB de Touchégg para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg_0.2-maverick_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg_0.2-maverick_amd64.deb 64 bits])
 
  - Descargar paquete DEB de Touchégg GUI para Ubuntu 10.10 ([http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_i386.deb 32 bits] / [http://touchegg.googlecode.com/files/touchegg-gui_0.2-maverick_amd64.deb 64 bits])
 
- [http://touchegg.googlecode.com/files/touchegg-0.2.tar.gz - Descargar el código fuente de Touchégg]
+ - [http://touchegg.googlecode.com/files/touchegg-0.2.tar.gz Descargar el código fuente de Touchégg]
 
- [http://touchegg.googlecode.com/files/touchegg-gui-0.2.tar.gz - Descargar el código fuente de Touchégg GUI]
+ - [http://touchegg.googlecode.com/files/touchegg-gui-0.2.tar.gz Descargar el código fuente de Touchégg GUI]
 
 
 
  * *Touchegg v0.1:*
 
- [http://touchegg.googlecode.com/files/touchegg_0.1-1_i386.deb - Descargar paquete DEB para Ubuntu 10.10 (i386)]
+ - [http://touchegg.googlecode.com/files/touchegg_0.1-1_i386.deb Descargar paquete DEB para Ubuntu 10.10 (i386)]
 
- [http://touchegg.googlecode.com/files/touchegg-0.1.tar.gz - Descargar código fuente]
+ - [http://touchegg.googlecode.com/files/touchegg-0.1.tar.gz Descargar código fuente]
 
 <br/>
 <hr>

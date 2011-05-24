@@ -42,8 +42,7 @@ class ActionTypeEnum : public QObject {
         enum ActionType {
             NO_ACTION,
             MOUSE_CLICK,
-            VERTICAL_SCROLL,
-            HORIZONTAL_SCROLL,
+            SCROLL,
             MINIMIZE_WINDOW,
             MAXIMIZE_RESTORE_WINDOW,
             CLOSE_WINDOW,

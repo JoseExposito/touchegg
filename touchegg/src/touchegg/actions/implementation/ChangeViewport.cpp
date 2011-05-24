@@ -62,6 +62,9 @@ void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
         widthViews  = aux[0];
         heightViews = aux[1];
         XFree(propRet);
+
+        if(widthViews == 0 || heightViews == 0)
+            return;
     } else {
         return;
     }

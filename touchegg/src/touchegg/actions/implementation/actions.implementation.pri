@@ -11,10 +11,9 @@ HEADERS += \
     src/touchegg/actions/implementation/MoveWindow.h \
     src/touchegg/actions/implementation/RunCommand.h \
     src/touchegg/actions/implementation/DragAndDrop.h \
-    src/touchegg/actions/implementation/VerticalScroll.h \
-    src/touchegg/actions/implementation/HorizontalScroll.h \
     src/touchegg/actions/implementation/ChangeViewport.h \
-    src/touchegg/actions/implementation/MouseClick.h
+    src/touchegg/actions/implementation/MouseClick.h \
+    src/touchegg/actions/implementation/Scroll.h
 
 SOURCES += \
     src/touchegg/actions/implementation/MinimizeWindow.cpp \
@@ -27,7 +26,6 @@ SOURCES += \
     src/touchegg/actions/implementation/MoveWindow.cpp \
     src/touchegg/actions/implementation/RunCommand.cpp \
     src/touchegg/actions/implementation/DragAndDrop.cpp \
-    src/touchegg/actions/implementation/VerticalScroll.cpp \
-    src/touchegg/actions/implementation/HorizontalScroll.cpp \
     src/touchegg/actions/implementation/ChangeViewport.cpp \
-    src/touchegg/actions/implementation/MouseClick.cpp
+    src/touchegg/actions/implementation/MouseClick.cpp \
+    src/touchegg/actions/implementation/Scroll.cpp

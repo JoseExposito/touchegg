@@ -42,11 +42,8 @@ Action* ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
     case ActionTypeEnum::MOUSE_CLICK:
         return new MouseClick(settings, window);
 
-    case ActionTypeEnum::VERTICAL_SCROLL:
-        return new VerticalScroll(settings, window);
-
-    case ActionTypeEnum::HORIZONTAL_SCROLL:
-        return new HorizontalScroll(settings, window);
+    case ActionTypeEnum::SCROLL:
+        return new Scroll(settings, window);
 
     case ActionTypeEnum::MINIMIZE_WINDOW:
         return new MinimizeWindow(settings, window);

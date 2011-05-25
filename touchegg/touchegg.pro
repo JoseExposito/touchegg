@@ -21,4 +21,8 @@ include(src/touchegg/touchegg.pri)
 
 OTHER_FILES += \
     documentation/doxyfile_es \
-    documentation/doxyfile_en
+    documentation/doxyfile_en \
+    README \
+    COPYING \
+    CHANGELOG \
+    COPYRIGHT

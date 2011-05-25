@@ -10,7 +10,7 @@
  * modify it under the terms of the GNU GPL v3.
  *
  * @class  CloseWindow
- * @author José Expósito
+ * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef CLOSEWINDOW_H
 #define CLOSEWINDOW_H

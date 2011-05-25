@@ -10,7 +10,7 @@
  * modify it under the terms of the GNU GPL v3.
  *
  * @class  Scroll
- * @author José Expósito
+ * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef SCROLL_H
 #define SCROLL_H

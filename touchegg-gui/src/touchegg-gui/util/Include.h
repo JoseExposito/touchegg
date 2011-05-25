@@ -9,7 +9,7 @@
  * This file is part of the Touchégg project, you can redistribute it and/or
  * modify it under the terms of the GNU GPL v3.
  *
- * @author José Expósito
+ * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef INCLUDE_H
 #define INCLUDE_H

@@ -10,7 +10,7 @@
  * modify it under the terms of the GNU GPL v3.
  *
  * @class  GeneralSettingsTab
- * @author José Expósito
+ * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef GENERALSETTINGSTAB_H
 #define GENERALSETTINGSTAB_H

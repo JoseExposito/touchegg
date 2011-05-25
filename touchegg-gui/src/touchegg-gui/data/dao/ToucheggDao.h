@@ -10,7 +10,7 @@
  * modify it under the terms of the GNU GPL v3.
  *
  * @class  GestureDao
- * @author José Expósito
+ * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef GESTUREDAO_H
 #define GESTUREDAO_H

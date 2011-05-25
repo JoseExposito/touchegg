@@ -18,3 +18,10 @@ INSTALLS   += target menu icon
 
 
 include(src/touchegg-gui/touchegg-gui.pri)
+
+OTHER_FILES += \
+    README \
+    documentation/doxyfile_es \
+    documentation/doxyfile_en \
+    COPYING \
+    COPYRIGHT

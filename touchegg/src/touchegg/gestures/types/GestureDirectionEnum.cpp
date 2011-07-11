@@ -1,5 +1,5 @@
 /**
- * @file src/touchegg/actions/types/ActionTypeEnum.cpp
+ * @file src/touchegg/gestures/types/GestureDirectionEnum.cpp
  *
  * This file is part of Touchégg.
  *
@@ -16,27 +16,30 @@
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
- * @class  ActionTypeEnum
+ * @class  GestureDirectionEnum
  */
-#include "ActionTypeEnum.h"
+#include "GestureDirectionEnum.h"
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
-QString ActionTypeEnum::getValue(ActionType atEnum)
+QString GestureDirectionEnum::getValue(GestureDirection gdEnum)
 {
-    ActionTypeEnum actionTypeEnum;
-    int index = actionTypeEnum.metaObject()->indexOfEnumerator("ActionType");
-    QMetaEnum metaEnum = actionTypeEnum.metaObject()->enumerator(index);
-    return metaEnum.valueToKey(atEnum);
+    GestureDirectionEnum GestureDirectionEnum;
+    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator(
+            "GestureDirection");
+    QMetaEnum metaEnum = GestureDirectionEnum.metaObject()->enumerator(index);
+    return metaEnum.valueToKey(gdEnum);
 }
 
-ActionTypeEnum::ActionType ActionTypeEnum::getEnum(const QString& atString)
+GestureDirectionEnum::GestureDirection GestureDirectionEnum::getEnum(
+        const QString& gdString)
 {
-    ActionTypeEnum actionTypeEnum;
-    int index = actionTypeEnum.metaObject()->indexOfEnumerator("ActionType");
-    QMetaEnum metaEnum = actionTypeEnum.metaObject()->enumerator(index);
-    return (ActionTypeEnum::ActionType)metaEnum.keyToValue(
-            atString.toStdString().c_str());
+    GestureDirectionEnum GestureDirectionEnum;
+    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator(
+            "GestureDirection");
+    QMetaEnum metaEnum = GestureDirectionEnum.metaObject()->enumerator(index);
+    return (GestureDirectionEnum::GestureDirection)metaEnum.keyToValue(
+            gdString.toStdString().c_str());
 }

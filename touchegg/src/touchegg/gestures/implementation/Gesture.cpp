@@ -1,34 +1,44 @@
 /**
  * @file /src/touchegg/gestures/implementations/Gesture.cpp
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  Gesture
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #include "Gesture.h"
-
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-Gesture::Gesture(GestureTypeEnum::GestureType type, GeisGestureId id,
-        const QHash<QString, QVariant>& attrs) {
-    this->type   = type;
-    this->id     = id;
-    this->attrs  = attrs;
+Gesture::Gesture(GestureTypeEnum::GestureType type, int numFingers,
+        GestureDirectionEnum::GestureDirection dir, GeisGestureId id,
+        const QHash<QString, QVariant>& attrs) :
+    type(type),
+    numFingers(numFingers),
+    dir(dir),
+    id(id),
+    attrs(attrs)
+{
+
 }
 
-Gesture::~Gesture() {
-    if(this->action != NULL)
-        delete this->action;
+Gesture::~Gesture()
+{
+    delete this->action;
 }
 
 
@@ -36,17 +46,20 @@ Gesture::~Gesture() {
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void Gesture::start() const {
+void Gesture::start() const
+{
     if(this->action != NULL)
         this->action->executeStart(this->attrs);
 }
 
-void Gesture::update() const {
+void Gesture::update() const
+{
     if(this->action != NULL)
         this->action->executeUpdate(this->attrs);
 }
 
-void Gesture::finish() const  {
+void Gesture::finish() const
+{
     if(this->action != NULL)
         this->action->executeFinish(this->attrs);
 }
@@ -56,34 +69,64 @@ void Gesture::finish() const  {
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
 
-GestureTypeEnum::GestureType Gesture::getType() const {
+GestureTypeEnum::GestureType Gesture::getType() const
+{
     return this->type;
 }
 
-GeisGestureId Gesture::getId() const {
+int Gesture::getNumFingers() const
+{
+    return this->numFingers;
+}
+
+GestureDirectionEnum::GestureDirection Gesture::getDirection() const
+{
+    return this->dir;
+}
+
+GeisGestureId Gesture::getId() const
+{
     return this->id;
 }
 
-const QHash<QString, QVariant>& Gesture::getAttrs() const {
+const QHash<QString, QVariant>& Gesture::getAttrs() const
+{
     return this->attrs;
 }
 
-const Action* Gesture::getAction() const {
+const Action* Gesture::getAction() const
+{
     return this->action;
 }
 
-void Gesture::setType(GestureTypeEnum::GestureType type) {
+//------------------------------------------------------------------------------
+
+void Gesture::setType(GestureTypeEnum::GestureType type)
+{
     this->type = type;
 }
 
-void Gesture::setId(GeisGestureId id) {
+void Gesture::setNumFingers(int numFingers)
+{
+    this->numFingers = numFingers;
+}
+
+void Gesture::setDirection(GestureDirectionEnum::GestureDirection dir)
+{
+    this->dir = dir;
+}
+
+void Gesture::setId(GeisGestureId id)
+{
     this->id = id;
 }
 
-void Gesture::setAttrs(const QHash<QString, QVariant>& attrs) {
+void Gesture::setAttrs(const QHash<QString, QVariant>& attrs)
+{
     this->attrs = attrs;
 }
 
-void Gesture::setAction(Action* action) {
+void Gesture::setAction(Action* action)
+{
     this->action = action;
 }

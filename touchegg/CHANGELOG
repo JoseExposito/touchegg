@@ -4,8 +4,13 @@ Current Code:
  - The SCROLL action support invert the movement, for touchscreen/trackpad compatibility
    https://code.google.com/p/touchegg/issues/detail?id=64
 
+Added support for the following gestures:
+ - ROTATE     - With 2 to 5 fingers
+ - DOUBLE_TAP - With 1 to 5 fingers
+ - DRAG       - With 1 finger
+ 
 
-Touchégg v0.3 (2011/04/28)
+[+] Touchégg v0.3 (2011/04/28)
  - Touchégg now allow to assign different actions to different windows
  - Added compatibility with uTouch 2, and therefore, with the Synaptics driver and Ubuntu 11.04
  - Improved CPU usage
@@ -32,7 +37,7 @@ Touchégg v0.3 (2011/04/28)
  - DRAG_AND_DROP now support any button emulation
 
 
-Touchégg v0.2 (2011/03/11)
+[+] Touchégg v0.2 (2011/03/11)
  Solved bugs:
  - Solved problems at shutdown
  - Fixed _DESKTOP actions with compiz
@@ -52,7 +57,7 @@ Touchégg v0.2 (2011/03/11)
  - Added menu entries  to launch Touchégg and touchégg GUI
 
 
-Touchégg v0.1 (2011/01/23)
+[+] Touchégg v0.1 (2011/01/23)
  Initial release, support for the following gestures:
  - TAP   - With 2, 3 and 4 fingers
  - PINCH - With 3 fingers

@@ -1,16 +1,22 @@
 /**
  * @file /src/touchegg/gestures/factory/GestureFactory.h
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  GestureFactory
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #ifndef GESTUREFACTORY_H
 #define GESTUREFACTORY_H
@@ -26,88 +32,89 @@
  * @~english
  * Factory to create the different gestures.
  */
-class GestureFactory {
+class GestureFactory
+{
 
-    private:
+private:
 
-        /**
-         * @~spanish
-         * Única instancia de la clase.
-         *
-         * @~english
-         * Single instance of the class.
-         */
-        static GestureFactory* instance;
+    /**
+     * @~spanish
+     * Única instancia de la clase.
+     *
+     * @~english
+     * Single instance of the class.
+     */
+    static GestureFactory* instance;
 
-        // Hide constructors
-        GestureFactory(){}
-        GestureFactory(const GestureFactory&);
-        const GestureFactory& operator = (const GestureFactory&);
+    // Hide constructors
+    GestureFactory(){}
+    GestureFactory(const GestureFactory&);
+    const GestureFactory& operator = (const GestureFactory&);
 
-    public:
+public:
 
-        /**
-         * @~spanish
-         * Único método para obtener una instancia de la clase.
-         * @return La única instancia de la clase.
-         *
-         * @~english
-         * Only method to get an instance of the class.
-         * @return The single instance of the class.
-         */
-        static GestureFactory* getInstance();
+    /**
+     * @~spanish
+     * Único método para obtener una instancia de la clase.
+     * @return La única instancia de la clase.
+     *
+     * @~english
+     * Only method to get an instance of the class.
+     * @return The single instance of the class.
+     */
+    static GestureFactory* getInstance();
 
-        //----------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-        /**
-         * @~spanish
-         * Crea un gesto con las propiedades indicadas. IMPORTANTE: No olvidar
-         * liberar memoria.
-         * @param type  Tipo del gesto.
-         * @param id    ID del gesto.
-         * @param attrs Atributos del gestos, siendo la clave el nombre del
-         *        atributo (por ejemplo "focus x", "touches"...) y el valor el
-         *        valor del propio atributo.
-         * @return El gesto.
-         *
-         * @~english
-         * Creates a gesture with the specified properties. IMPORTANT: Don't
-         * forget to free memory.
-         * @param type  Gesture type.
-         * @param id    Gesture ID.
-         * @param attrs Gesture attributes, where the key is the name of the
-         *        attribute (ie "focus x", "touches") and the value the value of
-         *        the attribute.
-         * @return The gesture.
-         */
-        Gesture* createGesture(GeisGestureType type, GeisGestureId id,
-            QHash<QString, QVariant> attrs);
+    /**
+     * @~spanish
+     * Crea un gesto no-compuesto con las propiedades indicadas.
+     * IMPORTANTE: No olvidar liberar memoria.
+     * @param type  Tipo del gesto.
+     * @param id    ID del gesto.
+     * @param attrs Atributos del gestos, siendo la clave el nombre del
+     *        atributo (por ejemplo "focus x", "touches"...) y el valor el
+     *        valor del propio atributo.
+     * @return El gesto.
+     *
+     * @~english
+     * Creates a no-composed gesture with the specified properties.
+     * IMPORTANT: Don't forget to free memory.
+     * @param type  Gesture type.
+     * @param id    Gesture ID.
+     * @param attrs Gesture attributes, where the key is the name of the
+     *        attribute (ie "focus x", "touches") and the value the value of
+     *        the attribute.
+     * @return The gesture.
+     */
+    Gesture* createSimpleGesture(GeisGestureType type, GeisGestureId id,
+    QHash<QString, QVariant> attrs);
 
-        /**
-         * @~spanish
-         * Como el tap&hold no es un gesto soportado directamente por uTouch,
-         * necesitamos construirlo de manera especial.
-         * IMPORTANTE: No olvidar liberar memoria.
-         * @param type  Tipo del gesto.
-         * @param id    ID del gesto.
-         * @param attrs Atributos del gestos, siendo la clave el nombre del
-         *        atributo (por ejemplo "focus x", "touches"...) y el valor el
-         *        valor del propio atributo.
-         * @return El gesto.
-         *
-         * @~english
-         * As the tap&hold gesture is not directly supported by uTouch, is
-         * necesary build it a special way.
-         * IMPORTANT: Don't forget to free memory.
-         * @param type  Gesture type.
-         * @param id    Gesture ID.
-         * @param attrs Gesture attributes, where the key is the name of the
-         *        attribute (ie "focus x", "touches") and the value the value of
-         *        the attribute.
-         * @return The gesture.
-         */
-        Gesture* createTapAndHold(GeisGestureType type, GeisGestureId id,
-                            QHash<QString, QVariant> attrs);
+    /**
+     * @~spanish
+     * Crea un gesto compuesto (tap&hol, double tap...) con las propiedades
+     * indicadas.
+     * IMPORTANTE: No olvidar liberar memoria.
+     * @param type  Tipo del gesto.
+     * @param id    ID del gesto.
+     * @param attrs Atributos del gestos, siendo la clave el nombre del
+     *        atributo (por ejemplo "focus x", "touches"...) y el valor el
+     *        valor del propio atributo.
+     * @return El gesto.
+     *
+     * @~english
+     * Creates a composed gesture (tap&hold, double tap...) with the
+     * specified properties.
+     * IMPORTANT: Don't forget to free memory.
+     * @param type  Gesture type.
+     * @param id    Gesture ID.
+     * @param attrs Gesture attributes, where the key is the name of the
+     *        attribute (ie "focus x", "touches") and the value the value of
+     *        the attribute.
+     * @return The gesture.
+     */
+    Gesture* createComposedGesture(GeisGestureType type, GeisGestureId id,
+    QHash<QString, QVariant> attrs);
 };
 
 #endif // GESTUREFACTORY_H

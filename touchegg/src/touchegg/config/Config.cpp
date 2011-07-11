@@ -1,39 +1,53 @@
 /**
  * @file /src/touchegg/config/Config.cpp
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  Config
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #include "Config.h"
+
+// ************************************************************************** //
+// **********                  ANONYMOUS NAMESPACE                 ********** //
+// ************************************************************************** //
+
+namespace
+{
+    const char* USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
+    const char* HOME_CONFIG_FILE      = "/.touchegg/touchegg.conf";
+    const char* HOME_CONFIG_DIR       = ".touchegg";
+}
+
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
-const char* Config::USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
-const char* Config::HOME_CONFIG_FILE      = "/.touchegg/touchegg.conf";
-const char* Config::HOME_CONFIG_DIR       = ".touchegg";
-
-//------------------------------------------------------------------------------
-
 Config* Config::instance = NULL;
 
-Config* Config::getInstance() {
+Config* Config::getInstance()
+{
     if(Config::instance == NULL)
         Config::instance = new Config();
 
     return Config::instance;
 }
 
-void Config::loadConfig() {
+void Config::loadConfig()
+{
     if(instance != NULL) {
         delete instance;
         instance = NULL;
@@ -46,16 +60,19 @@ void Config::loadConfig() {
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-Config::Config() {
-    // Comprobamos que los archivos estén en su sitio
+Config::Config()
+{
+    this->composedGesturesTime = 0;
     QFile homeFile(QDir::homePath() + HOME_CONFIG_FILE);
     QFile usrFile(USR_SHARE_CONFIG_FILE);
 
+    // If the /usr/share/touchegg configuration file is not found then exit
     if(!usrFile.exists()) {
         qFatal("%s not found, reinstall application can solve the problem\n",
                USR_SHARE_CONFIG_FILE);
     }
 
+    // If the ~/.touchegg configuration file doesn't exist copy it
     if(!homeFile.exists()) {
         qDebug() << QDir::homePath() + HOME_CONFIG_FILE
                  << " not found, copying config from "
@@ -64,6 +81,7 @@ Config::Config() {
         usrFile.copy(QDir::homePath() + HOME_CONFIG_FILE);
     }
 
+    // Load the configuration into the QHash
     qDebug() << "Reading config from " << QDir::homePath() + HOME_CONFIG_FILE;
     this->initConfig(homeFile);
 }
@@ -72,33 +90,143 @@ Config::Config() {
 // **********                   PRIVATE METHODS                    ********** //
 // ************************************************************************** //
 
-void Config::initConfig(QFile& file) {
-    file.open(QIODevice::ReadOnly);
+void Config::initConfig(QFile& file)
+{
+    // Loads the XML file
+    QDomDocument document;
+    if (!file.open(QIODevice::ReadOnly))
+        qFatal("Can't open configuration file for read");
+    if (!document.setContent(&file)) {
+        file.close();
+        qFatal("Error reading configuration, please, review the format");
+    }
+    file.close();
 
-    while(!file.atEnd()) {
-        QString line(file.readLine());
-        line = line.trimmed();
-        int index = line.indexOf("=");
+    /*
+     * A very simple example of a configuration file:
+     * <touchégg>
+     *
+     *     <settings>
+     *         <property name="composed_gestures_time">140</property>
+     *     </settings>
+     *
+     *     <application name="All">
+     *
+     *         <gesture type="tap" fingers="5" direction="">
+     *             <action type="CLOSE_WINDOW"></action>
+     *         </gesture>
+     *
+     *     </application>
+     *
+     *     <application name="Okular">
+     *
+     *         <gesture type="pinch" fingers="2" direction"in">
+     *             <action type="SEND_KEYS">
+     *                 HOLD_DOWN=Control_L:PRESS=KP_Add
+     *             </action>
+     *         </gesture>
+     *
+     *         <gesture type="pinch" fingers="2" direction"out">
+     *             <action type="SEND_KEYS">
+     *                 HOLD_DOWN=Control_L:PRESS=KP_Subtract
+     *             </action>
+     *         </gesture>
+     *
+     *     </application>
+     *
+     * </touchégg>
+     */
 
-        if(line != "" && index != -1) {
-            // Guardamos el valor en el QHash
-            QString key   = line.left(index);
-            QString value = line.mid(index+1);
-            this->settings.insert(key, value);
+    for(QDomNode appNode=document.documentElement().firstChild();
+            !appNode.isNull(); appNode=appNode.nextSibling()) {
+        QDomElement appElem = appNode.toElement();
+        if(appElem.isNull())
+            continue;
 
-            // Si es un gesto y está en uso, lo añadimos a la usedGestures
-            QStringList aux = key.split(".");
-            if(aux.size() == 3 && aux.at(2) == "action"
-                    && value != "" && value != "NO_ACTION") {
-                QStringList geisEquiv = GestureTypeEnum::getGeisEquivalent(
-                    GestureTypeEnum::getEnum(aux.at(0)));
-                this->usedGestures.append(geisEquiv);
+        // Load general Touchégg settings
+        if(appElem.tagName() == "settings") {
+
+            for(QDomNode propNode=appNode.firstChild();
+                    !propNode.isNull(); propNode=propNode.nextSibling()) {
+                if(!propNode.toElement().isNull()
+                        && propNode.toElement().attribute("name")
+                        == "composed_gestures_time") {
+                    this->composedGesturesTime =
+                            propNode.toElement().text().toInt();
+                }
             }
+
+        // Load applications/gestures settings
+        } else {
+
+            for(QDomNode gestureNode=appNode.firstChild();!gestureNode.isNull();
+                    gestureNode=gestureNode.nextSibling()) {
+                QDomElement gestureElem = gestureNode.toElement();
+                if(gestureElem.isNull())
+                    continue;
+
+                // For common configuration applications
+                QStringList apps = appElem.attribute("name").split(",");
+                QStringList keys;
+
+                for(int n=0; n<apps.length(); n++) {
+                    QString appName = apps.at(n).trimmed();
+                    QString key = appName + "."
+                            + gestureElem.attribute("type") + "."
+                            + gestureElem.attribute("fingers") + "."
+                            + gestureElem.attribute("direction");
+                    if(key.right(1) == ".")    // For the tap gestures,
+                        key += "NO_DIRECTION"; // without direction
+                    keys.append(key);
+                }
+
+                // Get the action
+                QString action;
+                for(QDomNode actNode=gestureNode.firstChild();
+                        !actNode.isNull(); actNode=actNode.nextSibling()) {
+                    if(!actNode.toElement().isNull())
+                        action = actNode.toElement().attribute("type");
+                }
+
+                // Get the settings
+                QString settings;
+                for(QDomNode settNode=gestureNode.firstChild();
+                        !settNode.isNull(); settNode=settNode.nextSibling()) {
+                    if(!settNode.toElement().isNull())
+                        settings = settNode.toElement().text();
+                }
+
+                // Save the actions and the settings into the settings QHash
+                for(int n=0; n<keys.length(); n++) {
+                    this->settings.insert(keys.at(n) + ".action", action);
+                    this->settings.insert(keys.at(n) + ".settings", settings);
+                }
+
+                //--------------------------------------------------------------
+
+                // If is an used gesture add it to the usedGestures QHash
+                if(action != "" && action != "NO_ACTION") {
+                    for(int n=0; n<apps.length(); n++) {
+                        QString app = apps.at(n).trimmed();
+                        QString gesture = gestureElem.attribute("type");
+                        int fingers = gestureElem.attribute("fingers").toInt();
+
+                        if(this->usedGestures.contains(app)) {
+                            QStringList aux = this->usedGestures.value(app);
+                            aux.append(GestureTypeEnum::getGeisEquivalent(
+                                    GestureTypeEnum::getEnum(gesture),fingers));
+                            this->usedGestures.insert(app, aux);
+                        } else {
+                            this->usedGestures.insert(app,
+                                    GestureTypeEnum::getGeisEquivalent(
+                                    GestureTypeEnum::getEnum(gesture),fingers));
+                        }
+                    }
+                }
+            }
+
         }
     }
-
-    this->usedGestures.removeDuplicates();
-    file.close();
 }
 
 
@@ -106,43 +234,81 @@ void Config::initConfig(QFile& file) {
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
 
-QStringList Config::getUsedGestures() const {
-    return this->usedGestures;
+QStringList Config::getUsedGestures(const QString& application) const
+{
+    QStringList ret = this->usedGestures.value(application);
+    ret.removeDuplicates();
+    return ret;
 }
 
 //------------------------------------------------------------------------------
 
-int Config::getTapAndHoldTime() const {
-    bool ok;
-    int ret = this->settings.value(
-            "general_settings.tap_and_hold_time").toInt(&ok);
-    return ok ? ret : 135;
+int Config::getComposedGesturesTime() const
+{
+    return this->composedGesturesTime;
 }
 
 //------------------------------------------------------------------------------
 
-ActionTypeEnum::ActionType Config::getAssociatedAction(
-        GestureTypeEnum::GestureType gestureType, QString appClass) const {
-    QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString keyWithClass = gesture + "." + appClass + ".action";
+ActionTypeEnum::ActionType Config::getAssociatedAction(const QString& appClass,
+        GestureTypeEnum::GestureType gestureType, int numFingers,
+        GestureDirectionEnum::GestureDirection dir) const
+{
+    QString exactKey = appClass + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + "."
+            + GestureDirectionEnum::getValue(dir) + ".action";
+    QString allDirectionsKey = appClass + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + ".ALL.action";
+    QString globalExactKey = "All."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + "."
+            + GestureDirectionEnum::getValue(dir) + ".action";
+    QString globalAllDirectionsKey = "All."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + ".ALL.action";
 
-    if(this->settings.contains(keyWithClass)) {
-        return ActionTypeEnum::getEnum(this->settings.value(keyWithClass));
-    } else {
-        QString key = gesture + ".ALL.action";
-        return ActionTypeEnum::getEnum(this->settings.value(key));
-    }
+    if(this->settings.contains(exactKey))
+        return ActionTypeEnum::getEnum(this->settings.value(exactKey));
+    else if(this->settings.contains(allDirectionsKey))
+        return ActionTypeEnum::getEnum(this->settings.value(allDirectionsKey));
+    else if(this->settings.contains(globalExactKey))
+        return ActionTypeEnum::getEnum(this->settings.value(globalExactKey));
+    else if(this->settings.contains(globalAllDirectionsKey))
+        return ActionTypeEnum::getEnum(this->settings.value(
+                globalAllDirectionsKey));
+    else
+        return ActionTypeEnum::NO_ACTION;
 }
 
-QString Config::getAssociatedSettings(GestureTypeEnum::GestureType
-        gestureType, QString appClass) const {
-    QString gesture = GestureTypeEnum::getValue(gestureType);
-    QString keyWithClass = gesture + "." + appClass + ".settings";
+QString Config::getAssociatedSettings(const QString& appClass,
+        GestureTypeEnum::GestureType gestureType, int numFingers,
+        GestureDirectionEnum::GestureDirection dir) const
+{
+    QString exactKey = appClass + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + "."
+            + GestureDirectionEnum::getValue(dir) + ".settings";
+    QString allDirectionsKey = appClass + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + ".ALL.settings";
+    QString globalExactKey = "All."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + "."
+            + GestureDirectionEnum::getValue(dir) + ".settings";
+    QString globalAllDirectionsKey = "All."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + ".ALL.settings";
 
-    if(this->settings.contains(keyWithClass)) {
-        return this->settings.value(keyWithClass);
-    } else {
-        QString key = gesture + ".ALL.settings";
-        return this->settings.value(key);
-    }
+    if(this->settings.contains(exactKey))
+        return this->settings.value(exactKey);
+    else if(this->settings.contains(allDirectionsKey))
+        return this->settings.value(allDirectionsKey);
+    else if(this->settings.contains(globalExactKey))
+        return this->settings.value(globalExactKey);
+    else if(this->settings.contains(globalAllDirectionsKey))
+        return this->settings.value(globalAllDirectionsKey);
+    else
+        return "";
 }

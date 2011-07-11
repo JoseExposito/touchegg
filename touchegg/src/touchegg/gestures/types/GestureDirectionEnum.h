@@ -1,5 +1,5 @@
 /**
- * @file src/touchegg/actions/types/ActionTypeEnum.h
+ * @file src/touchegg/gestures/types/GestureDirectionEnum.h
  *
  * This file is part of Touchégg.
  *
@@ -16,50 +16,44 @@
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
- * @class  ActionTypeEnum
+ * @class  GestureDirectionEnum
  */
-#ifndef ACTIONTYPEENUM_H
-#define ACTIONTYPEENUM_H
+#ifndef GESTUREDIRECTIONENUM_H
+#define GESTUREDIRECTIONENUM_H
 
 #include "src/touchegg/util/Include.h"
 
 /**
  * @~spanish
- * Contiene un tipo enumerado con las acciones soportadas.
+ * Contiene un tipo enumerado con las posibles direcciones de los gestos.
  *
  * @~english
- * Contains a enumeradted type with supported actions.
+ * Contains an enumerated type with availables directions of gestures.
  */
-class ActionTypeEnum : public QObject
+class GestureDirectionEnum : public QObject
 {
 
     Q_OBJECT
-    Q_ENUMS(ActionType);
+    Q_ENUMS(GestureDirection);
 
 public:
 
     /**
      * @~spanish
-     * Tipo enumerado con las acciones soportadas.
+     * Tipo enumerado con las direcciones disponibles.
      *
      * @~english
-     * Enumerated type with supported actions.
+     * Enumerated type with supported directions.
      */
-    enum ActionType {
-        NO_ACTION,
-        MOUSE_CLICK,
-        SCROLL,
-        MINIMIZE_WINDOW,
-        MAXIMIZE_RESTORE_WINDOW,
-        CLOSE_WINDOW,
-        RESIZE_WINDOW,
-        SHOW_DESKTOP,
-        CHANGE_DESKTOP,
-        CHANGE_VIEWPORT,
-        SEND_KEYS,
-        MOVE_WINDOW,
-        RUN_COMMAND,
-        DRAG_AND_DROP
+    enum GestureDirection {
+        NO_DIRECTION,
+        ALL,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        IN,
+        OUT
     };
 
     /**
@@ -71,7 +65,7 @@ public:
      * Converts the enum to QString.
      * @return The QString.
      */
-    static QString getValue(ActionType atEnum);
+    static QString getValue(GestureDirection gtEnum);
 
     /**
      * @~spanish
@@ -82,7 +76,8 @@ public:
      * Converts the indicated QString to the equivalent enum type.
      * @return The enum type.
      */
-    static ActionType getEnum(const QString& atString);
+    static GestureDirection getEnum(const QString& gtString);
+
 };
 
-#endif // ACTIONTYPEENUM_H
+#endif // GESTUREDIRECTIONENUM_H

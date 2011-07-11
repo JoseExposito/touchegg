@@ -1,16 +1,22 @@
 /**
  * @file /src/touchegg/actions/implementation/ChangeDesktop.cpp
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  ChangeDesktop
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #include "ChangeDesktop.h"
 
@@ -19,7 +25,8 @@
 // ************************************************************************** //
 
 ChangeDesktop::ChangeDesktop(const QString& settings, Window window)
-        : Action(settings, window) {
+        : Action(settings, window)
+{
     this->toRight = true;
 
     QStringList strl = settings.split("=");
@@ -46,7 +53,8 @@ void ChangeDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void ChangeDesktop::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
+{
     // Obtenemos el número total de escritorios
     Atom atomRet;
     int size;

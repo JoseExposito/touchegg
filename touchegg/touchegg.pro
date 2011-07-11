@@ -1,11 +1,10 @@
 TEMPLATE     = app
 TARGET       = touchegg
-QT          += core gui
+QT          += gui core xml
 OBJECTS_DIR += build
 MOC_DIR     += build
 LIBS        += -lutouch-geis -lX11 -lXtst -lXext
 //DEFINES      = QT_NO_DEBUG_OUTPUT
-
 
 target.path  = /usr/bin
 config.path  = /usr/share/touchegg

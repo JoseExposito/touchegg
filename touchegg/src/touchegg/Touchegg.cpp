@@ -1,16 +1,22 @@
 /**
  * @file /src/touchegg/Touchegg.cpp
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  Touchegg
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #include "Touchegg.h"
 
@@ -18,14 +24,29 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-Touchegg::Touchegg() {
-    // Inicializamos la configuración
-    Config::loadConfig();
+Touchegg::Touchegg()
+    : gestureCollector(new GestureCollector),
+    gestureHandler(new GestureHandler)
+{
 
-    // Inicializamos los atributos
-    this->gestureCollector = new GestureCollector();
-    this->gestureHandler   = new GestureHandler();
+}
 
+Touchegg::~Touchegg()
+{
+    if(this->gestureCollector->isRunning())
+        this->gestureCollector->exit();
+
+    delete this->gestureCollector;
+    delete this->gestureHandler;
+}
+
+
+// ************************************************************************** //
+// **********                    PUBLIC METHODS                    ********** //
+// ************************************************************************** //
+
+void Touchegg::start()
+{
     // Conectamos GestureHandler con GestureHandler para que el último trate los
     // eventos que recoge el primero.
     qRegisterMetaType<GeisGestureType>("GeisGestureType");
@@ -47,12 +68,4 @@ Touchegg::Touchegg() {
     // Lanzamos GestureHandler en un hilo aparte para no congelar el bucle de
     // eventos de Qt
     this->gestureCollector->start();
-}
-
-Touchegg::~Touchegg() {
-    if(this->gestureCollector->isRunning())
-        this->gestureCollector->exit();
-
-    delete this->gestureCollector;
-    delete this->gestureHandler;
 }

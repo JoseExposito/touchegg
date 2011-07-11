@@ -1,60 +1,46 @@
 /**
  * @file /src/touchegg/gestures/collector/GestureCollector.cpp
  *
- * @~spanish
- * Este archivo es parte del proyecto Touchégg, usted puede redistribuirlo y/o
- * modificarlo bajo los téminos de la licencia GNU GPL v3.
+ * This file is part of Touchégg.
  *
- * @~english
- * This file is part of the Touchégg project, you can redistribute it and/or
- * modify it under the terms of the GNU GPL v3.
+ * Touchégg is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License  as  published by  the  Free Software
+ * Foundation,  either version 3 of the License,  or (at your option)  any later
+ * version.
  *
+ * Touchégg is distributed in the hope that it will be useful,  but  WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the  GNU General Public License  for more details.
+ *
+ * You should have received a copy of the  GNU General Public License along with
+ * Touchégg. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
  * @class  GestureCollector
- * @author Copyright (C) 2011 José Expósito <jose.exposito89@gmail.com>
  */
 #include "GestureCollector.h"
-
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
-void GestureCollector::deviceAdded(void* cookie, GeisInputDeviceId /*id*/,
-        void* /*attrs*/) {
-    GestureCollector* gc = (GestureCollector*)cookie;
-    gc->semDevices->release();
-}
-
-void GestureCollector::deviceRemoved(void* cookie, GeisInputDeviceId /*id*/,
-        void* /*attrs*/) {
-    GestureCollector* gc = (GestureCollector*)cookie;
-    gc->semDevices->acquire();
-}
-
-//------------------------------------------------------------------------------
-
-void GestureCollector::gestureAdded(void* /*cookie*/, GeisGestureType /*type*/,
-        GeisGestureId /*id*/, GeisSize /*numAttrs*/,
-        GeisGestureAttr* /*attrs*/) {}
-
-void GestureCollector::gestureRemoved(void* /*cookie*/, GeisGestureType/*type*/,
-        GeisGestureId /*id*/, GeisSize /*numAttrs*/,
-        GeisGestureAttr* /*attrs*/) {}
-
 void GestureCollector::gestureStart(void* cookie, GeisGestureType type,
-        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs) {
+        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs)
+{
     GestureCollector* gc = (GestureCollector*)cookie;
     emit gc->executeGestureStart(type, id, getGestureAttrs(numAttrs, attrs));
 }
 
 void GestureCollector::gestureUpdate(void* cookie, GeisGestureType type,
-        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs) {
+        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs)
+{
     GestureCollector* gc = (GestureCollector*)cookie;
     emit gc->executeGestureUpdate(type, id, getGestureAttrs(numAttrs, attrs));
 }
 
 void GestureCollector::gestureFinish(void* cookie, GeisGestureType type,
-        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs) {
+        GeisGestureId id, GeisSize numAttrs, GeisGestureAttr* attrs)
+{
     GestureCollector* gc = (GestureCollector*)cookie;
     emit gc->executeGestureFinish(type, id, getGestureAttrs(numAttrs, attrs));
 }
@@ -65,7 +51,8 @@ void GestureCollector::gestureFinish(void* cookie, GeisGestureType type,
 // ************************************************************************** //
 
 QHash<QString, QVariant> GestureCollector::getGestureAttrs(GeisSize numAttrs,
-        GeisGestureAttr* attrs) {
+        GeisGestureAttr* attrs)
+{
     QHash<QString, QVariant> ret;
 
     for(unsigned int n=0; n<numAttrs; n++) {
@@ -100,9 +87,8 @@ QHash<QString, QVariant> GestureCollector::getGestureAttrs(GeisSize numAttrs,
 // **********                   PROTECTED METHOS                   ********** //
 // ************************************************************************** //
 
-void GestureCollector::run() {
-    this->semDevices = new QSemaphore(0);
-
+void GestureCollector::run()
+{
     GeisXcbWinInfo xcbWinInfo;
     xcbWinInfo.display_name = NULL;
     xcbWinInfo.screenp      = NULL;
@@ -118,24 +104,39 @@ void GestureCollector::run() {
         qFatal("geis_init: Can't initialize utouch-geis");
     }
 
-    // Estamos atentos a si se conectan o desconectan dispositivos de entrada
-    // para no recoger gestos si no hay ninguno conectado
-    GeisInputFuncs devicesFuncs;
-    devicesFuncs.added = GestureCollector::deviceAdded;
-    devicesFuncs.removed = GestureCollector::deviceRemoved;
-    geis_input_devices(geisInstance, &devicesFuncs, this);
-
     // Establecemos las funciones de callback
     GeisGestureFuncs gestureFuncs;
-    gestureFuncs.added   = GestureCollector::gestureAdded;
-    gestureFuncs.removed = GestureCollector::gestureRemoved;
     gestureFuncs.start   = GestureCollector::gestureStart;
     gestureFuncs.update  = GestureCollector::gestureUpdate;
     gestureFuncs.finish  = GestureCollector::gestureFinish;
 
     // Nos suscribimos solo a los gestos que se vayan a usar
-    Config* cfg = Config::getInstance();
-    QStringList subscribeList = cfg->getUsedGestures();
+
+    // TODO Cuando esté incorporado el mecanismo para escuchar a los gestos
+    //      globales en la root window y a los específicos en la ventana de cada
+    //      aplicación sustituir el código entre llaves por las dos líneas
+    //      comentadas
+
+    //Config* cfg = Config::getInstance();
+    //QStringList subscribeList = cfg->getUsedGestures("All");
+
+    // {
+    QStringList subscribeList;
+    subscribeList.append(GEIS_GESTURE_TYPE_TAP2);
+    subscribeList.append(GEIS_GESTURE_TYPE_TAP3);
+    subscribeList.append(GEIS_GESTURE_TYPE_TAP4);
+    subscribeList.append(GEIS_GESTURE_TYPE_TAP5);
+    subscribeList.append(GEIS_GESTURE_TYPE_DRAG2);
+    subscribeList.append(GEIS_GESTURE_TYPE_DRAG3);
+    subscribeList.append(GEIS_GESTURE_TYPE_DRAG4);
+    subscribeList.append(GEIS_GESTURE_TYPE_DRAG5);
+    subscribeList.append(GEIS_GESTURE_TYPE_PINCH2);
+    subscribeList.append(GEIS_GESTURE_TYPE_PINCH3);
+    subscribeList.append(GEIS_GESTURE_TYPE_PINCH4);
+    subscribeList.append(GEIS_GESTURE_TYPE_PINCH5);
+    // }
+
+
     if(subscribeList.length() == 0)
         qFatal("Exiting, no gestures added to the configuration");
     char** subscribe = new char*[subscribeList.size() + 1];
@@ -169,10 +170,6 @@ void GestureCollector::run() {
 
     fd_set read_fds;
     for(;;) {
-        // Si no hay dispositivos conectados esperamos
-        if(this->semDevices->available() == 0)
-            this->semDevices->acquire();
-
         FD_ZERO(&read_fds);
         FD_SET(fd, &read_fds);
         int sstat = select(fd+1, &read_fds, NULL, NULL, NULL);
@@ -185,5 +182,4 @@ void GestureCollector::run() {
     }
 
     geis_finish(geisInstance);
-    delete this->semDevices;
 }

@@ -1,16 +1,20 @@
-﻿ * [TWO|THREE|FOUR|FIVE]_FINGERS_TAP:
+﻿= Introducción =
 
-[http://lh4.ggpht.com/_ReRtolbPWnI/TTzSV6HkpPI/AAAAAAAAADA/LAb7QsyqGRA/2.jpg]
-[http://lh6.ggpht.com/_ReRtolbPWnI/TTzSWDU9ReI/AAAAAAAAADE/-ujKwNolhU4/3.jpg]
-[http://lh4.ggpht.com/_ReRtolbPWnI/TTzSWNL3TRI/AAAAAAAAADI/eU9Apr6Qfco/4.jpg]
-[http://lh3.ggpht.com/_ReRtolbPWnI/TTzSWc65dlI/AAAAAAAAADM/Dzov1DgKbn0/5.jpg]
+En esta página puede encontrar una lista con todos los gestos soportados por
+Touchégg así como su nombre en el archivo de configuración:
 
- * [TWO|THREE|FOUR]_FINGERS_DRAG_[UP|DOWN|RIGHT|LEFT]
+{{{
+~/.config/touchegg/touchegg.conf
+}}}
 
-[http://lh4.ggpht.com/_ReRtolbPWnI/TTzSWpGBDSI/AAAAAAAAADQ/gG1YIBiDOU0/drag-2.jpg]
-[http://lh4.ggpht.com/_ReRtolbPWnI/TTzSgc4K72I/AAAAAAAAADU/qBwSBTN2u5g/drag-3.jpg]
-[http://lh4.ggpht.com/_ReRtolbPWnI/TTzSgQ7KswI/AAAAAAAAADY/tx-B0sUz0eI/drag-4.jpg]
-[http://lh6.ggpht.com/_ReRtolbPWnI/TTzSgit_UxI/AAAAAAAAADc/wwJq0al0U7w/drag-5.jpg]
 
- * THREE_FINGERS_PINCH
-[http://lh5.ggpht.com/_ReRtolbPWnI/TTzSglSevtI/AAAAAAAAADg/NbzLDe-lbg0/pinch-3.jpg]
+= Lista de gestos =
+
+|| *NOMBRE* || *DESCRIPCIÓN* ||
+|| Tap || Similar a hacer un click sobre el trackpad/touchscreen con 1 hasta 5 dedos.<br>Nombre en el archivo de configuración: TAP<br>Admite direcciones: No ||
+|| Drag || Arrastrar desde 1 hasta 5 dedos sobre el trackpad/touchscreen.<br>Nombre en el archivo de configuración: DRAG<br>Admite direcciones: Si, up/down/left/right ||
+|| Pinch || Pellizco con 2 hasta 5 sobre el trackpad/touchscreen.<br>Nombre en el archivo de configuración: PINCH<br>Admite direcciones: Si, in/out ||
+|| Rotate || Hacer un círculo con 2 hasta 5 sobre el trackpad/touchscreen.<br>Nombre en el archivo de configuración: ROTATE<br>Admite direcciones: Si, left/right ||
+|| Tap & Hold || Similar a hacer un tap seguido de un drag con 1 hasta 5 dedos. Este gesto se usa principalmente para hacer drag&drop o para seleccionar text.<br>Nombre en el archivo de configuración: TAP_AND_HOLD<br>Admite direcciones: Si, up/down/left/right ||
+|| Double Tap || Similar ha hacer un tap seguido de otro tap con 1 hasta 5 dedos.<br>Nombre en el archivo de configuración: DOUBLE_TAP<br>Admite direcciones: No ||
+

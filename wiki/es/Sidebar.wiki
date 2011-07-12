@@ -1,5 +1,6 @@
  * -> [Main Página principal]
  * -> [AllGestures Todos los gestos soportados por Touchégg]
+ * -> [AllActions Todos las acciones soportadas por Touchégg]
  * -> [ConfigureDevices Cómo configurar su trackpad]
  * -> [CompileSourceCode Cómo compilar el código fuente]
  * -> [HowToHelp Cómo colaborar con Touchégg]

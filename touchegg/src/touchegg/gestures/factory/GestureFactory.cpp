@@ -106,8 +106,9 @@ Gesture* GestureFactory::createSimpleGesture(GeisGestureType type,
                 GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
         qDebug() << "\tNumber of fingers-> " << attrs.value(
                 GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
-        return NULL;
     }
+
+    return NULL;
 }
 
 Gesture* GestureFactory::createComposedGesture(GeisGestureType type,
@@ -154,7 +155,6 @@ Gesture* GestureFactory::createComposedGesture(GeisGestureType type,
                 GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
         qDebug() << "\tNumber of fingers-> " << attrs.value(
                 GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
-        return NULL;
     }
 
     return NULL;

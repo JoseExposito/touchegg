@@ -27,11 +27,11 @@
 Gesture::Gesture(GestureTypeEnum::GestureType type, int numFingers,
         GestureDirectionEnum::GestureDirection dir, GeisGestureId id,
         const QHash<QString, QVariant>& attrs) :
-    type(type),
-    numFingers(numFingers),
-    dir(dir),
-    id(id),
-    attrs(attrs)
+        type(type),
+        numFingers(numFingers),
+        dir(dir),
+        id(id),
+        attrs(attrs)
 {
 
 }

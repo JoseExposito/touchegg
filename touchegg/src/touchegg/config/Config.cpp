@@ -27,8 +27,8 @@
 namespace
 {
     const char* USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
-    const char* HOME_CONFIG_FILE      = "/.touchegg/touchegg.conf";
-    const char* HOME_CONFIG_DIR       = ".touchegg";
+    const char* HOME_CONFIG_FILE      = "/.config/touchegg/touchegg.conf";
+    const char* HOME_CONFIG_DIR       = ".config/touchegg";
 }
 
 
@@ -72,7 +72,7 @@ Config::Config()
                USR_SHARE_CONFIG_FILE);
     }
 
-    // If the ~/.touchegg configuration file doesn't exist copy it
+    // If the ~/.config/touchegg configuration file doesn't exist copy it
     if(!homeFile.exists()) {
         qDebug() << QDir::homePath() + HOME_CONFIG_FILE
                  << " not found, copying config from "

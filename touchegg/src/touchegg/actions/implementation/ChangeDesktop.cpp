@@ -27,20 +27,14 @@
 ChangeDesktop::ChangeDesktop(const QString& settings, Window window)
         : Action(settings, window)
 {
-    this->toRight = true;
+    this->next = true;
 
-    QStringList strl = settings.split("=");
-    if(strl.length() == 2 && strl.at(0) == "DIRECTION") {
-        QString configDir = strl.at(1);
-        if(configDir == "PREVIOUS")
-            this->toRight = false;
-        else if(configDir == "NEXT")
-            this->toRight = true;
-        else
-            qWarning() << "Error reading CHANGE_DESKTOP settings, using " <<
-                    "the default settings";
-    } else
-        qWarning() << "Error reading CHANGE_DESKTOP settings, using " <<
+    if(settings == "PREVIOUS")
+        this->next = false;
+    else if(settings == "NEXT")
+        this->next = true;
+    else
+        qWarning() << "Error reading CHANGE_VIEWPORT settings, using " <<
                 "the default settings";
 }
 
@@ -77,7 +71,7 @@ void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
     XFree(propRet);
 
     // Cambiamos al escritorio siguiente o anterior
-    int nextDesktop = this->toRight
+    int nextDesktop = this->next
             ? (currentDesktop + 1) % numDesktops
             : (currentDesktop - 1 + numDesktops) % numDesktops;
 

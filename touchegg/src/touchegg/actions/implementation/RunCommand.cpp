@@ -27,13 +27,7 @@
 RunCommand::RunCommand(const QString& settings, Window window)
         : Action(settings, window)
 {
-    this->command = "";
-
-    QStringList strl = settings.split("=");
-    if(strl.length() == 2 && strl.at(0) == "COMMAND")
-        this->command = strl.at(1);
-    else
-        qWarning() << "Error reading RUN_COMMAND settings";
+    this->command = settings;
 }
 
 

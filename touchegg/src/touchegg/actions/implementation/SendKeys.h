@@ -26,10 +26,10 @@
 
 /**
  * @~spanish
- * Envía las teclas indicadas en la configuración a la ventana activa.
+ * Envía las teclas indicadas en la configuración a la ventana bajo el cursor.
  *
  * @~english
- * Envía las teclas indicadas en la configuración a la ventana activa.
+ * Sends the keys indicated in the configuration to the window under the cursor.
  */
 class SendKeys : public Action
 {

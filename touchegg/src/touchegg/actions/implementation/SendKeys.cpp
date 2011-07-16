@@ -27,48 +27,47 @@
 SendKeys::SendKeys(const QString& settings, Window window)
         : Action(settings, window)
 {
-    if(settings.split(":").length() != 2) {
-        qWarning() << "Error reading SEND_KEYS settings";
-        return;
-    }
+    // Leemos las teclas a enviar desde la configuración
+    QStringList keys = settings.split("+");
 
-    QString allHoldDown = settings.split(":").at(0);
-    QString allBetween  = settings.split(":").at(1);
-
-    if(allHoldDown.split("=").length() != 2
-            || allBetween.split("=").length() != 2) {
-        qWarning() << "Error reading SEND_KEYS settings";
-        return;
-    }
-
-    if(allHoldDown.split("=").at(0) != "HOLD_DOWN"
-            || allBetween.split("=").at(0) != "PRESS") {
-        qWarning() << "Error reading SEND_KEYS settings";
-        return;
-    }
-
-    QString holdDownStr      = allHoldDown.split("=").at(1);
-    QString betweenStr       = allBetween.split("=").at(1);
-    QStringList holdDownList = holdDownStr.split("|");
-    QStringList betweenList  = betweenStr.split("|");
-
-    for(int n=0; n<holdDownList.length(); n++) {
-        QString keySymStr = holdDownList.at(n);
-        if(keySymStr != "") {
-            KeySym keySym = XStringToKeysym(keySymStr.toStdString().c_str());
+    foreach(QString key, keys) {
+        if(key == "Control" || key == "Shift" || key == "Super"
+                || key == "Alt") {
+            key = key.append("_L");
+            KeySym keySym = XStringToKeysym(key.toStdString().c_str());
             KeyCode keyCode = XKeysymToKeycode(QX11Info::display(), keySym);
             this->holdDownKeys.append(keyCode);
-        }
-    }
 
-    for(int n=0; n<betweenList.length(); n++) {
-        QString keySymStr = betweenList.at(n);
-        if(keySymStr != "") {
-            KeySym keySym = XStringToKeysym(keySymStr.toStdString().c_str());
+        } else if(key == "AltGr") {
+            KeySym keySym = XStringToKeysym("Alt_R");
+            KeyCode keyCode = XKeysymToKeycode(QX11Info::display(), keySym);
+            this->holdDownKeys.append(keyCode);
+
+        } else {
+            KeySym keySym = XStringToKeysym(key.toStdString().c_str());
             KeyCode keyCode = XKeysymToKeycode(QX11Info::display(), keySym);
             this->pressBetweenKeys.append(keyCode);
         }
     }
+
+    // Traemos al frente la ventana bajo el cursor, ya que solo se pueden enviar
+    // teclas a la ventana activa
+    XClientMessageEvent event;
+    event.window = this-> window;
+    event.type = ClientMessage;
+    event.message_type = XInternAtom(QX11Info::display(), "_NET_ACTIVE_WINDOW",
+                                     false);
+    event.format = 32;
+    event.data.l[0] = 2;
+    event.data.l[1] = CurrentTime;
+    event.data.l[2] = 0;
+
+    XSendEvent(QX11Info::display(),
+            QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask),
+            (XEvent*)&event);
+
+    XFlush(QX11Info::display());
 }
 
 

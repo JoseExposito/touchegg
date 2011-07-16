@@ -43,7 +43,7 @@ private:
      * @~english
      * Direction to switch desktops.
      */
-    bool toRight;
+    bool next;
 
 public:
 

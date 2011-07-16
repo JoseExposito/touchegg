@@ -69,7 +69,7 @@ void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
 
     // Si la ventana está maximizada la restauramos
     XClientMessageEvent event;
-    event.window =this-> window;
+    event.window = this-> window;
     event.type = ClientMessage;
     event.message_type = XInternAtom(QX11Info::display(), "_NET_WM_STATE",
                                      false);

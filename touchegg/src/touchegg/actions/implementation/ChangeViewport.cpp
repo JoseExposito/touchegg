@@ -29,17 +29,11 @@ ChangeViewport::ChangeViewport(const QString& settings, Window window)
 {
     this->next = true;
 
-    QStringList strl = settings.split("=");
-    if(strl.length() == 2 && strl.at(0) == "DIRECTION") {
-        QString configDir = strl.at(1);
-        if(configDir == "PREVIOUS")
-            this->next = false;
-        else if(configDir == "NEXT")
-            this->next = true;
-        else
-            qWarning() << "Error reading CHANGE_VIEWPORT settings, using " <<
-                    "the default settings";
-    } else
+    if(settings == "PREVIOUS")
+        this->next = false;
+    else if(settings == "NEXT")
+        this->next = true;
+    else
         qWarning() << "Error reading CHANGE_VIEWPORT settings, using " <<
                 "the default settings";
 }

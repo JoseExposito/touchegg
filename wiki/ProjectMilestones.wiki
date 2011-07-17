@@ -12,3 +12,4 @@ Then you can see a list with the principal milestones of Touchégg project.
 || 13/04/2011 || Touchégg in the [https://wiki.ubuntu.com/MeetingLogs/appdevweek1104/Touchegg Ubuntu AppDeveloperWeek] ||
 || 28/04/2011 || Touchégg v0.3 released ||
 || 03/05/2011 || Touchégg gets more than 10000 downloads ||
+|| 17/07/2011 || Touchégg gets more than 15000 downloads ||

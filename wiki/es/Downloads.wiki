@@ -1,6 +1,6 @@
 #sidebar
 
-*[https://code.google.com/p/touchegg/feeds ¡Enterate el primero de los últimos cambios en Touchégg!]* https://lh3.googleusercontent.com/_ReRtolbPWnI/TW45hTR7DaI/AAAAAAAAAEk/Qzjh5Dw1mLE/rss.png
+*Sigue Touchégg en...* [https://code.google.com/p/touchegg/feeds https://lh3.googleusercontent.com/-52GoOXWJMJ8/TW45hTR7DaI/AAAAAAAAAEk/Qaj7O8dF-WM/rss.png]       [https://twitter.com/#!/Jose__Exposito https://lh3.googleusercontent.com/-iIHeqSdDWsE/Tj15isn38QI/AAAAAAAAAJU/MAu0vSOTqx4/twitter.png]
 
 <br/>
 

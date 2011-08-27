@@ -13,3 +13,4 @@ A continuación puede ver una lista de los principales eventos relaccionados con
 || 28/04/2011 || Touchégg v0.3 ||
 || 03/05/2011 || Touchégg alcanza más de 10000 descargas ||
 || 17/07/2011 || Touchégg alcanza más de 15000 descargas ||
+|| 24/08/2011 || Touchégg añadido al repositorio oficial de Ubuntu ||

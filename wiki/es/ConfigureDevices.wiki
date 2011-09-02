@@ -1,0 +1,111 @@
+= Ubuntu 11.04 Natty Narwhal =
+
+En Natty no es necesario realizar ningún cambio en su configuración, tan solo instale y ejecute Touchégg.
+
+
+
+= Ubuntu 10.10 Maverick Meerkat =
+== Configuración general ==
+
+Normalmente la configuración consiste en cambiar el driver usado por evdev, en
+caso de que no se esté usando ya este, _y reiniciar las X._
+
+Hacer esto es tan sencillo como buscar un archivo del tipo "nn-<nombre de tu trackpad>.conf"
+en /usr/share/X11/xorg.conf.d/ y localizar el identificador de tu trackpad.
+
+A continuación basta con copiar dicha configuración al final de /etc/X11/xorg.conf
+cambiando el driver por "evdev".
+
+Si el archivo /etc/X11/xorg.conf no existe tan solo hay que crearlo:
+$ sudo touch /etc/X11/xorg.conf
+
+
+== Configuración específica ==
+
+ * *Apple Magic Trackpad:*
+
+ Basta con copiar la configuración del archivo /usr/share/X11/xorg.conf.d/60-magictrackpad.conf
+ a /etc/X11/xorg.conf cambiando el driver por evdev:
+ {{{
+ # Apple Magic Trackpad
+ Section "InputClass"
+      Identifier "Magic Trackpad"
+      MatchUSBID "05ac:030e"
+      Driver "evdev"
+ EndSection
+ }}}
+ Todos los gestos son detectados y funcionan correctamente.
+
+
+
+ * *Asus eeepc 1000h (Buildin Elantech Trackpad)*
+
+ La configuración original puede verse en /usr/share/X11/xorg.conf.d/50-synaptics.conf.
+ Copiela al final de /etc/X11/xorg.conf cambiando el driver por "evdev":
+ {{{
+ Section "InputClass"
+    Identifier "touchpad catchall"
+    Driver "evdev"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+ EndSection
+ }}}
+ No soporta gestos con más de tres dedos.
+
+ (¡Gracias [http://code.google.com/p/touchegg/issues/detail?id=3 mbuess]!)
+
+
+ * *!MacBook Pro 7.1*
+
+ [https://code.google.com/p/touchegg/issues/detail?id=19#c10 Nils Schmidt] ha escrito
+ [http://infiniteblogging.co.cc/ubuntu-10-10-on-macbook-pro-7-1/#touchpad un excelente atículo en su blog]
+ explicando como instalar Ubuntu en un !MacBook Pro 7.1, Touchégg incluido.
+
+ Básicamente hay que añadir estas líneas al final de /etc/X11/xorg.conf:
+ {{{
+ Section "InputClass"
+        Identifier "touchpad catchall"
+        Driver "evdev"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+ EndSection
+ }}}
+
+ * *Otros !MacBook's (!MacBook, !MacBook Pro, !MacBook Air)*
+
+ Como [http://code.google.com/p/touchegg/issues/detail?id=12 "jlcleary87"] ha
+ tenido la amabilidad de aclararme 
+ Touchégg es compatible con todos los !MacBook's de aluminio y su configuración es
+ similar a la del Magic Trackpad.
+
+ ¡Gracias jlcleary87!
+
+ * *Acer Aspire One D255*
+
+ Copia el contenido de tu "10-evdev.conf" en /etc/X11/xorg.conf
+ {{{
+ Section "InputClass"
+        Identifier "evdev touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "evdev"
+ EndSection
+ }}}
+ Puedes ver el issue completo [http://code.google.com/p/touchegg/issues/detail?id=34 aquí]
+ y un articulo completo con vídeos
+ [http://equimantux.wordpress.com/2011/03/21/instalar-probar-y-configirar-touchegg-en-un-acer-one-d255-con-ubuntu/ aquí].
+
+
+ * *HP Pavilon DV6000*
+
+ Como explica [http://code.google.com/p/touchegg/issues/detail?id=32 Virgolus] 
+ es necesario copiar el contenido de /usr/share/X11/xorg.conf.d/50-synaptics.conf
+ en /etc/X11/xorg.conf:
+ {{{
+ Section "InputClass"
+    Identifier "touchpad catchall"
+    Driver "evdev"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+ EndSection
+ }}}

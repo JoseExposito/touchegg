@@ -1,0 +1,16 @@
+= Introducción =
+
+A continuación puede ver una lista de los principales eventos relaccionados con Touchégg.
+
+= Milestones =
+
+|| *Fecha* || *Evento* ||
+|| 23/01/2011 || Touchégg v0.1 ||
+|| 07/02/2011 || Touchégg alcanza más de 1000 descargas. ¡Gracias a todos! ||
+|| 11/03/2011 || Touchégg v0.2 ||
+|| 16/03/2011 || Touchégg alcanza más de 5000 descargas ||
+|| 13/04/2011 || Touchégg en la [https://wiki.ubuntu.com/MeetingLogs/appdevweek1104/Touchegg Ubuntu AppDeveloperWeek] ||
+|| 28/04/2011 || Touchégg v0.3 ||
+|| 03/05/2011 || Touchégg alcanza más de 10000 descargas ||
+|| 17/07/2011 || Touchégg alcanza más de 15000 descargas ||
+|| 24/08/2011 || Touchégg añadido al repositorio oficial de Ubuntu ||

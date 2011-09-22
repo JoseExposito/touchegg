@@ -12,11 +12,11 @@
     Es necesario actualizar uTouch a la última versión añadiendo este PPA: <br/>
     https://launchpad.net/~utouch-team/+archive/daily <br/>
     E instalarlo desde el paquete DEB disponible en su [https://launchpad.net/ubuntu/oneiric/+source/touchegg/1.0-0ubuntu1 página en Launchpad ] o descargar e instalar el código fuente: <br/>
-   - [http://launchpadlibrarian.net/80526375/touchegg_1.0-0ubuntu1_i386.deb Paquete DEB i386] <br/>
-   - [http://launchpadlibrarian.net/80528329/touchegg_1.0-0ubuntu1_amd64.deb Paquete DEB amd64] <br/>
-   - [http://launchpadlibrarian.net/80527615/touchegg_1.0-0ubuntu1_armel.deb Paquete DEB armel] <br/>
-   - [http://launchpadlibrarian.net/80527664/touchegg_1.0-0ubuntu1_powerpc.deb Paquete DEB powerpc] <br/>
-   - [http://touchegg.googlecode.com/files/touchegg-1.0.tar.gz Código fuente]
+    - [http://launchpadlibrarian.net/80526375/touchegg_1.0-0ubuntu1_i386.deb Paquete DEB i386] <br/>
+    - [http://launchpadlibrarian.net/80528329/touchegg_1.0-0ubuntu1_amd64.deb Paquete DEB amd64] <br/>
+    - [http://launchpadlibrarian.net/80527615/touchegg_1.0-0ubuntu1_armel.deb Paquete DEB armel] <br/>
+    - [http://launchpadlibrarian.net/80527664/touchegg_1.0-0ubuntu1_powerpc.deb Paquete DEB powerpc] <br/>
+    - [http://touchegg.googlecode.com/files/touchegg-1.0.tar.gz Código fuente]
 
 
  

@@ -15,9 +15,9 @@
     - [http://launchpadlibrarian.net/80527615/touchegg_1.0-0ubuntu1_armel.deb Paquete DEB armel] <br/>
     - [http://launchpadlibrarian.net/80527664/touchegg_1.0-0ubuntu1_powerpc.deb Paquete DEB powerpc] <br/>
     - [http://touchegg.googlecode.com/files/touchegg-1.0.tar.gz Código fuente] 
- * *Arch Linux:* Available in [https://aur.archlinux.org/packages.php?ID=46809 AUR] (thanks to Chenxiaolong)
+ * *Arch Linux:* Disponible en [https://aur.archlinux.org/packages.php?ID=46809 AUR] (gracias a Chenxiaolong)
     {{{$ yaourt -S touchegg}}}
- * For other distros you can download and compile the *[https://code.google.com/p/touchegg/downloads/list source code]*
+ * En otras distribuciones puedes descargar e instalar el *[https://code.google.com/p/touchegg/downloads/list código fuente]*
 
 
 <br/>

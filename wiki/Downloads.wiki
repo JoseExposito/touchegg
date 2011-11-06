@@ -1,8 +1,14 @@
-
-*Follow Touchégg on...* [https://code.google.com/p/touchegg/feeds https://lh3.googleusercontent.com/-52GoOXWJMJ8/TW45hTR7DaI/AAAAAAAAAEk/Qaj7O8dF-WM/rss.png]       [https://twitter.com/#!/Jose__Exposito https://lh3.googleusercontent.com/-iIHeqSdDWsE/Tj15isn38QI/AAAAAAAAAJU/MAu0vSOTqx4/twitter.png]
+#sydebar
+Bellow you can download packages for your favorite distro or download the source code to compile and install Touchégg in any distro. Please, consider [http://goo.gl/lTuZX make a donation] to support the project
 
 <br/>
+<hr>
+<br/>
 
+ * *Ubuntu 11.10 Oneiric Ocelot:* Touchégg is available in the Ubuntu official repository, to install it:
+    {{{ $ sudo apt-get install touchegg }}}
+ * *Ubuntu 11.04 Natty Narwhal:*
+=======
 Bellow you can download packages for your favorite distro or download the source code to compile and install Touchégg in any distro. Please, consider [http://goo.gl/lTuZX make a donation] to support the project
 
 <br/>
@@ -12,6 +18,7 @@ Bellow you can download packages for your favorite distro or download the source
  * *Ubuntu 11.10 Oneiric Ocelot:* Touchégg is available in the Ubuntu official repository, to install it:
     {{{ $ sudo apt-get install touchegg }}} 
  * *Ubuntu 11.04 Natty Narwhal:*
+>>>>>>> .r153
     Is necessary update uTouch to the last version adding this PPA:<br/>
     https://launchpad.net/~utouch-team/+archive/daily <br/>
     And install the DEB package from the [https://launchpad.net/ubuntu/oneiric/+source/touchegg/1.0-0ubuntu1 Launchpad page] or download and compile the source code: <br/>

@@ -1,11 +1,5 @@
 #sidebar
 
-Bellow you can download packages for your favorite distro or download the source code to compile and install Touchégg in any distro. Please, consider [http://goo.gl/lTuZX make a donation] to support the project
-
-<br/>
-<hr>
-<br/>
-
  * *Ubuntu 11.10 Oneiric Ocelot:* Touchégg is available in the Ubuntu official repository, to install it:
     {{{ $ sudo apt-get install touchegg }}}
  * *Ubuntu 11.04 Natty Narwhal:*

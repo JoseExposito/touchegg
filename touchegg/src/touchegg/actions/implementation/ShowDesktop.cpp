@@ -48,6 +48,10 @@ void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
             XInternAtom(QX11Info::display(), "_NET_SHOWING_DESKTOP", false),
             0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems,
             &bytesAfterReturn, &propRet);
+
+    if (propRet == NULL)
+        return;
+
     bool isShowingDesktop = *((bool *) propRet);
     XFree(propRet);
 

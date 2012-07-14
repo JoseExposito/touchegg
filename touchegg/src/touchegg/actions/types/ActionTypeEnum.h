@@ -30,7 +30,7 @@ class ActionTypeEnum : public QObject
 {
 
     Q_OBJECT
-    Q_ENUMS(ActionType);
+    Q_ENUMS(ActionType)
 
 public:
 

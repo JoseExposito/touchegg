@@ -59,6 +59,13 @@ public:
     /// @see gestureStart()
     static void gestureFinish(GestureCollector *gc, GeisEvent event);
 
+    /**
+     * Initialize list of avalilable gesture classes.
+     *
+     * @param event Event with available gesture information.
+     */
+    static void setupGestureEvent(GeisEvent event);
+
 public slots:
 
     /**
@@ -148,6 +155,11 @@ private:
      * unsuscribe when close the window.
      */
     QHash <Window, QList<GeisSubscription> > subscriptions;
+
+    /**
+     * Saves a list of the avalilable gesture classes.
+     */
+    static QList <GeisGestureClass> gestures;
 };
 
 #endif // GESTURECOLLECTOR_H

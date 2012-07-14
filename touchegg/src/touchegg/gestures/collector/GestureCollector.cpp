@@ -24,6 +24,8 @@
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
+QList <GeisGestureClass> GestureCollector::gestures;
+
 void GestureCollector::gestureStart(GestureCollector *gc, GeisEvent event)
 {
     // "type" es GEIS_GESTURE_TYPE_TAP1, GEIS_GESTURE_TYPE_PINCH3...
@@ -200,6 +202,10 @@ void GestureCollector::geisEvent()
             emit this->ready();
             break;
 
+        case GEIS_EVENT_CLASS_AVAILABLE:
+            setupGestureEvent(event);
+            break;
+
         default:
             break;
         }
@@ -235,6 +241,14 @@ QHash<QString, QVariant> GestureCollector::getGestureAttrs(GeisEvent event)
                 QString attrName = geis_attr_name(gestureAttr);
                 QVariant value;
 
+                if (attrName == GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME) {
+                    continue;
+                }
+
+                if (attrName == GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID) {
+                    continue;
+                }
+
                 switch (geis_attr_type(gestureAttr)) {
                 case GEIS_ATTR_TYPE_BOOLEAN:
                     value = geis_attr_value_to_boolean(gestureAttr);
@@ -256,6 +270,26 @@ QHash<QString, QVariant> GestureCollector::getGestureAttrs(GeisEvent event)
                     ret.insert(attrName, value);
                 }
             }
+
+            // Get GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME
+            for (int l=0; l<GestureCollector::gestures.length(); ++l) {
+                GeisGestureClass gestureClass = GestureCollector::gestures.at(l);
+                if (geis_frame_is_class(frame, gestureClass)) {
+                    ret.insert(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME,
+                        geis_gesture_class_name(gestureClass));
+
+                    break;
+                }
+            }
+
+            // Get GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID
+            int rootX,rootY, winX, winY;
+            Window child, root;
+            unsigned int mask;
+            XQueryPointer(QX11Info::display(), QX11Info::appRootWindow(),
+                    &root, &child, &rootX, &rootY, &winX, &winY, &mask);
+            ret.insert(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID,
+                    (qulonglong)child);
         }
     }
 
@@ -270,4 +304,18 @@ QString GestureCollector::getWindowClass(Window window) const
     XFree(classHint->res_class);
     XFree(classHint->res_name);
     return ret;
+}
+
+void GestureCollector::setupGestureEvent(GeisEvent event)
+{
+    GeisAttr         attr;
+    GeisGestureClass gesture_class;
+
+    attr = geis_event_attr_by_name(event, GEIS_EVENT_ATTRIBUTE_CLASS);
+    gesture_class = (GeisGestureClass)geis_attr_value_to_pointer(attr);
+
+    qDebug() << "[+] Avaliable gesture:";
+    qDebug() << "\t Name -> " << geis_gesture_class_name(gesture_class);
+
+    GestureCollector::gestures.append(gesture_class);
 }

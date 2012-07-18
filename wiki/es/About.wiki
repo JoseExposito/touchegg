@@ -4,7 +4,7 @@ Touchégg es sofware libre, licenciado bajo GPL v3.
 
 Autor - José Expósito
 
-Especial agradecimiento a co3k.ebihara por su ayuda con el [https://code.google.com/p/touchegg/issues/detail?id=148 Issue 148]
+Especial agradecimiento a Kousuke Ebihara por su ayuda con el [https://code.google.com/p/touchegg/issues/detail?id=148 Issue 148]
 
 Icono de la página web - !AlexN83
 

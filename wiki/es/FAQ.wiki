@@ -1,0 +1,15 @@
+*¿Mi dispositivo está soportado por Touchégg?*
+ Touchégg hace uso de la librería uTouch. La lista de hardware soportado por uTouch está disponible en la [https://wiki.ubuntu.com/Multitouch/HardwareSupport wiki de Ubuntu].
+ Otra forma de muy fácil de comprobar si su dispositivo está soportado es abrir un terminal y ejecutar Touchégg ($ touchegg). Si hace gestos y su dispositivo está soportado, debería aparecer información sobre el mismo.
+
+*Estoy usando Unity y no puedo hacer gestos con 3 y 4 dedos*
+ Unity reserva los gestos con 3 y 4 dedos para si mismo, haciendo imposible a Touchégg recibirlos.
+
+*¿Hay una interfaz gráfica para configurar Touchégg?*
+ No. Consulte estas páginas para saber como configurar su dispositivo:
+ http://code.google.com/p/touchegg/wiki/AllGestures
+ http://code.google.com/p/touchegg/wiki/AllActions
+
+*¿Necesito configurar mi dispositivo multitouch?*
+ En Ubuntu 10.10 Mavarick Meerkat [http://code.google.com/p/touchegg/wiki/ConfigureDevices es necesario aplicar esta configuración].
+ En versiones posteriores no hace falta configurar nada.

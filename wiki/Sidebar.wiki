@@ -1,4 +1,5 @@
  * -> [Main Main page]
+ * -> [FAQ FAQ]
  * -> [AllGestures All gestures supported by Touchégg]
  * -> [AllActions All actions supported by Touchégg]
  * -> [ConfigureDevices How to configure your trackpad]

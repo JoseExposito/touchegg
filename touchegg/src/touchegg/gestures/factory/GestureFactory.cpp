@@ -49,63 +49,52 @@ Gesture *GestureFactory::createSimpleGesture(const QString &type, int id,
         return new Gesture(GestureTypeEnum::TAP, numFingers,
                 GestureDirectionEnum::NO_DIRECTION, id, attrs);
 
-        // DRAG
+    // DRAG
     } else if (type == GEIS_GESTURE_DRAG) {
+        float deltaX = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat();
+        float deltaY = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat();
+
         // UP
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
-            return new Gesture(GestureTypeEnum::DRAG, numFingers,
-                    GestureDirectionEnum::UP, id, attrs);
+        if (deltaY < 0 && abs(deltaY) > abs(deltaX))
+            return new Gesture(GestureTypeEnum::DRAG, numFingers, GestureDirectionEnum::UP, id, attrs);
 
         // DOWN
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
-            return new Gesture(GestureTypeEnum::DRAG, numFingers,
-                    GestureDirectionEnum::DOWN, id, attrs);
+        else if (deltaY > 0 && abs(deltaY) > abs(deltaX))
+            return new Gesture(GestureTypeEnum::DRAG, numFingers, GestureDirectionEnum::DOWN, id, attrs);
 
         // LEFT
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
-            return new Gesture(GestureTypeEnum::DRAG, numFingers,
-                    GestureDirectionEnum::LEFT, id, attrs);
+        else if (deltaX < 0 && abs(deltaX) > abs(deltaY))
+            return new Gesture(GestureTypeEnum::DRAG, numFingers, GestureDirectionEnum::LEFT, id, attrs);
 
         // RIGHT
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
-            return new Gesture(GestureTypeEnum::DRAG, numFingers,
-                    GestureDirectionEnum::RIGHT, id, attrs);
+        else if (deltaX > 0 && abs(deltaX) > abs(deltaY))
+            return new Gesture(GestureTypeEnum::DRAG, numFingers, GestureDirectionEnum::RIGHT, id, attrs);
 
-        // PINCH
+    // PINCH
     } else if (type == GEIS_GESTURE_PINCH) {
         // IN
         if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() < 0)
-            return new Gesture(GestureTypeEnum::PINCH, numFingers,
-                    GestureDirectionEnum::IN, id, attrs);
+            return new Gesture(GestureTypeEnum::PINCH, numFingers, GestureDirectionEnum::IN, id, attrs);
 
         // OUT
         if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() > 0)
-            return new Gesture(GestureTypeEnum::PINCH, numFingers,
-                    GestureDirectionEnum::OUT, id, attrs);
+            return new Gesture(GestureTypeEnum::PINCH, numFingers, GestureDirectionEnum::OUT, id, attrs);
 
-        // ROTATE
+    // ROTATE
     } else if (type == GEIS_GESTURE_ROTATE) {
         // LEFT
         if (attrs.value(GEIS_GESTURE_ATTRIBUTE_ANGLE_DELTA).toFloat() < 0)
-            return new Gesture(GestureTypeEnum::ROTATE, numFingers,
-                    GestureDirectionEnum::LEFT, id, attrs);
+            return new Gesture(GestureTypeEnum::ROTATE, numFingers, GestureDirectionEnum::LEFT, id, attrs);
 
         // RIGHT
         if (attrs.value(GEIS_GESTURE_ATTRIBUTE_ANGLE_DELTA).toFloat() > 0)
-            return new Gesture(GestureTypeEnum::ROTATE, numFingers,
-                    GestureDirectionEnum::RIGHT, id, attrs);
+            return new Gesture(GestureTypeEnum::ROTATE, numFingers, GestureDirectionEnum::RIGHT, id, attrs);
 
-        // UNKNOWN GESTURE
+    // UNKNOWN GESTURE
     } else {
         qDebug() << "[+] Unknown gesture:";
-        qDebug() << "\tName -> " << attrs.value(
-                GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
-        qDebug() << "\tNumber of fingers-> " << attrs.value(
-                GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
+        qDebug() << "\tName -> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
+        qDebug() << "\tNumber of fingers-> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
     }
 
     return NULL;
@@ -118,43 +107,34 @@ Gesture *GestureFactory::createComposedGesture(const QString &type, int id,
 
     // TAP & HOLD
     if (type == GEIS_GESTURE_DRAG) {
+        float deltaX = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat();
+        float deltaY = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat();
 
         // UP
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() < 0)
-            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers,
-                    GestureDirectionEnum::UP, id, attrs);
+        if (deltaY < 0 && abs(deltaY) > abs(deltaX))
+            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers, GestureDirectionEnum::UP, id, attrs);
 
         // DOWN
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() == 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() > 0)
-            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers,
-                    GestureDirectionEnum::DOWN, id, attrs);
+        else if (deltaY > 0 && abs(deltaY) > abs(deltaX))
+            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers, GestureDirectionEnum::DOWN, id, attrs);
 
         // LEFT
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() < 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
-            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers,
-                    GestureDirectionEnum::LEFT, id, attrs);
+        else if (deltaX < 0 && abs(deltaX) > abs(deltaY))
+            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers, GestureDirectionEnum::LEFT, id, attrs);
 
         // RIGHT
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() > 0
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() == 0)
-            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers,
-                    GestureDirectionEnum::RIGHT, id, attrs);
+        else if (deltaX > 0 && abs(deltaX) > abs(deltaY))
+            return new Gesture(GestureTypeEnum::TAP_AND_HOLD, numFingers, GestureDirectionEnum::RIGHT, id, attrs);
 
-        // DOUBLE TAP
+    // DOUBLE TAP
     } else if (type == GEIS_GESTURE_TAP) {
-        return new Gesture(GestureTypeEnum::DOUBLE_TAP, numFingers,
-                GestureDirectionEnum::NO_DIRECTION, id, attrs);
+        return new Gesture(GestureTypeEnum::DOUBLE_TAP, numFingers, GestureDirectionEnum::NO_DIRECTION, id, attrs);
 
-        // UNKNOWN GESTURE
+    // UNKNOWN GESTURE
     } else {
         qDebug() << "[+] Unknown gesture:";
-        qDebug() << "\tName -> " << attrs.value(
-                GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
-        qDebug() << "\tNumber of fingers-> " << attrs.value(
-                GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
+        qDebug() << "\tName -> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
+        qDebug() << "\tNumber of fingers-> " << attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
     }
 
     return NULL;

@@ -64,7 +64,7 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
     if (this->window == 0)
         return;
 
-    // Ángulo
+    // Angle
     if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1)
             || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2)
             || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y1)
@@ -93,8 +93,7 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
     // Redimensionamos la ventana
     XWindowAttributes xwa;
     XGetWindowAttributes(QX11Info::display(), this->window, &xwa);
-    int inc = (int)attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat()
-            * 3;
+    int inc = (int)attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() * 10;
     XResizeWindow(QX11Info::display(), this->window,
             xwa.width  + inc * incX,
             xwa.height + inc * incY);

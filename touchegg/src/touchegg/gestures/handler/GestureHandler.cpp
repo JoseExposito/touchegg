@@ -53,36 +53,8 @@ void GestureHandler::executeGestureStart(const QString &type, int id,
     if (this->currentGesture == NULL) {
         this->currentGesture = this->createGesture(type, id, attrs, false);
         if (this->currentGesture != NULL) {
-            // Ejecutamos el gesto
             qDebug() << "\tGesture Start" << id << type;
-
             this->currentGesture->start();
-        }
-
-        // Si el timer está en ejecución podemos hacer un TAP_AND_HOLD
-    } else if (this->timerTap->isActive()) {
-        this->timerTap->stop();
-
-        // El nuevo gesto debe ser un drag con igual número de dedos que el tap
-        // en ejecución para que se considere un TAP_AND_HOLD
-        if (attrs.contains(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                && this->currentGesture->getAttrs().contains(
-                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                == this->currentGesture->getAttrs().value(
-                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)) {
-            delete this->currentGesture;
-            this->currentGesture = this->createGesture(type, id, attrs, true);
-
-            if (this->currentGesture != NULL) {
-                // Ejecutamos el gesto
-                qDebug() << "\tGesture Start";
-                this->currentGesture->start();
-            }
-
-            // Si no es un tap&hold ejecutamos el tap con normalidad
-        } else {
-            this->executeTap();
         }
     }
 }
@@ -90,41 +62,56 @@ void GestureHandler::executeGestureStart(const QString &type, int id,
 void GestureHandler::executeGestureUpdate(const QString &type, int id,
         const QHash<QString, QVariant>& attrs)
 {
-    // Si es un update del gesto en ejecución
-    if (this->currentGesture != NULL
-            && this->currentGesture->getId() == id
-            && !this->timerTap->isActive()) {
+    // If is an update of the current gesture execute it
+    if (this->currentGesture != NULL && this->currentGesture->getId() == id && !this->timerTap->isActive()) {
         qDebug() << "\tGesture Update" << id << type;
         this->currentGesture->setAttrs(attrs);
         this->currentGesture->update();
 
-        // Si no se está ejecutando ningún gesto es que es un TAP o un gesto no
-        // soportado
+    // If no gesture is running the gesture is a TAP, an unsupported gesture, or in Precise a DRAG
     } else if (this->currentGesture == NULL) {
-        // Si es un TAP, esperamos un poco para que se pueda usar un tap&hold
-        this->currentGesture = this->createGesture(type, id, attrs, false);
-        if (this->currentGesture != NULL) {
-            this->timerTap->start();
+
+        Gesture *gesture = this->createGesture(type, id, attrs, false);
+        if (gesture != NULL) {
+            this->currentGesture = gesture;
+
+            // If the gesture is a tap allow to make a tap & hold
+            if (gesture->getType() == GestureTypeEnum::TAP) {
+                this->timerTap->start();
+
+            // In Precise the DeltaX and DeltaY attrs in start are 0. Create the Drag here
+            } else if (gesture->getType() == GestureTypeEnum::DRAG) {
+                qDebug() << "\tGesture Start";
+                this->currentGesture->start();
+                qDebug() << "\tGesture Update" << id << type;
+                this->currentGesture->update();
+            }
         }
 
-        // Si se recibe un TAP con el timer en ejecución es que es un DOUBLE_TAP
-    } else if (this->currentGesture != NULL
-            && this->timerTap->isActive()) {
+    // If is an update whith the timer running it is a DOUBLE_TAP or a TAP_AND_HOLD
+    } else if (this->currentGesture != NULL && this->timerTap->isActive()) {
         this->timerTap->stop();
 
-        // El nuevo gesto debe ser un tap con igual número de dedos que el tap
-        // en ejecución para que se considere un DOUBLE_TAP
-        if (attrs.contains(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                && this->currentGesture->getAttrs().contains(
-                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                && attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES)
-                == this->currentGesture->getAttrs().value(
-                        GEIS_GESTURE_ATTRIBUTE_TOUCHES)) {
-            delete this->currentGesture;
-            this->currentGesture = this->createGesture(type, id, attrs, true);
+        int currentNumFingers = this->currentGesture->getAttrs().value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
+        int newNumFingers     = attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
+        Gesture *gesture = this->createGesture(type, id, attrs, true);
 
-            if (this->currentGesture != NULL) {
-                // Ejecutamos el gesto
+        if (gesture != NULL && currentNumFingers == newNumFingers) {
+
+            // TAP_AND_HOLD
+            if (gesture->getType() == GestureTypeEnum::TAP_AND_HOLD) {
+                this->currentGesture = gesture;
+
+                qDebug() << "\tGesture Start";
+                this->currentGesture->start();
+
+                qDebug() << "\tGesture Update";
+                this->currentGesture->update();
+
+            // DOUBLE_TAP
+            } else if (gesture->getType() == GestureTypeEnum::DOUBLE_TAP) {
+                this->currentGesture = gesture;
+
                 qDebug() << "\tGesture Start";
                 this->currentGesture->start();
 
@@ -137,6 +124,7 @@ void GestureHandler::executeGestureUpdate(const QString &type, int id,
                 delete this->currentGesture;
                 this->currentGesture = NULL;
             }
+
         }
     }
 }

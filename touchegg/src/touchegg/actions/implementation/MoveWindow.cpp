@@ -47,8 +47,8 @@ void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
         return;
 
     XTestFakeRelativeMotionEvent(QX11Info::display(),
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() * 2,
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() * 2, 0);
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() * 0.1,
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() * 0.1, 0);
 
     XFlush(QX11Info::display());
 }

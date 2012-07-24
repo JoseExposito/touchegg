@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureDirectionEnum
  */
 #ifndef GESTUREDIRECTIONENUM_H
@@ -30,7 +30,7 @@ class GestureDirectionEnum : public QObject
 {
 
     Q_OBJECT
-    Q_ENUMS(GestureDirection);
+    Q_ENUMS(GestureDirection)
 
 public:
 

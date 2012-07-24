@@ -1,3 +1,6 @@
+[+] Touchégg v1.1 (2012/07/22)
+ - Added Ubuntu Precise compatibility
+
 [+] Touchégg v1.0 (2011/09/02)
  - Now Touchégg subscribe to gestures in their own window, to not conflict with
    applications that uses their own gestures

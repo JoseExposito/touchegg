@@ -15,26 +15,26 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ResizeWindow
  */
 #include "ResizeWindow.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 ResizeWindow::ResizeWindow(const QString &settings, Window window)
     : Action(settings, window) {}
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void ResizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 {
-    // Vemos si la ventana a redimensionar es especial (para no hacerlo)
+    // Check if the window to resize is special (toolbar, descktop...) to not resize it
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -42,17 +42,13 @@ void ResizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 
     if (XGetWindowProperty(QX11Info::display(), this->window,
             XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE", false),
-            0, 100, false, XA_ATOM, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet) == Success) {
+            0, 100, false, XA_ATOM, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet) == Success) {
         Atom *types = (Atom *)propRet;
-        Atom type = types[0]; // Solo miramos el primer tipo especificado
+        Atom type = types[0]; // Only check the first type
 
-        if (type == XInternAtom(QX11Info::display(),
-                "_NET_WM_WINDOW_TYPE_DESKTOP", false)
-                || type == XInternAtom(QX11Info::display(),
-                        "_NET_WM_WINDOW_TYPE_DOCK", false)
-                || type == XInternAtom(QX11Info::display(),
-                        "_NET_WM_WINDOW_TYPE_SPLASH", false)) {
+        if (type == XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_DESKTOP", false)
+                || type == XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_DOCK", false)
+                || type == XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_SPLASH", false)) {
             this->window = 0;
         }
         XFree(propRet);
@@ -90,7 +86,7 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
         incY = sin(angle * (3.14 / 180));
     }
 
-    // Redimensionamos la ventana
+    // Resize the window
     XWindowAttributes xwa;
     XGetWindowAttributes(QX11Info::display(), this->window, &xwa);
     int inc = (int)attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() * 10;

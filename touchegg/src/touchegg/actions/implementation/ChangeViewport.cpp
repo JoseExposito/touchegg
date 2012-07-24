@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ChangeViewport
  */
 #include "ChangeViewport.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 ChangeViewport::ChangeViewport(const QString &settings, Window window)
     : Action(settings, window)
@@ -34,14 +34,13 @@ ChangeViewport::ChangeViewport(const QString &settings, Window window)
     else if (settings == "NEXT")
         this->next = true;
     else
-        qWarning() << "Error reading CHANGE_VIEWPORT settings, using " <<
-                "the default settings";
+        qWarning() << "Error reading CHANGE_VIEWPORT settings, using the default settings";
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void ChangeViewport::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
@@ -49,7 +48,7 @@ void ChangeViewport::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
-    // Obtenemos el tamaño total de todos los viewports juntos
+    // Get the size of all viewports together
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -71,7 +70,7 @@ void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
         return;
     }
 
-    // Obtenemos las coordenadas del viewport actual
+    // Get the coordinates of the current viewport
     int currentX, currentY;
     if (XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
             XInternAtom(QX11Info::display(), "_NET_DESKTOP_VIEWPORT", false),
@@ -85,17 +84,17 @@ void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
         return;
     }
 
-    // Obtenemos las coordenadas del viewport anterior/siguiente
+    // Get the coordinates of the next/previous viewport
     int nextX, nextY;
     if (this->next) {
         nextX = (currentX + QApplication::desktop()->width()) % widthViews;
-        nextY = nextX == 0
+        nextY = (nextX == 0)
                 ? (currentY + QApplication::desktop()->height()) % heightViews
                 : currentY;
     } else {
         nextX = (currentX - QApplication::desktop()->width()) % widthViews;
         if (nextX < 0) {
-            nextY = (currentY - QApplication::desktop()->height()) % heightViews;
+            nextY  = (currentY - QApplication::desktop()->height()) % heightViews;
             nextX *= -1;
             nextY *= -1;
         } else {
@@ -103,19 +102,16 @@ void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
         }
     }
 
-    // Cambiamos de viewport
+    // Change the viewport
     XClientMessageEvent event;
     event.window = QX11Info::appRootWindow(QX11Info::appScreen());
     event.type = ClientMessage;
-    event.message_type = XInternAtom(QX11Info::display(),
-            "_NET_DESKTOP_VIEWPORT", false);
+    event.message_type = XInternAtom(QX11Info::display(), "_NET_DESKTOP_VIEWPORT", false);
     event.format = 32;
     event.data.l[0] = nextX;
     event.data.l[1] = nextY;
 
-    XSendEvent(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()), false,
-            (SubstructureNotifyMask | SubstructureRedirectMask),
-            (XEvent *)&event);
+    XSendEvent(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }

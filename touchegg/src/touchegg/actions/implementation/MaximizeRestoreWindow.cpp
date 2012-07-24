@@ -15,23 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  MaximizeRestoreWindow
  */
 #include "MaximizeRestoreWindow.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
-MaximizeRestoreWindow::MaximizeRestoreWindow(const QString &settings,
-        Window window)
+MaximizeRestoreWindow::MaximizeRestoreWindow(const QString &settings, Window window)
     : Action(settings, window) {}
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void MaximizeRestoreWindow::executeStart(const QHash<QString, QVariant>&) {}
 
@@ -39,21 +38,17 @@ void MaximizeRestoreWindow::executeUpdate(const QHash<QString, QVariant>&) {}
 
 void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
 {
-    Atom atomMaxVert = XInternAtom(QX11Info::display(),
-            "_NET_WM_STATE_MAXIMIZED_VERT", false);
-    Atom atomMaxHorz = XInternAtom(QX11Info::display(),
-            "_NET_WM_STATE_MAXIMIZED_HORZ", false);
+    Atom atomMaxVert = XInternAtom(QX11Info::display(), "_NET_WM_STATE_MAXIMIZED_VERT", false);
+    Atom atomMaxHorz = XInternAtom(QX11Info::display(), "_NET_WM_STATE_MAXIMIZED_HORZ", false);
 
-    // Vemos si la ventanan está maximizada
+    // Check if the window is maximized
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
     unsigned char *propRet;
 
-    XGetWindowProperty(QX11Info::display(), this->window,
-            XInternAtom(QX11Info::display(), "_NET_WM_STATE", false),
-            0, 100, false, XA_ATOM, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
+    XGetWindowProperty(QX11Info::display(), this->window, XInternAtom(QX11Info::display(), "_NET_WM_STATE", false),
+            0, 100, false, XA_ATOM, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet);
     Atom *states = (Atom *)propRet;
 
     bool maxHor  = false;
@@ -67,22 +62,18 @@ void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
     bool maximized = maxHor && maxVert;
     XFree(propRet);
 
-    // Si la ventana está maximizada la restauramos
+    // If the window is maximized restore it
     XClientMessageEvent event;
     event.window = this-> window;
     event.type = ClientMessage;
-    event.message_type = XInternAtom(QX11Info::display(), "_NET_WM_STATE",
-            false);
+    event.message_type = XInternAtom(QX11Info::display(), "_NET_WM_STATE", false);
     event.format = 32;
     event.data.l[0] = maximized ? 0 : 1;
     event.data.l[1] = atomMaxVert;
     event.data.l[2] = atomMaxHorz;
 
-    XSendEvent(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()), false,
-            (SubstructureNotifyMask | SubstructureRedirectMask),
-            (XEvent *)&event);
-
+    XSendEvent(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }
 

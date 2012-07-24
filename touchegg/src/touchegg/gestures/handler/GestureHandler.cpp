@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureHandler
  */
 #include "GestureHandler.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 GestureHandler::GestureHandler(QObject *parent)
     : QObject(parent),
@@ -42,14 +42,13 @@ GestureHandler::~GestureHandler()
 }
 
 
-// ************************************************************************** //
-// **********                     PUBLIC SLOTS                     ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                         PUBLIC SLOTS                                         ********** //
+// ****************************************************************************************************************** //
 
-void GestureHandler::executeGestureStart(const QString &type, int id,
-        const QHash<QString, QVariant>& attrs)
+void GestureHandler::executeGestureStart(const QString &type, int id, const QHash<QString, QVariant>& attrs)
 {
-    // Si no se está ejecutando ningún gesto creamos uno nuevo
+    // If not gesture is running create one
     if (this->currentGesture == NULL) {
         this->currentGesture = this->createGesture(type, id, attrs, false);
         if (this->currentGesture != NULL) {
@@ -59,8 +58,7 @@ void GestureHandler::executeGestureStart(const QString &type, int id,
     }
 }
 
-void GestureHandler::executeGestureUpdate(const QString &type, int id,
-        const QHash<QString, QVariant>& attrs)
+void GestureHandler::executeGestureUpdate(const QString &type, int id, const QHash<QString, QVariant>& attrs)
 {
     // If is an update of the current gesture execute it
     if (this->currentGesture != NULL && this->currentGesture->getId() == id && !this->timerTap->isActive()) {
@@ -94,7 +92,7 @@ void GestureHandler::executeGestureUpdate(const QString &type, int id,
 
         int currentNumFingers = this->currentGesture->getAttrs().value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
         int newNumFingers     = attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
-        Gesture *gesture = this->createGesture(type, id, attrs, true);
+        Gesture *gesture      = this->createGesture(type, id, attrs, true);
 
         if (gesture != NULL && currentNumFingers == newNumFingers) {
 
@@ -129,8 +127,7 @@ void GestureHandler::executeGestureUpdate(const QString &type, int id,
     }
 }
 
-void GestureHandler::executeGestureFinish(const QString &/*type*/, int id,
-        const QHash<QString, QVariant>& attrs)
+void GestureHandler::executeGestureFinish(const QString &/*type*/, int id, const QHash<QString, QVariant>& attrs)
 {
     if (this->currentGesture != NULL && this->currentGesture->getId() == id) {
         qDebug() << "\tGesture Finish";
@@ -142,9 +139,9 @@ void GestureHandler::executeGestureFinish(const QString &/*type*/, int id,
 }
 
 
-// ************************************************************************** //
-// **********                     PRIVATE SLOTS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                         PRIVATE SLOTS                                        ********** //
+// ****************************************************************************************************************** //
 
 void GestureHandler::executeTap()
 {
@@ -166,12 +163,12 @@ void GestureHandler::executeTap()
 }
 
 
-// ************************************************************************** //
-// **********                   PRIVATE METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PRIVATE METHODS                                       ********** //
+// ****************************************************************************************************************** //
 
-Gesture *GestureHandler::createGesture(const QString &type, int id,
-        const QHash<QString, QVariant>& attrs, bool isComposedGesture) const
+Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<QString, QVariant>& attrs,
+    bool isComposedGesture) const
 {
     // Creamos el gesto sin su acción
     Gesture *ret;
@@ -184,28 +181,24 @@ Gesture *GestureHandler::createGesture(const QString &type, int id,
         return NULL;
 
     // Vemos sobre que ventana se ha ejecutado
-    Window gestureWindow = this->getGestureWindow(
-            attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
+    Window gestureWindow = this->getGestureWindow(attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
     if (gestureWindow == None)
         return NULL;
     QString appClass = this->getAppClass(gestureWindow);
 
     // Creamos y asignamos la acción asociada al gesto
-    ActionTypeEnum::ActionType actionType = this->config->getAssociatedAction(
-            appClass, ret->getType(), ret->getNumFingers(),
+    ActionTypeEnum::ActionType actionType = this->config->getAssociatedAction(appClass, ret->getType(),
+            ret->getNumFingers(), ret->getDirection());
+    QString actionSettings = this->config->getAssociatedSettings(appClass, ret->getType(), ret->getNumFingers(),
             ret->getDirection());
-    QString actionSettings = this->config->getAssociatedSettings(appClass,
-            ret->getType(), ret->getNumFingers(), ret->getDirection());
 
-    ret->setAction(this->actionFact->createAction(actionType, actionSettings,
-            gestureWindow));
+    ret->setAction(this->actionFact->createAction(actionType, actionSettings, gestureWindow));
 
     // Mostramos los datos sobre el gesto
     qDebug() << "[+] New gesture:";
     qDebug() << "\tType      -> " << GestureTypeEnum::getValue(ret->getType());
     qDebug() << "\tFingers   -> " << ret->getNumFingers();
-    qDebug() << "\tDirection -> " << GestureDirectionEnum::getValue(
-            ret->getDirection());
+    qDebug() << "\tDirection -> " << GestureDirectionEnum::getValue(ret->getDirection());
     qDebug() << "\tAction    -> " << ActionTypeEnum::getValue(actionType);
     qDebug() << "\tApp Class -> " << appClass;
 
@@ -220,10 +213,9 @@ Window GestureHandler::getGestureWindow(Window window) const
     if (topIn == None)
         return None;
 
-    // Comparamos la top-level window de la ventana pasada con las de las
-    // posibles fake-top-level windows (realmente no son top-level, pero son las
-    // ventanas que guardan los atributos y de más), devolviendo la ventana que
-    // contiene el título, la clase, etc
+    // Compare the top-level window of the specified window with the possible fake-top-level window (really they are not
+    // top-level windows, but are the windows that stores the attributes and more), returning the window that contains
+    // the title, the class...
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -234,21 +226,17 @@ Window GestureHandler::getGestureWindow(Window window) const
     Window ret = None;
 
     int status;
-    Atom atomList = XInternAtom(QX11Info::display(),
-            "_NET_CLIENT_LIST_STACKING", false);
+    Atom atomList = XInternAtom(QX11Info::display(), "_NET_CLIENT_LIST_STACKING", false);
     do {
-        status = XGetWindowProperty(QX11Info::display(),
-                QX11Info::appRootWindow(), atomList,
+        status = XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(), atomList,
                 offset, offsetSize, false, XA_WINDOW, &atomRet, &size,
                 &numItems, &bytesAfterReturn, &propRet);
 
         if (status == Success) {
-
             Window *aux = (Window *)propRet;
             unsigned int n = 0;
             while (ret == None && n < numItems) {
-                // Vemos si la top-level window de la ventana de la lista
-                // coincide con la de la pasada como argumento
+                // Check if the top-level window of the window of the list coincides with the window passed as argument
                 if (this->getTopLevelWindow(aux[n]) == topIn)
                     ret = aux[n];
                 n++;

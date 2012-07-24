@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureFactory
  */
 #ifndef GESTUREFACTORY_H
@@ -26,10 +26,6 @@
 #include "src/touchegg/gestures/implementation/Gesture.h"
 
 /**
- * @~spanish
- * Factoría para crear los distintos gestos.
- *
- * @~english
  * Factory to create the different gestures.
  */
 class GestureFactory
@@ -43,7 +39,7 @@ public:
      */
     static GestureFactory *getInstance();
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a no-composed gesture with the specified properties.
@@ -55,22 +51,18 @@ public:
      *        the attribute.
      * @return The gesture.
      */
-    Gesture *createSimpleGesture(const QString &type, int id,
-            QHash<QString, QVariant> attrs);
+    Gesture *createSimpleGesture(const QString &type, int id, QHash<QString, QVariant> attrs);
 
     /**
-     * Creates a composed gesture (tap&hold, double tap...) with the
-     * specified properties.
+     * Creates a composed gesture (tap&hold, double tap...) with the specified properties.
      * IMPORTANT: Don't forget to free memory.
      * @param type  Gesture type.
      * @param id    Gesture ID.
-     * @param attrs Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      * @return The gesture.
      */
-    Gesture *createComposedGesture(const QString &type, int id,
-            QHash<QString, QVariant> attrs);
+    Gesture *createComposedGesture(const QString &type, int id, QHash<QString, QVariant> attrs);
 
 private:
 

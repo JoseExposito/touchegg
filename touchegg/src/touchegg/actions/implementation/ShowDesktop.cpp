@@ -15,22 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ShowDesktop
  */
 #include "ShowDesktop.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 ShowDesktop::ShowDesktop(const QString &settings, Window window)
     : Action(settings, window) {}
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void ShowDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
@@ -38,7 +38,7 @@ void ShowDesktop::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
-    // Vemos si ya se está en modo show desktop
+    // Check if it is already in show desktop mode
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -46,8 +46,7 @@ void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 
     XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
             XInternAtom(QX11Info::display(), "_NET_SHOWING_DESKTOP", false),
-            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
+            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet);
 
     if (propRet == NULL)
         return;
@@ -55,18 +54,15 @@ void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
     bool isShowingDesktop = *((bool *) propRet);
     XFree(propRet);
 
-    // Minimizamos o restauramos todas la ventanas
+    // Minimize or restore the windows
     XClientMessageEvent event;
     event.window = QX11Info::appRootWindow(QX11Info::appScreen());
     event.type = ClientMessage;
-    event.message_type = XInternAtom(QX11Info::display(),
-            "_NET_SHOWING_DESKTOP", false);
+    event.message_type = XInternAtom(QX11Info::display(), "_NET_SHOWING_DESKTOP", false);
     event.format = 32;
     event.data.l[0] = !isShowingDesktop;
 
-    XSendEvent(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()), false,
-            (SubstructureNotifyMask | SubstructureRedirectMask),
-            (XEvent *)&event);
+    XSendEvent(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }

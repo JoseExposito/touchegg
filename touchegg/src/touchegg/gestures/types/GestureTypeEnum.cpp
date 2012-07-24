@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureTypeEnum
  */
 #include "GestureTypeEnum.h"
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 QString GestureTypeEnum::getValue(GestureType gtEnum)
 {
@@ -37,8 +37,7 @@ GestureTypeEnum::GestureType GestureTypeEnum::getEnum(const QString &gtString)
     GestureTypeEnum gestureTypeEnum;
     int index = gestureTypeEnum.metaObject()->indexOfEnumerator("GestureType");
     QMetaEnum metaEnum = gestureTypeEnum.metaObject()->enumerator(index);
-    return (GestureTypeEnum::GestureType)metaEnum.keyToValue(
-            gtString.toStdString().c_str());
+    return (GestureTypeEnum::GestureType)metaEnum.keyToValue(gtString.toStdString().c_str());
 }
 
 QStringList GestureTypeEnum::getGeisEquivalent(GestureType gt)

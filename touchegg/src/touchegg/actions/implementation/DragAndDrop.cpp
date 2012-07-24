@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  DragAndDrop
  */
 #include "DragAndDrop.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 DragAndDrop::DragAndDrop(const QString &settings, Window window)
     : Action(settings, window)
@@ -37,17 +37,16 @@ DragAndDrop::DragAndDrop(const QString &settings, Window window)
         if (ok && aux >= 1 && aux <= 9)
             this->button = aux;
         else
-            qWarning() << "Error reading MOUSE_CLICK settings, using " <<
-                    "the default settings";
-    } else
-        qWarning() << "Error reading MOUSE_CLICK settings, using " <<
-                "the default settings";
+            qWarning() << "Error reading MOUSE_CLICK settings, using the default settings";
+    } else {
+        qWarning() << "Error reading MOUSE_CLICK settings, using the default settings";
+    }
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void DragAndDrop::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 {
@@ -56,14 +55,11 @@ void DragAndDrop::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 
 void DragAndDrop::executeUpdate(const QHash<QString, QVariant>& attrs)
 {
-    if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X)
-            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
+    if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X) || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
         return;
 
-    QCursor::setPos(QCursor::pos().x()
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat(),
-            QCursor::pos().y()
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat());
+    QCursor::setPos(QCursor::pos().x() + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat(),
+            QCursor::pos().y() + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat());
 }
 
 void DragAndDrop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)

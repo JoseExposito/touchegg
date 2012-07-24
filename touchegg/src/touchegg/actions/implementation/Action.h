@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Action
  */
 #ifndef ACTION_H
@@ -43,25 +43,22 @@ public:
 
     /**
      * Part of the action that will be executed when the gesture is started.
-     * @param attrs Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      */
     virtual void executeStart(const QHash<QString, QVariant>& attrs) = 0;
 
     /**
      * Part of the action that will be executed when the gesture is updated.
-     * @param attrs Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      */
     virtual void executeUpdate(const QHash<QString, QVariant>& attrs) = 0;
 
     /**
      * Part of the action that will be executed when the gesture finish.
-     * @param attrs Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      */
     virtual void executeFinish(const QHash<QString, QVariant>& attrs) = 0;
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Scroll
  */
 #ifndef SCROLL_H
@@ -52,7 +52,7 @@ private:
      */
     int verticalSpeed;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Accumulated space to scrolling up.
@@ -74,7 +74,7 @@ private:
      */
     int rightScrollSpace;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Button of the mouse to scroll up.

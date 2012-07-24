@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ActionFactory
  */
 #ifndef ACTIONFACTORY_H
@@ -61,8 +61,7 @@ public:
      * @param  window     Window on which execute the action.
      * @return The action.
      */
-    Action *createAction(ActionTypeEnum::ActionType actionType,
-            const QString &settings, Window window);
+    Action *createAction(ActionTypeEnum::ActionType actionType, const QString &settings, Window window);
 
 private:
 

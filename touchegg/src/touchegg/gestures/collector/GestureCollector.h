@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureCollector
  */
 #ifndef GESTURECOLLECTOR_H
@@ -44,7 +44,7 @@ public:
      */
     virtual ~GestureCollector();
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Callback function that is called when a gesture starts.
@@ -95,16 +95,13 @@ signals:
      *        attribute (ie "focus x", "touches") and the value the value of
      *        the attribute.
      */
-    void executeGestureStart(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureStart(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
     /// @see executeGestureStart()
-    void executeGestureUpdate(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureUpdate(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
     /// @see executeGestureStart()
-    void executeGestureFinish(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureFinish(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
 private slots:
 
@@ -116,9 +113,8 @@ private slots:
 private:
 
     /**
-     * Returns a Hash with all attributes of a gesture, where the key is the
-     * name of the attribute (ie "focus x", "touches") and the value the
-     * value of the attribute.
+     * Returns a Hash with all attributes of a gesture, where the key is the name of the attribute (ie "focus x",
+     * "touches") and the value the value of the attribute.
      * @param event Information of the gesture.
      * @return The hash.
      */
@@ -131,7 +127,7 @@ private:
      */
     QString getWindowClass(Window window) const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Single instance of the GEIS v2.0 API.
@@ -139,20 +135,17 @@ private:
     Geis geis;
 
     /**
-     * Socket notifier that will emit a activated() signal whenever a gestures
-     * is produced.
+     * Socket notifier that will emit a activated() signal whenever a gestures is produced.
      */
     QSocketNotifier *socketNotifier;
 
     /**
-     * Saves a list of the filters associated to a window to allow to unsuscribe
-     * when close the window.
+     * Saves a list of the filters associated to a window to allow to unsuscribe when close the window.
      */
     QHash <Window, QList<GeisFilter> > filters;
 
     /**
-     * Saves a list of the subscriptions associated to a window to allow to
-     * unsuscribe when close the window.
+     * Saves a list of the subscriptions associated to a window to allow to unsuscribe when close the window.
      */
     QHash <Window, QList<GeisSubscription> > subscriptions;
 

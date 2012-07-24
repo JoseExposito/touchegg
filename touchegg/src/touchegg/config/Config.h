@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Config
  */
 #ifndef CONFIG_H
@@ -45,21 +45,18 @@ public:
      */
     static void loadConfig();
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns a list with all gestures used by the specified application.
      * If the app haven't got associated gestures returns an empty list.
-     * They are saved directly in the format used for GEIS to subscribe to
-     * this gestures.
+     * They are saved directly in the format used for GEIS to subscribe to this gestures.
      * @param  application The application.
-     * @return The list, composed by the name, in GEIS format, and the number of
-     *         fingers.
+     * @return The list, composed by the name, in GEIS format, and the number of fingers.
      */
-    QList< QPair<QStringList, int> > getUsedGestures(
-        const QString &application) const;
+    QList< QPair<QStringList, int> > getUsedGestures(const QString &application) const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the time, in milliseconds, which can run a composed gesture.
@@ -67,7 +64,7 @@ public:
      */
     int getComposedGesturesTime() const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the associated action type with a gesture.
@@ -109,10 +106,9 @@ private:
      * @param gestureType The gesture to save.
      * @param numFingers Number of fingers.
      */
-    void saveUsedGestures(const QString &app, const QString &gestureType,
-            int numFingers);
+    void saveUsedGestures(const QString &app, const QString &gestureType, int numFingers);
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Time to wait between composed gestures.
@@ -120,21 +116,18 @@ private:
     int composedGesturesTime;
 
     /**
-     * QHash with the configuration. The keys are like
-     * Application.GestureType.NumFingers.Direction.action/settings and the
-     * value is the action or the settings associate to the gesture.
+     * QHash with the configuration. The keys are like Application.GestureType.NumFingers.Direction.action/settings and
+     * the value is the action or the settings associate to the gesture.
      */
     QHash<QString, QString> settings;
 
     /**
-     * QHash with the gestures used by Touchégg, being the key the
-     * application and the value the gestures.
-     * The gestures are saved directly in the format used for GEIS to
-     * subscribe to this gestures.
+     * QHash with the gestures used by Touchégg, being the key the application and the value the gestures.
+     * The gestures are saved directly in the format used for GEIS to subscribe to this gestures.
      */
     QHash<QString, QList< QPair<QStringList, int> > > usedGestures;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Single instance of the class.

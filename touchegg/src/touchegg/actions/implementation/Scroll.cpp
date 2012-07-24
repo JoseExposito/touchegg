@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Scroll
  */
 #include "Scroll.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 Scroll::Scroll(const QString &settings, Window window)
     : Action(settings, window),
@@ -73,15 +73,14 @@ Scroll::Scroll(const QString &settings, Window window)
 
 
     if (error) {
-        qWarning() << "Error reading SCROLL settings, using"
-                << "the default settings";
+        qWarning() << "Error reading SCROLL settings, using the default settings";
     }
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void Scroll::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
@@ -96,11 +95,8 @@ void Scroll::executeUpdate(const QHash<QString, QVariant>& attrs)
 
         while (this->downScrollSpace >= this->verticalSpeed) {
             this->downScrollSpace -= this->verticalSpeed;
-
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonDown, true,
-                    0);
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonDown, false,
-                    0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonDown, true, 0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonDown, false, 0);
             XFlush(QX11Info::display());
         }
 
@@ -109,7 +105,6 @@ void Scroll::executeUpdate(const QHash<QString, QVariant>& attrs)
 
         while (this->upScrollSpace >= this->verticalSpeed) {
             this->upScrollSpace -= this->verticalSpeed;
-
             XTestFakeButtonEvent(QX11Info::display(), this->buttonUp, true, 0);
             XTestFakeButtonEvent(QX11Info::display(), this->buttonUp, false, 0);
             XFlush(QX11Info::display());
@@ -122,11 +117,8 @@ void Scroll::executeUpdate(const QHash<QString, QVariant>& attrs)
 
         while (this->rightScrollSpace >= this->horizontalSpeed) {
             this->rightScrollSpace -= this->horizontalSpeed;
-
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonRight, true,
-                    0);
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonRight, false,
-                    0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonRight, true, 0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonRight, false, 0);
             XFlush(QX11Info::display());
         }
 
@@ -135,11 +127,8 @@ void Scroll::executeUpdate(const QHash<QString, QVariant>& attrs)
 
         while (this->leftScrollSpace >= this->horizontalSpeed) {
             this->leftScrollSpace -= this->horizontalSpeed;
-
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonLeft, true,
-                    0);
-            XTestFakeButtonEvent(QX11Info::display(), this->buttonLeft, false,
-                    0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonLeft, true, 0);
+            XTestFakeButtonEvent(QX11Info::display(), this->buttonLeft, false, 0);
             XFlush(QX11Info::display());
         }
     }

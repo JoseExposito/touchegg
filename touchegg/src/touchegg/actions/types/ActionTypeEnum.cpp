@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ActionTypeEnum
  */
 #include "ActionTypeEnum.h"
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 QString ActionTypeEnum::getValue(ActionType atEnum)
 {
@@ -37,6 +37,5 @@ ActionTypeEnum::ActionType ActionTypeEnum::getEnum(const QString &atString)
     ActionTypeEnum actionTypeEnum;
     int index = actionTypeEnum.metaObject()->indexOfEnumerator("ActionType");
     QMetaEnum metaEnum = actionTypeEnum.metaObject()->enumerator(index);
-    return (ActionTypeEnum::ActionType)metaEnum.keyToValue(
-            atString.toStdString().c_str());
+    return (ActionTypeEnum::ActionType)metaEnum.keyToValue(atString.toStdString().c_str());
 }

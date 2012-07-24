@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Touchegg
  */
 #include "Touchegg.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 Touchegg::Touchegg(int &argc, char **argv)
     : QApplication(argc, argv),
@@ -37,9 +37,9 @@ Touchegg::Touchegg(int &argc, char **argv)
 }
 
 
-// ************************************************************************** //
-// **********                   PROTECTED METHODS                  ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                       PROTECTED METHODS                                      ********** //
+// ****************************************************************************************************************** //
 
 bool Touchegg::x11EventFilter(XEvent *event)
 {
@@ -48,21 +48,20 @@ bool Touchegg::x11EventFilter(XEvent *event)
 }
 
 
-// ************************************************************************** //
-// **********                    PRIVATE SLOTS                     ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                         PRIVATE SLOTS                                        ********** //
+// ****************************************************************************************************************** //
 
 void Touchegg::start()
 {
-    // Conectamos el WindowListener con el GestureCollector para recoger los
-    // eventos multitouch en las ventanas creadas si corresponde
+    // Connect the WindowListener with the GestureCollector to get the multitouch gestures in the created windows
     connect(this->windowListener, SIGNAL(windowCreated(Window)),
             this->gestureCollector, SLOT(addWindow(Window)));
     connect(this->windowListener, SIGNAL(windowDeleted(Window)),
             this->gestureCollector, SLOT(removeWindow(Window)));
 
-    // Conectamos el GestureCollector con el GestureHandler para que el último
-    // trate los eventos que recoge el primero
+    // The GestureCollector collect the gestures and the GestureHandler perform its and add a layer to perform
+    // composed gestures
     connect(gestureCollector, SIGNAL(executeGestureStart(
             QString, int, QHash<QString, QVariant>)),
             gestureHandler, SLOT(executeGestureStart(
@@ -76,10 +75,10 @@ void Touchegg::start()
             gestureHandler, SLOT(executeGestureFinish(
                     QString, int, QHash<QString, QVariant>)));
 
-    // Nos suscribimos a los gestos globales
+    // Subscribe to global gestures
     this->gestureCollector->addWindow(QX11Info::appRootWindow());
 
-    // Nos suscribimos a los gestos específicos
+    // Subscribe to application specific gestures
     foreach(Window w, this->windowListener->getClientList()) {
         this->gestureCollector->addWindow(w);
     }

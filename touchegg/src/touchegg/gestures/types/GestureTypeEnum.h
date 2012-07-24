@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureTypeEnum
  */
 #ifndef GESTURETYPEENUM_H
@@ -30,7 +30,7 @@ class GestureTypeEnum : public QObject
 {
 
     Q_OBJECT
-    Q_ENUMS(GestureType);
+    Q_ENUMS(GestureType)
 
 public:
 
@@ -59,11 +59,9 @@ public:
     static GestureType getEnum(const QString &gtString);
 
     /**
-     * Returns a list with the equivalents uTouch-GEIS gestures to the
-     * indicated gesture, if it doesn't have equivalent, returns an empty
-     * list.
-     * For example, the equivalent of a tap_and_hold gesture is
-     * {GEIS_GESTURE_TAP, GEIS_GESTURE_DRAG}.
+     * Returns a list with the equivalents uTouch-GEIS gestures to the indicated gesture, if it doesn't have equivalent,
+     * returns an empty list.
+     * For example, the equivalent of a tap_and_hold gesture is {GEIS_GESTURE_TAP, GEIS_GESTURE_DRAG}.
      * @param  gt The gesture.
      * @return The equivalent.
      */

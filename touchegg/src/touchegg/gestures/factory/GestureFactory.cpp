@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureFactory
  */
 #include "GestureFactory.h"
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 GestureFactory *GestureFactory::instance = NULL;
 
@@ -35,12 +35,11 @@ GestureFactory *GestureFactory::getInstance()
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
-Gesture *GestureFactory::createSimpleGesture(const QString &type, int id,
-        QHash<QString, QVariant> attrs)
+Gesture *GestureFactory::createSimpleGesture(const QString &type, int id, QHash<QString, QVariant> attrs)
 {
     int numFingers = attrs.value(GEIS_GESTURE_ATTRIBUTE_TOUCHES).toInt();
 

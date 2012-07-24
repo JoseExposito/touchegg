@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureHandler
  */
 #ifndef GESTUREHANDLER_H
@@ -27,12 +27,7 @@
 #include "src/touchegg/actions/factory/ActionFactory.h"
 
 /**
- * @~spanish
- * Clase que recibe los gestos, los procesa y ejecuta la acción correspondiente.
- *
- * @~english
- * Class that receives the gestures, processes it and execute the corresponding
- * action.
+ * Class that receives the gestures, processes it and execute the corresponding action.
  */
 class GestureHandler : public QObject
 {
@@ -57,20 +52,16 @@ public slots:
      * Runs the indicated gesture.
      * @param type   Gesture type.
      * @param id     Gesture ID.
-     * @param attrs  Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs  Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      */
-    void executeGestureStart(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureStart(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
     /// @see executeGestureStart()
-    void executeGestureUpdate(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureUpdate(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
     /// @see executeGestureStart()
-    void executeGestureFinish(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs);
+    void executeGestureFinish(const QString &type, int id, const QHash<QString, QVariant>& attrs);
 
 private slots:
 
@@ -92,11 +83,10 @@ private:
      *         tap) or not.
      * @return The gesture or NULL.
      */
-    Gesture *createGesture(const QString &type, int id,
-            const QHash<QString, QVariant>& attrs, bool isComposedGesture)
-    const;
+    Gesture *createGesture(const QString &type, int id, const QHash<QString, QVariant>& attrs,
+        bool isComposedGesture) const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns window over the gestures is make.
@@ -113,14 +103,13 @@ private:
     Window getTopLevelWindow(Window window) const;
 
     /**
-     * Returns the class of a window, for example, "XTerm" is the class of
-     * all instances of XTerm.
+     * Returns the class of a window, for example, "XTerm" is the class of all instances of XTerm.
      * @param  window This window.
      * @return The class.
      */
     QString getAppClass(Window window) const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Gesture that is running.
@@ -128,8 +117,7 @@ private:
     Gesture *currentGesture;
 
     /**
-     * Timer that running the taps always that the gesture does not prove to be
-     * a composed gesture.
+     * Timer that running the taps always that the gesture does not prove to be a composed gesture.
      */
     QTimer *timerTap;
 

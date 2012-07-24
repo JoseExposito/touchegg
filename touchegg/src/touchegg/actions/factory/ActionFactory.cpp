@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ActionFactory
  */
 #include "ActionFactory.h"
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 ActionFactory *ActionFactory::instance = NULL;
 
@@ -35,9 +35,9 @@ ActionFactory *ActionFactory::getInstance()
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 Action *ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
         const QString &settings, Window window)

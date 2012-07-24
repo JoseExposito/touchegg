@@ -15,35 +15,33 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  MoveWindow
  */
 #include "MoveWindow.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 MoveWindow::MoveWindow(const QString &settings, Window window)
     : Action(settings, window) {}
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void MoveWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 {
-    XTestFakeKeyEvent(QX11Info::display(),
-            XKeysymToKeycode(QX11Info::display(), XK_Alt_L), true, 0);
+    XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), XK_Alt_L), true, 0);
     XTestFakeButtonEvent(QX11Info::display(), Button1, true, 0);
     XFlush(QX11Info::display());
 }
 
 void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
 {
-    if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X)
-            || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
+    if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X) || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
         return;
 
     XTestFakeRelativeMotionEvent(QX11Info::display(),
@@ -55,8 +53,7 @@ void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
 
 void MoveWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
-    XTestFakeKeyEvent(QX11Info::display(),
-            XKeysymToKeycode(QX11Info::display(), XK_Alt_L), false, 0);
+    XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), XK_Alt_L), false, 0);
     XTestFakeButtonEvent(QX11Info::display(), Button1, false, 0);
     XFlush(QX11Info::display());
 }

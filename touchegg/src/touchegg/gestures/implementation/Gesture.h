@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Gesture
  */
 #ifndef GESTURE_H
@@ -40,12 +40,10 @@ public:
      * @param numFingers Number of fingers used by the gesture.
      * @param dir Direction of the gesture.
      * @param id Gesture ID.
-     * @param attrs Gesture attributes, where the key is the name of the
-     *        attribute (ie "focus x", "touches") and the value the value of
-     *        the attribute.
+     * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the
+     *        value the value of the attribute.
      */
-    Gesture(GestureTypeEnum::GestureType type, int numFingers,
-            GestureDirectionEnum::GestureDirection dir, int id,
+    Gesture(GestureTypeEnum::GestureType type, int numFingers, GestureDirectionEnum::GestureDirection dir, int id,
             const QHash<QString, QVariant>& attrs);
 
     /**
@@ -53,7 +51,7 @@ public:
      */
     ~Gesture();
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Is called when the gesture is started.
@@ -70,7 +68,7 @@ public:
      */
     void finish() const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the gesture type.
@@ -108,7 +106,7 @@ public:
      */
     const Action *getAction() const;
 
-    //--------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Sets the gesture type.

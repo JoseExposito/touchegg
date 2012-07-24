@@ -15,20 +15,19 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureDirectionEnum
  */
 #include "GestureDirectionEnum.h"
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 QString GestureDirectionEnum::getValue(GestureDirection gdEnum)
 {
     GestureDirectionEnum GestureDirectionEnum;
-    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator(
-            "GestureDirection");
+    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator("GestureDirection");
     QMetaEnum metaEnum = GestureDirectionEnum.metaObject()->enumerator(index);
     return metaEnum.valueToKey(gdEnum);
 }
@@ -37,9 +36,7 @@ GestureDirectionEnum::GestureDirection GestureDirectionEnum::getEnum(
     const QString &gdString)
 {
     GestureDirectionEnum GestureDirectionEnum;
-    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator(
-            "GestureDirection");
+    int index = GestureDirectionEnum.metaObject()->indexOfEnumerator("GestureDirection");
     QMetaEnum metaEnum = GestureDirectionEnum.metaObject()->enumerator(index);
-    return (GestureDirectionEnum::GestureDirection)metaEnum.keyToValue(
-            gdString.toStdString().c_str());
+    return (GestureDirectionEnum::GestureDirection)metaEnum.keyToValue(gdString.toStdString().c_str());
 }

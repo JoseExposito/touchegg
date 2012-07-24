@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  MouseClick
  */
 #include "MouseClick.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 MouseClick::MouseClick(const QString &settings, Window window)
     : Action(settings, window)
@@ -37,17 +37,15 @@ MouseClick::MouseClick(const QString &settings, Window window)
         if (ok && aux >= 1 && aux <= 9)
             this->button = aux;
         else
-            qWarning() << "Error reading MOUSE_CLICK settings, using " <<
-                    "the default settings";
+            qWarning() << "Error reading MOUSE_CLICK settings, using the default settings";
     } else
-        qWarning() << "Error reading MOUSE_CLICK settings, using " <<
-                "the default settings";
+        qWarning() << "Error reading MOUSE_CLICK settings, using the default settings";
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void MouseClick::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 

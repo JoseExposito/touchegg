@@ -15,22 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  MinimizeWindow
  */
 #include "MinimizeWindow.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 MinimizeWindow::MinimizeWindow(const QString &settings, Window window)
     : Action(settings, window) {}
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void MinimizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
@@ -38,18 +38,15 @@ void MinimizeWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MinimizeWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
-    // Minimizamos la ventana
+    // Minimize the window
     XClientMessageEvent event;
     event.window = this->window;
     event.type = ClientMessage;
-    event.message_type = XInternAtom(QX11Info::display(), "WM_CHANGE_STATE",
-            false);
+    event.message_type = XInternAtom(QX11Info::display(), "WM_CHANGE_STATE", false);
     event.format = 32;
     event.data.l[0] = IconicState;
 
-    XSendEvent(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()), false,
-            (SubstructureNotifyMask | SubstructureRedirectMask),
-            (XEvent *)&event);
+    XSendEvent(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }

@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  WindowListener
  */
 #include "WindowListener.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 WindowListener::WindowListener(QObject *parent)
     : QObject(parent),
@@ -32,14 +32,14 @@ WindowListener::WindowListener(QObject *parent)
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void WindowListener::x11Event(XEvent *event)
 {
-    if (event->type == PropertyNotify && event->xproperty.atom == XInternAtom(
-            QX11Info::display(), "_NET_CLIENT_LIST", false)) {
+    if (event->type == PropertyNotify
+            && event->xproperty.atom == XInternAtom(QX11Info::display(), "_NET_CLIENT_LIST", false)) {
         bool isNew;
         QList<Window> oldList = this->clientList;
         this->clientList = this->getClientList();
@@ -69,10 +69,8 @@ QList<Window> WindowListener::getClientList() const
     QList<Window> ret;
 
     do {
-        status = XGetWindowProperty(QX11Info::display(),
-                QX11Info::appRootWindow(), atomList, offset, offsetSize, false,
-                XA_WINDOW, &atomRet, &size, &numItems, &bytesAfterReturn,
-                &propRet);
+        status = XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(), atomList, offset, offsetSize, false,
+                XA_WINDOW, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet);
 
         if (status == Success) {
             Window *aux = (Window *)propRet;
@@ -90,19 +88,17 @@ QList<Window> WindowListener::getClientList() const
 }
 
 
-// ************************************************************************** //
-// **********                   PRIVATE METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PRIVATE METHODS                                       ********** //
+// ****************************************************************************************************************** //
 
-Window WindowListener::getDifferentWindow(QList<Window> lnew,
-        QList<Window> lold, bool *isNew) const
+Window WindowListener::getDifferentWindow(QList<Window> lnew, QList<Window> lold, bool *isNew) const
 {
     if (lnew == lold) {
         return None;
     } else {
-        // Como _NET_CLIENT_LIST lleva un orden de primero las ventanas viejas y
-        // luego las nuevas, nos basta con devolver la última ventana de la
-        // lista más larga
+        // Because _NET_CLIENT_LIST is order from old to new windows, we only need to return the last window of the
+        // longer list
         *isNew = lnew.length() > lold.length();
         return lnew.length() > lold.length() ? lnew.last() : lold.last();
     }

@@ -8,7 +8,7 @@
 
     In addition:
     
-      - Limit the number of characters per line to 80
+      - Limit the number of characters per line to 120
       - If is neccessary, make Doxygen documentation
       - Maintain this order in the methods of the header files:
       
@@ -19,15 +19,16 @@
           private slots
           private (Private methods, private variables)
 
-      - Use "comment tags" in the source files to make easy find the
-        implementation of the methods in this order:
+      - Use "comment tags" (check COMMENT_TAGS.txt) in the source files to make 
+        easy find the implementation of the methods in this order:
 
           ANONYMOUS NAMESPACE
           STATIC METHODS AND VARIABLES
           CONSTRUCTORS AND DESTRUCTOR
           PUBLIC METHODS
-          PROTECTED METHODS
           PUBLIC SLOTS
+          PROTECTED METHODS
+          OVERLOAD OPERATORS
           PRIVATE SLOTS
           PRIVATE METHODS
           GET/SET/IS

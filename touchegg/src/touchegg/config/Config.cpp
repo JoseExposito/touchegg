@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Config
  */
 #include "Config.h"
 
-// ************************************************************************** //
-// **********                  ANONYMOUS NAMESPACE                 ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                      ANONYMOUS NAMESPACE                                     ********** //
+// ****************************************************************************************************************** //
 
 namespace
 {
@@ -32,9 +32,9 @@ namespace
 }
 
 
-// ************************************************************************** //
-// **********             STATIC METHODS AND VARIABLES             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                 STATIC METHODS AND VARIABLES                                 ********** //
+// ****************************************************************************************************************** //
 
 Config *Config::instance = NULL;
 
@@ -56,9 +56,9 @@ void Config::loadConfig()
 }
 
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 Config::Config()
 {
@@ -68,15 +68,12 @@ Config::Config()
 
     // If the /usr/share/touchegg configuration file is not found then exit
     if (!usrFile.exists()) {
-        qFatal("%s not found, reinstall application can solve the problem\n",
-               USR_SHARE_CONFIG_FILE);
+        qFatal("%s not found, reinstall application can solve the problem\n", USR_SHARE_CONFIG_FILE);
     }
 
     // If the ~/.config/touchegg configuration file doesn't exist copy it
     if (!homeFile.exists()) {
-        qDebug() << QDir::homePath() + HOME_CONFIG_FILE
-                << " not found, copying config from "
-                << USR_SHARE_CONFIG_FILE;
+        qDebug() << QDir::homePath() + HOME_CONFIG_FILE << " not found, copying config from " << USR_SHARE_CONFIG_FILE;
         QDir::home().mkdir(HOME_CONFIG_DIR);
         usrFile.copy(QDir::homePath() + HOME_CONFIG_FILE);
     }
@@ -86,9 +83,9 @@ Config::Config()
     this->initConfig(homeFile);
 }
 
-// ************************************************************************** //
-// **********                   PRIVATE METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PRIVATE METHODS                                       ********** //
+// ****************************************************************************************************************** //
 
 void Config::initConfig(QFile &file)
 {
@@ -137,8 +134,7 @@ void Config::initConfig(QFile &file)
      * </touchégg>
      */
 
-    for (QDomNode appNode = document.documentElement().firstChild();
-            !appNode.isNull(); appNode = appNode.nextSibling()) {
+    for (QDomNode appNode=document.documentElement().firstChild(); !appNode.isNull(); appNode=appNode.nextSibling()) {
         QDomElement appElem = appNode.toElement();
         if (appElem.isNull())
             continue;
@@ -146,19 +142,15 @@ void Config::initConfig(QFile &file)
         // Load general Touchégg settings
         if (appElem.tagName() == "settings") {
 
-            for (QDomNode propNode = appNode.firstChild();
-                    !propNode.isNull(); propNode = propNode.nextSibling()) {
+            for (QDomNode propNode = appNode.firstChild(); !propNode.isNull(); propNode = propNode.nextSibling()) {
                 if (!propNode.toElement().isNull()
-                        && propNode.toElement().attribute("name")
-                        == "composed_gestures_time") {
-                    this->composedGesturesTime =
-                        propNode.toElement().text().toInt();
+                        && propNode.toElement().attribute("name") == "composed_gestures_time") {
+                    this->composedGesturesTime = propNode.toElement().text().toInt();
                 }
             }
 
         } else {
             // Load applications/gestures settings
-
             for (QDomNode gestureNode = appNode.firstChild(); !gestureNode.isNull();
                     gestureNode = gestureNode.nextSibling()) {
                 QDomElement gestureElem = gestureNode.toElement();
@@ -182,16 +174,14 @@ void Config::initConfig(QFile &file)
 
                 // Get the action
                 QString action;
-                for (QDomNode actNode = gestureNode.firstChild();
-                        !actNode.isNull(); actNode = actNode.nextSibling()) {
+                for (QDomNode actNode = gestureNode.firstChild(); !actNode.isNull(); actNode = actNode.nextSibling()) {
                     if (!actNode.toElement().isNull())
                         action = actNode.toElement().attribute("type");
                 }
 
                 // Get the settings
                 QString settings;
-                for (QDomNode settNode = gestureNode.firstChild();
-                        !settNode.isNull(); settNode = settNode.nextSibling()) {
+                for (QDomNode settNode=gestureNode.firstChild(); !settNode.isNull(); settNode=settNode.nextSibling()) {
                     if (!settNode.toElement().isNull())
                         settings = settNode.toElement().text();
                 }
@@ -220,14 +210,12 @@ void Config::initConfig(QFile &file)
     }
 }
 
-void Config::saveUsedGestures(const QString &app, const QString &gestureType,
-        int numFingers)
+void Config::saveUsedGestures(const QString &app, const QString &gestureType, int numFingers)
 {
 
     if (this->usedGestures.contains(app)) {
         QList< QPair<QStringList, int> > aux = this->usedGestures.value(app);
-        QStringList gestures = GestureTypeEnum::getGeisEquivalent(
-                GestureTypeEnum::getEnum(gestureType));
+        QStringList gestures = GestureTypeEnum::getGeisEquivalent(GestureTypeEnum::getEnum(gestureType));
 
         QPair<QStringList, int> pair;
         pair.first = gestures;
@@ -238,8 +226,7 @@ void Config::saveUsedGestures(const QString &app, const QString &gestureType,
 
     } else {
         QList< QPair<QStringList, int> > aux;
-        QStringList gestures = GestureTypeEnum::getGeisEquivalent(
-                GestureTypeEnum::getEnum(gestureType));
+        QStringList gestures = GestureTypeEnum::getGeisEquivalent(GestureTypeEnum::getEnum(gestureType));
 
         QPair<QStringList, int> pair;
         pair.first = gestures;
@@ -251,9 +238,9 @@ void Config::saveUsedGestures(const QString &app, const QString &gestureType,
 }
 
 
-// ************************************************************************** //
-// **********                      GET/SET/IS                      ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                          GET/SET/IS                                          ********** //
+// ****************************************************************************************************************** //
 
 QList< QPair<QStringList, int> >  Config::getUsedGestures(
     const QString &application) const

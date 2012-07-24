@@ -15,18 +15,17 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  Gesture
  */
 #include "Gesture.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
-Gesture::Gesture(GestureTypeEnum::GestureType type, int numFingers,
-        GestureDirectionEnum::GestureDirection dir, int id,
-        const QHash<QString, QVariant>& attrs)
+Gesture::Gesture(GestureTypeEnum::GestureType type, int numFingers, GestureDirectionEnum::GestureDirection dir, int id,
+    const QHash<QString, QVariant>& attrs)
     : type(type),
       numFingers(numFingers),
       dir(dir),
@@ -42,9 +41,9 @@ Gesture::~Gesture()
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void Gesture::start() const
 {
@@ -65,9 +64,9 @@ void Gesture::finish() const
 }
 
 
-// ************************************************************************** //
-// **********                      GET/SET/IS                      ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                          GET/SET/IS                                          ********** //
+// ****************************************************************************************************************** //
 
 GestureTypeEnum::GestureType Gesture::getType() const
 {
@@ -99,7 +98,7 @@ const Action *Gesture::getAction() const
     return this->action;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 void Gesture::setType(GestureTypeEnum::GestureType type)
 {

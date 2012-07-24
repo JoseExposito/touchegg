@@ -15,14 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011
+ * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  ChangeDesktop
  */
 #include "ChangeDesktop.h"
 
-// ************************************************************************** //
-// **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
+// ****************************************************************************************************************** //
 
 ChangeDesktop::ChangeDesktop(const QString &settings, Window window)
     : Action(settings, window)
@@ -34,14 +34,13 @@ ChangeDesktop::ChangeDesktop(const QString &settings, Window window)
     else if (settings == "NEXT")
         this->next = true;
     else
-        qWarning() << "Error reading CHANGE_VIEWPORT settings, using " <<
-                "the default settings";
+        qWarning() << "Error reading CHANGE_VIEWPORT settings, using the default settings";
 }
 
 
-// ************************************************************************** //
-// **********                    PUBLIC METHODS                    ********** //
-// ************************************************************************** //
+// ****************************************************************************************************************** //
+// **********                                        PUBLIC METHODS                                        ********** //
+// ****************************************************************************************************************** //
 
 void ChangeDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
 
@@ -49,7 +48,7 @@ void ChangeDesktop::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
-    // Obtenemos el número total de escritorios
+    // Get the number of desktops
     Atom atomRet;
     int size;
     unsigned long numItems, bytesAfterReturn;
@@ -57,20 +56,18 @@ void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 
     XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
             XInternAtom(QX11Info::display(), "_NET_NUMBER_OF_DESKTOPS", false),
-            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
+            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet);
     int numDesktops = (int) * propRet;
     XFree(propRet);
 
-    // Obtenemos el escritorio actual
+    // Get the current desktop
     XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(),
             XInternAtom(QX11Info::display(), "_NET_CURRENT_DESKTOP", false),
-            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems,
-            &bytesAfterReturn, &propRet);
+            0, 1, false, XA_CARDINAL, &atomRet, &size, &numItems, &bytesAfterReturn, &propRet);
     int currentDesktop = (int) * propRet;
     XFree(propRet);
 
-    // Cambiamos al escritorio siguiente o anterior
+    // Switch to the next/previous desktop
     int nextDesktop = this->next
             ? (currentDesktop + 1) % numDesktops
             : (currentDesktop - 1 + numDesktops) % numDesktops;
@@ -78,14 +75,11 @@ void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
     XClientMessageEvent event;
     event.window = QX11Info::appRootWindow(QX11Info::appScreen());
     event.type = ClientMessage;
-    event.message_type = XInternAtom(QX11Info::display(),
-            "_NET_CURRENT_DESKTOP", false);
+    event.message_type = XInternAtom(QX11Info::display(), "_NET_CURRENT_DESKTOP", false);
     event.format = 32;
     event.data.l[0] = nextDesktop;
 
-    XSendEvent(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()), false,
-            (SubstructureNotifyMask | SubstructureRedirectMask),
-            (XEvent *)&event);
+    XSendEvent(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), false,
+            (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }

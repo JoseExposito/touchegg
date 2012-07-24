@@ -4,6 +4,8 @@
 
 <br/>
 
+ * *Ubuntu 12.04 Precise Pangolin:*
+    Download and compile the [http://touchegg.googlecode.com/files/touchegg-1.1.tar.gz source code] following this [http://code.google.com/p/touchegg/wiki/CompileSourceCode instructions]
  * *Ubuntu 11.10 Oneiric Ocelot:* Touchégg is available in the Ubuntu official repository, to install it:
     {{{ $ sudo apt-get install touchegg }}} 
  * *Ubuntu 11.04 Natty Narwhal:*

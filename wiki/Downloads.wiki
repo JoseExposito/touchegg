@@ -19,6 +19,7 @@
     - [http://touchegg.googlecode.com/files/touchegg-1.0.tar.gz Source code]
  * *Arch Linux:* Available in [https://aur.archlinux.org/packages.php?ID=46809 AUR] (thanks to Chenxiaolong)
     {{{$ yaourt -S touchegg}}}
+ * *Fedora and Mageia:* Available at http://pkgs.org/download/touchegg
  * For other distros you can download and compile the *[https://code.google.com/p/touchegg/downloads/list source code]*
 
 <br/>

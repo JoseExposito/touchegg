@@ -38,6 +38,9 @@ void MinimizeWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MinimizeWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
+    if (this->window == None)
+        return;
+
     // Minimize the window
     XClientMessageEvent event;
     event.window = this->window;

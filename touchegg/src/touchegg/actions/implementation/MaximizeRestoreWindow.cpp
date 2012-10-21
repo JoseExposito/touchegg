@@ -38,6 +38,9 @@ void MaximizeRestoreWindow::executeUpdate(const QHash<QString, QVariant>&) {}
 
 void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
 {
+    if (this->window == None)
+        return;
+
     Atom atomMaxVert = XInternAtom(QX11Info::display(), "_NET_WM_STATE_MAXIMIZED_VERT", false);
     Atom atomMaxHorz = XInternAtom(QX11Info::display(), "_NET_WM_STATE_MAXIMIZED_HORZ", false);
 

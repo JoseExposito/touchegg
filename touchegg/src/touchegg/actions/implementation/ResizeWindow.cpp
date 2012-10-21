@@ -34,6 +34,9 @@ ResizeWindow::ResizeWindow(const QString &settings, Window window)
 
 void ResizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/)
 {
+    if (this->window == None)
+        return;
+
     // Check if the window to resize is special (toolbar, descktop...) to not resize it
     Atom atomRet;
     int size;

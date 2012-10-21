@@ -41,6 +41,8 @@ public:
         : settings(settings),
           window(window) {}
 
+    virtual ~Action() {}
+
     /**
      * Part of the action that will be executed when the gesture is started.
      * @param attrs Gesture attributes, where the key is the name of the attribute (ie "focus x", "touches") and the

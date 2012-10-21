@@ -182,8 +182,8 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
 
     // Vemos sobre que ventana se ha ejecutado
     Window gestureWindow = this->getGestureWindow(attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
-    if (gestureWindow == None)
-        return NULL;
+    //if (gestureWindow == None)
+    //    return NULL;
     QString appClass = this->getAppClass(gestureWindow);
 
     // Creamos y asignamos la acción asociada al gesto

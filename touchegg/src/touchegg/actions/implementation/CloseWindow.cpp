@@ -38,6 +38,9 @@ void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
+    if (this->window == None)
+        return;
+
     // Close the window
     XClientMessageEvent event;
     event.window = this->window;

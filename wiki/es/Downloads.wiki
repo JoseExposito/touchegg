@@ -6,6 +6,7 @@
 
  * *Ubuntu 12.10 Quantal Quetzal:*
     Descarga y compila el [http://touchegg.googlecode.com/files/touchegg-1.1.1.tar.gz código fuente] siguiendo estas [http://code.google.com/p/touchegg/wiki/CompileSourceCode instrucciones]
+    ¿Quieres una interfaz gráfica para configurar Touchégg? Échale un vistazo a [https://github.com/Raffarti/Touchegg-gce Touchégg-GCE] desarrollada por Raffarti
  * *Ubuntu 12.04 Precise Pangolin:*
     Descarga y compila el [http://touchegg.googlecode.com/files/touchegg-1.1.tar.gz código fuente] siguiendo estas [http://code.google.com/p/touchegg/wiki/CompileSourceCode instrucciones]
  * *Ubuntu 11.10 Oneiric Ocelot:*  Touchégg está disponible en el repositorio oficial de  Ubuntu, para instalarlo:

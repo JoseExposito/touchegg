@@ -6,7 +6,8 @@
  Unity reserves to itself gestures with 3 and 4 gestures making impossible to Touchégg make use of it.
 
 *There is a GUI available to configure Touchégg?*
- No. Check this wiki pages to configure your device:
+ Yes, check out [https://github.com/Raffarti/Touchegg-gce Touchégg-GCE].
+ In addition you can check this wiki pages to configure your device:
  http://code.google.com/p/touchegg/wiki/AllGestures
  http://code.google.com/p/touchegg/wiki/AllActions
 

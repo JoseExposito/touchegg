@@ -15,7 +15,11 @@ código fuente.
 Compilar el código fuente es muy sencillo, basta con seguir estos tres pasos:
 
  * 1 - [https://code.google.com/p/touchegg/wiki/Downloads?tm=2 Descargar] y descomprimir el código fuente:
- * 2 - Intalar las dependencias de Touchégg, abra un terminal y escriba lo siguiente:
+ * 2 - Intalar las dependencias de Touchégg. En Ubuntu 11.10 Oneiric Ocelot o superior abra un terminal y escriba lo siguiente:
+ {{{
+ $ sudo apt-get build-dep touchegg
+ }}}
+ Si estás usando una versión anterior de Ubuntu u otra distribución estos son los paquetes necesarios:
  {{{
  $ sudo apt-get install build-essential libqt4-dev utouch libx11-6 libxtst-dev
  }}}

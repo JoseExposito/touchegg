@@ -6,7 +6,8 @@
  Unity reserva los gestos con 3 y 4 dedos para si mismo, haciendo imposible a Touchégg recibirlos.
 
 *¿Hay una interfaz gráfica para configurar Touchégg?*
- No. Consulte estas páginas para saber como configurar su dispositivo:
+ Sí, quizás [https://github.com/Raffarti/Touchegg-gce Touchégg-GCE] te pueda servir de ayuda.
+ Si no siempre puedes confuigurar tu dispositivo a mano:
  http://code.google.com/p/touchegg/wiki/AllGestures
  http://code.google.com/p/touchegg/wiki/AllActions
 

@@ -1,7 +1,7 @@
 TEMPLATE     = app
 TARGET       = touchegg
 QT          += gui core xml
-LIBS        += -lutouch-geis -lX11 -lXtst -lXext
+LIBS        += -lgeis -lX11 -lXtst -lXext
 //DEFINES      = QT_NO_DEBUG_OUTPUT
 
 target.path  = /usr/bin

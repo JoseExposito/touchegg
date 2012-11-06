@@ -14,3 +14,12 @@
 *What configuration need my multitouch device?*
  In Ubuntu 10.10 Mavarick Meerkat [http://code.google.com/p/touchegg/wiki/ConfigureDevices this configuration is necessary].
  In later versions no configuration is required.
+ In Precise, if you want to use gestures with 2 and 3 fingers, you need to follow this instructions:
+ https://wiki.ubuntu.com/Multitouch/TouchpadSupport
+ Yo can simply execute this commands to allow Touchégg to use this gestures:
+  synclient TapButton2=0
+  synclient TapButton3=0
+  synclient ClickFinger2=0
+  synclient ClickFinger3=0
+  synclient HorizTwoFingerScroll=0
+  synclient VertTwoFingerScroll=0

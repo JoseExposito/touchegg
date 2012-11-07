@@ -13,13 +13,18 @@
 
 *¿Necesito configurar mi dispositivo multitouch?*
  En Ubuntu 10.10 Mavarick Meerkat [http://code.google.com/p/touchegg/wiki/ConfigureDevices es necesario aplicar esta configuración].
+
  En versiones posteriores no hace falta configurar nada.
+
  En Precise, si quieres hacer gestos con 2 o 3 dedos, necesitas seguir estas instrucciones:
  https://wiki.ubuntu.com/Multitouch/TouchpadSupport
+
  Puedes ejecutar estos comandos para permitir a Touchégg usar dichos gestos:
+  {{{
   synclient TapButton2=0
   synclient TapButton3=0
   synclient ClickFinger2=0
   synclient ClickFinger3=0
   synclient HorizTwoFingerScroll=0
   synclient VertTwoFingerScroll=0
+  }}}

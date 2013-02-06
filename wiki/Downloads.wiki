@@ -23,6 +23,7 @@
  * *Arch Linux:* Available in [https://aur.archlinux.org/packages.php?ID=46809 AUR] (thanks to Chenxiaolong)
     {{{$ yaourt -S touchegg}}}
  * *Fedora and Mageia:* Available at http://pkgs.org/download/touchegg
+    If you have a MacBook follow this instructions: http://code.google.com/p/touchegg/wiki/Fedora17MacbookAirHOWTO
  * For other distros you can download and compile the *[https://code.google.com/p/touchegg/downloads/list source code]*
 
 <br/>

@@ -21,17 +21,20 @@ Go ahead and add silfreed repo
 Note: I was unable to find a public key for the repo so you have to ignore the gpg check. I always set repos to disabled and only pull the packages when I want. 
 
 Edit /etc/yum.repo.d/silfreed.repo and add the folllowing;
+{{{
 [silfreed] 
 name=Silfreed $releasever - $basearch - Touchegg
 baseurl=ftp://ftp.silfreed.net/repo/fedora/17/i386/silfreednet/ # Change arch if you are on x64
 enabled=1 
 gpgcheck=0 
 # touchegg 
+}}}
 
 yum install touchegg –enablerepo=silfreed –nogpgcheck -y
 
 First drop the following text in the touchegg configuration file ~/.config/touchegg/touchegg.conf 
 
+{{{
 <touchégg> 
     <settings> 
         <property name="composed_gestures_time">1</property> 
@@ -104,10 +107,11 @@ First drop the following text in the touchegg configuration file ~/.config/touch
         </gesture> 
     </application> 
 </touchégg> 
-
+}}}
 
 Next lets add some parameters to xorg.conf, create /etc/X11/xorg.conf.d/60-touchpad.conf and drop the following text in;
 
+{{{
 Section "InputClass" 
         Identifier "touchpad catchall" 
         Driver "synaptics" 
@@ -158,15 +162,19 @@ Section "InputClass"
         MatchTag "touchpad_button_overlap" 
         Option "AreaBottomEdge" "4000" 
 EndSection 
+}}}
 
 Restart X, what this does is adding conditions to the Apple touchpad, most importantly Option "ClickFinger3" "0". This is disabling three finger taps recognition to be handled by Synaptics. You can do this manually by running the following commands.
 
+{{{
 synclient  ClickFinger3=0
 synclient  TapButton3
+}}}
 
 You can find additional configuration parameters by running synclient but do not forget to add it to xorg.conf so it retains your settings. 
 
 Parameter settings: 
+{{{
     LeftEdge                = -3791 
     RightEdge               = 4311 
     TopEdge                 = 423 
@@ -242,7 +250,7 @@ Parameter settings:
     MiddleButtonAreaRight   = 0 
     MiddleButtonAreaTop     = 0 
     MiddleButtonAreaBottom  = 0 
-
+}}}
 
 Goto system settings and the touchpad configuration and make sure it looks like the following.
 

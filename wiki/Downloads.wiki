@@ -1,4 +1,3 @@
-#sidebar
 
 *Follow Touchégg on...* [https://code.google.com/p/touchegg/feeds https://lh3.googleusercontent.com/-52GoOXWJMJ8/TW45hTR7DaI/AAAAAAAAAEk/Qaj7O8dF-WM/rss.png]       [https://twitter.com/#!/Jose__Exposito https://lh3.googleusercontent.com/-kRgKvb-T4_4/T9psNwZN3TI/AAAAAAAAANA/pwasxapdWm0/s33/twitter.png]
 
@@ -23,7 +22,7 @@
  * *Arch Linux:* Available in [https://aur.archlinux.org/packages.php?ID=46809 AUR] (thanks to Chenxiaolong)
     {{{$ yaourt -S touchegg}}}
  * *Fedora and Mageia:* Available at http://pkgs.org/download/touchegg
-    If you have a MacBook follow this instructions: http://code.google.com/p/touchegg/wiki/Fedora17MacbookAirHOWTO
+    If you have a !MacBook follow this instructions: http://code.google.com/p/touchegg/wiki/Fedora17MacbookAirHOWTO
  * For other distros you can download and compile the *[https://code.google.com/p/touchegg/downloads/list source code]*
 
 <br/>

@@ -72,11 +72,11 @@ Gesture *GestureFactory::createSimpleGesture(const QString &type, int id, QHash<
     // PINCH
     } else if (type == GEIS_GESTURE_PINCH) {
         // IN
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() < 0)
+        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() < 1.0)
             return new Gesture(GestureTypeEnum::PINCH, numFingers, GestureDirectionEnum::IN, id, attrs);
 
         // OUT
-        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() > 0)
+        if (attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() > 1.0)
             return new Gesture(GestureTypeEnum::PINCH, numFingers, GestureDirectionEnum::OUT, id, attrs);
 
     // ROTATE

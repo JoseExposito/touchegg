@@ -24,8 +24,8 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-ChangeViewport::ChangeViewport(const QString &settings, Window window)
-    : Action(settings, window)
+ChangeViewport::ChangeViewport(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window)
 {
     this->next = true;
 
@@ -42,12 +42,21 @@ ChangeViewport::ChangeViewport(const QString &settings, Window window)
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void ChangeViewport::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void ChangeViewport::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        changeViewport();
+    }
+}
 
 void ChangeViewport::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void ChangeViewport::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        changeViewport();
+    }
+}
+
+void ChangeViewport::changeViewport() {
     // Get the size of all viewports together
     Atom atomRet;
     int size;

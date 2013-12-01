@@ -90,6 +90,20 @@ public:
             GestureTypeEnum::GestureType gestureType, int numFingers,
             GestureDirectionEnum::GestureDirection dir) const;
 
+    /**
+     * Returns the associated timing information for the action 
+     * with the indicated gesture.
+     * @param  appClass Application where it is made ​​the gesture.
+     * @param  gestureType The gesture that is made.
+     * @param  numFingers Number of fingers used by the gesture.
+     * @param  dir Direction of the gesture.
+     * @return The timing information, either "AT_START" or "AT_END".
+     */
+    QString getAssociatedTiming(const QString &appClass,
+            GestureTypeEnum::GestureType gestureType, int numFingers,
+            GestureDirectionEnum::GestureDirection dir) const;
+
+
 private:
 
     /**

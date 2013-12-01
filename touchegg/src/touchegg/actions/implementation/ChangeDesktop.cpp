@@ -24,8 +24,8 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-ChangeDesktop::ChangeDesktop(const QString &settings, Window window)
-    : Action(settings, window)
+ChangeDesktop::ChangeDesktop(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window)
 {
     this->next = true;
 
@@ -42,12 +42,23 @@ ChangeDesktop::ChangeDesktop(const QString &settings, Window window)
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void ChangeDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void ChangeDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) 
+{
+    if (at_start) {
+        changeDesktop();
+    }
+}
 
 void ChangeDesktop::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void ChangeDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
+    if (!at_start) {
+        changeDesktop();
+    }
+}
+
+void ChangeDesktop::changeDesktop() {
     // Get the number of desktops
     Atom atomRet;
     int size;

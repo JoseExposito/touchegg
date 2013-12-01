@@ -32,13 +32,21 @@ class MaximizeRestoreWindow : public Action
 
 public:
 
-    MaximizeRestoreWindow(const QString &settings, Window window);
+    MaximizeRestoreWindow(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
     void executeUpdate(const QHash<QString, QVariant>& attrs);
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
+
+protected:
+
+    /**
+     * Helper method to actually perform the operation.
+     */
+    void maximizeRestoreWindow();
+
 };
 
 #endif // MAXIMIZERESTOREWINDOW_H

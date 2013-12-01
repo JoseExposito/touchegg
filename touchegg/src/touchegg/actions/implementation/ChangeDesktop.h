@@ -32,7 +32,7 @@ class ChangeDesktop : public Action
 
 public:
 
-    ChangeDesktop(const QString &settings, Window window);
+    ChangeDesktop(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -40,12 +40,18 @@ public:
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
 
-private:
+protected:
+    /**
+     * Helper method that actually does the switching
+     */
+    void changeDesktop();
 
     /**
      * Direction to switch desktops.
      */
     bool next;
+
+
 };
 
 #endif // CHANGEDESKTOP_H

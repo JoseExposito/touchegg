@@ -24,20 +24,29 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-ShowDesktop::ShowDesktop(const QString &settings, Window window)
-    : Action(settings, window) {}
+ShowDesktop::ShowDesktop(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window) {}
 
 
 // ****************************************************************************************************************** //
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void ShowDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void ShowDesktop::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        showDesktop();
+    }
+}
 
 void ShowDesktop::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void ShowDesktop::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        showDesktop();
+    }
+}
+
+void ShowDesktop::showDesktop() {
     // Check if it is already in show desktop mode
     Atom atomRet;
     int size;

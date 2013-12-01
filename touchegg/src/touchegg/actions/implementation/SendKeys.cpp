@@ -24,8 +24,8 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-SendKeys::SendKeys(const QString &settings, Window window)
-    : Action(settings, window)
+SendKeys::SendKeys(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window)
 {
     // Read the keys to send from te configuration
     QStringList keys = settings.split("+");
@@ -69,13 +69,21 @@ SendKeys::SendKeys(const QString &settings, Window window)
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void SendKeys::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void SendKeys::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        sendKeys();
+    }
+}
 
 void SendKeys::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void SendKeys::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void SendKeys::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        sendKeys();
+    }
+}
 
+void SendKeys::sendKeys() {
     for (int n = 0; n < this->holdDownKeys.length(); n++) {
         XTestFakeKeyEvent(QX11Info::display(), this->holdDownKeys.at(n), true, 0);
     }

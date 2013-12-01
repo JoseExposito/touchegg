@@ -32,13 +32,20 @@ class CloseWindow : public Action
 
 public:
 
-    CloseWindow(const QString &settings, Window window);
+    CloseWindow(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
     void executeUpdate(const QHash<QString, QVariant>& attrs);
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
+
+protected:
+    /**
+     * Helper to actually close the window
+     */
+    void closeWindow();
+
 };
 
 #endif // CLOSEWINDOW_H

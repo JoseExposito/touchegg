@@ -24,20 +24,29 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-MaximizeRestoreWindow::MaximizeRestoreWindow(const QString &settings, Window window)
-    : Action(settings, window) {}
+MaximizeRestoreWindow::MaximizeRestoreWindow(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window) {}
 
 
 // ****************************************************************************************************************** //
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void MaximizeRestoreWindow::executeStart(const QHash<QString, QVariant>&) {}
+void MaximizeRestoreWindow::executeStart(const QHash<QString, QVariant>&) {
+    if (at_start) {
+        maximizeRestoreWindow();
+    }
+}
 
 void MaximizeRestoreWindow::executeUpdate(const QHash<QString, QVariant>&) {}
 
-void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
-{
+void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&) {
+    if (!at_start) {
+        maximizeRestoreWindow();
+    }
+}
+
+void MaximizeRestoreWindow::maximizeRestoreWindow() {
     if (this->window == None)
         return;
 
@@ -79,4 +88,3 @@ void MaximizeRestoreWindow::executeFinish(const QHash<QString, QVariant>&)
             (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&event);
     XFlush(QX11Info::display());
 }
-

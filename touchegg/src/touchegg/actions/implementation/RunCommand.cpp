@@ -24,8 +24,8 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-RunCommand::RunCommand(const QString &settings, Window window)
-    : Action(settings, window)
+RunCommand::RunCommand(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window)
 {
     this->command = settings;
 }
@@ -35,12 +35,22 @@ RunCommand::RunCommand(const QString &settings, Window window)
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void RunCommand::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void RunCommand::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        runCommand();
+    }
+}
 
 void RunCommand::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void RunCommand::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void RunCommand::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        runCommand();
+    }
+}
+
+
+void RunCommand::runCommand() {
     if (this->command != "") {
         QProcess *myProcess = new QProcess();
         myProcess->startDetached(this->command);

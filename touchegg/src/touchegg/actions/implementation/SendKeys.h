@@ -32,7 +32,7 @@ class SendKeys : public Action
 
 public:
 
-    SendKeys(const QString &settings, Window window);
+    SendKeys(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -40,7 +40,11 @@ public:
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
 
-private:
+protected:
+    /**
+     * Helper method to actually send the keys.
+     */
+    void sendKeys();
 
     /**
      * Keys to hold down while sending the rest of keys.

@@ -61,7 +61,8 @@ public:
      * @param  window     Window on which execute the action.
      * @return The action.
      */
-    Action *createAction(ActionTypeEnum::ActionType actionType, const QString &settings, Window window);
+    Action *createAction(ActionTypeEnum::ActionType actionType, const QString &settings, const QString &timing, 
+            Window window);
 
 private:
 

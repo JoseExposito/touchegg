@@ -24,20 +24,29 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-CloseWindow::CloseWindow(const QString &settings, Window window)
-    : Action(settings, window) {}
+CloseWindow::CloseWindow(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window) {}
 
 
 // ****************************************************************************************************************** //
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void CloseWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void CloseWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        closeWindow();
+    }
+}
 
 void CloseWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void CloseWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        closeWindow();
+    }
+}
+
+void CloseWindow::closeWindow() {
     if (this->window == None)
         return;
 

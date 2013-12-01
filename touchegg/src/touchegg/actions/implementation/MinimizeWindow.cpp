@@ -24,20 +24,29 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-MinimizeWindow::MinimizeWindow(const QString &settings, Window window)
-    : Action(settings, window) {}
+MinimizeWindow::MinimizeWindow(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window) {}
 
 
 // ****************************************************************************************************************** //
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void MinimizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void MinimizeWindow::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        minimizeWindow();
+    }
+}
 
 void MinimizeWindow::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
-void MinimizeWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
-{
+void MinimizeWindow::executeFinish(const QHash<QString, QVariant>& /*attrs*/) {
+    if (!at_start) {
+        minimizeWindow();
+    }
+}
+
+void MinimizeWindow::minimizeWindow() {
     if (this->window == None)
         return;
 

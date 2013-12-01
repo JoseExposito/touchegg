@@ -40,47 +40,47 @@ ActionFactory *ActionFactory::getInstance()
 // ****************************************************************************************************************** //
 
 Action *ActionFactory::createAction(ActionTypeEnum::ActionType actionType,
-        const QString &settings, Window window)
+        const QString &settings, const QString &timing,  Window window)
 {
     switch (actionType) {
     case ActionTypeEnum::NO_ACTION:
         return NULL;
 
     case ActionTypeEnum::MOUSE_CLICK:
-        return new MouseClick(settings, window);
+        return new MouseClick(settings, timing, window);
 
     case ActionTypeEnum::SCROLL:
         return new Scroll(settings, window);
 
     case ActionTypeEnum::MINIMIZE_WINDOW:
-        return new MinimizeWindow(settings, window);
+        return new MinimizeWindow(settings, timing, window);
 
     case ActionTypeEnum::MAXIMIZE_RESTORE_WINDOW:
-        return new MaximizeRestoreWindow(settings, window);
+        return new MaximizeRestoreWindow(settings, timing, window);
 
     case ActionTypeEnum::CLOSE_WINDOW:
-        return new CloseWindow(settings, window);
+        return new CloseWindow(settings, timing, window);
 
     case ActionTypeEnum::RESIZE_WINDOW:
         return new ResizeWindow(settings, window);
 
     case ActionTypeEnum::SHOW_DESKTOP:
-        return new ShowDesktop(settings, window);
+        return new ShowDesktop(settings, timing, window);
 
     case ActionTypeEnum::CHANGE_DESKTOP:
-        return new ChangeDesktop(settings, window);
+        return new ChangeDesktop(settings, timing, window);
 
     case ActionTypeEnum::CHANGE_VIEWPORT:
-        return new ChangeViewport(settings, window);
+        return new ChangeViewport(settings, timing, window);
 
     case ActionTypeEnum::SEND_KEYS:
-        return new SendKeys(settings, window);
+        return new SendKeys(settings, timing, window);
 
     case ActionTypeEnum::MOVE_WINDOW:
         return new MoveWindow(settings, window);
 
     case ActionTypeEnum::RUN_COMMAND:
-        return new RunCommand(settings, window);
+        return new RunCommand(settings, timing, window);
 
     case ActionTypeEnum::DRAG_AND_DROP:
         return new DragAndDrop(settings, window);

@@ -191,8 +191,10 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
             ret->getNumFingers(), ret->getDirection());
     QString actionSettings = this->config->getAssociatedSettings(appClass, ret->getType(), ret->getNumFingers(),
             ret->getDirection());
+    QString timing = this->config->getAssociatedTiming(appClass, ret->getType(), ret->getNumFingers(),
+            ret->getDirection());
 
-    ret->setAction(this->actionFact->createAction(actionType, actionSettings, gestureWindow));
+    ret->setAction(this->actionFact->createAction(actionType, actionSettings, timing, gestureWindow));
 
     // Mostramos los datos sobre el gesto
     qDebug() << "[+] New gesture:";
@@ -200,6 +202,7 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
     qDebug() << "\tFingers   -> " << ret->getNumFingers();
     qDebug() << "\tDirection -> " << GestureDirectionEnum::getValue(ret->getDirection());
     qDebug() << "\tAction    -> " << ActionTypeEnum::getValue(actionType);
+    qDebug() << "\tTiming    -> " << timing;
     qDebug() << "\tApp Class -> " << appClass;
 
     return ret;

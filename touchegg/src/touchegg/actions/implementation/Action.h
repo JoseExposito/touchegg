@@ -39,9 +39,29 @@ public:
      */
     Action(const QString &settings, Window window)
         : settings(settings),
-          window(window) {}
+          window(window) {
+
+        at_start = false;     
+    }
 
     virtual ~Action() {}
+
+    /**
+     * Another constructor, this one also takes timing information.
+     * @param settings Gesture settings.
+     * @param timing Timing information.
+     * @param window Window on which to execute the action
+     */
+    Action(const QString &settings, const QString &timing, Window window)
+        : settings(settings),
+          window(window) {
+    
+        if (timing == "AT_START") {
+            at_start = true;
+        } else {
+            at_start = false;
+        }
+    }
 
     /**
      * Part of the action that will be executed when the gesture is started.
@@ -70,6 +90,11 @@ protected:
      * Action settings.
      */
     QString settings;
+
+    /**
+     * Timing information (only applies to certain actions).
+     */
+    bool at_start;
 
     /**
      * Window on which execute the action.

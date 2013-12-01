@@ -32,7 +32,7 @@ class ChangeViewport : public Action
 
 public:
 
-    ChangeViewport(const QString &settings, Window window);
+    ChangeViewport(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -40,7 +40,12 @@ public:
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
 
-private:
+protected:
+
+    /**
+     * Helper method to actually switch.
+     */
+    void changeViewport();
 
     /**
      * Direction to switch desktops.

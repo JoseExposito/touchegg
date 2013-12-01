@@ -32,13 +32,20 @@ class MinimizeWindow : public Action
 
 public:
 
-    MinimizeWindow(const QString &settings, Window window);
+    MinimizeWindow(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
     void executeUpdate(const QHash<QString, QVariant>& attrs);
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
+
+protected:
+    /**
+     * Helper method that actually minimizes the window.
+     */
+    void minimizeWindow();
+
 };
 
 #endif // MINIMIZEWINDOW_H

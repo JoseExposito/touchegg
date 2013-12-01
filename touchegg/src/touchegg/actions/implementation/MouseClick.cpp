@@ -24,8 +24,8 @@
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //
 // ****************************************************************************************************************** //
 
-MouseClick::MouseClick(const QString &settings, Window window)
-    : Action(settings, window)
+MouseClick::MouseClick(const QString &settings, const QString &timing, Window window)
+    : Action(settings, timing, window)
 {
     this->button = 1;
 
@@ -47,12 +47,22 @@ MouseClick::MouseClick(const QString &settings, Window window)
 // **********                                        PUBLIC METHODS                                        ********** //
 // ****************************************************************************************************************** //
 
-void MouseClick::executeStart(const QHash<QString, QVariant>& /*attrs*/) {}
+void MouseClick::executeStart(const QHash<QString, QVariant>& /*attrs*/) {
+    if (at_start) {
+        mouseClick();
+    }
+}
 
 void MouseClick::executeUpdate(const QHash<QString, QVariant>& /*attrs*/) {}
 
 void MouseClick::executeFinish(const QHash<QString, QVariant>& /*attrs*/)
 {
+    if (!at_start) {
+        mouseClick();
+    }
+}
+
+void MouseClick::mouseClick() {
     XTestFakeButtonEvent(QX11Info::display(), this->button, true, 0);
     XTestFakeButtonEvent(QX11Info::display(), this->button, false, 0);
     XFlush(QX11Info::display());

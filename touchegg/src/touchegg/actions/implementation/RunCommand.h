@@ -33,7 +33,7 @@ class RunCommand : public Action
 
 public:
 
-    RunCommand(const QString &settings, Window window);
+    RunCommand(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -41,7 +41,11 @@ public:
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
 
-private:
+protected:
+    /**
+     * Helper method to actually run the command
+     */
+    void runCommand();
 
     /**
      * Command to execute.

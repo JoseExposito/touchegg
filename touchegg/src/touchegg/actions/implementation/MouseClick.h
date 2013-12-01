@@ -32,7 +32,7 @@ class MouseClick : public Action
 
 public:
 
-    MouseClick(const QString &settings, Window window);
+    MouseClick(const QString &settings, const QString &timing, Window window);
 
     void executeStart(const QHash<QString, QVariant>& attrs);
 
@@ -40,7 +40,12 @@ public:
 
     void executeFinish(const QHash<QString, QVariant>& attrs);
 
-private:
+protected:
+
+    /**
+     * Helper method to actually make the click.
+     */
+    void mouseClick();
 
     /**
      * Button to emulate.

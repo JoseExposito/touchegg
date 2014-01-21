@@ -22,7 +22,7 @@ Compile the source code is very simple, just follow these three steps:
  }}}
  If your are using a previous Ubuntu version or other distro these are the required packages:
  {{{
- $ sudo apt-get install build-essential libqt4-dev utouch libx11-6 libxtst-dev
+ $ sudo apt-get install build-essential libqt4-dev utouch libgeis-dev libx11-6 libxtst-dev
  }}}
  * 3 - Compile and install Touchégg:
  {{{

@@ -21,7 +21,7 @@ Compilar el código fuente es muy sencillo, basta con seguir estos tres pasos:
  }}}
  Si estás usando una versión anterior de Ubuntu u otra distribución estos son los paquetes necesarios:
  {{{
- $ sudo apt-get install build-essential libqt4-dev utouch libx11-6 libxtst-dev
+ $ sudo apt-get install build-essential libqt4-dev utouch libgeis-dev libx11-6 libxtst-dev
  }}}
  * 3 - Compilar e instalar Touchégg:
  {{{

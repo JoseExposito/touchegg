@@ -28,3 +28,6 @@
   synclient HorizTwoFingerScroll=0
   synclient VertTwoFingerScroll=0
   }}}
+
+Personalmente recomiendo usar synaptics para gestionar los gestos con 1 y dos dedos (clic izquierdo, clic derecho y scroll con dos dedos) y Touchégg para hacer gestos personalizados con 3 o más dedos. Para ver como configurar synaptics:
+http://uselessuseofcat.com/?p=74

@@ -28,3 +28,6 @@
   synclient HorizTwoFingerScroll=0
   synclient VertTwoFingerScroll=0
   }}}
+
+I personally recommend the use of synaptics to manage gestures with 1 and 2 fingers (left click, right click and two fingers scroll) and Touchégg to manage your personalized gestures with 3 or more fingers. To see how to configure synaptics:
+http://uselessuseofcat.com/?p=74

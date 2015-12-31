@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/images">
-        <file>touchegg-logo.png</file>
-        <file>gestures-icon.png</file>
-    </qresource>
-</RCC>

@@ -45,10 +45,3 @@ Below you can see many ways to collaborate easily with _Touchégg_, as you can s
 + **Advertising _Touchégg_ project**
 
  If you have a blog, a website, a Facebook or Twitter account or something similar, a good way to help the project is making it known to more users
-
-
-+ **Making a donation**
-
- Finally if you can not help none of the above, you can always make a donation, even a few pennies to help the project continue forward
-
- [![](https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif "Make a donation")](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FT2KS37PVG8PU&lc=US&item_name=Egg%20Software&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

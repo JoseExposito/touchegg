@@ -25,7 +25,7 @@ Copyright:
 
 Copyright (C) 2011 - 2016 José Expósito <<jose.exposito89@gmail.com>> 
 
-The source code is available under GPL v2 license at [GitHub](https://github.com/JoseExposito/touchegg)
+The source code is available under GPL v2 license on [GitHub](https://github.com/JoseExposito/touchegg)
 
 
 Helping to the project:

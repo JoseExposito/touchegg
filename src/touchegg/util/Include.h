@@ -23,7 +23,8 @@
     // Qt
     #include <QtCore>
     #include <QtGui>
-    #include <QtGui/QX11Info>
+    #include <QtWidgets>
+    #include <QX11Info>
     #include <QtXml>
 
     // Xlib

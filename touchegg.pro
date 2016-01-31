@@ -1,6 +1,6 @@
 TEMPLATE     = app
 TARGET       = touchegg
-QT          += gui core xml
+QT          += gui core xml widgets x11extras
 LIBS        += -lgeis -lX11 -lXtst -lXext
 //DEFINES      = QT_NO_DEBUG_OUTPUT
 

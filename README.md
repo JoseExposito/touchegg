@@ -26,22 +26,3 @@ Copyright:
 Copyright (C) 2011 - 2016 José Expósito <<jose.exposito89@gmail.com>> 
 
 The source code is available under GPL v2 license on [GitHub](https://github.com/JoseExposito/touchegg)
-
-
-Helping to the project:
-=======================
-
-Below you can see many ways to collaborate easily with _Touchégg_, as you can see collaborate is very easy
-
-+ **Sending suggestions**
-
- Are you _Touchégg_ user and think that the project needs something? Do not hesitate, let me know!
-
-
-+ **Reporting bugs**
-
- Have you found a bug? Report it!
-
-+ **Advertising _Touchégg_ project**
-
- If you have a blog, a website, a Facebook or Twitter account or something similar, a good way to help the project is making it known to more users

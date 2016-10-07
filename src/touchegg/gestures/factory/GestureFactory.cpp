@@ -18,6 +18,8 @@
  * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2012
  * @class  GestureFactory
  */
+
+#include "cmath"
 #include "GestureFactory.h"
 
 // ****************************************************************************************************************** //

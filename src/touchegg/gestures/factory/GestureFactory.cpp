@@ -19,7 +19,7 @@
  * @class  GestureFactory
  */
 
-#include "cmath"
+#include <cmath>
 #include "GestureFactory.h"
 
 // ****************************************************************************************************************** //

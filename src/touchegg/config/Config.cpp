@@ -26,7 +26,7 @@
 
 namespace
 {
-    const char *USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
+    const char *USR_SHARE_CONFIG_FILE = CONFIG_PATH "/touchegg.conf";
     const char *HOME_CONFIG_FILE      = "/.config/touchegg/touchegg.conf";
     const char *HOME_CONFIG_DIR       = ".config/touchegg";
 }

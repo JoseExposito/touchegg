@@ -9,6 +9,8 @@ config.path  = /usr/share/touchegg
 config.files = installation/touchegg.conf
 INSTALLS    += target config
 
+DEFINES += CONFIG_PATH=\\\"$$config.path\\\"
+
 include(src/touchegg/touchegg.pri)
 
 OTHER_FILES += \

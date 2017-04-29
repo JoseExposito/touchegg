@@ -107,6 +107,22 @@ public:
 private:
 
     /**
+     * Returns the associated setting for the indicated gesture.
+     * `settingType` can be one of "action", "setting", or "timing".
+     * @param  appClass Application where it is made ​​the gesture.
+     * @param  gestureType The gesture that is made.
+     * @param  numFingers Number of fingers used by the gesture.
+     * @param  dir Direction of the gesture.
+     * @param  settingType Type of setting to retrieve.
+     * @param  defaultValue Value to return if the setting does not exist.
+     * @return The specified setting or the default value if does not exist.
+     */
+    QString getAssociation(const QString &appClass,
+        GestureTypeEnum::GestureType gestureType, int numFingers,
+        GestureDirectionEnum::GestureDirection dir,
+        QString settingType, QString defaultValue) const;
+
+    /**
      * Initializes the QHash's for the configuration and used gestures.
      * @param file File from which to read configuration.
      * @see settings

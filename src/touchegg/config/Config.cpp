@@ -269,84 +269,44 @@ ActionTypeEnum::ActionType Config::getAssociatedAction(const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
-    QString exactKey = appClass + "."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".action";
-    QString allDirectionsKey = appClass + "."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.action";
-    QString globalExactKey = "All."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".action";
-    QString globalAllDirectionsKey = "All."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.action";
-
-    if (this->settings.contains(exactKey))
-        return ActionTypeEnum::getEnum(this->settings.value(exactKey));
-    else if (this->settings.contains(allDirectionsKey))
-        return ActionTypeEnum::getEnum(this->settings.value(allDirectionsKey));
-    else if (this->settings.contains(globalExactKey))
-        return ActionTypeEnum::getEnum(this->settings.value(globalExactKey));
-    else if (this->settings.contains(globalAllDirectionsKey))
-        return ActionTypeEnum::getEnum(this->settings.value(
-                globalAllDirectionsKey));
-    else
-        return ActionTypeEnum::NO_ACTION;
+    return ActionTypeEnum::getEnum(getAssociation(
+        appClass, gestureType, numFingers, dir,
+        "action", ActionTypeEnum::getValue(ActionTypeEnum::NO_ACTION)));
 }
 
 QString Config::getAssociatedSettings(const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
-    QString exactKey = appClass + "."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".settings";
-    QString allDirectionsKey = appClass + "."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.settings";
-    QString globalExactKey = "All."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".settings";
-    QString globalAllDirectionsKey = "All."
-            + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.settings";
-
-    if (this->settings.contains(exactKey))
-        return this->settings.value(exactKey);
-    else if (this->settings.contains(allDirectionsKey))
-        return this->settings.value(allDirectionsKey);
-    else if (this->settings.contains(globalExactKey))
-        return this->settings.value(globalExactKey);
-    else if (this->settings.contains(globalAllDirectionsKey))
-        return this->settings.value(globalAllDirectionsKey);
-    else
-        return "";
+    return getAssociation(appClass, gestureType, numFingers, dir, "settings", "");
 }
-
 
 QString Config::getAssociatedTiming(const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
+    return getAssociation(appClass, gestureType, numFingers, dir, "timing", "AT_END");
+}
+
+QString Config::getAssociation(const QString &appClass,
+        GestureTypeEnum::GestureType gestureType, int numFingers,
+        GestureDirectionEnum::GestureDirection dir,
+        QString settingType, QString defaultValue) const
+{
     QString exactKey = appClass + "."
             + GestureTypeEnum::getValue(gestureType) + "."
             + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".timing";
+            + GestureDirectionEnum::getValue(dir) + "." + settingType;
     QString allDirectionsKey = appClass + "."
             + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.timing";
+            + QString::number(numFingers) + ".ALL." + settingType;
     QString globalExactKey = "All."
             + GestureTypeEnum::getValue(gestureType) + "."
             + QString::number(numFingers) + "."
-            + GestureDirectionEnum::getValue(dir) + ".timing";
+            + GestureDirectionEnum::getValue(dir) + "." + settingType;
     QString globalAllDirectionsKey = "All."
             + GestureTypeEnum::getValue(gestureType) + "."
-            + QString::number(numFingers) + ".ALL.timing";
+            + QString::number(numFingers) + ".ALL." + settingType;
 
     if (this->settings.contains(exactKey))
         return this->settings.value(exactKey);
@@ -357,5 +317,5 @@ QString Config::getAssociatedTiming(const QString &appClass,
     else if (this->settings.contains(globalAllDirectionsKey))
         return this->settings.value(globalAllDirectionsKey);
     else
-        return "AT_END";
+        return defaultValue;
 }

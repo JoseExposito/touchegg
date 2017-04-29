@@ -184,15 +184,18 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
     Window gestureWindow = this->getGestureWindow(attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
     //if (gestureWindow == None)
     //    return NULL;
-    QString appClass = this->getAppClass(gestureWindow);
+    WindowClassHint appClass = this->getAppClass(gestureWindow);
 
     // Creamos y asignamos la acción asociada al gesto
-    ActionTypeEnum::ActionType actionType = this->config->getAssociatedAction(appClass, ret->getType(),
+    ActionTypeEnum::ActionType actionType = this->config->getAssociatedAction(
+            appClass.windowName, appClass.windowClass, ret->getType(),
             ret->getNumFingers(), ret->getDirection());
-    QString actionSettings = this->config->getAssociatedSettings(appClass, ret->getType(), ret->getNumFingers(),
-            ret->getDirection());
-    QString timing = this->config->getAssociatedTiming(appClass, ret->getType(), ret->getNumFingers(),
-            ret->getDirection());
+    QString actionSettings = this->config->getAssociatedSettings(
+            appClass.windowName, appClass.windowClass, ret->getType(),
+            ret->getNumFingers(), ret->getDirection());
+    QString timing = this->config->getAssociatedTiming(
+            appClass.windowName, appClass.windowClass, ret->getType(),
+            ret->getNumFingers(), ret->getDirection());
 
     ret->setAction(this->actionFact->createAction(actionType, actionSettings, timing, gestureWindow));
 
@@ -203,7 +206,8 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
     qDebug() << "\tDirection -> " << GestureDirectionEnum::getValue(ret->getDirection());
     qDebug() << "\tAction    -> " << ActionTypeEnum::getValue(actionType);
     qDebug() << "\tTiming    -> " << timing;
-    qDebug() << "\tApp Class -> " << appClass;
+    qDebug() << "\tApp Name  -> " << appClass.windowName;
+    qDebug() << "\tApp Class -> " << appClass.windowClass;
 
     return ret;
 }
@@ -273,11 +277,13 @@ Window GestureHandler::getTopLevelWindow(Window window) const
     }
 }
 
-QString GestureHandler::getAppClass(Window window) const
+GestureHandler::WindowClassHint GestureHandler::getAppClass(Window window) const
 {
     XClassHint *classHint = XAllocClassHint();
     XGetClassHint(QX11Info::display(), window, classHint);
-    QString ret = classHint->res_class;
+    WindowClassHint ret;
+    ret.windowName = classHint->res_name;
+    ret.windowClass = classHint->res_class;
     XFree(classHint->res_class);
     XFree(classHint->res_name);
     return ret;

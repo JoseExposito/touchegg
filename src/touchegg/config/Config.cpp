@@ -131,6 +131,22 @@ void Config::initConfig(QFile &file)
      *
      *     </application>
      *
+     *     <application name="windowname.Leela090.exe">
+     *
+     *         <gesture type="TAP" fingers="3" direction="">
+     *             <action type="SEND_KEYS">Alt+P</action>
+     *         </gesture>
+     *
+     *         <gesture type="DRAG" fingers="3" direction="UP">
+     *             <action type="SEND_KEYS">Control+R</action>
+     *         </gesture>
+     *
+     *         <gesture type="DRAG" fingers="3" direction="DOWN">
+     *             <action type="SEND_KEYS">Alt+R</action>
+     *         </gesture>
+     *
+     *     </application>
+     *
      * </touchégg>
      */
 
@@ -265,34 +281,41 @@ int Config::getComposedGesturesTime() const
 
 //------------------------------------------------------------------------------
 
-ActionTypeEnum::ActionType Config::getAssociatedAction(const QString &appClass,
+ActionTypeEnum::ActionType Config::getAssociatedAction(const QString &appName, const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
     return ActionTypeEnum::getEnum(getAssociation(
-        appClass, gestureType, numFingers, dir,
+        appName, appClass, gestureType, numFingers, dir,
         "action", ActionTypeEnum::getValue(ActionTypeEnum::NO_ACTION)));
 }
 
-QString Config::getAssociatedSettings(const QString &appClass,
+QString Config::getAssociatedSettings(const QString &appName, const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
-    return getAssociation(appClass, gestureType, numFingers, dir, "settings", "");
+    return getAssociation(appName, appClass, gestureType, numFingers, dir, "settings", "");
 }
 
-QString Config::getAssociatedTiming(const QString &appClass,
+QString Config::getAssociatedTiming(const QString &appName, const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir) const
 {
-    return getAssociation(appClass, gestureType, numFingers, dir, "timing", "AT_END");
+    return getAssociation(appName, appClass, gestureType, numFingers, dir, "timing", "AT_END");
 }
 
-QString Config::getAssociation(const QString &appClass,
+QString Config::getAssociation(const QString &appName, const QString &appClass,
         GestureTypeEnum::GestureType gestureType, int numFingers,
         GestureDirectionEnum::GestureDirection dir,
         QString settingType, QString defaultValue) const
 {
+    QString exactNameKey = "windowname." + appName + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + "."
+            + GestureDirectionEnum::getValue(dir) + "." + settingType;
+    QString allDirectionsNameKey = "windowname." + appName + "."
+            + GestureTypeEnum::getValue(gestureType) + "."
+            + QString::number(numFingers) + ".ALL." + settingType;
     QString exactKey = appClass + "."
             + GestureTypeEnum::getValue(gestureType) + "."
             + QString::number(numFingers) + "."
@@ -308,7 +331,11 @@ QString Config::getAssociation(const QString &appClass,
             + GestureTypeEnum::getValue(gestureType) + "."
             + QString::number(numFingers) + ".ALL." + settingType;
 
-    if (this->settings.contains(exactKey))
+    if (this->settings.contains(exactNameKey))
+        return this->settings.value(exactNameKey);
+    else if (this->settings.contains(allDirectionsNameKey))
+        return this->settings.value(allDirectionsNameKey);
+    else if (this->settings.contains(exactKey))
         return this->settings.value(exactKey);
     else if (this->settings.contains(allDirectionsKey))
         return this->settings.value(allDirectionsKey);

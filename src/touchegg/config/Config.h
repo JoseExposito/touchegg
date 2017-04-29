@@ -68,38 +68,44 @@ public:
 
     /**
      * Returns the associated action type with a gesture.
-     * @param  appClass Application where it is made ​​the gesture.
+     * @param  appName Application name where the gesture happened.
+     * @param  appClass Application class where ​​the gesture happened.
      * @param  gestureType The gesture that is made.
      * @param  numFingers Number of fingers used by the gesture.
      * @param  dir Direction of the gesture.
      * @return Type of associated action.
      */
-    ActionTypeEnum::ActionType getAssociatedAction(const QString &appClass,
+    ActionTypeEnum::ActionType getAssociatedAction(
+            const QString &appName, const QString &appClass,
             GestureTypeEnum::GestureType gestureType, int numFingers,
             GestureDirectionEnum::GestureDirection dir) const;
 
     /**
      * Returns the associated config with the indicated gesture.
-     * @param  appClass Application where it is made ​​the gesture.
+     * @param  appName Application name where the gesture happened.
+     * @param  appClass Application class where ​​the gesture happened.
      * @param  gestureType The gesture that is made.
      * @param  numFingers Number of fingers used by the gesture.
      * @param  dir Direction of the gesture.
      * @return The settings.
      */
-    QString getAssociatedSettings(const QString &appClass,
+    QString getAssociatedSettings(
+            const QString &appName, const QString &appClass,
             GestureTypeEnum::GestureType gestureType, int numFingers,
             GestureDirectionEnum::GestureDirection dir) const;
 
     /**
      * Returns the associated timing information for the action 
      * with the indicated gesture.
-     * @param  appClass Application where it is made ​​the gesture.
+     * @param  appName Application name where the gesture happened.
+     * @param  appClass Application class where ​​the gesture happened.
      * @param  gestureType The gesture that is made.
      * @param  numFingers Number of fingers used by the gesture.
      * @param  dir Direction of the gesture.
      * @return The timing information, either "AT_START" or "AT_END".
      */
-    QString getAssociatedTiming(const QString &appClass,
+    QString getAssociatedTiming(
+            const QString &appName, const QString &appClass,
             GestureTypeEnum::GestureType gestureType, int numFingers,
             GestureDirectionEnum::GestureDirection dir) const;
 
@@ -109,7 +115,8 @@ private:
     /**
      * Returns the associated setting for the indicated gesture.
      * `settingType` can be one of "action", "setting", or "timing".
-     * @param  appClass Application where it is made ​​the gesture.
+     * @param  appName Application name where the gesture happened.
+     * @param  appClass Application class where ​​the gesture happened.
      * @param  gestureType The gesture that is made.
      * @param  numFingers Number of fingers used by the gesture.
      * @param  dir Direction of the gesture.
@@ -117,10 +124,11 @@ private:
      * @param  defaultValue Value to return if the setting does not exist.
      * @return The specified setting or the default value if does not exist.
      */
-    QString getAssociation(const QString &appClass,
-        GestureTypeEnum::GestureType gestureType, int numFingers,
-        GestureDirectionEnum::GestureDirection dir,
-        QString settingType, QString defaultValue) const;
+    QString getAssociation(
+            const QString &appName, const QString &appClass,
+            GestureTypeEnum::GestureType gestureType, int numFingers,
+            GestureDirectionEnum::GestureDirection dir,
+            QString settingType, QString defaultValue) const;
 
     /**
      * Initializes the QHash's for the configuration and used gestures.

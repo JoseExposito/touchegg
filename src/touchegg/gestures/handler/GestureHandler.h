@@ -72,6 +72,10 @@ private slots:
 
 private:
 
+    struct WindowClassHint {
+      QString windowName, windowClass;
+    };
+
     /**
      * Create a estandar gesture with their action.
      * @param  type  Gesture type.
@@ -103,11 +107,13 @@ private:
     Window getTopLevelWindow(Window window) const;
 
     /**
-     * Returns the class of a window, for example, "XTerm" is the class of all instances of XTerm.
+     * Returns the name and the class of a window.  For example,
+     * "xterm" is the name and "XTerm" is the class of all instances
+     * of XTerm.
      * @param  window This window.
-     * @return The class.
+     * @return The name and class of the window.
      */
-    QString getAppClass(Window window) const;
+    WindowClassHint getAppClass(Window window) const;
 
     //------------------------------------------------------------------------------------------------------------------
 

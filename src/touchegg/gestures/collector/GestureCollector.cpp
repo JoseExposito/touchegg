@@ -304,7 +304,7 @@ void GestureCollector::setupGestureEvent(GeisEvent event)
     attr = geis_event_attr_by_name(event, GEIS_EVENT_ATTRIBUTE_CLASS);
     gesture_class = (GeisGestureClass)geis_attr_value_to_pointer(attr);
 
-    qDebug() << "[+] Avaliable gesture:";
+    qDebug() << "[+] Available gesture:";
     qDebug() << "\t Name -> " << geis_gesture_class_name(gesture_class);
 
     GestureCollector::gestures.append(gesture_class);

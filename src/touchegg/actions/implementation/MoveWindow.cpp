@@ -44,9 +44,12 @@ void MoveWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
     if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_X) || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_DELTA_Y))
         return;
 
+    // work-around for updates received from GestureCollector
+    int trackpadOrientation = attrs.contains("trackpadOrientation") ? attrs.value("trackpadOrientation").toInt() : 1;
+
     XTestFakeRelativeMotionEvent(QX11Info::display(),
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() * 0.1,
-            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() * 0.1, 0);
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat() * 0.1 * trackpadOrientation,
+            + attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat() * 0.1 * trackpadOrientation, 0);
 
     XFlush(QX11Info::display());
 }

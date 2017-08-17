@@ -64,6 +64,11 @@ public:
      */
     int getComposedGesturesTime() const;
 
+    /**
+    * Returns the orientation of the trackpad: 1 for regular, -1 for flipped 180 degrees
+    */
+    int getTrackpadOrientation() const;
+
     //------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -128,6 +133,11 @@ private:
      * Time to wait between composed gestures.
      */
     int composedGesturesTime;
+
+    /**
+     * Orientation of the trackpad: 1 for regular, -1 for flipped 180 degrees
+     */
+    int trackpadOrientation;
 
     /**
      * QHash with the configuration. The keys are like Application.GestureType.NumFingers.Direction.action/settings and

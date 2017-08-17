@@ -63,6 +63,7 @@ void Config::loadConfig()
 Config::Config()
 {
     this->composedGesturesTime = 0;
+    this->trackpadOrientation = 1;
     QFile homeFile(QDir::homePath() + HOME_CONFIG_FILE);
     QFile usrFile(USR_SHARE_CONFIG_FILE);
 
@@ -146,6 +147,12 @@ void Config::initConfig(QFile &file)
                 if (!propNode.toElement().isNull()
                         && propNode.toElement().attribute("name") == "composed_gestures_time") {
                     this->composedGesturesTime = propNode.toElement().text().toInt();
+                }
+                if (!propNode.toElement().isNull()
+                        && propNode.toElement().attribute("name") == "flip_trackpad") {
+                    qDebug() << "\tflip_trackpad:" << propNode.toElement().text();
+                    this->trackpadOrientation = propNode.toElement().text() == "true" ? -1 : 1;
+                    qDebug() << "\ttrackpadOrientation:" << trackpadOrientation;
                 }
             }
 
@@ -261,6 +268,11 @@ QList< QPair<QStringList, int> >  Config::getUsedGestures(
 int Config::getComposedGesturesTime() const
 {
     return this->composedGesturesTime;
+}
+
+int Config::getTrackpadOrientation() const
+{
+    return this->trackpadOrientation;
 }
 
 //------------------------------------------------------------------------------

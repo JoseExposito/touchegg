@@ -38,6 +38,15 @@ void GestureCollector::gestureStart(GestureCollector *gc, GeisEvent event)
 void GestureCollector::gestureUpdate(GestureCollector *gc, GeisEvent event)
 {
     QHash<QString, QVariant> attrs = getGestureAttrs(event);
+    
+    // check trackpad orientation to invert the coordinates' deltas
+    int trackpadOrientation = Config::getInstance()->getTrackpadOrientation();
+    if (trackpadOrientation == -1) {
+        qDebug() << "Trackpad is inverted -> requesting coordinates flip";
+        // We can't modify the deltas directly since this would alter all actions and we only need for MoveWindow, therefore we pass a flag to be checked by MoveWindow
+        attrs.insert("trackpadOrientation", trackpadOrientation);
+    }
+
     QString type = attrs.value(GEIS_GESTURE_ATTRIBUTE_GESTURE_NAME).toString();
     int id = attrs.value("geis gesture class id").toInt();
     emit gc->executeGestureUpdate(type, id, attrs);

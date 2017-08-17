@@ -52,6 +52,13 @@ Gesture *GestureFactory::createSimpleGesture(const QString &type, int id, QHash<
 
     // DRAG
     } else if (type == GEIS_GESTURE_DRAG) {
+        // check trackpad orientation to invert the coordinates' deltas
+        int trackpadOrientation = this->config->getTrackpadOrientation();
+        if (trackpadOrientation == -1) {
+            attrs.insert(GEIS_GESTURE_ATTRIBUTE_DELTA_X, trackpadOrientation * attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat());
+            attrs.insert(GEIS_GESTURE_ATTRIBUTE_DELTA_Y, trackpadOrientation * attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat());
+        }
+
         float deltaX = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat();
         float deltaY = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat();
 

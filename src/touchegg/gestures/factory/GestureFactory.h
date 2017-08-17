@@ -22,6 +22,7 @@
 #define GESTUREFACTORY_H
 
 #include "src/touchegg/util/Include.h"
+#include "src/touchegg/config/Config.h"
 #include "src/touchegg/gestures/types/GestureTypeEnum.h"
 #include "src/touchegg/gestures/implementation/Gesture.h"
 
@@ -72,9 +73,14 @@ private:
     static GestureFactory *instance;
 
     // Hide constructors
-    GestureFactory() {}
+    GestureFactory():config(Config::getInstance()) {}
     GestureFactory(const GestureFactory &);
     const GestureFactory &operator = (const GestureFactory &);
+
+    /**
+     * Provides access to the configuration.
+     */
+     Config *config;
 
 };
 

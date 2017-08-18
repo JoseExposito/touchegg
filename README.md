@@ -1,3 +1,11 @@
+This touchegg fork supports flipping your apple trackpad 180 degrees.
+
+This must be used in sync with the following xinput configuration to also have the cursor move adapted
+
+xinput set-prop 'Apple Wireless Trackpad' 'Coordinate Transformation Matrix' -1 0 1 0 -1 1 0 0 1 # invert move coordinates 180 degrees
+xinput set-prop 'Apple Wireless Trackpad' 'Synaptics Scrolling Distance' 157, 157 # invert 2 finger scroll direction
+
+
 **Follow Touchégg on...** [![](https://lh3.googleusercontent.com/-kRgKvb-T4_4/T9psNwZN3TI/AAAAAAAAANA/pwasxapdWm0/s33/twitter.png "Twitter")](https://twitter.com/#!/Jose__Exposito)
 
 About Touchégg:

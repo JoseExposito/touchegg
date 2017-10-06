@@ -83,7 +83,7 @@ public slots:
 signals:
 
     /**
-     * Signal emited when uTouch is inicializzed.
+     * Signal emitted when uTouch is initialized.
      */
     void ready();
 

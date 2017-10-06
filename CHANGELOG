@@ -6,7 +6,7 @@
    applications that uses their own gestures
  - Touchégg ported to GEIS v2 API
  - Touchégg now uses a XML configuration file more intuitive, easy and cleaned
-   and some action configurations has been enchancement.
+   and some action configurations have been enhanced.
  - The code is adapted to the Qt/KDE coding style
  
  Added support for the following actions:

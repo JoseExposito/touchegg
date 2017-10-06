@@ -55,12 +55,12 @@ public:
 signals:
 
     /**
-     * Emited when a new window is created.
+     * Emitted when a new window is created.
      */
     void windowCreated(Window w);
 
     /**
-     * Emited when a window is closed/deleted.
+     * Emitted when a window is closed/deleted.
      */
     void windowDeleted(Window w);
 

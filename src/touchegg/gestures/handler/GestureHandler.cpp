@@ -86,7 +86,7 @@ void GestureHandler::executeGestureUpdate(const QString &type, int id, const QHa
             }
         }
 
-    // If is an update whith the timer running it is a DOUBLE_TAP or a TAP_AND_HOLD
+    // If is an update with the timer running it is a DOUBLE_TAP or a TAP_AND_HOLD
     } else if (this->currentGesture != NULL && this->timerTap->isActive()) {
         this->timerTap->stop();
 

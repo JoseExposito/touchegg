@@ -3,9 +3,9 @@
 About Touchégg:
 ===============
 
-Touchégg allows the GNU/Linux users to made full use of their trackpacks.
+Touchégg allows the GNU/Linux users to make full use of their trackpacks.
 
-By editing a simple configuration file you can attach an action to a particular gesture and -by performing those gestures on your trackpad- maximize, minimize or resize windows, show your desktop, emulate mouse clicks and more.
+By editing a simple configuration file you can attach an action to a particular gesture and – by performing those gestures on your trackpad – maximize, minimize or resize windows, show your desktop, emulate mouse clicks and more.
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=1Ek4QaFQ1qo">

@@ -27,8 +27,8 @@
 #include "src/touchegg/gestures/handler/GestureHandler.h"
 
 /**
- * Initializes and launches Touchégg. To do this uses this three clases:
- * - WindowListener: To detect the creation or destruction of the windows and listen, if is neccessary, the multitouch
+ * Initializes and launches Touchégg. To do this uses these three classes:
+ * - WindowListener: To detect the creation or destruction of the windows and listen, if is necessary, the multitouch
  *   events in that window.
  * - GestureCollector: To get the multitouch events in the windows selected by the WindowListener.
  * - GestureHandler: To treat the multitouch events collected by the GestureCollector.
@@ -48,7 +48,7 @@ protected:
 
     /**
      * Reimplement the method QApplication::x11EventFilter. This method receives the notifications of
-     * creation/destruction of windows and manage it as appropiate using WindowListener.
+     * creation/destruction of windows and manage it as appropriate using WindowListener.
      * @param  event The event that occurred.
      * @return true if you want to stop the event from being processed, ie when we treat ourselves, false for normal
      *         event dispatching.

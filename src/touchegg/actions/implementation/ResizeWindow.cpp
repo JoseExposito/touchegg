@@ -63,6 +63,8 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
     if (this->window == 0)
         return;
 
+        qDebug() << "==============attrs" << attrs;
+
     // Angle
     if (!attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1)
             || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2)
@@ -70,32 +72,35 @@ void ResizeWindow::executeUpdate(const QHash<QString, QVariant>& attrs)
             || !attrs.contains(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y2))
         return;
 
-    float co = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y2).toFloat()
-            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y1).toFloat();
-    float cc = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2).toFloat()
-            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1).toFloat();
+//    float co = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y2).toFloat()
+//            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_Y1).toFloat();
+//    float cc = attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X2).toFloat()
+//            - attrs.value(GEIS_GESTURE_ATTRIBUTE_BOUNDINGBOX_X1).toFloat();
 
-    double angle = (int)(atan(co / cc) * 100);
+//    double angle = (int)(atan(co / cc) * 100);
 
-    double incX, incY;
-    if (angle > 75) {
-        incX = 0;
-        incY = 1;
-    } else if (angle < 20) {
-        incX = 1;
-        incY = 0;
-    } else {
-        incX = cos(angle * (3.14 / 180));
-        incY = sin(angle * (3.14 / 180));
-    }
+    double deltaX = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_X).toFloat();
+    double deltaY = attrs.value(GEIS_GESTURE_ATTRIBUTE_DELTA_Y).toFloat();
+
+//    double incX, incY;
+//    if (angle > 75) {
+//        incX = 0;
+//        incY = 1;
+//    } else if (angle < 20) {
+//        incX = 1;
+//        incY = 0;
+//    } else {
+//        incX = cos(angle * (3.14 / 180));
+//        incY = sin(angle * (3.14 / 180));
+//    }
 
     // Resize the window
     XWindowAttributes xwa;
     XGetWindowAttributes(QX11Info::display(), this->window, &xwa);
-    int inc = (int)attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() * 10;
+//    int inc = (int)attrs.value(GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA).toFloat() * 10;
     XResizeWindow(QX11Info::display(), this->window,
-            xwa.width  + inc * incX,
-            xwa.height + inc * incY);
+            xwa.width  + deltaX,
+            xwa.height + deltaY);
     XFlush(QX11Info::display());
 }
 

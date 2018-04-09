@@ -180,13 +180,13 @@ Gesture *GestureHandler::createGesture(const QString &type, int id, const QHash<
     if (ret == NULL)
         return NULL;
 
-    // Vemos sobre que ventana se ha ejecutado
+    // see on what window has the gesture been executed
     Window gestureWindow = this->getGestureWindow(attrs.value(GEIS_GESTURE_ATTRIBUTE_CHILD_WINDOW_ID).toInt());
     //if (gestureWindow == None)
     //    return NULL;
     QString appClass = this->getAppClass(gestureWindow);
 
-    // Creamos y asignamos la acción asociada al gesto
+    // Create and assign the action associated with the gesture
     ActionTypeEnum::ActionType actionType = this->config->getAssociatedAction(appClass, ret->getType(),
             ret->getNumFingers(), ret->getDirection());
     QString actionSettings = this->config->getAssociatedSettings(appClass, ret->getType(), ret->getNumFingers(),

@@ -99,6 +99,7 @@ void Config::initConfig(QFile &file)
         qFatal("Error reading configuration, please, review the format");
     }
     file.close();
+    qDebug() << "Config content read:" << document.toString();
 
     /*
      * A very simple example of a configuration file:

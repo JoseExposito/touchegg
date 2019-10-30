@@ -21,16 +21,17 @@
 #define INCLUDE_H
 
     // Qt
+    #include <QApplication>
     #include <QtCore>
     #include <QtGui>
-    #include <QtGui/QX11Info>
+    #include <QX11Info>
     #include <QtXml>
-
     // Xlib
     #include <X11/Xlib.h>
     #include <X11/Xutil.h>
     #include <X11/Xatom.h>
     #include <X11/extensions/XTest.h>
+//    #include <X11/extensions/xtestproto.h>
 
     // uTouch
     #include <geis/geis.h>

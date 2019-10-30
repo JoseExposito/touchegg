@@ -19,6 +19,7 @@
  * @class  ChangeViewport
  */
 #include "ChangeViewport.h"
+#include <QDesktopWidget>
 
 // ****************************************************************************************************************** //
 // **********                                  CONSTRUCTORS AND DESTRUCTOR                                 ********** //

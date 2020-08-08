@@ -1,44 +1,107 @@
+# Compilation
 
-### Coding Style: ###
-
-If you want to send a patch please follow the Qt/KDE coding style:
-    
-    http://developer.qt.nokia.com/wiki/Qt_Coding_Style
-    http://techbase.kde.org/Policies/Kdelibs_Coding_Style
-
-Remember that you can use astyle to indent the code automatically:
+Before you start coding, you will need to install some dependencies:
 
 ```
-astyle --style=k/r --indent=spaces=4 --convert-tabs \
-       --pad-header --unpad-paren \
-       --indent-namespaces --keep-one-line-blocks --align-pointer=name \
-       --max-instatement-indent=8 --indent-col1-comments \
-       --suffix=none \
-       `find -type f -name '*.cpp'` `find -type f -name '*.h'`
+$ sudo apt-get install build-essential cmake git
 ```
 
-### Understanding the Code: ###
-
-All the code is documented with Doxygen. If want to see this documentation in html format, go to the ./documentation folder and run:
+Now clone the source code and compile it following the usual CMake compilation steps:
 
 ```
+$ git clone https://github.com/JoseExposito/touchegg.git
+$ cd touchegg
+$ mkdir build
+$ cd build
+$ cmake -DCMAKE_BUILD_TYPE=Release ..
+$ make
+```
+
+# Code Style
+
+This project follows Google C++ Style Guide:
+
+https://google.github.io/styleguide/cppguide.html
+
+And uses clang-format and clang-tidy to check the code style.
+
+```
+$ sudo apt-get install clang clang-format clang-tidy
+```
+
+# Development environment
+
+You can use any text editor or IDE. But, if like me, you are using Visual Studio Code, here are some
+tips:
+
+## C/C++ Extension
+
+Install this extension for language support:
+
+https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
+
+## CMake Tools
+
+Install this extension for CMake integration:
+
+https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools
+
+## EditorConfig Extension
+
+Install this extension to override your preferences following the rules described in .editorconfig:
+
+https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
+
+## Code Spell Checker Extension
+
+Install this extension to avoid typos:
+
+https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker
+
+
+## Line Length
+
+Google C++ Style Guide defines a limit of 80 characters:
+
+https://google.github.io/styleguide/cppguide.html#Line_Length
+
+In order to easily follow this rule, add the following configuration to your settings.json file by
+pressing "Control + Shift + P" and typing "Preferences: Open Settings (JSON)":
+
+```
+"[cpp]": {
+    "editor.rulers": [
+        80
+    ]
+}
+```
+
+## Apply format on save
+
+The best way to follow the code style rules is to let Visual Studio Code apply them for you.
+add the following configuration to your settings.json file by
+pressing "Control + Shift + P" and typing "Preferences: Open Settings (JSON)":
+
+```
+"editor.formatOnSave": true
+```
+
+# Understanding the Code:
+
+The entire code is documented with Doxygen. If want to see this documentation in HTML format execute
+the following commands:
+
+```
+$ cd documentation
 $ doxygen doxyfile
 ```
 
-The ./documentation/html/index.html file is a good place to begin.
+The `./documentation/html/index.html` file is a good place to start.
 
-Touchégg makes an intensive use of Qt and uTouch. Reading this can help:
+# Contact the developer:
 
-    http://doc.qt.io/
-    http://people.canonical.com/~stephenwebb/geis-v2-api/
+If you want to report a bug or ask a question, you can do it in the official bug tracker:
 
-
-### Contact the developer: ###
-
-If you want to report a bug, you can do it in the official bug tracker:
-
-    https://github.com/JoseExposito/touchegg/issues
-
-For other questions, talk about the weather or invite me to a beer :beer: you can send me an email to jose.exposito89@gmail.com
+https://github.com/JoseExposito/touchegg/issues
 
 Happy coding!

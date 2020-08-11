@@ -1,4 +1,6 @@
 /**
+ * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ *
  * This file is part of Touchégg.
  *
  * Touchégg is free software: you can redistribute it and/or modify it under the
@@ -12,10 +14,8 @@
  *
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
- *
- * @author José Expósito <jose.exposito89@gmail.com> (C) 2011 - 2020
  */
-#include "config.h"
+#include "config/config.h"
 
 #include <pwd.h>
 #include <sys/types.h>
@@ -23,26 +23,51 @@
 
 #include <cstdlib>
 #include <exception>
-#include <filesystem>
+#include <filesystem>  // NOLINT
 #include <string>
 #include <vector>
 
 namespace {
-const char *USR_SHARE_CONFIG_FILE = "/usr/share/touchegg/touchegg.conf";
-const char *HOME_CONFIG_FILE = "/.config/touchegg/touchegg.conf";
+const char *USR_SHARE_CONFIG_DIR = "/usr/share/touchegg";
 const char *HOME_CONFIG_DIR = ".config/touchegg";
+const char *CONFIG_FILE = "touchegg.conf";
 }  // namespace
 
-void Config::loadConfig() {
-  const std::filesystem::path usrFile{USR_SHARE_CONFIG_FILE};
+Config::Config() {
+  Config::copyConfingIfNotPresent();
+  this->parseConfig();
+}
 
-  if (!std::filesystem::exists(usrFile)) {
-    throw std::runtime_error{
-        "File " + USR_SHARE_CONFIG_FILE +
-        " not found. Reinstall Touchégg to solve this issue"};
+void Config::parseConfig() {
+  const std::filesystem::path homePath = Config::getHomePath();
+  const std::filesystem::path configPath =
+      homePath / HOME_CONFIG_DIR / CONFIG_FILE;
+
+  // TODO(jose) Test
+  this->config["foo"] = "bar";
+}
+
+void Config::copyConfingIfNotPresent() {
+  const std::filesystem::path homePath = Config::getHomePath();
+  const std::filesystem::path homeConfigDir = homePath / HOME_CONFIG_DIR;
+  const std::filesystem::path homeConfigFile = homeConfigDir / CONFIG_FILE;
+
+  // If the ~/.config/touchegg configuration file exists we can continue,
+  // otherwise we need to copy it from /usr/share/touchegg/touchegg.conf
+  if (std::filesystem::exists(homeConfigFile)) {
+    return;
   }
 
-  const std::filesystem::path homePath = Config::getHomePath();
+  const std::filesystem::path usrConfigDir{USR_SHARE_CONFIG_DIR};
+  const std::filesystem::path usrConfigFile{usrConfigDir / CONFIG_FILE};
+  if (!std::filesystem::exists(usrConfigFile)) {
+    throw std::runtime_error{
+        "File /usr/share/touchegg/touchegg.conf not found.\n"
+        "Reinstall Touchégg to solve this issue"};
+  }
+
+  std::filesystem::create_directories(homeConfigDir);
+  std::filesystem::copy_file(usrConfigFile, homeConfigFile);
 }
 
 std::filesystem::path Config::getHomePath() {
@@ -53,7 +78,7 @@ std::filesystem::path Config::getHomePath() {
   }
 
   // In case $HOME is not set fallback to getpwuid
-  const struct passwd *userInfo = getpwuid(getuid());
+  const struct passwd *userInfo = getpwuid(getuid());  // NOLINT
   if (userInfo == nullptr) {
     throw std::runtime_error{
         "Error getting your home directory path (getpwuid).\n"

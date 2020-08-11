@@ -15,11 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
+#ifndef CONFIG_PARSER_H_
+#define CONFIG_PARSER_H_
 
-#include "config/config.h"
+#include <string>
+#include <unordered_map>
 
-int main(/* int, char ** */) {
-  std::cout << "Hello, world!\n";
-  Config config;
-}
+class Parser {
+ public:
+};
+
+#endif  // CONFIG_PARSER_H_

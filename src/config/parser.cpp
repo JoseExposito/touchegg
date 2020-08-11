@@ -15,11 +15,6 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
+#include "config/parser.h"
 
-#include "config/config.h"
-
-int main(/* int, char ** */) {
-  std::cout << "Hello, world!\n";
-  Config config;
-}
+#include <libxml/xmlreader.h>

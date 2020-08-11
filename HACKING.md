@@ -3,7 +3,7 @@
 Before you start coding, you will need to install some dependencies:
 
 ```
-$ sudo apt-get install build-essential cmake git
+$ sudo apt-get install git build-essential cmake libxml2-dev
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:
@@ -23,11 +23,17 @@ This project follows Google C++ Style Guide:
 
 https://google.github.io/styleguide/cppguide.html
 
-And uses clang-format and clang-tidy to check the code style.
+And uses clang-format, clang-tidy and `cpplint.py` automatically to check potential the code issues.
+
+In order to take advantage of those tools, install the following dependencies:
 
 ```
-$ sudo apt-get install clang clang-format clang-tidy
+$ sudo apt-get install clang clang-format clang-tidy python2
 ```
+
+More information about `cpplint.py`:
+
+https://google.github.io/styleguide/cppguide.html#cpplint
 
 # Development environment
 

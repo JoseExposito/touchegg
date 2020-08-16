@@ -18,37 +18,34 @@
 #ifndef CONFIG_CONFIG_H_
 #define CONFIG_CONFIG_H_
 
-#include <filesystem>
 #include <string>
 #include <unordered_map>
 
+/**
+ * Class to save and access the configuration.
+ * It only provides a simple interface to get/set the configuration, delegating
+ * the responsability of saving the configuration to a third party, usually
+ * `XmlConfigLoader`.
+ */
 class Config {
  public:
-  Config();
+  /**
+   * Save the settings associated to a gesture.
+   */
+  void saveGestureConfig(
+      const std::string &application, const std::string &gesture,
+      const std::string &numFingers, const std::string &direction,
+      const std::string &action,
+      std::unordered_map<std::string, std::string> actionSettings);
 
  private:
   /**
    * Configuration is saved here to ensure 0(1) access.
-   * Key: [Application].[GestureType].[NumFingers].[Direction].[action/settings]
-   * Value: Action or settings associated with the gesture
+   * Key: [Application]_[GestureType]_[NumFingers]_[Direction].
+   * Value: Action and settings associated with the gesture.
    */
-  std::unordered_map<std::string, std::string> config;
-
-  /**
-   * Parse the configuration placed on the user's home directory
-   */
-  void parseConfig();
-
-  /**
-   * Check that the required configuration files are in place.
-   */
-  static void copyConfingIfNotPresent();
-
-  /**
-   * Return the path of the user's home directory.
-   * @return User's home directory.
-   */
-  static std::filesystem::path getHomePath();
+  std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
+      config;
 };
 
 #endif /* CONFIG_CONFIG_H_ */

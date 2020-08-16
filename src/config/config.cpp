@@ -17,82 +17,22 @@
  */
 #include "config/config.h"
 
-#include <pwd.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include <cstdlib>
-#include <exception>
-#include <filesystem>  // NOLINT
 #include <string>
-#include <vector>
+#include <unordered_map>
 
-namespace {
-const char *USR_SHARE_CONFIG_DIR = "/usr/share/touchegg";
-const char *HOME_CONFIG_DIR = ".config/touchegg";
-const char *CONFIG_FILE = "touchegg.conf";
-}  // namespace
+void Config::saveGestureConfig(
+    const std::string &application, const std::string &gesture,
+    const std::string &numFingers, const std::string &direction,
+    const std::string &action,
+    std::unordered_map<std::string, std::string> actionSettings) {
+  // TODO(jose) Store NO_DIRECTION in a enum
+  const std::string directionKey =
+      direction.empty() ? "NO_DIRECTION" : direction;
 
-Config::Config() {
-  Config::copyConfingIfNotPresent();
-  this->parseConfig();
-}
+  const std::string key =
+      application + "_" + gesture + "_" + numFingers + "_" + directionKey;
 
-void Config::parseConfig() {
-  const std::filesystem::path homePath = Config::getHomePath();
-  const std::filesystem::path configPath =
-      homePath / HOME_CONFIG_DIR / CONFIG_FILE;
+  actionSettings["action"] = action;
 
-  // TODO(jose) Test
-  this->config["foo"] = "bar";
-}
-
-void Config::copyConfingIfNotPresent() {
-  const std::filesystem::path homePath = Config::getHomePath();
-  const std::filesystem::path homeConfigDir = homePath / HOME_CONFIG_DIR;
-  const std::filesystem::path homeConfigFile = homeConfigDir / CONFIG_FILE;
-
-  // If the ~/.config/touchegg configuration file exists we can continue,
-  // otherwise we need to copy it from /usr/share/touchegg/touchegg.conf
-  if (std::filesystem::exists(homeConfigFile)) {
-    return;
-  }
-
-  const std::filesystem::path usrConfigDir{USR_SHARE_CONFIG_DIR};
-  const std::filesystem::path usrConfigFile{usrConfigDir / CONFIG_FILE};
-  if (!std::filesystem::exists(usrConfigFile)) {
-    throw std::runtime_error{
-        "File /usr/share/touchegg/touchegg.conf not found.\n"
-        "Reinstall Touchégg to solve this issue"};
-  }
-
-  std::filesystem::create_directories(homeConfigDir);
-  std::filesystem::copy_file(usrConfigFile, homeConfigFile);
-}
-
-std::filesystem::path Config::getHomePath() {
-  // $HOME should be checked first
-  const char *homeEnvVar = getenv("HOME");
-  if (homeEnvVar != nullptr) {
-    return std::filesystem::path{homeEnvVar};
-  }
-
-  // In case $HOME is not set fallback to getpwuid
-  const struct passwd *userInfo = getpwuid(getuid());  // NOLINT
-  if (userInfo == nullptr) {
-    throw std::runtime_error{
-        "Error getting your home directory path (getpwuid).\n"
-        "Please file a bug report at "
-        "https://github.com/JoseExposito/touchegg/issues"};
-  }
-
-  const char *workingDir = userInfo->pw_dir;
-  if (workingDir == nullptr) {
-    throw std::runtime_error{
-        "Error getting your home directory path (pw_dir).\n"
-        "Please file a bug report at "
-        "https://github.com/JoseExposito/touchegg/issues"};
-  }
-
-  return std::filesystem::path{workingDir};
+  this->config[key] = actionSettings;
 }

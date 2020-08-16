@@ -18,8 +18,11 @@
 #include <iostream>
 
 #include "config/config.h"
+#include "config/xml-config-loader.h"
 
 int main(/* int, char ** */) {
-  std::cout << "Hello, world!\n";
+  std::cout << "Starting Touchégg..." << std::endl;
   Config config;
+  XmlConfigLoader loader(&config);
+  loader.load();
 }

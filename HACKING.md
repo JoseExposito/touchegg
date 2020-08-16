@@ -3,7 +3,7 @@
 Before you start coding, you will need to install some dependencies:
 
 ```
-$ sudo apt-get install git build-essential cmake libxml2-dev
+$ sudo apt-get install git build-essential cmake gdb
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:

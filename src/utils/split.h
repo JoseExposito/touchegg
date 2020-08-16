@@ -15,6 +15,12 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "config/parser.h"
+#ifndef UTILS_SPLIT_H_
+#define UTILS_SPLIT_H_
 
-#include <libxml/xmlreader.h>
+#include <string>
+#include <vector>
+
+std::vector<std::string> split(const std::string &string, char delimiter);
+
+#endif  // UTILS_SPLIT_H_

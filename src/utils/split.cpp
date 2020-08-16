@@ -15,14 +15,21 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CONFIG_PARSER_H_
-#define CONFIG_PARSER_H_
+#include "utils/split.h"
 
+#include <sstream>
 #include <string>
-#include <unordered_map>
+#include <utility>
+#include <vector>
 
-class Parser {
- public:
-};
+std::vector<std::string> split(const std::string &string, char delimiter) {
+  std::stringstream ss(string);
+  std::string item;
+  std::vector<std::string> elems;
 
-#endif  // CONFIG_PARSER_H_
+  while (std::getline(ss, item, delimiter)) {
+    elems.push_back(std::move(item));
+  }
+
+  return elems;
+}

@@ -63,6 +63,12 @@ class XmlConfigLoader {
   void parseApplicationXmlNodes(const pugi::xml_node &rootNode);
 
   /**
+   * Watch the configuration file and parse it on change.
+   * @param configPath Path to the configuration file.
+   */
+  void watchFile(const std::filesystem::path &configPath);
+
+  /**
    * Check that the required configuration files are in place.
    */
   static void copyConfingIfNotPresent();

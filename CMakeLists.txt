@@ -10,6 +10,8 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
   include(./cmake/check-code-style.cmake)
 endif()
 
+# Required to use std threads
+find_package(Threads REQUIRED)
 
 # PugiXML
 add_library(
@@ -40,7 +42,7 @@ set(
 )
 
 add_executable(touchegg ${SOURCE_FILES} $<TARGET_OBJECTS:pugixml>)
-target_link_libraries(touchegg stdc++fs)
+target_link_libraries(touchegg stdc++fs Threads::Threads)
 
 
 # include(CTest)

@@ -38,6 +38,11 @@ class Config {
       const std::string &action,
       std::unordered_map<std::string, std::string> actionSettings);
 
+  /**
+   * Remove all saved settings.
+   */
+  inline void clear() { this->config.clear(); }
+
  private:
   /**
    * Configuration is saved here to ensure 0(1) access.

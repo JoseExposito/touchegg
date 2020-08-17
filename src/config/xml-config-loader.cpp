@@ -18,13 +18,16 @@
 #include "config/xml-config-loader.h"
 
 #include <pwd.h>
+#include <sys/inotify.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <array>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <string>
+#include <thread>  // NOLINT
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -38,6 +41,9 @@ namespace {
 const char *USR_SHARE_CONFIG_DIR = "/usr/share/touchegg";
 const char *HOME_CONFIG_DIR = ".config/touchegg";
 const char *CONFIG_FILE = "touchegg.conf";
+
+constexpr std::size_t WATCH_EVENT_SIZE = sizeof(struct inotify_event);
+constexpr std::size_t WATCH_BUFFER_SIZE = (100 * (WATCH_EVENT_SIZE + 16));
 }  // namespace
 
 XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {
@@ -50,6 +56,7 @@ void XmlConfigLoader::load() {
       homePath / HOME_CONFIG_DIR / CONFIG_FILE;
 
   this->parseXml(configPath);
+  this->watchFile(configPath);
 }
 
 void XmlConfigLoader::parseXml(const std::filesystem::path &configPath) {
@@ -91,6 +98,41 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
       }
     }
   }
+}
+
+void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
+  // https://developer.ibm.com/tutorials/l-ubuntu-inotify/
+  const std::string warningMessage =
+      "It was not posssible to monitor your configuration file for changes. "
+      "Touchégg will not be able to automatically reload your configuration "
+      "when you change it. You will need to restart Touchégg to apply your "
+      "configuration changes";
+
+  int fd = inotify_init();
+  if (fd < 0) {
+    std::cout << warningMessage << std::endl;
+    return;
+  }
+
+  int wd = inotify_add_watch(fd, configPath.c_str(), IN_MODIFY | IN_CREATE);
+  if (wd < 0) {
+    std::cout << warningMessage << std::endl;
+    return;
+  }
+
+  std::thread watchThread{[&]() {
+    std::array<char, WATCH_BUFFER_SIZE> buffer{};
+    while (true) {
+      const std::size_t length = read(fd, buffer.data(), buffer.size());
+      if (length > 0) {
+        std::cout << "Your configuration file changed, reloading your settings"
+                  << std::endl;
+        this->config->clear();
+        this->parseXml(configPath);
+      }
+    }
+  }};
+  watchThread.detach();
 }
 
 void XmlConfigLoader::copyConfingIfNotPresent() {

@@ -120,7 +120,7 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     return;
   }
 
-  std::thread watchThread{[&]() {
+  std::thread watchThread{[fd, configPath, this]() {
     std::array<char, WATCH_BUFFER_SIZE> buffer{};
     while (true) {
       const std::size_t length = read(fd, buffer.data(), buffer.size());

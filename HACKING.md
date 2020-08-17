@@ -3,7 +3,7 @@
 Before you start coding, you will need to install some dependencies:
 
 ```
-$ sudo apt-get install git build-essential cmake gdb
+$ sudo apt-get install git build-essential gdb cmake libudev-dev libinput-dev
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:
@@ -14,7 +14,7 @@ $ cd touchegg
 $ mkdir build
 $ cd build
 $ cmake -DCMAKE_BUILD_TYPE=Release ..
-$ make
+$ make -j$(nproc)
 ```
 
 # Code Style
@@ -103,6 +103,10 @@ $ doxygen doxyfile
 ```
 
 The `./documentation/html/index.html` file is a good place to start.
+
+Touchégg makes intensive use of libinput, don't forget to check its documentation:
+
+https://wayland.freedesktop.org/libinput/doc/latest/api/
 
 # Contact the developer:
 

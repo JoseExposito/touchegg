@@ -4,14 +4,16 @@ project(touchegg VERSION 2.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
 # In debug mode check code style issues
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   include(./cmake/check-code-style.cmake)
 endif()
 
-# Required to use std threads
-find_package(Threads REQUIRED)
+find_package(Threads REQUIRED) # Required to use std threads
+find_package(Libudev REQUIRED)
+find_package(Libinput REQUIRED)
 
 # PugiXML
 add_library(
@@ -36,13 +38,16 @@ set(
   src/config/config.cpp
   src/config/xml-config-loader.h
   src/config/xml-config-loader.cpp
+  src/gestures/gesture-gatherer.h
+  src/gestures/gesture-gatherer.cpp
   src/utils/filesystem.h
   src/utils/split.h
   src/utils/split.cpp
 )
 
 add_executable(touchegg ${SOURCE_FILES} $<TARGET_OBJECTS:pugixml>)
-target_link_libraries(touchegg stdc++fs Threads::Threads)
+target_include_directories(touchegg PUBLIC ${LIBUDEV_INCLUDE_DIRS} ${LIBINPUT_INCLUDE_DIRS})
+target_link_libraries(touchegg stdc++fs Threads::Threads ${LIBUDEV_LIBRARIES} ${LIBINPUT_LIBRARIES})
 
 
 # include(CTest)

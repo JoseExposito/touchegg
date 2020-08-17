@@ -43,6 +43,7 @@ const char *CONFIG_FILE = "touchegg.conf";
 XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {
   XmlConfigLoader::copyConfingIfNotPresent();
 }
+
 void XmlConfigLoader::load() {
   const std::filesystem::path homePath = XmlConfigLoader::getHomePath();
   const std::filesystem::path configPath =
@@ -59,15 +60,37 @@ void XmlConfigLoader::parseXml(const std::filesystem::path &configPath) {
     throw std::runtime_error{"Error parsing configuration file"};
   }
 
-  // TODO(jose) TEST!!!
-  std::cout
-      << "App: "
-      << doc.document_element().child("application").attribute("name").value()
-      << std::endl;
+  pugi::xml_node rootNode = doc.document_element();
+  this->parseApplicationXmlNodes(rootNode);
+}
 
-  std::unordered_map<std::string, std::string> actionSettings{{"BUTTON", "2"}};
-  this->config->saveGestureConfig("All", "TAP", "2", "", "MOUSE_CLICK",
-                                  std::move(actionSettings));
+void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
+  for (pugi::xml_node applicationNode : rootNode.children("application")) {
+    const std::string appsStr = applicationNode.attribute("name").value();
+    const std::vector<std::string> applications = split(appsStr, ',');
+
+    for (pugi::xml_node gestureNode : applicationNode.children("gesture")) {
+      const std::string gestureType = gestureNode.attribute("type").value();
+      const std::string fingers = gestureNode.attribute("fingers").value();
+      const std::string direction = gestureNode.attribute("direction").value();
+
+      pugi::xml_node actionNode = gestureNode.child("action");
+      const std::string actionType = actionNode.attribute("type").value();
+
+      std::unordered_map<std::string, std::string> actionSettings;
+      for (pugi::xml_node settingNode : actionNode.children()) {
+        const std::string settingName = settingNode.name();
+        const std::string settingValue = settingNode.child_value();
+        actionSettings[settingName] = settingValue;
+      }
+
+      // Save the gesture config for each application
+      for (const std::string &application : applications) {
+        this->config->saveGestureConfig(application, gestureType, fingers,
+                                        direction, actionType, actionSettings);
+      }
+    }
+  }
 }
 
 void XmlConfigLoader::copyConfingIfNotPresent() {

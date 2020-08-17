@@ -20,6 +20,9 @@
 
 #include "utils/filesystem.h"
 class Config;
+namespace pugi {
+class xml_node;
+}
 
 /**
  * Default config loader. It reads the configuration from
@@ -52,6 +55,12 @@ class XmlConfigLoader {
    * @param configPath Path to the configuration file.
    */
   void parseXml(const std::filesystem::path &configPath);
+
+  /**
+   * Parse the "application" nodes in the XML.
+   * @param rootNode XML root node, usually named "touchégg".
+   */
+  void parseApplicationXmlNodes(const pugi::xml_node &rootNode);
 
   /**
    * Check that the required configuration files are in place.

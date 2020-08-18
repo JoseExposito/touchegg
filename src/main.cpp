@@ -29,4 +29,5 @@ int main(/* int, char ** */) {
   loader.load();
 
   GestureGatherer gg(config);
+  gg.run();
 }

@@ -18,15 +18,42 @@
 #ifndef GESTURES_GESTURE_GATHERER_H_
 #define GESTURES_GESTURE_GATHERER_H_
 
+#include <libinput.h>
+#include <libudev.h>
 class Config;
 
 class GestureGatherer {
  public:
   explicit GestureGatherer(const Config &config);
+  ~GestureGatherer();
+
+  /**
+   * Run libinput's event loop.
+   */
+  void run();
 
  private:
+  /**
+   * Object to access the configuration.
+   */
   const Config &config;
 
+  /**
+   * udev context.
+   */
+  struct udev *udevContext = nullptr;
+
+  /**
+   * libinput context.
+   */
+  struct libinput *libinputContext = nullptr;
+
+  /**
+   * libinput structure with pointers to the open/close callbacks.
+   */
+  struct libinput_interface libinputInterface {
+    GestureGatherer::openRestricted, GestureGatherer::closeRestricted
+  };
   static int openRestricted(const char *path, int flags, void *userData);
   static void closeRestricted(int fd, void *userData);
 };

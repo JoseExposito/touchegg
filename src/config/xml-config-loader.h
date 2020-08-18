@@ -32,9 +32,9 @@ class xml_node;
 class XmlConfigLoader {
  public:
   /**
-   * Default contructor, it takes a reference to the `Config` object where the
+   * Default contructor, it takes a pointer to the `Config` object where the
    * configuration will be stored.
-   * @param config A mutable reference to the `Config` object.
+   * @param config Pointer to the `Config` object.
    */
   explicit XmlConfigLoader(Config *config);
 
@@ -46,7 +46,7 @@ class XmlConfigLoader {
 
  private:
   /**
-   * Reference to the `Config` object injected in the constructor.
+   * Pointer to the `Config` object injected in the constructor.
    */
   Config *config;
 

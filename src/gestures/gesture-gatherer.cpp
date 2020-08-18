@@ -20,42 +20,85 @@
 #include <fcntl.h>
 #include <libinput.h>
 #include <libudev.h>
+#include <poll.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <array>
+#include <exception>
+#include <iostream>
+
 #include "config/config.h"
 
 GestureGatherer::GestureGatherer(const Config &config) : config(config) {
-  libinput_interface libinputInterface{GestureGatherer::openRestricted,
-                                       GestureGatherer::closeRestricted};
-
-  udev *udev = udev_new();
-  if (udev == nullptr) {
-    // TODO(jose) Throw an exception
+  this->udevContext = udev_new();
+  if (this->udevContext == nullptr) {
+    throw std::runtime_error{"Error initialising Touchégg: udev"};
   }
 
-  libinput *libinput =
-      libinput_udev_create_context(&libinputInterface, nullptr, udev);
-  if (libinput == nullptr) {
-    // TODO(jose) Throw an exception
+  this->libinputContext = libinput_udev_create_context(
+      &this->libinputInterface, nullptr, this->udevContext);
+  if (this->libinputContext == nullptr) {
+    throw std::runtime_error{"Error initialising Touchégg: libinput"};
   }
 
-  int seat = libinput_udev_assign_seat(libinput, "seat0");
+  int seat = libinput_udev_assign_seat(this->libinputContext, "seat0");
   if (seat != 0) {
-    // TODO(jose) Throw an exception
+    throw std::runtime_error{"Error initialising Touchégg: libinput seat"};
+  }
+}
+
+GestureGatherer::~GestureGatherer() {
+  if (this->libinputContext != nullptr) {
+    libinput_unref(this->libinputContext);
+  }
+
+  if (this->udevContext != nullptr) {
+    udev_unref(this->udevContext);
+  }
+}
+
+void GestureGatherer::run() {
+  int fd = libinput_get_fd(this->libinputContext);
+  if (fd == -1) {
+    throw std::runtime_error{"Error initialising Touchégg: libinput_get_fd"};
+  }
+
+  // Create poll to wait until libinput's file descriptor has data
+  // https://man7.org/linux/man-pages/man2/poll.2.html
+  int pollTimeout = -1;
+  std::array<struct pollfd, 1> pollFds{{fd, POLLIN, 0}};
+
+  while (poll(pollFds.data(), pollFds.size(), pollTimeout) >= 0) {
+    // Once the data is in the file descriptor, read and process every event
+    bool hasEvents = true;
+    do {
+      libinput_dispatch(this->libinputContext);
+      struct libinput_event *event = libinput_get_event(this->libinputContext);
+      if (event != nullptr) {
+        // std::cout << libinput_event_get_type(event) << std::endl;
+        libinput_event_destroy(event);
+      } else {
+        hasEvents = false;
+      }
+    } while (hasEvents);
   }
 }
 
 int GestureGatherer::openRestricted(const char *path, int flags,
-                                    void *userData) {  // NOLINT
-  int fd = open(path, flags);                          // NOLINT
+                                    void * /*userData*/) {
+  int fd = open(path, flags);  // NOLINT
   if (fd < 0) {
-    // TODO(jose) Throw an exception
+    throw std::runtime_error{
+        "Error initialising Touchégg: libinput open.\n"
+        "Please execute the following command:\n"
+        "$ sudo usermod -a -G input $USER\n"
+        "And reboot to solve this issue"};
   }
   return fd;
 }
 
-void GestureGatherer::closeRestricted(int fd, void *userData) {  // NOLINT
+void GestureGatherer::closeRestricted(int fd, void * /*userData*/) {
   close(fd);
 }

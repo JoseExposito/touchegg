@@ -15,18 +15,20 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
+#ifndef GESTURES_GESTURE_GATHERER_H_
+#define GESTURES_GESTURE_GATHERER_H_
 
-#include "config/config.h"
-#include "config/xml-config-loader.h"
-#include "gestures/gesture-gatherer.h"
+class Config;
 
-int main(/* int, char ** */) {
-  std::cout << "Starting Touchégg..." << std::endl;
+class GestureGatherer {
+ public:
+  explicit GestureGatherer(const Config &config);
 
-  Config config;
-  XmlConfigLoader loader(&config);
-  loader.load();
+ private:
+  const Config &config;
 
-  GestureGatherer gg(config);
-}
+  static int openRestricted(const char *path, int flags, void *userData);
+  static void closeRestricted(int fd, void *userData);
+};
+
+#endif  // GESTURES_GESTURE_GATHERER_H_

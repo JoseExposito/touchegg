@@ -40,7 +40,7 @@ class GestureGatherer {
    * send the gestures.
    */
   GestureGatherer(const Config &config,
-                  const GestureControllerDelegate &gestureController)
+                  GestureControllerDelegate *gestureController)
       : config(config), gestureController(gestureController) {}
 
   virtual ~GestureGatherer() = default;
@@ -53,7 +53,7 @@ class GestureGatherer {
  protected:
   const Config &config;
 
-  const GestureControllerDelegate &gestureController;
+  GestureControllerDelegate *gestureController;
 };
 
 #endif  // GESTURE_GATHERER_GESTURE_GATHERER_H_

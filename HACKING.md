@@ -106,6 +106,8 @@ The `./documentation/html/index.html` file is a good place to start.
 
 Touchégg makes intensive use of libinput, don't forget to check its documentation:
 
+https://wayland.freedesktop.org/libinput/doc/latest/index.html
+
 https://wayland.freedesktop.org/libinput/doc/latest/api/
 
 # Contact the developer:

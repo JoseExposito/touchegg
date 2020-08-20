@@ -37,7 +37,7 @@
 #include "gesture/libinput-gesture.h"
 
 LibinputGestureGatherer::LibinputGestureGatherer(
-    const Config &config, const GestureControllerDelegate &gestureController)
+    const Config &config, GestureControllerDelegate *gestureController)
     : GestureGatherer(config, gestureController) {
   this->udevContext = udev_new();
   if (this->udevContext == nullptr) {
@@ -98,9 +98,7 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN: {
       // TODO(jose) Use a factory to build the Gesture?
       auto gesture = std::make_unique<LibinputGesture>(event);
-      // this->gestureController.onGestureBegin(std::move(gesture));
-      std::cout << (gesture->type() == GestureType::SWIPE) << std::endl;
-      /// this->gestureController.onGestureBegin(gesture);
+      this->gestureController->onGestureBegin(std::move(gesture));
       break;
     }
 

@@ -24,7 +24,7 @@ LibinputGesture::LibinputGesture(struct libinput_event *event)
 
 LibinputGesture::~LibinputGesture() { libinput_event_destroy(this->event); }
 
-GestureType LibinputGesture::type() {
+GestureType LibinputGesture::type() const {
   libinput_event_type eventType = libinput_event_get_type(this->event);
   switch (eventType) {
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
@@ -42,4 +42,16 @@ GestureType LibinputGesture::type() {
                 << " is not supported" << std::endl;
       return GestureType::NOT_SUPPORTED;
   }
+}
+
+int LibinputGesture::fingers() const {
+  return libinput_event_gesture_get_finger_count(this->gestureEvent);
+}
+
+double LibinputGesture::deltaX() const {
+  return libinput_event_gesture_get_dx(this->gestureEvent);
+}
+
+double LibinputGesture::deltaY() const {
+  return libinput_event_gesture_get_dy(this->gestureEvent);
 }

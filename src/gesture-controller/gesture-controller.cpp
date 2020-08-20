@@ -19,10 +19,12 @@
 
 #include <iostream>
 
-void GestureController::onGestureBegin(
-    std::unique_ptr<Gesture> /*gesture*/) const {
+void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   // TODO(jose)
   std::cout << "onGestureBegin" << std::endl;
+  std::cout << "Fingers: " << gesture->fingers() << std::endl;
+  std::cout << "Delta X: " << gesture->deltaX() << std::endl;
+  std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
 }
 
 void GestureController::onGestureUpdate() {}

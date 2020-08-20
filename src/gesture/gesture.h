@@ -28,7 +28,26 @@ class Gesture {
  public:
   virtual ~Gesture() = default;
 
-  virtual GestureType type() = 0;
+  /**
+   * @returns The gesture type.
+   * @see GestureType
+   */
+  virtual GestureType type() const = 0;
+
+  /**
+   * @returns The number of fingers used to perform the gesture.
+   */
+  virtual int fingers() const = 0;
+
+  /**
+   * @returns Gesture change in the X since the its last update.
+   */
+  virtual double deltaX() const = 0;
+
+  /**
+   * @returns Gesture change in the X since the its last update.
+   */
+  virtual double deltaY() const = 0;
 };
 
 #endif  // GESTURE_GESTURE_H_

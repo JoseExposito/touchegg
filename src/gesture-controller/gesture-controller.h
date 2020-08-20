@@ -27,7 +27,7 @@ class GestureController : public GestureControllerDelegate {
   GestureController() = default;
   virtual ~GestureController() = default;
 
-  void onGestureBegin(std::unique_ptr<Gesture> gesture) const override;
+  void onGestureBegin(std::unique_ptr<Gesture> gesture) override;
   void onGestureUpdate();  // override;
   void onGestureEnd();     // override;
 };

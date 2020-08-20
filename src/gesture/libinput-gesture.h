@@ -25,12 +25,21 @@
 
 /**
  * Libinput backend Gesture implementation.
+ * @see Gesture
  */
 class LibinputGesture : public Gesture {
  public:
   explicit LibinputGesture(struct libinput_event *event);
+
   ~LibinputGesture();
-  GestureType type() override;
+
+  GestureType type() const override;
+
+  int fingers() const override;
+
+  double deltaX() const override;
+
+  double deltaY() const override;
 
  private:
   struct libinput_event *event;

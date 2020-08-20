@@ -31,6 +31,6 @@ int main(/* int, char ** */) {
 
   GestureController gestureController{};
 
-  LibinputGestureGatherer gg(config, gestureController);
+  LibinputGestureGatherer gg(config, &gestureController);
   gg.run();
 }

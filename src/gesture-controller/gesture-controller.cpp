@@ -15,22 +15,16 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gesture-controller/gesture-controller.h"
+
 #include <iostream>
 
-#include "config/config.h"
-#include "config/xml-config-loader.h"
-#include "gesture-controller/gesture-controller.h"
-#include "gesture-gatherer/libinput-gesture-gatherer.h"
-
-int main(/* int, char ** */) {
-  std::cout << "Starting Touchégg..." << std::endl;
-
-  Config config;
-  XmlConfigLoader loader(&config);
-  loader.load();
-
-  GestureController gestureController{};
-
-  LibinputGestureGatherer gg(config, gestureController);
-  gg.run();
+void GestureController::onGestureBegin(
+    std::unique_ptr<Gesture> /*gesture*/) const {
+  // TODO(jose)
+  std::cout << "onGestureBegin" << std::endl;
 }
+
+void GestureController::onGestureUpdate() {}
+
+void GestureController::onGestureEnd() {}

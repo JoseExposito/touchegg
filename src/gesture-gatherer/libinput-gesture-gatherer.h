@@ -15,29 +15,28 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GESTURES_GESTURE_GATHERER_H_
-#define GESTURES_GESTURE_GATHERER_H_
+#ifndef GESTURE_GATHERER_LIBINPUT_GESTURE_GATHERER_H_
+#define GESTURE_GATHERER_LIBINPUT_GESTURE_GATHERER_H_
 
 #include <libinput.h>
 #include <libudev.h>
-class Config;
 
-class GestureGatherer {
+#include "gesture-gatherer/gesture-gatherer.h"
+class Config;
+class GestureControllerDelegate;
+
+class LibinputGestureGatherer : public GestureGatherer {
  public:
-  explicit GestureGatherer(const Config &config);
-  ~GestureGatherer();
+  LibinputGestureGatherer(const Config &config,
+                          const GestureControllerDelegate &gestureController);
+  ~LibinputGestureGatherer();
 
   /**
    * Run libinput's event loop.
    */
-  void run();
+  void run() override;
 
  private:
-  /**
-   * Object to access the configuration.
-   */
-  const Config &config;
-
   /**
    * udev context.
    */
@@ -49,13 +48,19 @@ class GestureGatherer {
   struct libinput *libinputContext = nullptr;
 
   /**
+   * Handles the supported libinput events.
+   */
+  void handleEvent(struct libinput_event *event);
+
+  /**
    * libinput structure with pointers to the open/close callbacks.
    */
   struct libinput_interface libinputInterface {
-    GestureGatherer::openRestricted, GestureGatherer::closeRestricted
+    LibinputGestureGatherer::openRestricted,
+        LibinputGestureGatherer::closeRestricted
   };
   static int openRestricted(const char *path, int flags, void *userData);
   static void closeRestricted(int fd, void *userData);
 };
 
-#endif  // GESTURES_GESTURE_GATHERER_H_
+#endif  // GESTURE_GATHERER_LIBINPUT_GESTURE_GATHERER_H_

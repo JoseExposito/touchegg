@@ -15,22 +15,33 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
+#ifndef GESTURE_LIBINPUT_GESTURE_H_
+#define GESTURE_LIBINPUT_GESTURE_H_
 
-#include "config/config.h"
-#include "config/xml-config-loader.h"
-#include "gesture-controller/gesture-controller.h"
-#include "gesture-gatherer/libinput-gesture-gatherer.h"
+#include <libinput.h>
 
-int main(/* int, char ** */) {
-  std::cout << "Starting Touchégg..." << std::endl;
+#include "gesture/gesture-type.h"
+#include "gesture/gesture.h"
 
-  Config config;
-  XmlConfigLoader loader(&config);
-  loader.load();
+/**
+ * Gestures implementations change depending on the driver/backend. This is the
+ * basic interface of a gesture.
+ */
+class LibinputGesture : public Gesture {
+ public:
+  // LibinputGesture(struct libinput_event *event);
+  // ~LibinputGesture();
+  // GestureType type() override;
 
-  GestureController gestureController{};
+  LibinputGesture(struct libinput_event *event)
+      : event(event), gestureEvent(libinput_event_get_gesture_event(event)) {}
+  ~LibinputGesture(){};
 
-  LibinputGestureGatherer gg(config, gestureController);
-  gg.run();
-}
+  GestureType type() override{};
+
+ private:
+  struct libinput_event *event;
+  struct libinput_event_gesture *gestureEvent;
+};
+
+#endif  // GESTURE_LIBINPUT_GESTURE_H_

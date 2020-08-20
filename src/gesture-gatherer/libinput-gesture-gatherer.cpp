@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gestures/gesture-gatherer.h"
+#include "gesture-gatherer/libinput-gesture-gatherer.h"
 
 #include <fcntl.h>
 #include <libinput.h>
@@ -28,10 +28,17 @@
 #include <array>
 #include <exception>
 #include <iostream>
+#include <memory>
+#include <utility>
 
 #include "config/config.h"
+#include "gesture-controller/gesture-controller-delegate.h"
+#include "gesture/gesture.h"
+#include "gesture/libinput-gesture.h"
 
-GestureGatherer::GestureGatherer(const Config &config) : config(config) {
+LibinputGestureGatherer::LibinputGestureGatherer(
+    const Config &config, const GestureControllerDelegate &gestureController)
+    : GestureGatherer(config, gestureController) {
   this->udevContext = udev_new();
   if (this->udevContext == nullptr) {
     throw std::runtime_error{"Error initialising Touchégg: udev"};
@@ -49,7 +56,7 @@ GestureGatherer::GestureGatherer(const Config &config) : config(config) {
   }
 }
 
-GestureGatherer::~GestureGatherer() {
+LibinputGestureGatherer::~LibinputGestureGatherer() {
   if (this->libinputContext != nullptr) {
     libinput_unref(this->libinputContext);
   }
@@ -59,7 +66,7 @@ GestureGatherer::~GestureGatherer() {
   }
 }
 
-void GestureGatherer::run() {
+void LibinputGestureGatherer::run() {
   int fd = libinput_get_fd(this->libinputContext);
   if (fd == -1) {
     throw std::runtime_error{"Error initialising Touchégg: libinput_get_fd"};
@@ -77,8 +84,7 @@ void GestureGatherer::run() {
       libinput_dispatch(this->libinputContext);
       struct libinput_event *event = libinput_get_event(this->libinputContext);
       if (event != nullptr) {
-        // std::cout << libinput_event_get_type(event) << std::endl;
-        libinput_event_destroy(event);
+        this->handleEvent(event);
       } else {
         hasEvents = false;
       }
@@ -86,8 +92,31 @@ void GestureGatherer::run() {
   }
 }
 
-int GestureGatherer::openRestricted(const char *path, int flags,
-                                    void * /*userData*/) {
+void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
+  libinput_event_type eventType = libinput_event_get_type(event);
+  switch (eventType) {
+    case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN: {
+      // TODO(jose) Use a factory to build the Gesture?
+      auto gesture = std::make_unique<LibinputGesture>(event);
+      // this->gestureController.onGestureBegin(std::move(gesture));
+      std::cout << (gesture->type() == GestureType::SWIPE) << std::endl;
+      /// this->gestureController.onGestureBegin(gesture);
+      break;
+    }
+
+      // TODO(jose) Add more gesture
+      // case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
+      // case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+      // case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
+      // case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
+      // case LIBINPUT_EVENT_GESTURE_PINCH_END:
+    default:
+      break;
+  };
+}
+
+int LibinputGestureGatherer::openRestricted(const char *path, int flags,
+                                            void * /*userData*/) {
   int fd = open(path, flags);  // NOLINT
   if (fd < 0) {
     throw std::runtime_error{
@@ -99,6 +128,6 @@ int GestureGatherer::openRestricted(const char *path, int flags,
   return fd;
 }
 
-void GestureGatherer::closeRestricted(int fd, void * /*userData*/) {
+void LibinputGestureGatherer::closeRestricted(int fd, void * /*userData*/) {
   close(fd);
 }

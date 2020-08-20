@@ -30,20 +30,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_SOURCE_DIR}/third-party
 )
-
-set(
-  SOURCE_FILES
-  src/main.cpp
-  src/config/config.h
-  src/config/config.cpp
-  src/config/xml-config-loader.h
-  src/config/xml-config-loader.cpp
-  src/gestures/gesture-gatherer.h
-  src/gestures/gesture-gatherer.cpp
-  src/utils/filesystem.h
-  src/utils/split.h
-  src/utils/split.cpp
-)
+file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 
 add_executable(touchegg ${SOURCE_FILES} $<TARGET_OBJECTS:pugixml>)
 target_include_directories(touchegg PUBLIC ${LIBUDEV_INCLUDE_DIRS} ${LIBINPUT_INCLUDE_DIRS})

@@ -15,22 +15,13 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
+#ifndef GESTURE_GESTURE_TYPE_H_
+#define GESTURE_GESTURE_TYPE_H_
 
-#include "config/config.h"
-#include "config/xml-config-loader.h"
-#include "gesture-controller/gesture-controller.h"
-#include "gesture-gatherer/libinput-gesture-gatherer.h"
+enum class GestureType {
+  SWIPE,
+  PINCH,
+  NOT_SUPPORTED,
+};
 
-int main(/* int, char ** */) {
-  std::cout << "Starting Touchégg..." << std::endl;
-
-  Config config;
-  XmlConfigLoader loader(&config);
-  loader.load();
-
-  GestureController gestureController{};
-
-  LibinputGestureGatherer gg(config, gestureController);
-  gg.run();
-}
+#endif  // GESTURE_GESTURE_TYPE_H_

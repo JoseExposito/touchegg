@@ -18,6 +18,8 @@
 #ifndef GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_
 #define GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_
 
+#include <memory>
+
 #include "gesture-controller/gesture-controller-delegate.h"
 
 class GestureController : public GestureControllerDelegate {
@@ -26,7 +28,6 @@ class GestureController : public GestureControllerDelegate {
   virtual ~GestureController() = default;
 
   void onGestureBegin(std::unique_ptr<Gesture> gesture) const override;
-  void onGestureBegin();   // override;
   void onGestureUpdate();  // override;
   void onGestureEnd();     // override;
 };

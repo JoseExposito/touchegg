@@ -112,7 +112,7 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
       // case LIBINPUT_EVENT_GESTURE_PINCH_END:
     default:
       break;
-  };
+  }
 }
 
 int LibinputGestureGatherer::openRestricted(const char *path, int flags,

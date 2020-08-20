@@ -24,20 +24,13 @@
 #include "gesture/gesture.h"
 
 /**
- * Gestures implementations change depending on the driver/backend. This is the
- * basic interface of a gesture.
+ * Libinput backend Gesture implementation.
  */
 class LibinputGesture : public Gesture {
  public:
-  // LibinputGesture(struct libinput_event *event);
-  // ~LibinputGesture();
-  // GestureType type() override;
-
-  LibinputGesture(struct libinput_event *event)
-      : event(event), gestureEvent(libinput_event_get_gesture_event(event)) {}
-  ~LibinputGesture(){};
-
-  GestureType type() override{};
+  explicit LibinputGesture(struct libinput_event *event);
+  ~LibinputGesture();
+  GestureType type() override;
 
  private:
   struct libinput_event *event;

@@ -19,28 +19,27 @@
 
 #include <iostream>
 
-// LibinputGesture::LibinputGesture(struct libinput_event *event)
-//     : event(event),
-//       gestureEvent(libinput_event_get_gesture_event(event)) {}
+LibinputGesture::LibinputGesture(struct libinput_event *event)
+    : event(event), gestureEvent(libinput_event_get_gesture_event(event)) {}
 
-// LibinputGesture::~LibinputGesture() { libinput_event_destroy(this->event); }
+LibinputGesture::~LibinputGesture() { libinput_event_destroy(this->event); }
 
-// GestureType LibinputGesture::type() {
-//   libinput_event_type eventType = libinput_event_get_type(this->event);
-//   switch (eventType) {
-//     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
-//     case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
-//     case LIBINPUT_EVENT_GESTURE_SWIPE_END:
-//       return GestureType::SWIPE;
+GestureType LibinputGesture::type() {
+  libinput_event_type eventType = libinput_event_get_type(this->event);
+  switch (eventType) {
+    case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
+    case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
+    case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+      return GestureType::SWIPE;
 
-//     case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
-//     case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
-//     case LIBINPUT_EVENT_GESTURE_PINCH_END:
-//       return GestureType::PINCH;
+    case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
+    case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
+    case LIBINPUT_EVENT_GESTURE_PINCH_END:
+      return GestureType::PINCH;
 
-//     default:
-//       std::cout << "Error: LibinputGesture type " << eventType
-//                 << " is not supported" << std::endl;
-//       return GestureType::NOT_SUPPORTED;
-//   };
-// }
+    default:
+      std::cout << "Error: LibinputGesture type " << eventType
+                << " is not supported" << std::endl;
+      return GestureType::NOT_SUPPORTED;
+  }
+}

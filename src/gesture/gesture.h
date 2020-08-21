@@ -18,6 +18,7 @@
 #ifndef GESTURE_GESTURE_H_
 #define GESTURE_GESTURE_H_
 
+#include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
 /**
@@ -35,19 +36,40 @@ class Gesture {
   virtual GestureType type() const = 0;
 
   /**
+   * @returns The gesture direction.
+   * @see GestureDirection
+   */
+  virtual GestureDirection direction() const = 0;
+
+  /**
    * @returns The number of fingers used to perform the gesture.
    */
   virtual int fingers() const = 0;
 
   /**
-   * @returns Gesture change in the X since the its last update.
+   * @returns Gesture change in the X since its last update.
    */
   virtual double deltaX() const = 0;
 
   /**
-   * @returns Gesture change in the X since the its last update.
+   * @returns Gesture change in the Y since its last update.
    */
   virtual double deltaY() const = 0;
+
+  /**
+   * @returns If the gesture type is GestureType::PINCH, returns the angle
+   * covered by a gesture since its last update, in degrees, clockwise.
+   * For example: If the fingers are on the 12 and 6 location of a clock face
+   * plate and they move to the 1 resp. 7 location in a single event then the
+   * angle delta is 30 degrees.
+   */
+  virtual double angleDelta() const = 0;
+
+  /**
+   * @returns If the gesture type is GestureType::PINCH, return the change in
+   * the radius of the gesture since last update. Otherwise return 0.
+   */
+  virtual double radiusDelta() const = 0;
 };
 
 #endif  // GESTURE_GESTURE_H_

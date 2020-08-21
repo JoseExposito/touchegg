@@ -20,6 +20,7 @@
 
 #include <libinput.h>
 
+#include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 #include "gesture/gesture.h"
 
@@ -29,11 +30,18 @@
  */
 class LibinputGesture : public Gesture {
  public:
+  /**
+   * Default contructor, takes the libinput raw event.
+   * Memory cleanup is handled by this class.
+   * @param Libinput general event.
+   */
   explicit LibinputGesture(struct libinput_event *event);
 
   ~LibinputGesture();
 
   GestureType type() const override;
+
+  GestureDirection direction() const override;
 
   int fingers() const override;
 
@@ -41,9 +49,33 @@ class LibinputGesture : public Gesture {
 
   double deltaY() const override;
 
+  double angleDelta() const override;
+
+  double radiusDelta() const override;
+
+  /**
+   * The direction is not implicit in the libinput_event_gesture, instead
+   * LibinputGestureGatherer is in charge of set it once a certain threshold is
+   * crossed.
+   */
+  void setDirection(GestureDirection direction);
+
  private:
+  /**
+   * Pointer to the libinput event with the gesture information.
+   */
   struct libinput_event *event;
+
+  /**
+   * Pointer to the gesture libinput event, obtained from this->event.
+   */
   struct libinput_event_gesture *gestureEvent;
+
+  /**
+   * Gesture direction. Defaults to GestureDirection::UNKNOWN unless it is set
+   * from the outside.
+   */
+  GestureDirection gestureDirection;
 };
 
 #endif  // GESTURE_LIBINPUT_GESTURE_H_

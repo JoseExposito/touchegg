@@ -19,7 +19,8 @@
 #define GESTURE_GESTURE_DIRECTION_H_
 
 enum class GestureDirection {
-  ALL,
+  // A gesture may have an unknow direction until we have more information
+  UNKNOWN,
 
   // GestureType::SWIPE
   UP,
@@ -29,7 +30,10 @@ enum class GestureDirection {
 
   // GestureType::PINCH
   IN,
-  OUT
+  OUT,
+
+  // Matches any direction
+  ALL
 };
 
 #endif  // GESTURE_GESTURE_DIRECTION_H_

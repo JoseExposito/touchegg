@@ -20,7 +20,9 @@
 #include <iostream>
 
 LibinputGesture::LibinputGesture(struct libinput_event *event)
-    : event(event), gestureEvent(libinput_event_get_gesture_event(event)) {}
+    : event(event),
+      gestureEvent(libinput_event_get_gesture_event(event)),
+      gestureDirection(GestureDirection::UNKNOWN) {}
 
 LibinputGesture::~LibinputGesture() { libinput_event_destroy(this->event); }
 
@@ -44,6 +46,10 @@ GestureType LibinputGesture::type() const {
   }
 }
 
+GestureDirection LibinputGesture::direction() const {
+  return this->gestureDirection;
+}
+
 int LibinputGesture::fingers() const {
   return libinput_event_gesture_get_finger_count(this->gestureEvent);
 }
@@ -54,4 +60,24 @@ double LibinputGesture::deltaX() const {
 
 double LibinputGesture::deltaY() const {
   return libinput_event_gesture_get_dy(this->gestureEvent);
+}
+
+double LibinputGesture::angleDelta() const {
+  if (this->type() != GestureType::PINCH) {
+    return 0;
+  }
+
+  return libinput_event_gesture_get_angle_delta(this->gestureEvent);
+}
+
+double LibinputGesture::radiusDelta() const {
+  if (this->type() != GestureType::PINCH) {
+    return 0;
+  }
+
+  return libinput_event_gesture_get_scale(this->gestureEvent);
+}
+
+void LibinputGesture::setDirection(GestureDirection direction) {
+  this->gestureDirection = direction;
 }

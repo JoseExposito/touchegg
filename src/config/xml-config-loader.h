@@ -18,6 +18,11 @@
 #ifndef CONFIG_XML_CONFIG_LOADER_H_
 #define CONFIG_XML_CONFIG_LOADER_H_
 
+#include <string>
+
+#include "actions/action-type.h"
+#include "gesture/gesture-direction.h"
+#include "gesture/gesture-type.h"
 #include "utils/filesystem.h"
 class Config;
 namespace pugi {
@@ -57,6 +62,12 @@ class XmlConfigLoader {
   void parseXml(const std::filesystem::path &configPath);
 
   /**
+   * Parse the global settings.
+   * @param rootNode XML root node, usually named "touchégg".
+   */
+  void parseGlobalSettings(const pugi::xml_node &rootNode);
+
+  /**
    * Parse the "application" nodes in the XML.
    * @param rootNode XML root node, usually named "touchégg".
    */
@@ -67,6 +78,21 @@ class XmlConfigLoader {
    * @param configPath Path to the configuration file.
    */
   void watchFile(const std::filesystem::path &configPath);
+
+  /**
+   * Transform a gesture type as found in config to the enum type.
+   */
+  static GestureType getGestureType(const std::string &str);
+
+  /**
+   * Transform a gesture direction as found in config to the enum type.
+   */
+  static GestureDirection getGestureDirection(const std::string &str);
+
+  /**
+   * Transform an action type as found in config to the enum type.
+   */
+  static ActionType getActionType(const std::string &str);
 
   /**
    * Check that the required configuration files are in place.

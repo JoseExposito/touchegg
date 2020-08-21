@@ -20,19 +20,53 @@
 #include <string>
 #include <unordered_map>
 
+Config::Config() { this->loadDefaultGlobalSettings(); }
+
+void Config::clear() {
+  this->globalSettings.clear();
+  this->config.clear();
+  this->loadDefaultGlobalSettings();
+}
+
+void Config::saveGlobalSetting(const std::string &name,
+                               const std::string &value) {
+  this->globalSettings[name] = value;
+}
+
+std::string Config::getGlobalSetting(const std::string &name) const {
+  return this->globalSettings.at(name);
+}
+
 void Config::saveGestureConfig(
-    const std::string &application, const std::string &gesture,
-    const std::string &numFingers, const std::string &direction,
-    const std::string &action,
-    std::unordered_map<std::string, std::string> actionSettings) {
-  // TODO(jose) Store NO_DIRECTION in a enum
-  const std::string directionKey =
-      direction.empty() ? "NO_DIRECTION" : direction;
+    const std::string &application, GestureType gestureType,
+    const std::string &numFingers, GestureDirection gestureDirection,
+    ActionType actionType,
+    const std::unordered_map<std::string, std::string> &actionSettings) {
+  std::string key = Config::getConfigKey(application, gestureType, numFingers,
+                                         gestureDirection);
+  this->config[key] = std::make_pair(actionType, actionSettings);
+}
 
-  const std::string key =
-      application + "_" + gesture + "_" + numFingers + "_" + directionKey;
+std::pair<ActionType, std::unordered_map<std::string, std::string>>
+Config::getGestureConfig(const std::string &application,
+                         GestureType gestureType, const std::string &numFingers,
+                         GestureDirection gestureDirection) {
+  std::string key = Config::getConfigKey(application, gestureType, numFingers,
+                                         gestureDirection);
+  return this->config.at(key);
+}
 
-  actionSettings["action"] = action;
+void Config::loadDefaultGlobalSettings() {
+  this->globalSettings["composed_gestures_time"] = "0";
+  this->globalSettings["threshold"] = "0";
+}
 
-  this->config[key] = actionSettings;
+std::string Config::getConfigKey(const std::string &application,
+                                 GestureType gestureType,
+                                 const std::string &numFingers,
+                                 GestureDirection gestureDirection) {
+  auto gestureTypeInt = static_cast<int>(gestureType);
+  auto gestureDirectionInt = static_cast<int>(gestureDirection);
+  return application + "_" + std::to_string(gestureTypeInt) + "_" + numFingers +
+         "_" + std::to_string(gestureDirectionInt);
 }

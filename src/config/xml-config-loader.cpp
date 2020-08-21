@@ -68,7 +68,17 @@ void XmlConfigLoader::parseXml(const std::filesystem::path &configPath) {
   }
 
   pugi::xml_node rootNode = doc.document_element();
+  this->parseGlobalSettings(rootNode);
   this->parseApplicationXmlNodes(rootNode);
+}
+
+void XmlConfigLoader::parseGlobalSettings(const pugi::xml_node &rootNode) {
+  pugi::xml_node settingsNode = rootNode.child("settings");
+  for (pugi::xml_node propertyNode : settingsNode.children("property")) {
+    const std::string property = propertyNode.attribute("name").value();
+    const std::string value = propertyNode.child_value();
+    this->config->saveGlobalSetting(property, value);
+  }
 }
 
 void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
@@ -93,8 +103,10 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
 
       // Save the gesture config for each application
       for (const std::string &application : applications) {
-        this->config->saveGestureConfig(application, gestureType, fingers,
-                                        direction, actionType, actionSettings);
+        this->config->saveGestureConfig(
+            application, XmlConfigLoader::getGestureType(gestureType), fingers,
+            XmlConfigLoader::getGestureDirection(direction),
+            XmlConfigLoader::getActionType(actionType), actionSettings);
       }
     }
   }
@@ -133,6 +145,48 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     }
   }};
   watchThread.detach();
+}
+
+GestureType XmlConfigLoader::getGestureType(const std::string &str) {
+  if (str == "SWIPE" || str == "DRAG") {
+    return GestureType::SWIPE;
+  }
+  if (str == "PINCH") {
+    return GestureType::PINCH;
+  }
+  return GestureType::NOT_SUPPORTED;
+}
+
+GestureDirection XmlConfigLoader::getGestureDirection(const std::string &str) {
+  if (str == "UP") {
+    return GestureDirection::UP;
+  }
+  if (str == "DOWN") {
+    return GestureDirection::DOWN;
+  }
+  if (str == "LEFT") {
+    return GestureDirection::LEFT;
+  }
+  if (str == "RIGHT") {
+    return GestureDirection::RIGHT;
+  }
+  if (str == "IN") {
+    return GestureDirection::IN;
+  }
+  if (str == "OUT") {
+    return GestureDirection::OUT;
+  }
+  if (str == "ALL") {
+    return GestureDirection::ALL;
+  }
+  return GestureDirection::UNKNOWN;
+}
+
+ActionType XmlConfigLoader::getActionType(const std::string &str) {
+  if (str == "MAXIMIZE_RESTORE_WINDOW") {
+    return ActionType::MAXIMIZE_RESTORE_WINDOW;
+  }
+  return ActionType::NO_ACTION;
 }
 
 void XmlConfigLoader::copyConfingIfNotPresent() {

@@ -20,6 +20,11 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
+
+#include "actions/action-type.h"
+#include "gesture/gesture-direction.h"
+#include "gesture/gesture-type.h"
 
 /**
  * Class to save and access the configuration.
@@ -29,28 +34,72 @@
  */
 class Config {
  public:
-  /**
-   * Save the settings associated to a gesture.
-   */
-  void saveGestureConfig(
-      const std::string &application, const std::string &gesture,
-      const std::string &numFingers, const std::string &direction,
-      const std::string &action,
-      std::unordered_map<std::string, std::string> actionSettings);
+  Config();
 
   /**
    * Remove all saved settings.
    */
-  inline void clear() { this->config.clear(); }
+  void clear();
+
+  /**
+   * Save a global setting.
+   * @param name Setting name, for example "threshold".
+   * @param value Setting value, for example "1000".
+   */
+  void saveGlobalSetting(const std::string &name, const std::string &value);
+
+  /**
+   * Return a global settings value.
+   * @param Setting name, for example "threshold".
+   * @returns Setting value, for example "1000".
+   */
+  std::string getGlobalSetting(const std::string &name) const;
+
+  /**
+   * Save the settings associated to a gesture.
+   */
+  void saveGestureConfig(
+      const std::string &application, GestureType gestureType,
+      const std::string &numFingers, GestureDirection gestureDirection,
+      ActionType actionType,
+      const std::unordered_map<std::string, std::string> &actionSettings);
+
+  std::pair<ActionType, std::unordered_map<std::string, std::string>>
+  getGestureConfig(const std::string &application, GestureType gestureType,
+                   const std::string &numFingers,
+                   GestureDirection gestureDirection);
 
  private:
   /**
-   * Configuration is saved here to ensure 0(1) access.
-   * Key: [Application]_[GestureType]_[NumFingers]_[Direction].
-   * Value: Action and settings associated with the gesture.
+   * Global settings are stored here to ensure 0(1) access.
+   * Key: Global settings name.
+   * Value: Global setting value.
    */
-  std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
+  std::unordered_map<std::string, std::string> globalSettings;
+
+  /**
+   * Configuration is saved here to ensure 0(1) access.
+   * Key: As returned from Config::getConfigKey.
+   * Value: Action type and settings associated with it.
+   */
+  std::unordered_map<
+      std::string,
+      std::pair<ActionType, std::unordered_map<std::string, std::string>>>
       config;
+
+  /**
+   * Load the default global settings.
+   */
+  void loadDefaultGlobalSettings();
+
+  /**
+   * Return a key that can be use to get/set a gesture configuration value
+   * from/in "config".
+   */
+  static std::string getConfigKey(const std::string &application,
+                                  GestureType gestureType,
+                                  const std::string &numFingers,
+                                  GestureDirection gestureDirection);
 };
 
-#endif /* CONFIG_CONFIG_H_ */
+#endif  // CONFIG_CONFIG_H_

@@ -128,9 +128,6 @@ void LibinputGestureGatherer::handleSwipeUpdate(
     this->swipeState.deltaY += gesture->deltaY();
     const double threshold =
         std::stod(this->config.getGlobalSetting("threshold"));
-    std::cout << "Delta X: " << this->swipeState.deltaX << std::endl;
-    std::cout << "Delta Y: " << this->swipeState.deltaY << std::endl;
-    std::cout << "Threshold: " << threshold << std::endl;
 
     if (std::abs(this->swipeState.deltaX) > threshold ||
         std::abs(this->swipeState.deltaY) > threshold) {
@@ -150,16 +147,17 @@ void LibinputGestureGatherer::handleSwipeUpdate(
 
       gesture->setDirection(this->swipeState.direction);
       this->gestureController->onGestureBegin(std::move(gesture));
-    } else {
-      gesture->setDirection(this->swipeState.direction);
-      this->gestureController->onGestureUpdate(std::move(gesture));
     }
+  } else {
+    gesture->setDirection(this->swipeState.direction);
+    this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
 
 void LibinputGestureGatherer::handleSwipeEnd(
     std::unique_ptr<LibinputGesture> gesture) {
   if (this->swipeState.started) {
+    gesture->setDirection(this->swipeState.direction);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

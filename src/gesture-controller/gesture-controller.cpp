@@ -25,8 +25,29 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   std::cout << "Fingers: " << gesture->fingers() << std::endl;
   std::cout << "Delta X: " << gesture->deltaX() << std::endl;
   std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
+  if (gesture->direction() == GestureDirection::RIGHT) {
+    std::cout << "RIGHT" << std::endl;
+  }
 }
 
-void GestureController::onGestureUpdate(std::unique_ptr<Gesture> /*gesture*/) {}
+void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
+  // TODO(jose)
+  std::cout << "onGestureUpdate" << std::endl;
+  std::cout << "Fingers: " << gesture->fingers() << std::endl;
+  std::cout << "Delta X: " << gesture->deltaX() << std::endl;
+  std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
+  if (gesture->direction() == GestureDirection::RIGHT) {
+    std::cout << "RIGHT" << std::endl;
+  }
+}
 
-void GestureController::onGestureEnd(std::unique_ptr<Gesture> /*gesture*/) {}
+void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
+  // TODO(jose)
+  std::cout << "onGestureEnd" << std::endl;
+  std::cout << "Fingers: " << gesture->fingers() << std::endl;
+  std::cout << "Delta X: " << gesture->deltaX() << std::endl;
+  std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
+  if (gesture->direction() == GestureDirection::RIGHT) {
+    std::cout << "RIGHT" << std::endl;
+  }
+}

@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <array>
+#include <cmath>
 #include <exception>
 #include <iostream>
 #include <memory>
@@ -33,6 +34,7 @@
 
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"
+#include "gesture/gesture-direction.h"
 #include "gesture/gesture.h"
 #include "gesture/libinput-gesture.h"
 
@@ -95,22 +97,73 @@ void LibinputGestureGatherer::run() {
 void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
   libinput_event_type eventType = libinput_event_get_type(event);
   switch (eventType) {
-    case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN: {
-      // TODO(jose) Use a factory to build the Gesture?
-      auto gesture = std::make_unique<LibinputGesture>(event);
-      this->gestureController->onGestureBegin(std::move(gesture));
+    case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
+      this->handleSwipeBegin(std::make_unique<LibinputGesture>(event));
       break;
-    }
+    case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
+      this->handleSwipeUpdate(std::make_unique<LibinputGesture>(event));
+      break;
+    case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+      this->handleSwipeEnd(std::make_unique<LibinputGesture>(event));
+      break;
 
-      // TODO(jose) Add more gesture
-      // case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
-      // case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+      // TODO(jose) Add more gestures
       // case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
       // case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
       // case LIBINPUT_EVENT_GESTURE_PINCH_END:
     default:
       break;
   }
+}
+
+void LibinputGestureGatherer::handleSwipeBegin(
+    std::unique_ptr<LibinputGesture> /*gesture*/) {
+  this->swipeState.reset();
+}
+
+void LibinputGestureGatherer::handleSwipeUpdate(
+    std::unique_ptr<LibinputGesture> gesture) {
+  if (!this->swipeState.started) {
+    this->swipeState.deltaX += gesture->deltaX();
+    this->swipeState.deltaY += gesture->deltaY();
+    const double threshold =
+        std::stod(this->config.getGlobalSetting("threshold"));
+    std::cout << "Delta X: " << this->swipeState.deltaX << std::endl;
+    std::cout << "Delta Y: " << this->swipeState.deltaY << std::endl;
+    std::cout << "Threshold: " << threshold << std::endl;
+
+    if (std::abs(this->swipeState.deltaX) > threshold ||
+        std::abs(this->swipeState.deltaY) > threshold) {
+      this->swipeState.started = true;
+
+      // Calculate the direction
+      if (std::abs(this->swipeState.deltaX) >
+          std::abs(this->swipeState.deltaY)) {
+        this->swipeState.direction = (this->swipeState.deltaX > 0)
+                                         ? GestureDirection::RIGHT
+                                         : GestureDirection::LEFT;
+      } else {
+        this->swipeState.direction = (this->swipeState.deltaY > 0)
+                                         ? GestureDirection::UP
+                                         : GestureDirection::DOWN;
+      }
+
+      gesture->setDirection(this->swipeState.direction);
+      this->gestureController->onGestureBegin(std::move(gesture));
+    } else {
+      gesture->setDirection(this->swipeState.direction);
+      this->gestureController->onGestureUpdate(std::move(gesture));
+    }
+  }
+}
+
+void LibinputGestureGatherer::handleSwipeEnd(
+    std::unique_ptr<LibinputGesture> gesture) {
+  if (this->swipeState.started) {
+    this->gestureController->onGestureEnd(std::move(gesture));
+  }
+
+  this->swipeState.reset();
 }
 
 int LibinputGestureGatherer::openRestricted(const char *path, int flags,

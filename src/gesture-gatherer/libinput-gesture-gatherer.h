@@ -21,9 +21,13 @@
 #include <libinput.h>
 #include <libudev.h>
 
+#include <memory>
+
 #include "gesture-gatherer/gesture-gatherer.h"
+#include "gesture-gatherer/libinput-swipe-state.h"
 class Config;
 class GestureControllerDelegate;
+class LibinputGesture;
 
 class LibinputGestureGatherer : public GestureGatherer {
  public:
@@ -48,9 +52,39 @@ class LibinputGestureGatherer : public GestureGatherer {
   struct libinput *libinputContext = nullptr;
 
   /**
+   * Required data to handle swipes.
+   */
+  LibinputSwipeState swipeState;
+
+  /**
    * Handles the supported libinput events.
    */
   void handleEvent(struct libinput_event *event);
+
+  /**
+   * When the user starts a swipe, we still don't know the direction, so here we
+   * just reset this->swipeState.
+   * @param gesture Libinput specialized gesture.
+   */
+  void handleSwipeBegin(std::unique_ptr<LibinputGesture> gesture);
+
+  /**
+   * On every update we increase or decrease "this->swipeState.deltaX" and
+   * "this->swipeState.deltaY". Once any of them passes the configured threshold
+   * we send a begin event to the GestureControllerDelegate. Once the threshold
+   * is passed we send update events to the GestureControllerDelegate until the
+   * gesture ends.
+   * @param gesture Libinput specialized gesture.
+   */
+  void handleSwipeUpdate(std::unique_ptr<LibinputGesture> gesture);
+
+  /**
+   * Send a end event to the GestureControllerDelegate if a gesture was
+   * detected.
+   * If the gesture didn't pass the threshold we should not notify it.
+   * @param gesture Libinput specialized gesture.
+   */
+  void handleSwipeEnd(std::unique_ptr<LibinputGesture> gesture);
 
   /**
    * libinput structure with pointers to the open/close callbacks.

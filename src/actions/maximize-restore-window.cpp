@@ -17,4 +17,4 @@
  */
 #include "actions/maximize-restore-window.h"
 
-void MaximizeRestoreWindow::onGestureBegin(const Gesture &gesture) {}
+void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {}

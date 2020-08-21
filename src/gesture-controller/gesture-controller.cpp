@@ -27,6 +27,6 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
 }
 
-void GestureController::onGestureUpdate() {}
+void GestureController::onGestureUpdate(std::unique_ptr<Gesture> /*gesture*/) {}
 
-void GestureController::onGestureEnd() {}
+void GestureController::onGestureEnd(std::unique_ptr<Gesture> /*gesture*/) {}

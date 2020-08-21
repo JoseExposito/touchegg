@@ -27,8 +27,8 @@ class GestureControllerDelegate {
   virtual ~GestureControllerDelegate() = default;
 
   virtual void onGestureBegin(std::unique_ptr<Gesture> gesture) = 0;
-  // virtual void onGestureUpdate() = 0;
-  // virtual void onGestureEnd() = 0;
+  virtual void onGestureUpdate(std::unique_ptr<Gesture> gesture) = 0;
+  virtual void onGestureEnd(std::unique_ptr<Gesture> gesture) = 0;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_DELEGATE_H_

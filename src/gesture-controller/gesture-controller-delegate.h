@@ -22,6 +22,12 @@
 
 #include "gesture/gesture.h"
 
+/**
+ * Instead of passing the GestureController to the GestureGatherer, this
+ * delegate interface is passed instead.
+ * This interface allows us to decouple the GestureController implementation
+ * from the GestureGatherer exposing the minimal interface of the last.
+ */
 class GestureControllerDelegate {
  public:
   virtual ~GestureControllerDelegate() = default;

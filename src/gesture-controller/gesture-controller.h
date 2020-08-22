@@ -20,16 +20,28 @@
 
 #include <memory>
 
+#include "actions/action.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 
+class Config;
+class Gesture;
+
+/**
+ * The GestureController is in charge of receiving events from the outside and
+ * dispatching actions according to the user configuration.
+ */
 class GestureController : public GestureControllerDelegate {
  public:
-  GestureController() = default;
+  explicit GestureController(const Config &config);
   virtual ~GestureController() = default;
 
   void onGestureBegin(std::unique_ptr<Gesture> gesture) override;
   void onGestureUpdate(std::unique_ptr<Gesture> gesture) override;
   void onGestureEnd(std::unique_ptr<Gesture> gesture) override;
+
+ private:
+  const Config &config;
+  std::unique_ptr<Action> action;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_

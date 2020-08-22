@@ -29,7 +29,7 @@ int main(/* int, char ** */) {
   XmlConfigLoader loader(&config);
   loader.load();
 
-  GestureController gestureController{};
+  GestureController gestureController(config);
 
   LibinputGestureGatherer gg(config, &gestureController);
   gg.run();

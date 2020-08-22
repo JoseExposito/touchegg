@@ -18,13 +18,19 @@
 #ifndef ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
 #define ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
 
+#include <string>
+#include <unordered_map>
+
 #include "actions/action.h"
 
 class MaximizeRestoreWindow : public Action {
  public:
+  explicit MaximizeRestoreWindow(
+      std::unordered_map<std::string, std::string> settings);
+
   void onGestureBegin(const Gesture &gesture) override;
-  // virtual void onGestureUpdate() = 0;
-  // virtual void onGestureEnd() = 0;
+  void onGestureUpdate(const Gesture &gesture) override;
+  void onGestureEnd(const Gesture &gesture) override;
 };
 
 #endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_

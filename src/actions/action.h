@@ -18,15 +18,23 @@
 #ifndef ACTIONS_ACTION_H_
 #define ACTIONS_ACTION_H_
 
+#include <string>
+#include <unordered_map>
+
 #include "gesture/gesture.h"
 
 class Action {
  public:
+  explicit Action(std::unordered_map<std::string, std::string> settings)
+      : settings(settings) {}
   virtual ~Action() = default;
 
   virtual void onGestureBegin(const Gesture &gesture) = 0;
-  // virtual void onGestureUpdate() = 0;
-  // virtual void onGestureEnd() = 0;
+  virtual void onGestureUpdate(const Gesture &gesture) = 0;
+  virtual void onGestureEnd(const Gesture &gesture) = 0;
+
+ protected:
+  std::unordered_map<std::string, std::string> settings;
 };
 
 #endif  // ACTIONS_ACTION_H_

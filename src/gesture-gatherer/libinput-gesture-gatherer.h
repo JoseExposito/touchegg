@@ -29,6 +29,9 @@ class Config;
 class GestureControllerDelegate;
 class LibinputGesture;
 
+/**
+ * Libinput backed GestureGatherer.
+ */
 class LibinputGestureGatherer : public GestureGatherer {
  public:
   LibinputGestureGatherer(const Config &config,

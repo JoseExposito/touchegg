@@ -141,8 +141,8 @@ void LibinputGestureGatherer::handleSwipeUpdate(
                                          : GestureDirection::LEFT;
       } else {
         this->swipeState.direction = (this->swipeState.deltaY > 0)
-                                         ? GestureDirection::UP
-                                         : GestureDirection::DOWN;
+                                         ? GestureDirection::DOWN
+                                         : GestureDirection::UP;
       }
 
       gesture->setDirection(this->swipeState.direction);

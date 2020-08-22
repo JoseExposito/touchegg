@@ -64,10 +64,19 @@ class Config {
       ActionType actionType,
       const std::unordered_map<std::string, std::string> &actionSettings);
 
+  /**
+   * @returns If there is an action configured for the gesture.
+   */
+  bool hasGestureConfig(const std::string &application, GestureType gestureType,
+                        int numFingers,
+                        GestureDirection gestureDirection) const;
+
+  /**
+   * @returns The action configured for the gesture.
+   */
   std::pair<ActionType, std::unordered_map<std::string, std::string>>
   getGestureConfig(const std::string &application, GestureType gestureType,
-                   const std::string &numFingers,
-                   GestureDirection gestureDirection);
+                   int numFingers, GestureDirection gestureDirection) const;
 
  private:
   /**

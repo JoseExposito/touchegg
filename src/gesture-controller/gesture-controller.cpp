@@ -28,13 +28,19 @@
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 #include "gesture/gesture.h"
+#include "window-system/window-system.h"
 
-GestureController::GestureController(const Config &config) : config(config) {}
+GestureController::GestureController(const Config &config,
+                                     const WindowSystem &windowSystem)
+    : config(config), windowSystem(windowSystem) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   std::cout << "onGestureBegin" << std::endl;
 
   // TODO(jose) Get the application name under the cursor
+  auto w = this->windowSystem.getWindowUnderCursor();
+  std::cout << this->windowSystem.getWindowClassName(*w) << std::endl;
+
   const std::string application = "All";
   const GestureType gestureType = gesture->type();
   int fingers = gesture->fingers();

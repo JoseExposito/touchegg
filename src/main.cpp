@@ -21,16 +21,24 @@
 #include "config/xml-config-loader.h"
 #include "gesture-controller/gesture-controller.h"
 #include "gesture-gatherer/libinput-gesture-gatherer.h"
+#include "window-system/window-system.h"
+#include "window-system/x11.h"
 
 int main(/* int, char ** */) {
   std::cout << "Starting Touchégg..." << std::endl;
 
+  // Load the configutation using the XML loader
   Config config;
   XmlConfigLoader loader(&config);
   loader.load();
 
-  GestureController gestureController(config);
+  // Use X11 as window system
+  X11 windowSystem;
 
-  LibinputGestureGatherer gg(config, &gestureController);
-  gg.run();
+  // Initialize the gesture controller
+  GestureController gestureController(config, windowSystem);
+
+  // Use libinput as gesture gatherer
+  LibinputGestureGatherer gestureGatherer(config, &gestureController);
+  gestureGatherer.run();
 }

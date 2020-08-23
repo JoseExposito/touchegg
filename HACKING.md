@@ -111,6 +111,14 @@ https://wayland.freedesktop.org/libinput/doc/latest/index.html
 
 https://wayland.freedesktop.org/libinput/doc/latest/api/
 
+Xlib and X11 standards are also heavily used to manipulate the user desktop and windows:
+
+Xlib: https://tronche.com/gui/x/xlib/
+
+ICCCM: https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html
+
+EWMH: https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
+
 # Contact the developer:
 
 If you want to report a bug or ask a question, you can do it in the official bug tracker:

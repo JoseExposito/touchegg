@@ -22,9 +22,9 @@
 
 #include "actions/action.h"
 #include "gesture-controller/gesture-controller-delegate.h"
-
 class Config;
 class Gesture;
+class WindowSystem;
 
 /**
  * The GestureController is in charge of receiving events from the outside and
@@ -32,7 +32,8 @@ class Gesture;
  */
 class GestureController : public GestureControllerDelegate {
  public:
-  explicit GestureController(const Config &config);
+  explicit GestureController(const Config &config,
+                             const WindowSystem &windowSystem);
   virtual ~GestureController() = default;
 
   void onGestureBegin(std::unique_ptr<Gesture> gesture) override;
@@ -41,6 +42,8 @@ class GestureController : public GestureControllerDelegate {
 
  private:
   const Config &config;
+  const WindowSystem &windowSystem;
+
   std::unique_ptr<Action> action;
 };
 

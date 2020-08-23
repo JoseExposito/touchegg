@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <pugixml.hpp>  // NOLINT
 #include <string>
 #include <thread>  // NOLINT
 #include <unordered_map>
@@ -33,7 +34,6 @@
 #include <vector>
 
 #include "config/config.h"
-#include "pugixml/pugixml.hpp"
 #include "utils/filesystem.h"
 #include "utils/split.h"
 

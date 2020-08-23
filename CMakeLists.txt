@@ -16,13 +16,28 @@ find_package(Libudev REQUIRED)
 find_package(Libinput REQUIRED)
 find_package(PugiXML REQUIRED)
 find_package(Cairo REQUIRED)
+find_package(X11 REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 
 add_executable(touchegg ${SOURCE_FILES})
-target_include_directories(touchegg PUBLIC ${LIBUDEV_INCLUDE_DIRS} ${LIBINPUT_INCLUDE_DIRS} ${PUGIXML_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS})
-target_link_libraries(touchegg stdc++fs Threads::Threads ${LIBUDEV_LIBRARIES} ${LIBINPUT_LIBRARIES} ${PUGIXML_LIBRARIES} ${CAIRO_LIBRARIES})
+target_include_directories(touchegg PUBLIC
+  ${LIBUDEV_INCLUDE_DIRS}
+  ${LIBINPUT_INCLUDE_DIRS}
+  ${PUGIXML_INCLUDE_DIRS}
+  ${CAIRO_INCLUDE_DIRS}
+  ${X11_INCLUDE_DIRS}
+)
+target_link_libraries(touchegg
+  stdc++fs # std::filesystem
+  Threads::Threads # std::thread
+  ${LIBUDEV_LIBRARIES}
+  ${LIBINPUT_LIBRARIES}
+  ${PUGIXML_LIBRARIES}
+  ${CAIRO_LIBRARIES}
+  ${X11_LIBRARIES}
+)
 
 
 # include(CTest)

@@ -48,7 +48,7 @@ class WindowSystem {
   /**
    * Returns the window class name.
    * The class name is not the title of the window, it is the unique name the
-   * application has. For example, Chrome's class name is "google-chrome".
+   * application has. For example, Chrome's class name is "Google-chrome".
    * Under X11 this name can be obtained with the "xprop" command.
    */
   virtual std::string getWindowClassName(const WindowT &window) const = 0;

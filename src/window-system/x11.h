@@ -23,6 +23,8 @@
 
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "window-system/window-system.h"
 
@@ -88,10 +90,13 @@ class X11 : public WindowSystem {
    *
    * $ xprop -root
    *
-   * TL;DR Get the _NET_CLIENT_LIST attribute and check all the parents of the
+   * TL;DR Get the _NET_CLIENT_LIST attribute and check all the children of the
    * window param to get the top-level window.
    */
   Window getTopLevelWindow(Window window) const;
+  std::vector<Window> getNetClientListWindows() const;
+  std::pair<bool, Window> findTopLevelWindowInChildren(
+      Window window, const std::vector<Window> &topLevelWindows) const;
 };
 
 #endif  // WINDOW_SYSTEM_X11_H_

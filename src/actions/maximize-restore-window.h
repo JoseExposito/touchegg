@@ -25,8 +25,9 @@
 
 class MaximizeRestoreWindow : public Action {
  public:
-  explicit MaximizeRestoreWindow(
-      std::unordered_map<std::string, std::string> settings);
+  using Action::Action;
+  // explicit MaximizeRestoreWindow(
+  //     std::unordered_map<std::string, std::string> settings);
 
   void onGestureBegin(const Gesture &gesture) override;
   void onGestureUpdate(const Gesture &gesture) override;

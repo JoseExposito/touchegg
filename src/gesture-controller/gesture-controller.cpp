@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 #include "actions/action-factory.h"
@@ -37,9 +38,11 @@ GestureController::GestureController(const Config &config,
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   std::cout << "onGestureBegin" << std::endl;
 
-  // TODO(jose) Get the application name under the cursor
-  auto w = this->windowSystem.getWindowUnderCursor();
-  std::cout << this->windowSystem.getWindowClassName(*w) << std::endl;
+  this->window = this->windowSystem.getWindowUnderCursor();
+
+  // TODO(jose) Check if there is a gesture configured for the window
+  std::string className = this->windowSystem.getWindowClassName(*this->window);
+  std::cout << className << std::endl;
 
   const std::string application = "All";
   const GestureType gestureType = gesture->type();
@@ -54,10 +57,11 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
     auto pair = this->config.getGestureConfig(application, gestureType, fingers,
                                               direction);
     ActionType actionType = pair.first;
-    auto actionSettings = pair.second;
+    std::unordered_map<std::string, std::string> actionSettings = pair.second;
 
     this->action =
-        ActionFactory::buildAction(actionType, std::move(actionSettings));
+        ActionFactory::buildAction(actionType, std::move(actionSettings),
+                                   this->windowSystem, *this->window);
 
     if (this->action != nullptr) {
       std::cout << "Starting action" << std::endl;
@@ -106,5 +110,6 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
     }
   }
 
+  this->action.reset();
   this->action.reset();
 }

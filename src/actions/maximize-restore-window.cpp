@@ -20,9 +20,9 @@
 #include <iostream>
 #include <utility>
 
-MaximizeRestoreWindow::MaximizeRestoreWindow(
-    std::unordered_map<std::string, std::string> settings)
-    : Action(std::move(settings)) {}
+// MaximizeRestoreWindow::MaximizeRestoreWindow(
+//     std::unordered_map<std::string, std::string> settings)
+//     : Action(std::move(settings)) {}
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
   std::cout << "### MaximizeRestoreWindow::onGestureBegin ###" << std::endl;
@@ -34,4 +34,5 @@ void MaximizeRestoreWindow::onGestureUpdate(const Gesture& /*gesture*/) {
 
 void MaximizeRestoreWindow::onGestureEnd(const Gesture& /*gesture*/) {
   std::cout << "### MaximizeRestoreWindow::onGestureEnd ###" << std::endl;
+  this->windowSystem.maximizeOrRestoreWindow(this->window);
 }

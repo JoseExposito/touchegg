@@ -44,7 +44,15 @@ class GestureController : public GestureControllerDelegate {
   const Config &config;
   const WindowSystem &windowSystem;
 
+  /**
+   * The action to perform.
+   */
   std::unique_ptr<Action> action;
+
+  /**
+   * The window the action is performed on.
+   */
+  std::unique_ptr<WindowT> window;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_

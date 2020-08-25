@@ -23,10 +23,12 @@
 #include "actions/maximize-restore-window.h"
 
 std::unique_ptr<Action> ActionFactory::buildAction(
-    ActionType type, std::unordered_map<std::string, std::string> settings) {
+    ActionType type, std::unordered_map<std::string, std::string> settings,
+    const WindowSystem &windowSystem, const WindowT &window) {
   switch (type) {
     case ActionType::MAXIMIZE_RESTORE_WINDOW:
-      return std::make_unique<MaximizeRestoreWindow>(std::move(settings));
+      return std::make_unique<MaximizeRestoreWindow>(std::move(settings),
+                                                     windowSystem, window);
 
     default:
       return nullptr;

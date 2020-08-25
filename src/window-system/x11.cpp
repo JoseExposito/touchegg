@@ -82,53 +82,51 @@ std::string X11::getWindowClassName(const WindowT &window) const {
   return className;
 }
 
-Window X11::getTopLevelWindow(Window window) const {
-  // Get the list of top-level windows
-  std::vector<Window> topLevelWindows = this->getNetClientListWindows();
+template <typename T>
+std::vector<T> X11::getWindowProperty(Window window,
+                                      const std::string &atomName) const {
+  std::vector<T> propertiesVector;
 
-  // Figure out to which top-level window "window" belongs to
-  auto pair = this->findTopLevelWindowInChildren(window, topLevelWindows);
-  Window topLevelWindow = pair.second;
-  return topLevelWindow;
-}
-
-std::vector<Window> X11::getNetClientListWindows() const {
-  std::vector<Window> topLevelWindows;
-
-  // If the user's window manager is not EWMH compliant, this could be undefined
-  Atom clientListAtom = XInternAtom(this->display, "_NET_CLIENT_LIST", True);
-  if (clientListAtom == None) {
-    return topLevelWindows;
+  Atom atom = XInternAtom(this->display, atomName.c_str(), True);
+  if (atom == None) {
+    return propertiesVector;
   }
 
-  // Store the top level windows returned by _NET_CLIENT_LIST in the vector
   long offset = 0;        // NOLINT
   long offsetSize = 100;  // NOLINT
   Atom atomRet;
   int size;
   unsigned long numItems;          // NOLINT
   unsigned long bytesAfterReturn;  // NOLINT
-  unsigned char *ret;  // _NET_CLIENT_LIST returns an array of Window
+  unsigned char *ret;
   int status;
 
   do {
-    // https://tronche.com/gui/x/xlib/window-information/XGetWindowProperty.html
-    status =
-        XGetWindowProperty(this->display, XDefaultRootWindow(this->display),
-                           clientListAtom, offset, offsetSize, False, XA_WINDOW,
-                           &atomRet, &size, &numItems, &bytesAfterReturn, &ret);
-
+    status = XGetWindowProperty(this->display, window, atom, offset, offsetSize,
+                                False, XA_WINDOW, &atomRet, &size, &numItems,
+                                &bytesAfterReturn, &ret);
     if (status == Success) {
-      auto windows = reinterpret_cast<Window *>(ret);  // NOLINT
+      auto properties = reinterpret_cast<T *>(ret);  // NOLINT
       for (int i = 0; i < numItems; i++) {
-        topLevelWindows.push_back(windows[i]);
+        propertiesVector.push_back(properties[i]);
       }
       XFree(ret);
       offset += offsetSize;
     }
-  } while (status == Success && bytesAfterReturn != 0);
+  } while (status == Success && bytesAfterReturn != 0 && numItems != 0);
 
-  return topLevelWindows;
+  return propertiesVector;
+}
+
+Window X11::getTopLevelWindow(Window window) const {
+  // Get the list of top-level windows from the atom stored in the root window
+  std::vector<Window> topLevelWindows = this->getWindowProperty<Window>(
+      XDefaultRootWindow(this->display), std::string{"_NET_CLIENT_LIST"});
+
+  // Figure out to which top-level window "window" belongs to
+  auto pair = this->findTopLevelWindowInChildren(window, topLevelWindows);
+  Window topLevelWindow = pair.second;
+  return topLevelWindow;
 }
 
 std::pair<bool, Window> X11::findTopLevelWindowInChildren(
@@ -167,4 +165,29 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
   }
 
   return std::make_pair(found, ret);
+}
+
+void X11::maximizeOrRestoreWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  XClientMessageEvent event;
+  event.window = x11Window.window;
+  event.type = ClientMessage;
+  event.message_type = XInternAtom(this->display, "_NET_WM_STATE", False);
+  event.format = 32;
+  event.data.l[0] = 2;  // _NET_WM_STATE_TOGGLE = 2  // NOLINT
+  // NOLINTNEXTLINE
+  event.data.l[1] =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+  // NOLINTNEXTLINE
+  event.data.l[2] =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+
+  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
 }

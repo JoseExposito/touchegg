@@ -52,6 +52,11 @@ class WindowSystem {
    * Under X11 this name can be obtained with the "xprop" command.
    */
   virtual std::string getWindowClassName(const WindowT &window) const = 0;
+
+  /**
+   * If the window is not maximized, maximize it, otherwise restore its size.
+   */
+  virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

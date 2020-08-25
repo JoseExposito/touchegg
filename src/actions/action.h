@@ -22,11 +22,22 @@
 #include <unordered_map>
 
 #include "gesture/gesture.h"
+#include "window-system/window-system.h"
 
+/**
+ * Base class for all actions. Use the ActionFactory to build actions.
+ */
 class Action {
  public:
-  explicit Action(std::unordered_map<std::string, std::string> settings)
-      : settings(settings) {}
+  /**
+   * Default constructor.
+   * @param settings Action settings.
+   * @param windowSystem Object to access the underlaying window system.
+   * @param window The window the gesture is performed on.
+   */
+  Action(std::unordered_map<std::string, std::string> settings,
+         const WindowSystem &windowSystem, const WindowT &window)
+      : settings(settings), windowSystem(windowSystem), window(window) {}
   virtual ~Action() = default;
 
   virtual void onGestureBegin(const Gesture &gesture) = 0;
@@ -35,6 +46,8 @@ class Action {
 
  protected:
   std::unordered_map<std::string, std::string> settings;
+  const WindowSystem &windowSystem;
+  const WindowT &window;
 };
 
 #endif  // ACTIONS_ACTION_H_

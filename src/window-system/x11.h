@@ -19,7 +19,9 @@
 #define WINDOW_SYSTEM_X11_H_
 
 #include <X11/X.h>
+#include <X11/Xatom.h>
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #include <memory>
 #include <string>
@@ -49,11 +51,24 @@ class X11 : public WindowSystem {
 
   std::string getWindowClassName(const WindowT &window) const override;
 
+  void maximizeOrRestoreWindow(const WindowT &window) const override;
+
  private:
   /**
    * X11 connection.
    */
   Display *display;
+
+  /**
+   * A developer friendly wrapper around XGetWindowProperty.
+   * https://tronche.com/gui/x/xlib/window-information/XGetWindowProperty.html
+   * @param window The window to get the property from.
+   * @param atomName Name of the Atom to get.
+   * @returns A vector with the returned properties.
+   */
+  template <typename T>
+  std::vector<T> getWindowProperty(Window window,
+                                   const std::string &atomName) const;
 
   /**
    * The top-level window contains useful attributes like WM_CLASS or WM_NAME
@@ -94,7 +109,6 @@ class X11 : public WindowSystem {
    * window param to get the top-level window.
    */
   Window getTopLevelWindow(Window window) const;
-  std::vector<Window> getNetClientListWindows() const;
   std::pair<bool, Window> findTopLevelWindowInChildren(
       Window window, const std::vector<Window> &topLevelWindows) const;
 };

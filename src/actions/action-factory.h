@@ -28,7 +28,8 @@
 class ActionFactory {
  public:
   static std::unique_ptr<Action> buildAction(
-      ActionType type, std::unordered_map<std::string, std::string> settings);
+      ActionType type, std::unordered_map<std::string, std::string> settings,
+      const WindowSystem &windowSystem, const WindowT &window);
 };
 
 #endif  // ACTIONS_ACTION_FACTORY_H_

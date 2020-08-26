@@ -52,7 +52,7 @@ class X11 : public WindowSystem {
   std::string getWindowClassName(const WindowT &window) const override;
 
   std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
-  createSurface(const Rectangle &rectangle) const override;
+  createSurface() const override;
 
   void flushSurface() const override;
 
@@ -69,11 +69,12 @@ class X11 : public WindowSystem {
    * https://tronche.com/gui/x/xlib/window-information/XGetWindowProperty.html
    * @param window The window to get the property from.
    * @param atomName Name of the Atom to get.
+   * @param propType XA_WINDOW, XA_CARDINAL...
    * @returns A vector with the returned properties.
    */
   template <typename T>
-  std::vector<T> getWindowProperty(Window window,
-                                   const std::string &atomName) const;
+  std::vector<T> getWindowProperty(Window window, const std::string &atomName,
+                                   Atom atomType) const;
 
   /**
    * The top-level window contains useful attributes like WM_CLASS or WM_NAME

@@ -23,8 +23,6 @@
 #include <memory>
 #include <string>
 
-#include "utils/rectangle.h"
-
 /**
  * Abstract window type.
  */
@@ -62,7 +60,7 @@ class WindowSystem {
    * @param rectangle Size of the surface.
    */
   virtual std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
-  createSurface(const Rectangle &rectangle) const = 0;
+  createSurface() const = 0;
 
   /**
    * Flush the Cairo surface.

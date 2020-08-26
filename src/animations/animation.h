@@ -26,10 +26,9 @@
 
 class Animation {
  public:
-  // TODO(jose) Create always a full-screen surface???
   explicit Animation(const WindowSystem &windowSystem)
       : windowSystem(windowSystem),
-        surface(this->windowSystem.createSurface({0, 0, 1000, 1000})),
+        surface(this->windowSystem.createSurface()),
         cairoContext(cairo_create(this->surface.get())) {}
 
   virtual ~Animation() { cairo_destroy(this->cairoContext); }

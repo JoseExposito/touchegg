@@ -23,7 +23,6 @@
 #include <memory>
 
 #include "animations/animation.h"
-#include "utils/rectangle.h"
 
 class ResizeWindowAnimation : public Animation {
  public:

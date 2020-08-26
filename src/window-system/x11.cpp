@@ -85,7 +85,8 @@ std::string X11::getWindowClassName(const WindowT &window) const {
 
 template <typename T>
 std::vector<T> X11::getWindowProperty(Window window,
-                                      const std::string &atomName) const {
+                                      const std::string &atomName,
+                                      Atom atomType) const {
   std::vector<T> propertiesVector;
 
   Atom atom = XInternAtom(this->display, atomName.c_str(), True);
@@ -104,7 +105,7 @@ std::vector<T> X11::getWindowProperty(Window window,
 
   do {
     status = XGetWindowProperty(this->display, window, atom, offset, offsetSize,
-                                False, XA_WINDOW, &atomRet, &size, &numItems,
+                                False, atomType, &atomRet, &size, &numItems,
                                 &bytesAfterReturn, &ret);
     if (status == Success) {
       auto properties = reinterpret_cast<T *>(ret);  // NOLINT
@@ -122,7 +123,8 @@ std::vector<T> X11::getWindowProperty(Window window,
 Window X11::getTopLevelWindow(Window window) const {
   // Get the list of top-level windows from the atom stored in the root window
   std::vector<Window> topLevelWindows = this->getWindowProperty<Window>(
-      XDefaultRootWindow(this->display), std::string{"_NET_CLIENT_LIST"});
+      XDefaultRootWindow(this->display), std::string{"_NET_CLIENT_LIST"},
+      XA_WINDOW);
 
   // Figure out to which top-level window "window" belongs to
   auto pair = this->findTopLevelWindowInChildren(window, topLevelWindows);
@@ -169,16 +171,41 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
 }
 
 std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
-X11::createSurface(const Rectangle &rectangle) const {
-  Drawable window = XCreateSimpleWindow(
-      this->display, XDefaultRootWindow(this->display), rectangle.x,
-      rectangle.y, rectangle.width, rectangle.height, 0, 0, 0);
-  XMapWindow(this->display, window);
+X11::createSurface() const {
+  Window rootWindow = XDefaultRootWindow(this->display);
+  int screen = XDefaultScreen(this->display);
 
-  Visual *visual = XDefaultVisual(this->display, XDefaultScreen(this->display));
+  // Get the current desktop size (without dock, panels, etc)
+  std::vector<int> currenDesktop = this->getWindowProperty<int>(
+      rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
+  std::vector<uint64_t> workArea = this->getWindowProperty<uint64_t>(
+      rootWindow, "_NET_WORKAREA", XA_CARDINAL);
+  int x = workArea[0 + (currenDesktop[0] * 4)];
+  int y = workArea[1 + (currenDesktop[0] * 4)];
+  int width = workArea[2 + (currenDesktop[0] * 4)];
+  int height = workArea[3 + (currenDesktop[0] * 4)];
+
+  // Create a transparent window
+  XVisualInfo vInfo;
+  XMatchVisualInfo(this->display, screen, 32, TrueColor, &vInfo);
+
+  XSetWindowAttributes attr;
+  attr.colormap =
+      XCreateColormap(this->display, rootWindow, vInfo.visual, AllocNone);
+  attr.border_pixel = 0;
+  attr.background_pixel = 0;
+  attr.override_redirect = 1;
+
+  Window window = XCreateWindow(
+      this->display, rootWindow, x, y, width, height, 0, vInfo.depth,
+      InputOutput, vInfo.visual,
+      CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
+  XMapWindow(display, window);
+
+  // Create the surface
   cairo_surface_t *surface = cairo_xlib_surface_create(
-      this->display, window, visual, rectangle.width, rectangle.height);
-  cairo_xlib_surface_set_size(surface, rectangle.width, rectangle.height);
+      this->display, window, vInfo.visual, width, height);
+  cairo_xlib_surface_set_size(surface, width, height);
 
   return std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>(
       surface, &cairo_surface_destroy);

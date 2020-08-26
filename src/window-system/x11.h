@@ -51,6 +51,11 @@ class X11 : public WindowSystem {
 
   std::string getWindowClassName(const WindowT &window) const override;
 
+  std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
+  createSurface(const Rectangle &rectangle) const override;
+
+  void flushSurface() const override;
+
   void maximizeOrRestoreWindow(const WindowT &window) const override;
 
  private:

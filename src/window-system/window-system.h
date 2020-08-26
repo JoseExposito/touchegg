@@ -18,8 +18,12 @@
 #ifndef WINDOW_SYSTEM_WINDOW_SYSTEM_H_
 #define WINDOW_SYSTEM_WINDOW_SYSTEM_H_
 
+#include <cairo.h>
+
 #include <memory>
 #include <string>
+
+#include "utils/rectangle.h"
 
 /**
  * Abstract window type.
@@ -52,6 +56,18 @@ class WindowSystem {
    * Under X11 this name can be obtained with the "xprop" command.
    */
   virtual std::string getWindowClassName(const WindowT &window) const = 0;
+
+  /**
+   * Creates a Cairo surface to draw on.
+   * @param rectangle Size of the surface.
+   */
+  virtual std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
+  createSurface(const Rectangle &rectangle) const = 0;
+
+  /**
+   * Flush the Cairo surface.
+   */
+  virtual void flushSurface() const = 0;
 
   /**
    * If the window is not maximized, maximize it, otherwise restore its size.

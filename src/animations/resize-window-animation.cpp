@@ -15,30 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "actions/maximize-restore-window.h"
-
-#include <iostream>
-#include <utility>
-
 #include "animations/resize-window-animation.h"
 
-void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureBegin ###" << std::endl;
+#include <utility>
 
-  // TODO(jose) Check if animation is configured in this->settings
-  this->animation = std::make_unique<ResizeWindowAnimation>(this->windowSystem);
-}
+void ResizeWindowAnimation::render() {
+  cairo_t* ctx = this->cairoContext;
 
-void MaximizeRestoreWindow::onGestureUpdate(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureUpdate ###" << std::endl;
+  // Clear the background
+  cairo_set_source_rgba(ctx, 0, 0, 0, 0);
+  cairo_set_operator(ctx, CAIRO_OPERATOR_SOURCE);
+  cairo_paint(ctx);
 
-  if (this->animation) {
-    this->animation->render();
-  }
-}
+  // Draw the rectangle
+  cairo_set_source_rgb(ctx, 1.0, 1.0, 1.0);
+  cairo_rectangle(ctx, 0.0, 0.0, 500, 500);
+  cairo_fill(ctx);
 
-void MaximizeRestoreWindow::onGestureEnd(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureEnd ###" << std::endl;
-
-  this->windowSystem.maximizeOrRestoreWindow(this->window);
+  this->windowSystem.flushSurface();
 }

@@ -19,6 +19,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <cairo-xlib.h>
 
 #include <algorithm>
 #include <exception>
@@ -166,6 +167,24 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
 
   return std::make_pair(found, ret);
 }
+
+std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
+X11::createSurface(const Rectangle &rectangle) const {
+  Drawable window = XCreateSimpleWindow(
+      this->display, XDefaultRootWindow(this->display), rectangle.x,
+      rectangle.y, rectangle.width, rectangle.height, 0, 0, 0);
+  XMapWindow(this->display, window);
+
+  Visual *visual = XDefaultVisual(this->display, XDefaultScreen(this->display));
+  cairo_surface_t *surface = cairo_xlib_surface_create(
+      this->display, window, visual, rectangle.width, rectangle.height);
+  cairo_xlib_surface_set_size(surface, rectangle.width, rectangle.height);
+
+  return std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>(
+      surface, &cairo_surface_destroy);
+}
+
+void X11::flushSurface() const { XFlush(this->display); }
 
 void X11::maximizeOrRestoreWindow(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);

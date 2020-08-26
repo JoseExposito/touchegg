@@ -15,29 +15,14 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
-#define ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#ifndef UTILS_RECTANGLE_H_
+#define UTILS_RECTANGLE_H_
 
-#include <memory>
-#include <string>
-#include <unordered_map>
-
-#include "actions/action.h"
-#include "animations/resize-window-animation.h"
-
-/**
- * Action to maximize or restore the window under the pointer.
- * If the window is not maximized, maximize it, otherwise restore its size.
- */
-class MaximizeRestoreWindow : public Action {
- public:
-  using Action::Action;
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
-
- private:
-  std::unique_ptr<ResizeWindowAnimation> animation;
+struct Rectangle {
+  int x;
+  int y;
+  int width;
+  int height;
 };
 
-#endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#endif  // UTILS_RECTANGLE_H_

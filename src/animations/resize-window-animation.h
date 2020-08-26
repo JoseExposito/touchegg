@@ -15,29 +15,20 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
-#define ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#ifndef ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_
+#define ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_
+
+#include <cairo.h>
 
 #include <memory>
-#include <string>
-#include <unordered_map>
 
-#include "actions/action.h"
-#include "animations/resize-window-animation.h"
+#include "animations/animation.h"
+#include "utils/rectangle.h"
 
-/**
- * Action to maximize or restore the window under the pointer.
- * If the window is not maximized, maximize it, otherwise restore its size.
- */
-class MaximizeRestoreWindow : public Action {
+class ResizeWindowAnimation : public Animation {
  public:
-  using Action::Action;
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
-
- private:
-  std::unique_ptr<ResizeWindowAnimation> animation;
+  using Animation::Animation;
+  void render() override;
 };
 
-#endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#endif  // ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_

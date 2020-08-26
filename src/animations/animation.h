@@ -15,29 +15,31 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
-#define ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#ifndef ANIMATIONS_ANIMATION_H_
+#define ANIMATIONS_ANIMATION_H_
+
+#include <cairo.h>
 
 #include <memory>
-#include <string>
-#include <unordered_map>
 
-#include "actions/action.h"
-#include "animations/resize-window-animation.h"
+#include "window-system/window-system.h"
 
-/**
- * Action to maximize or restore the window under the pointer.
- * If the window is not maximized, maximize it, otherwise restore its size.
- */
-class MaximizeRestoreWindow : public Action {
+class Animation {
  public:
-  using Action::Action;
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
+  // TODO(jose) Create always a full-screen surface???
+  explicit Animation(const WindowSystem &windowSystem)
+      : windowSystem(windowSystem),
+        surface(this->windowSystem.createSurface({0, 0, 1000, 1000})),
+        cairoContext(cairo_create(this->surface.get())) {}
 
- private:
-  std::unique_ptr<ResizeWindowAnimation> animation;
+  virtual ~Animation() { cairo_destroy(this->cairoContext); }
+
+  virtual void render() = 0;
+
+ protected:
+  const WindowSystem &windowSystem;
+  std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)> surface;
+  cairo_t *cairoContext;
 };
 
-#endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
+#endif  // ANIMATIONS_ANIMATION_H_

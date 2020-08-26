@@ -149,7 +149,7 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
     return std::make_pair(true, None);
   }
 
-  Window ret;
+  Window ret = None;
   bool found = false;
   int index = 0;
   while (!found && index < numChildren) {

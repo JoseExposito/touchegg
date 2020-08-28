@@ -43,6 +43,8 @@ class LibinputGesture : public Gesture {
 
   GestureDirection direction() const override;
 
+  int percentage() const override;
+
   int fingers() const override;
 
   double deltaX() const override;
@@ -60,6 +62,12 @@ class LibinputGesture : public Gesture {
    */
   void setDirection(GestureDirection direction);
 
+  /**
+   * Set the animation percentage.
+   * @param percentage Value between 0 and 100.
+   */
+  void setPercentage(int percentage);
+
  private:
   /**
    * Pointer to the libinput event with the gesture information.
@@ -76,6 +84,11 @@ class LibinputGesture : public Gesture {
    * from the outside.
    */
   GestureDirection gestureDirection;
+
+  /**
+   * Value between 0 and 100 indicating the percentage of the animation.
+   */
+  int animationPercentage;
 };
 
 #endif  // GESTURE_LIBINPUT_GESTURE_H_

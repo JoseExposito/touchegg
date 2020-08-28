@@ -42,6 +42,12 @@ class Gesture {
   virtual GestureDirection direction() const = 0;
 
   /**
+   * Percentage of the gesture performed, used for animations.
+   * @return Value between 0 and 100.
+   */
+  virtual int percentage() const = 0;
+
+  /**
    * @returns The number of fingers used to perform the gesture.
    */
   virtual int fingers() const = 0;

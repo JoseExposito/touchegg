@@ -86,13 +86,13 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
     this->action->onGestureUpdate(*gesture);
 
     // TODO(jose)
-    std::cout << "onGestureUpdate" << std::endl;
-    std::cout << "Fingers: " << gesture->fingers() << std::endl;
-    std::cout << "Delta X: " << gesture->deltaX() << std::endl;
-    std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
-    if (gesture->direction() == GestureDirection::UP) {
-      std::cout << "UP" << std::endl;
-    }
+    // std::cout << "onGestureUpdate" << std::endl;
+    // std::cout << "Fingers: " << gesture->fingers() << std::endl;
+    // std::cout << "Delta X: " << gesture->deltaX() << std::endl;
+    // std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
+    // if (gesture->direction() == GestureDirection::UP) {
+    //   std::cout << "UP" << std::endl;
+    // }
   }
 }
 

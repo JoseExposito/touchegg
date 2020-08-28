@@ -36,7 +36,12 @@ class Animation {
     this->windowSystem.destroySurface(this->surface);
   }
 
-  virtual void render() = 0;
+  /**
+   * Draw the animation on screen.
+   * @param percentage A number between 0 and 100 indicating the percentage of
+   * the animation.
+   */
+  virtual void render(int percentage) = 0;
 
  protected:
   const WindowSystem &windowSystem;

@@ -27,7 +27,7 @@
 class ResizeWindowAnimation : public Animation {
  public:
   using Animation::Animation;
-  void render() override;
+  void render(int percentage) override;
 };
 
 #endif  // ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_

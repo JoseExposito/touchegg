@@ -29,11 +29,12 @@ void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
   this->animation = std::make_unique<ResizeWindowAnimation>(this->windowSystem);
 }
 
-void MaximizeRestoreWindow::onGestureUpdate(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureUpdate ###" << std::endl;
+void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
+  // std::cout << "### MaximizeRestoreWindow::onGestureUpdate ###" << std::endl;
 
   if (this->animation) {
-    this->animation->render();
+    std::cout << gesture.percentage() << std::endl;
+    this->animation->render(gesture.percentage());
   }
 }
 

@@ -67,6 +67,7 @@ Config::getGestureConfig(const std::string &application,
 void Config::loadDefaultGlobalSettings() {
   this->globalSettings["composed_gestures_time"] = "0";
   this->globalSettings["threshold"] = "0";
+  this->globalSettings["animation_finish_threshold"] = "800";
 }
 
 std::string Config::getConfigKey(const std::string &application,

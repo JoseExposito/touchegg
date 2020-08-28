@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <exception>
@@ -123,32 +124,26 @@ void LibinputGestureGatherer::handleSwipeBegin(
 
 void LibinputGestureGatherer::handleSwipeUpdate(
     std::unique_ptr<LibinputGesture> gesture) {
+  this->swipeState.deltaX += gesture->deltaX();
+  this->swipeState.deltaY += gesture->deltaY();
+
   if (!this->swipeState.started) {
-    this->swipeState.deltaX += gesture->deltaX();
-    this->swipeState.deltaY += gesture->deltaY();
     const double threshold =
         std::stod(this->config.getGlobalSetting("threshold"));
 
     if (std::abs(this->swipeState.deltaX) > threshold ||
         std::abs(this->swipeState.deltaY) > threshold) {
       this->swipeState.started = true;
+      this->swipeState.direction = this->calculateSwipeDirection();
 
-      // Calculate the direction
-      if (std::abs(this->swipeState.deltaX) >
-          std::abs(this->swipeState.deltaY)) {
-        this->swipeState.direction = (this->swipeState.deltaX > 0)
-                                         ? GestureDirection::RIGHT
-                                         : GestureDirection::LEFT;
-      } else {
-        this->swipeState.direction = (this->swipeState.deltaY > 0)
-                                         ? GestureDirection::DOWN
-                                         : GestureDirection::UP;
-      }
-
+      gesture->setPercentage(0);
       gesture->setDirection(this->swipeState.direction);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
+    this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
+
+    gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
@@ -157,11 +152,52 @@ void LibinputGestureGatherer::handleSwipeUpdate(
 void LibinputGestureGatherer::handleSwipeEnd(
     std::unique_ptr<LibinputGesture> gesture) {
   if (this->swipeState.started) {
+    gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 
   this->swipeState.reset();
+}
+
+GestureDirection LibinputGestureGatherer::calculateSwipeDirection() const {
+  if (std::abs(this->swipeState.deltaX) > std::abs(this->swipeState.deltaY)) {
+    return (this->swipeState.deltaX > 0) ? GestureDirection::RIGHT
+                                         : GestureDirection::LEFT;
+  }
+
+  return (this->swipeState.deltaY > 0) ? GestureDirection::DOWN
+                                       : GestureDirection::UP;
+}
+
+int LibinputGestureGatherer::calculateSwipeAnimationPercentage() const {
+  const double threshold =
+      std::stod(this->config.getGlobalSetting("threshold"));
+  const int deltaMax =
+      std::stoi(this->config.getGlobalSetting("animation_finish_threshold"));
+
+  int max = threshold + deltaMax;
+  int current = 0;
+  GestureDirection direction = this->swipeState.direction;
+
+  switch (direction) {
+    case GestureDirection::UP:
+      current = std::abs(std::min(0.0, this->swipeState.deltaY));
+      break;
+    case GestureDirection::DOWN:
+      current = std::max(0.0, this->swipeState.deltaY);
+      break;
+    case GestureDirection::LEFT:
+      current = std::abs(std::min(0.0, this->swipeState.deltaX));
+      break;
+    case GestureDirection::RIGHT:
+      current = std::max(0.0, this->swipeState.deltaX);
+      break;
+    default:
+      break;
+  }
+
+  return std::min((current * 100) / max, 100);
 }
 
 int LibinputGestureGatherer::openRestricted(const char *path, int flags,

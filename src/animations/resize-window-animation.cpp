@@ -19,7 +19,7 @@
 
 #include <utility>
 
-void ResizeWindowAnimation::render() {
+void ResizeWindowAnimation::render(int /*percentage*/) {
   cairo_t* ctx = this->cairoContext;
 
   // Clear the background
@@ -28,7 +28,7 @@ void ResizeWindowAnimation::render() {
   cairo_paint(ctx);
 
   // Draw the rectangle
-  cairo_set_source_rgb(ctx, 1.0, 1.0, 1.0);
+  cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, 0.5);
   cairo_rectangle(ctx, 0.0, 0.0, 500, 500);
   cairo_fill(ctx);
 

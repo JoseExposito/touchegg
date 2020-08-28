@@ -90,6 +90,16 @@ class LibinputGestureGatherer : public GestureGatherer {
   void handleSwipeEnd(std::unique_ptr<LibinputGesture> gesture);
 
   /**
+   * @returns The direction of a swipe gesture.
+   */
+  GestureDirection calculateSwipeDirection() const;
+
+  /**
+   * @returns The percentage (between 0 and 100) of the gesture animation.
+   */
+  int calculateSwipeAnimationPercentage() const;
+
+  /**
    * libinput structure with pointers to the open/close callbacks.
    */
   struct libinput_interface libinputInterface {

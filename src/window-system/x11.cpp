@@ -209,6 +209,14 @@ cairo_surface_t *X11::createSurface() const {
   return surface;
 }
 
+int X11::getSurfaceWidth(cairo_surface_t *cairoSurface) const {
+  return cairo_xlib_surface_get_width(cairoSurface);
+}
+
+int X11::getSurfaceHeight(cairo_surface_t *cairoSurface) const {
+  return cairo_xlib_surface_get_height(cairoSurface);
+}
+
 void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
   XFlush(this->display);
 }

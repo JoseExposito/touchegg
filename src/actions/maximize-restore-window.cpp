@@ -38,8 +38,8 @@ void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
   }
 }
 
-void MaximizeRestoreWindow::onGestureEnd(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureEnd ###" << std::endl;
-
-  this->windowSystem.maximizeOrRestoreWindow(this->window);
+void MaximizeRestoreWindow::onGestureEnd(const Gesture& gesture) {
+  if (!this->animation || (this->animation && gesture.percentage() > 50)) {
+    this->windowSystem.maximizeOrRestoreWindow(this->window);
+  }
 }

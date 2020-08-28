@@ -52,6 +52,8 @@ class X11 : public WindowSystem {
   std::string getWindowClassName(const WindowT &window) const override;
 
   cairo_surface_t *createSurface() const override;
+  int getSurfaceWidth(cairo_surface_t *cairoSurface) const override;
+  int getSurfaceHeight(cairo_surface_t *cairoSurface) const override;
   void flushSurface(cairo_surface_t *cairoSurface) const override;
   void destroySurface(cairo_surface_t *cairoSurface) const override;
 

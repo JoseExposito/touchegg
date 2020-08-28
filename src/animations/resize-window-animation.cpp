@@ -32,5 +32,5 @@ void ResizeWindowAnimation::render() {
   cairo_rectangle(ctx, 0.0, 0.0, 500, 500);
   cairo_fill(ctx);
 
-  this->windowSystem.flushSurface();
+  this->windowSystem.flushSurface(this->surface);
 }

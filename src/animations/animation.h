@@ -29,15 +29,18 @@ class Animation {
   explicit Animation(const WindowSystem &windowSystem)
       : windowSystem(windowSystem),
         surface(this->windowSystem.createSurface()),
-        cairoContext(cairo_create(this->surface.get())) {}
+        cairoContext(cairo_create(this->surface)) {}
 
-  virtual ~Animation() { cairo_destroy(this->cairoContext); }
+  virtual ~Animation() {
+    cairo_destroy(this->cairoContext);
+    this->windowSystem.destroySurface(this->surface);
+  }
 
   virtual void render() = 0;
 
  protected:
   const WindowSystem &windowSystem;
-  std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)> surface;
+  cairo_surface_t *surface;
   cairo_t *cairoContext;
 };
 

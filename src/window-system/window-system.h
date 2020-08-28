@@ -57,15 +57,21 @@ class WindowSystem {
 
   /**
    * Creates a Cairo surface to draw on.
-   * @param rectangle Size of the surface.
+   * IMPORTANT! Destroy the surface with WindowSystem::destroySurface().
    */
-  virtual std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
-  createSurface() const = 0;
+  virtual cairo_surface_t *createSurface() const = 0;
 
   /**
    * Flush the Cairo surface.
+   * @param cairoSurface The surface.
    */
-  virtual void flushSurface() const = 0;
+  virtual void flushSurface(cairo_surface_t *cairoSurface) const = 0;
+
+  /**
+   * Destroy the Cairo surface.
+   * @param cairoSurface The surface.
+   */
+  virtual void destroySurface(cairo_surface_t *cairoSurface) const = 0;
 
   /**
    * If the window is not maximized, maximize it, otherwise restore its size.

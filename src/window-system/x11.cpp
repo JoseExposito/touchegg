@@ -170,8 +170,7 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
   return std::make_pair(found, ret);
 }
 
-std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>
-X11::createSurface() const {
+cairo_surface_t *X11::createSurface() const {
   Window rootWindow = XDefaultRootWindow(this->display);
   int screen = XDefaultScreen(this->display);
 
@@ -207,11 +206,19 @@ X11::createSurface() const {
       this->display, window, vInfo.visual, width, height);
   cairo_xlib_surface_set_size(surface, width, height);
 
-  return std::unique_ptr<cairo_surface_t, decltype(&cairo_surface_destroy)>(
-      surface, &cairo_surface_destroy);
+  return surface;
 }
 
-void X11::flushSurface() const { XFlush(this->display); }
+void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
+  XFlush(this->display);
+}
+
+void X11::destroySurface(cairo_surface_t *cairoSurface) const {
+  Window window = cairo_xlib_surface_get_drawable(cairoSurface);
+  cairo_surface_destroy(cairoSurface);
+  XDestroyWindow(this->display, window);
+  XFlush(this->display);
+}
 
 void X11::maximizeOrRestoreWindow(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);

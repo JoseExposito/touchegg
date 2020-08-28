@@ -55,6 +55,11 @@ class LibinputGestureGatherer : public GestureGatherer {
   struct libinput *libinputContext = nullptr;
 
   /**
+   * Epoch time in milliseconds at the start of the gesture.
+   */
+  uint64_t gestureStartTimestamp = 0;
+
+  /**
    * Required data to handle swipes.
    */
   LibinputSwipeState swipeState;
@@ -98,6 +103,16 @@ class LibinputGestureGatherer : public GestureGatherer {
    * @returns The percentage (between 0 and 100) of the gesture animation.
    */
   int calculateSwipeAnimationPercentage() const;
+
+  /**
+   * @returns The current epoch time in milliseconds.
+   */
+  uint64_t getTimestamp() const;
+
+  /**
+   * @return Elapsed milliseconds  since the beginning of the gesture.
+   */
+  uint64_t calculateElapsedTime() const;
 
   /**
    * libinput structure with pointers to the open/close callbacks.

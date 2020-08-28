@@ -55,6 +55,8 @@ class LibinputGesture : public Gesture {
 
   double radiusDelta() const override;
 
+  uint64_t elapsedTime() const override;
+
   /**
    * The direction is not implicit in the libinput_event_gesture, instead
    * LibinputGestureGatherer is in charge of set it once a certain threshold is
@@ -67,6 +69,12 @@ class LibinputGesture : public Gesture {
    * @param percentage Value between 0 and 100.
    */
   void setPercentage(int percentage);
+
+  /**
+   * Set the gesture elapsed time.
+   * @param elapsedTime Elapsed time in milliseconds.
+   */
+  void setElapsedTime(uint64_t elapsedTime);
 
  private:
   /**
@@ -89,6 +97,11 @@ class LibinputGesture : public Gesture {
    * Value between 0 and 100 indicating the percentage of the animation.
    */
   int animationPercentage;
+
+  /**
+   * Elapsed time since the beginning of the gesture.
+   */
+  uint64_t gestureElapsedTime;
 };
 
 #endif  // GESTURE_LIBINPUT_GESTURE_H_

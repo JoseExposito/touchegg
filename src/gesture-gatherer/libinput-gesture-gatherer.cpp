@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <exception>
 #include <iostream>
@@ -135,9 +136,11 @@ void LibinputGestureGatherer::handleSwipeUpdate(
         std::abs(this->swipeState.deltaY) > threshold) {
       this->swipeState.started = true;
       this->swipeState.direction = this->calculateSwipeDirection();
+      this->gestureStartTimestamp = this->getTimestamp();
 
       gesture->setPercentage(0);
       gesture->setDirection(this->swipeState.direction);
+      gesture->setElapsedTime(0);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -145,6 +148,7 @@ void LibinputGestureGatherer::handleSwipeUpdate(
 
     gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
+    gesture->setElapsedTime(this->calculateElapsedTime());
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -154,6 +158,7 @@ void LibinputGestureGatherer::handleSwipeEnd(
   if (this->swipeState.started) {
     gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
+    gesture->setElapsedTime(this->calculateElapsedTime());
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 
@@ -198,6 +203,17 @@ int LibinputGestureGatherer::calculateSwipeAnimationPercentage() const {
   }
 
   return std::min((current * 100) / max, 100);
+}
+
+uint64_t LibinputGestureGatherer::getTimestamp() const {
+  auto now = std::chrono::system_clock::now().time_since_epoch();
+  uint64_t millis =
+      std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
+  return millis;
+}
+
+uint64_t LibinputGestureGatherer::calculateElapsedTime() const {
+  return this->getTimestamp() - this->gestureStartTimestamp;
 }
 
 int LibinputGestureGatherer::openRestricted(const char *path, int flags,

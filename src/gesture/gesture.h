@@ -76,6 +76,12 @@ class Gesture {
    * the radius of the gesture since last update. Otherwise return 0.
    */
   virtual double radiusDelta() const = 0;
+
+  /**
+   * Elapsed time since the beginning of the gesture.
+   * @returns The elapsed time in milliseconds.
+   */
+  virtual uint64_t elapsedTime() const = 0;
 };
 
 #endif  // GESTURE_GESTURE_H_

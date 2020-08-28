@@ -27,7 +27,7 @@
 int main(/* int, char ** */) {
   std::cout << "Starting Touchégg..." << std::endl;
 
-  // Load the configutation using the XML loader
+  // Load the configuration using the XML loader
   Config config;
   XmlConfigLoader loader(&config);
   loader.load();

@@ -111,5 +111,4 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   }
 
   this->action.reset();
-  this->action.reset();
 }

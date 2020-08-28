@@ -32,14 +32,18 @@ void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
 void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
   // std::cout << "### MaximizeRestoreWindow::onGestureUpdate ###" << std::endl;
 
-  if (this->animation) {
+  if (this->animation &&
+      gesture.elapsedTime() >
+          std::stoull(this->config.getGlobalSetting("animation_delay"))) {
     std::cout << gesture.percentage() << std::endl;
     this->animation->render(gesture.percentage());
   }
 }
 
 void MaximizeRestoreWindow::onGestureEnd(const Gesture& gesture) {
-  if (!this->animation || (this->animation && gesture.percentage() > 50)) {
+  if (!this->animation ||
+      gesture.percentage() > std::stoi(this->config.getGlobalSetting(
+                                 "action_execute_threshold"))) {
     this->windowSystem.maximizeOrRestoreWindow(this->window);
   }
 }

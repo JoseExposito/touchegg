@@ -24,12 +24,14 @@
 
 #include "actions/action-type.h"
 #include "actions/action.h"
+#include "config/config.h"
 
 class ActionFactory {
  public:
   static std::unique_ptr<Action> buildAction(
       ActionType type, std::unordered_map<std::string, std::string> settings,
-      const WindowSystem &windowSystem, const WindowT &window);
+      const WindowSystem &windowSystem, const WindowT &window,
+      const Config &config);
 };
 
 #endif  // ACTIONS_ACTION_FACTORY_H_

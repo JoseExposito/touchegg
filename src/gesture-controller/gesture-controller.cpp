@@ -59,9 +59,9 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
     ActionType actionType = pair.first;
     std::unordered_map<std::string, std::string> actionSettings = pair.second;
 
-    this->action =
-        ActionFactory::buildAction(actionType, std::move(actionSettings),
-                                   this->windowSystem, *this->window);
+    this->action = ActionFactory::buildAction(
+        actionType, std::move(actionSettings), this->windowSystem,
+        *this->window, this->config);
 
     if (this->action != nullptr) {
       std::cout << "Starting action" << std::endl;

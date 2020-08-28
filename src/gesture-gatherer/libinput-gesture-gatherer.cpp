@@ -27,7 +27,7 @@
 
 #include <algorithm>
 #include <array>
-#include <chrono>
+#include <chrono>  // NOLINT
 #include <cmath>
 #include <exception>
 #include <iostream>

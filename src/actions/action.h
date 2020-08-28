@@ -21,6 +21,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "config/config.h"
 #include "gesture/gesture.h"
 #include "window-system/window-system.h"
 
@@ -36,8 +37,12 @@ class Action {
    * @param window The window the gesture is performed on.
    */
   Action(std::unordered_map<std::string, std::string> settings,
-         const WindowSystem &windowSystem, const WindowT &window)
-      : settings(settings), windowSystem(windowSystem), window(window) {}
+         const WindowSystem &windowSystem, const WindowT &window,
+         const Config &config)
+      : settings(settings),
+        windowSystem(windowSystem),
+        window(window),
+        config(config) {}
   virtual ~Action() = default;
 
   virtual void onGestureBegin(const Gesture &gesture) = 0;
@@ -48,6 +53,7 @@ class Action {
   std::unordered_map<std::string, std::string> settings;
   const WindowSystem &windowSystem;
   const WindowT &window;
+  const Config &config;
 };
 
 #endif  // ACTIONS_ACTION_H_

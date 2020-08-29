@@ -15,19 +15,15 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_
-#define ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_
-
-#include <cairo.h>
-
-#include <memory>
+#ifndef ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
+#define ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
 
 #include "animations/animation.h"
 
-class ResizeWindowAnimation : public Animation {
+class MaximizeWindowAnimation : public Animation {
  public:
   using Animation::Animation;
   void render(int percentage) override;
 };
 
-#endif  // ANIMATIONS_RESIZE_WINDOW_ANIMATION_H_
+#endif  // ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_

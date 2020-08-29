@@ -137,8 +137,9 @@ void LibinputGestureGatherer::handleSwipeUpdate(
       this->swipeState.started = true;
       this->swipeState.direction = this->calculateSwipeDirection();
       this->gestureStartTimestamp = this->getTimestamp();
+      this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
 
-      gesture->setPercentage(0);
+      gesture->setPercentage(this->swipeState.percentage);
       gesture->setDirection(this->swipeState.direction);
       gesture->setElapsedTime(0);
       this->gestureController->onGestureBegin(std::move(gesture));
@@ -156,6 +157,8 @@ void LibinputGestureGatherer::handleSwipeUpdate(
 void LibinputGestureGatherer::handleSwipeEnd(
     std::unique_ptr<LibinputGesture> gesture) {
   if (this->swipeState.started) {
+    this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
+
     gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
     gesture->setElapsedTime(this->calculateElapsedTime());
@@ -187,16 +190,16 @@ int LibinputGestureGatherer::calculateSwipeAnimationPercentage() const {
 
   switch (direction) {
     case GestureDirection::UP:
-      current = std::abs(std::min(0.0, this->swipeState.deltaY));
+      current = std::abs(std::min(0.0, this->swipeState.deltaY + threshold));
       break;
     case GestureDirection::DOWN:
-      current = std::max(0.0, this->swipeState.deltaY);
+      current = std::max(0.0, this->swipeState.deltaY - threshold);
       break;
     case GestureDirection::LEFT:
-      current = std::abs(std::min(0.0, this->swipeState.deltaX));
+      current = std::abs(std::min(0.0, this->swipeState.deltaX + threshold));
       break;
     case GestureDirection::RIGHT:
-      current = std::max(0.0, this->swipeState.deltaX);
+      current = std::max(0.0, this->swipeState.deltaX - threshold);
       break;
     default:
       break;

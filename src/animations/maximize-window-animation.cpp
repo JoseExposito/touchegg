@@ -15,9 +15,9 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "animations/resize-window-animation.h"
+#include "animations/maximize-window-animation.h"
 
-void ResizeWindowAnimation::render(int percentage) {
+void MaximizeWindowAnimation::render(int percentage) {
   cairo_t* ctx = this->cairoContext;
 
   // Clear the background

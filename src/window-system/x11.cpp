@@ -123,8 +123,7 @@ std::vector<T> X11::getWindowProperty(Window window,
 Window X11::getTopLevelWindow(Window window) const {
   // Get the list of top-level windows from the atom stored in the root window
   std::vector<Window> topLevelWindows = this->getWindowProperty<Window>(
-      XDefaultRootWindow(this->display), std::string{"_NET_CLIENT_LIST"},
-      XA_WINDOW);
+      XDefaultRootWindow(this->display), "_NET_CLIENT_LIST", XA_WINDOW);
 
   // Figure out to which top-level window "window" belongs to
   auto pair = this->findTopLevelWindowInChildren(window, topLevelWindows);
@@ -226,6 +225,34 @@ void X11::destroySurface(cairo_surface_t *cairoSurface) const {
   cairo_surface_destroy(cairoSurface);
   XDestroyWindow(this->display, window);
   XFlush(this->display);
+}
+
+bool X11::isWindowMaximized(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return false;
+  }
+
+  Atom atomMaxVert =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", True);
+  Atom atomMaxHorz =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", True);
+  std::vector<Atom> states =
+      this->getWindowProperty<Atom>(x11Window.window, "_NET_WM_STATE", XA_ATOM);
+
+  bool maxHor = false;
+  bool maxVert = false;
+  for (Atom atom : states) {
+    if (atom == atomMaxVert) {
+      maxVert = true;
+    }
+    if (atom == atomMaxHorz) {
+      maxHor = true;
+    }
+  }
+
+  bool maximized = maxHor && maxVert;
+  return maximized;
 }
 
 void X11::maximizeOrRestoreWindow(const WindowT &window) const {

@@ -20,13 +20,20 @@
 #include <iostream>
 #include <utility>
 
-#include "animations/resize-window-animation.h"
+#include "animations/maximize-window-animation.h"
+#include "animations/restore-window-animation.h"
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
   std::cout << "### MaximizeRestoreWindow::onGestureBegin ###" << std::endl;
 
   // TODO(jose) Check if animation is configured in this->settings
-  this->animation = std::make_unique<ResizeWindowAnimation>(this->windowSystem);
+  if (this->windowSystem.isWindowMaximized(this->window)) {
+    this->animation =
+        std::make_unique<RestoreWindowAnimation>(this->windowSystem);
+  } else {
+    this->animation =
+        std::make_unique<MaximizeWindowAnimation>(this->windowSystem);
+  }
 }
 
 void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {

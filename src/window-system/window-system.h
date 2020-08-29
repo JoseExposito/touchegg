@@ -84,6 +84,11 @@ class WindowSystem {
   virtual void destroySurface(cairo_surface_t *cairoSurface) const = 0;
 
   /**
+   * @returns If the window is maximized or not.
+   */
+  virtual bool isWindowMaximized(const WindowT &window) const = 0;
+
+  /**
    * If the window is not maximized, maximize it, otherwise restore its size.
    */
   virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;

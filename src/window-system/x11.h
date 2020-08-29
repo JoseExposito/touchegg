@@ -57,6 +57,7 @@ class X11 : public WindowSystem {
   void flushSurface(cairo_surface_t *cairoSurface) const override;
   void destroySurface(cairo_surface_t *cairoSurface) const override;
 
+  bool isWindowMaximized(const WindowT &window) const override;
   void maximizeOrRestoreWindow(const WindowT &window) const override;
 
  private:

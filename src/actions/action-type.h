@@ -21,6 +21,9 @@
 enum class ActionType {
   NO_ACTION,
   MAXIMIZE_RESTORE_WINDOW,
+  MINIMIZE_WINDOW,
+  // Adding a new action? Don't forget to add it in
+  // XmlConfigLoader::getActionType and ActionFactory::buildAction
 };
 
 #endif  // ACTIONS_ACTION_TYPE_H_

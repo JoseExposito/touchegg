@@ -59,6 +59,7 @@ class X11 : public WindowSystem {
 
   bool isWindowMaximized(const WindowT &window) const override;
   void maximizeOrRestoreWindow(const WindowT &window) const override;
+  void minimizeWindow(const WindowT &window) const override;
 
  private:
   /**

@@ -279,3 +279,23 @@ void X11::maximizeOrRestoreWindow(const WindowT &window) const {
              reinterpret_cast<XEvent *>(&event));  // NOLINT
   XFlush(this->display);
 }
+
+void X11::minimizeWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  // Minimize the window
+  XClientMessageEvent event;
+  event.window = x11Window.window;
+  event.type = ClientMessage;
+  event.message_type = XInternAtom(this->display, "WM_CHANGE_STATE", False);
+  event.format = 32;
+  event.data.l[0] = IconicState;  // NOLINT
+
+  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
+}

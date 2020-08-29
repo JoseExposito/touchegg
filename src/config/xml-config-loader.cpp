@@ -186,6 +186,9 @@ ActionType XmlConfigLoader::getActionType(const std::string &str) {
   if (str == "MAXIMIZE_RESTORE_WINDOW") {
     return ActionType::MAXIMIZE_RESTORE_WINDOW;
   }
+  if (str == "MINIMIZE_WINDOW") {
+    return ActionType::MINIMIZE_WINDOW;
+  }
   return ActionType::NO_ACTION;
 }
 

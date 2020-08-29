@@ -15,26 +15,17 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "actions/action-factory.h"
-
-#include <utility>
+#ifndef ACTIONS_MINIMIZE_WINDOW_H_
+#define ACTIONS_MINIMIZE_WINDOW_H_
 
 #include "actions/action.h"
-#include "actions/maximize-restore-window.h"
-#include "actions/minimize-window.h"
 
-std::unique_ptr<Action> ActionFactory::buildAction(
-    ActionType type, std::unordered_map<std::string, std::string> settings,
-    const WindowSystem &windowSystem, const WindowT &window,
-    const Config &config) {
-  switch (type) {
-    case ActionType::MAXIMIZE_RESTORE_WINDOW:
-      return std::make_unique<MaximizeRestoreWindow>(
-          std::move(settings), windowSystem, window, config);
-    case ActionType::MINIMIZE_WINDOW:
-      return std::make_unique<MinimizeWindow>(std::move(settings), windowSystem,
-                                              window, config);
-    default:
-      return nullptr;
-  }
-}
+class MinimizeWindow : public Action {
+ public:
+  using Action::Action;
+  void onGestureBegin(const Gesture &gesture) override;
+  void onGestureUpdate(const Gesture &gesture) override;
+  void onGestureEnd(const Gesture &gesture) override;
+};
+
+#endif  // ACTIONS_MINIMIZE_WINDOW_H_

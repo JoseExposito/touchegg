@@ -17,20 +17,18 @@
  */
 #include "actions/maximize-restore-window.h"
 
-#include <iostream>
 #include <utility>
 
 #include "animations/maximize-window-animation.h"
 #include "animations/restore-window-animation.h"
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
-  std::cout << "### MaximizeRestoreWindow::onGestureBegin ###" << std::endl;
-
   bool animate = true;
   if (this->settings.count("animate") == 1) {
     animate = this->settings.at("animate") == "true";
   }
 
+  // TODO(jose) Allow to change the animation color??
   if (animate) {
     if (this->windowSystem.isWindowMaximized(this->window)) {
       this->animation =
@@ -46,7 +44,6 @@ void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
   if (this->animation &&
       gesture.elapsedTime() >
           std::stoull(this->config.getGlobalSetting("animation_delay"))) {
-    std::cout << gesture.percentage() << std::endl;
     this->animation->render(gesture.percentage());
   }
 }

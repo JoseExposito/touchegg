@@ -19,10 +19,10 @@
 #define UTILS_RECTANGLE_H_
 
 struct Rectangle {
-  int x;
-  int y;
-  int width;
-  int height;
+  int x = 0;
+  int y = 0;
+  int width = 0;
+  int height = 0;
 };
 
 #endif  // UTILS_RECTANGLE_H_

@@ -83,6 +83,27 @@ std::string X11::getWindowClassName(const WindowT &window) const {
   return className;
 }
 
+Rectangle X11::getWindowSize(const WindowT &window) const {
+  Rectangle size;
+
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return size;
+  }
+
+  XWindowAttributes attrs;
+  Status status = XGetWindowAttributes(this->display, x11Window.window, &attrs);
+  if (status == 0) {
+    return size;
+  }
+
+  size.x = attrs.x;
+  size.y = attrs.y;
+  size.width = attrs.width;
+  size.height = attrs.height;
+  return size;
+}
+
 template <typename T>
 std::vector<T> X11::getWindowProperty(Window window,
                                       const std::string &atomName,
@@ -298,4 +319,21 @@ void X11::minimizeWindow(const WindowT &window) const {
              (SubstructureNotifyMask | SubstructureRedirectMask),
              reinterpret_cast<XEvent *>(&event));  // NOLINT
   XFlush(this->display);
+}
+
+Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
+  Rectangle size;
+
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return size;
+  }
+
+  std::vector<uint64_t> iconSize = this->getWindowProperty<uint64_t>(
+      x11Window.window, "_NET_WM_ICON_GEOMETRY", XA_CARDINAL);
+  size.x = iconSize[0];
+  size.y = iconSize[1];
+  size.width = iconSize[2];
+  size.height = iconSize[3];
+  return size;
 }

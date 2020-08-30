@@ -50,6 +50,7 @@ class X11 : public WindowSystem {
   std::unique_ptr<WindowT> getWindowUnderCursor() const override;
 
   std::string getWindowClassName(const WindowT &window) const override;
+  Rectangle getWindowSize(const WindowT &window) const override;
 
   cairo_surface_t *createSurface() const override;
   int getSurfaceWidth(cairo_surface_t *cairoSurface) const override;
@@ -60,6 +61,7 @@ class X11 : public WindowSystem {
   bool isWindowMaximized(const WindowT &window) const override;
   void maximizeOrRestoreWindow(const WindowT &window) const override;
   void minimizeWindow(const WindowT &window) const override;
+  Rectangle minimizeWindowIconSize(const WindowT &window) const override;
 
  private:
   /**

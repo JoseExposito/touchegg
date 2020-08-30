@@ -23,6 +23,8 @@
 #include <memory>
 #include <string>
 
+#include "utils/rectangle.h"
+
 /**
  * Abstract window type.
  */
@@ -54,6 +56,11 @@ class WindowSystem {
    * Under X11 this name can be obtained with the "xprop" command.
    */
   virtual std::string getWindowClassName(const WindowT &window) const = 0;
+
+  /**
+   * @returns The size of the window.
+   */
+  virtual Rectangle getWindowSize(const WindowT &window) const = 0;
 
   /**
    * Creates a Cairo surface to draw on.
@@ -97,6 +104,12 @@ class WindowSystem {
    * Minimize a window.
    */
   virtual void minimizeWindow(const WindowT &window) const = 0;
+
+  /**
+   * @returns The size of the window icon in the toolbar/dock or similar. Useful
+   * to perform minimize animations.
+   */
+  virtual Rectangle minimizeWindowIconSize(const WindowT &window) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

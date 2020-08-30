@@ -28,14 +28,17 @@ void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
     animate = this->settings.at("animate") == "true";
   }
 
+  // TODO(jose) Ignore system windows:
+  // https://github.com/JoseExposito/touchegg/blob/master/src/touchegg/actions/implementation/ResizeWindow.cpp
+
   // TODO(jose) Allow to change the animation color??
   if (animate) {
     if (this->windowSystem.isWindowMaximized(this->window)) {
-      this->animation =
-          std::make_unique<RestoreWindowAnimation>(this->windowSystem);
+      this->animation = std::make_unique<RestoreWindowAnimation>(
+          this->windowSystem, this->window);
     } else {
-      this->animation =
-          std::make_unique<MaximizeWindowAnimation>(this->windowSystem);
+      this->animation = std::make_unique<MaximizeWindowAnimation>(
+          this->windowSystem, this->window);
     }
   }
 }

@@ -26,8 +26,9 @@
 
 class Animation {
  public:
-  explicit Animation(const WindowSystem &windowSystem)
+  Animation(const WindowSystem &windowSystem, const WindowT &window)
       : windowSystem(windowSystem),
+        window(window),
         surface(this->windowSystem.createSurface()),
         cairoContext(cairo_create(this->surface)) {}
 
@@ -45,6 +46,7 @@ class Animation {
 
  protected:
   const WindowSystem &windowSystem;
+  const WindowT &window;
   cairo_surface_t *surface;
   cairo_t *cairoContext;
 };

@@ -18,7 +18,10 @@
 #ifndef ACTIONS_MINIMIZE_WINDOW_H_
 #define ACTIONS_MINIMIZE_WINDOW_H_
 
+#include <memory>
+
 #include "actions/action.h"
+#include "animations/minimize-window-animation.h"
 
 class MinimizeWindow : public Action {
  public:
@@ -26,6 +29,9 @@ class MinimizeWindow : public Action {
   void onGestureBegin(const Gesture &gesture) override;
   void onGestureUpdate(const Gesture &gesture) override;
   void onGestureEnd(const Gesture &gesture) override;
+
+ private:
+  std::unique_ptr<MinimizeWindowAnimation> animation;
 };
 
 #endif  // ACTIONS_MINIMIZE_WINDOW_H_

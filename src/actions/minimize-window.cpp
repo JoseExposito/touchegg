@@ -25,23 +25,23 @@ void MinimizeWindow::onGestureBegin(const Gesture& /*gesture*/) {
 
   // TODO(jose) Allow to change the animation color??
   if (animate) {
-    // this->animation =
-    //     std::make_unique<RestoreWindowAnimation>(this->windowSystem);
+    this->animation = std::make_unique<MinimizeWindowAnimation>(
+        this->windowSystem, this->window);
   }
 }
 
-void MinimizeWindow::onGestureUpdate(const Gesture& /*gesture*/) {
-  // if (this->animation &&
-  //     gesture.elapsedTime() >
-  //         std::stoull(this->config.getGlobalSetting("animation_delay"))) {
-  //   this->animation->render(gesture.percentage());
-  // }
+void MinimizeWindow::onGestureUpdate(const Gesture& gesture) {
+  if (this->animation &&
+      gesture.elapsedTime() >
+          std::stoull(this->config.getGlobalSetting("animation_delay"))) {
+    this->animation->render(gesture.percentage());
+  }
 }
 
-void MinimizeWindow::onGestureEnd(const Gesture& /*gesture*/) {
-  // if (!this->animation ||
-  //     gesture.percentage() > std::stoi(this->config.getGlobalSetting(
-  //                                "action_execute_threshold"))) {
-  this->windowSystem.minimizeWindow(this->window);
-  //}
+void MinimizeWindow::onGestureEnd(const Gesture& gesture) {
+  if (!this->animation ||
+      gesture.percentage() > std::stoi(this->config.getGlobalSetting(
+                                 "action_execute_threshold"))) {
+    this->windowSystem.minimizeWindow(this->window);
+  }
 }

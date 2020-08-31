@@ -23,13 +23,15 @@
 #include "animations/restore-window-animation.h"
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
+  if (this->windowSystem.isSystemWindow(this->window)) {
+    this->ignoreAction = true;
+    return;
+  }
+
   bool animate = true;
   if (this->settings.count("animate") == 1) {
     animate = this->settings.at("animate") == "true";
   }
-
-  // TODO(jose) Ignore system windows:
-  // https://github.com/JoseExposito/touchegg/blob/master/src/touchegg/actions/implementation/ResizeWindow.cpp
 
   // TODO(jose) Allow to change the animation color??
   if (animate) {
@@ -44,6 +46,10 @@ void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
 }
 
 void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
+  if (this->ignoreAction) {
+    return;
+  }
+
   if (this->animation &&
       gesture.elapsedTime() >
           std::stoull(this->config.getGlobalSetting("animation_delay"))) {
@@ -52,6 +58,10 @@ void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
 }
 
 void MaximizeRestoreWindow::onGestureEnd(const Gesture& gesture) {
+  if (this->ignoreAction) {
+    return;
+  }
+
   if (!this->animation ||
       gesture.percentage() > std::stoi(this->config.getGlobalSetting(
                                  "action_execute_threshold"))) {

@@ -52,6 +52,7 @@ class X11 : public WindowSystem {
   std::string getWindowClassName(const WindowT &window) const override;
   Rectangle getWindowSize(const WindowT &window) const override;
   bool isWindowMaximized(const WindowT &window) const override;
+  bool isSystemWindow(const WindowT &window) const override;
   void maximizeOrRestoreWindow(const WindowT &window) const override;
   void minimizeWindow(const WindowT &window) const override;
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;

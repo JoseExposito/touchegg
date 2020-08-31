@@ -68,6 +68,12 @@ class WindowSystem {
   virtual bool isWindowMaximized(const WindowT &window) const = 0;
 
   /**
+   * @returns If the window is a system window, like the desktop window, the
+   * dock, a panel, etc
+   */
+  virtual bool isSystemWindow(const WindowT &window) const = 0;
+
+  /**
    * If the window is not maximized, maximize it, otherwise restore its size.
    */
   virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;

@@ -32,6 +32,7 @@ class MinimizeWindow : public Action {
 
  private:
   std::unique_ptr<MinimizeWindowAnimation> animation;
+  bool ignoreAction = false;
 };
 
 #endif  // ACTIONS_MINIMIZE_WINDOW_H_

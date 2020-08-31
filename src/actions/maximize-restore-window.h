@@ -36,6 +36,7 @@ class MaximizeRestoreWindow : public Action {
 
  private:
   std::unique_ptr<Animation> animation;
+  bool ignoreAction = false;
 };
 
 #endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_

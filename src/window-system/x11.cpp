@@ -231,6 +231,24 @@ bool X11::isWindowMaximized(const WindowT &window) const {
   return maximized;
 }
 
+bool X11::isSystemWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return false;
+  }
+
+  std::vector<Atom> types = this->getWindowProperty<Atom>(
+      x11Window.window, "_NET_WM_WINDOW_TYPE", XA_ATOM);
+
+  // Window type is not always set, but let's be optimistic
+  if (types.empty()) {
+    return false;
+  }
+
+  Atom normal = XInternAtom(this->display, "_NET_WM_WINDOW_TYPE_NORMAL", False);
+  return (std::find(types.begin(), types.end(), normal) == types.end());
+}
+
 void X11::maximizeOrRestoreWindow(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);
   if (x11Window.window == None) {
@@ -294,6 +312,11 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
 }
 
 Rectangle X11::getDesktopWorkarea() const {
+  // TODO(jose) When multiple physical screens are connected, the root
+  // window's size is the sum of all of them. Use X11/extensions/Xrandr.h to
+  // get the screen size of the window to animate in order to display the
+  // animation in the correct screen.
+
   Window rootWindow = XDefaultRootWindow(this->display);
 
   std::vector<int> currenDesktop = this->getWindowProperty<int>(
@@ -313,8 +336,8 @@ cairo_surface_t *X11::createSurface() const {
   Window rootWindow = XDefaultRootWindow(this->display);
   int screen = XDefaultScreen(this->display);
 
-  // Get the screen size. If multiple physical screens are connected this is the
-  // size of all of them, like they were a single screen
+  // Get the screen size. If multiple physical screens are connected this is
+  // the size of all of them, like they were a single screen
   int x = 0;
   int y = 0;
   int width = XWidthOfScreen(XDefaultScreenOfDisplay(this->display));

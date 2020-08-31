@@ -15,25 +15,31 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
-#define ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
+#ifndef UTILS_COLOR_H_
+#define UTILS_COLOR_H_
 
-#include "animations/animation.h"
-#include "utils/color.h"
-#include "utils/rectangle.h"
+#include <string>
 
-class MaximizeWindowAnimation : public Animation {
+/**
+ * Simple class to parse color from config and use them with Cairo.
+ */
+class Color {
  public:
-  using Animation::Animation;
-  MaximizeWindowAnimation(const WindowSystem &windowSystem,
-                          const WindowT &window, Color color,
-                          Color borderColor);
-  void render(int percentage) override;
+  Color() = default;
+
+  /**
+   * @param hexString A string like "RRGGBB" or "#RRGGBB".
+   */
+  explicit Color(const std::string &hexString);
+
+  double r() const;
+  double g() const;
+  double b() const;
 
  private:
-  Rectangle maxSize;
-  Color color;
-  Color borderColor;
+  double red = 62.0;
+  double green = 159.0;
+  double blue = 237.0;
 };
 
-#endif  // ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
+#endif  // UTILS_COLOR_H_

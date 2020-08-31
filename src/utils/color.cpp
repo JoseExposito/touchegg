@@ -15,25 +15,24 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
-#define ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
-
-#include "animations/animation.h"
 #include "utils/color.h"
-#include "utils/rectangle.h"
 
-class MaximizeWindowAnimation : public Animation {
- public:
-  using Animation::Animation;
-  MaximizeWindowAnimation(const WindowSystem &windowSystem,
-                          const WindowT &window, Color color,
-                          Color borderColor);
-  void render(int percentage) override;
+#include <iostream>
 
- private:
-  Rectangle maxSize;
-  Color color;
-  Color borderColor;
-};
+Color::Color(const std::string &hexString) {
+  if (hexString.size() != 6 &&
+      (hexString.size() != 7 && hexString.front() != '#')) {
+    return;
+  }
 
-#endif  // ANIMATIONS_MAXIMIZE_WINDOW_ANIMATION_H_
+  size_t offset = (hexString.size() == 6) ? 0 : 1;
+  this->red = std::stoi(hexString.substr(offset, 2), nullptr, 16);
+  this->green = std::stoi(hexString.substr(offset + 2, 2), nullptr, 16);
+  this->blue = std::stoi(hexString.substr(offset + 4, 2), nullptr, 16);
+}
+
+double Color::r() const { return this->red / 255.0; }
+
+double Color::g() const { return this->green / 255.0; }
+
+double Color::b() const { return this->blue / 255.0; }

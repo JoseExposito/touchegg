@@ -18,11 +18,15 @@
 #include "animations/restore-window-animation.h"
 
 #include <algorithm>
+#include <utility>
 
 RestoreWindowAnimation::RestoreWindowAnimation(const WindowSystem &windowSystem,
-                                               const WindowT &window)
+                                               const WindowT &window,
+                                               Color color, Color borderColor)
     : Animation(windowSystem, window),
-      maxSize(this->windowSystem.getDesktopWorkarea()) {}
+      maxSize(this->windowSystem.getDesktopWorkarea()),
+      color(color),
+      borderColor(borderColor) {}
 
 void RestoreWindowAnimation::render(int percentage) {
   cairo_t *ctx = this->cairoContext;
@@ -38,7 +42,7 @@ void RestoreWindowAnimation::render(int percentage) {
 
   // Full-screen colored rectangle
   double alpha = (percentage * maxAlpha) / 100;
-  cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, alpha);
+  cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_rectangle(ctx, maxSize.x, maxSize.y, maxSize.width, maxSize.height);
   cairo_fill(ctx);
 
@@ -47,9 +51,14 @@ void RestoreWindowAnimation::render(int percentage) {
   int width = maxSize.width - ((percentage * maxDiff) / 100);
   int height = maxSize.height - ((percentage * maxDiff) / 100);
 
-  cairo_set_source_rgba(ctx, 0, 0, 0, 0);
+  cairo_set_line_width(ctx, 2);
+  cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),
+                        alpha);
   cairo_rectangle(ctx, maxSize.x + (maxSize.width - width) / 2,
                   maxSize.y + (maxSize.height - height) / 2, width, height);
+  cairo_stroke_preserve(ctx);
+
+  cairo_set_source_rgba(ctx, 0, 0, 0, 0);
   cairo_fill(ctx);
 
   this->windowSystem.flushSurface(this->surface);

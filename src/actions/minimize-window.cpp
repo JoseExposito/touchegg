@@ -28,10 +28,20 @@ void MinimizeWindow::onGestureBegin(const Gesture& /*gesture*/) {
     animate = this->settings.at("animate") == "true";
   }
 
-  // TODO(jose) Allow to change the animation color??
   if (animate) {
+    Color color;
+    Color borderColor;
+
+    if (this->settings.count("color") == 1) {
+      color = Color{this->settings.at("color")};
+    }
+
+    if (this->settings.count("borderColor") == 1) {
+      borderColor = Color{this->settings.at("borderColor")};
+    }
+
     this->animation = std::make_unique<MinimizeWindowAnimation>(
-        this->windowSystem, this->window);
+        this->windowSystem, this->window, color, borderColor);
   }
 }
 

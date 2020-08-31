@@ -19,18 +19,22 @@
 #define ANIMATIONS_MINIMIZE_WINDOW_ANIMATION_H_
 
 #include "animations/animation.h"
+#include "utils/color.h"
 #include "utils/rectangle.h"
 
 class MinimizeWindowAnimation : public Animation {
  public:
   using Animation::Animation;
   MinimizeWindowAnimation(const WindowSystem &windowSystem,
-                          const WindowT &window);
+                          const WindowT &window, Color color,
+                          Color borderColor);
   void render(int percentage) override;
 
  private:
   Rectangle initialSize;
   Rectangle finalSize;
+  Color color;
+  Color borderColor;
 };
 
 #endif  // ANIMATIONS_MINIMIZE_WINDOW_ANIMATION_H_

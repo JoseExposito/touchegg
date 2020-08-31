@@ -21,10 +21,13 @@
 #include <iostream>
 
 MinimizeWindowAnimation::MinimizeWindowAnimation(
-    const WindowSystem &windowSystem, const WindowT &window)
+    const WindowSystem &windowSystem, const WindowT &window, Color color,
+    Color borderColor)
     : Animation(windowSystem, window),
       initialSize(this->windowSystem.getWindowSize(this->window)),
-      finalSize(this->windowSystem.minimizeWindowIconSize(this->window)) {}
+      finalSize(this->windowSystem.minimizeWindowIconSize(this->window)),
+      color(color),
+      borderColor(borderColor) {}
 
 void MinimizeWindowAnimation::render(int percentage) {
   cairo_t *ctx = this->cairoContext;
@@ -44,8 +47,13 @@ void MinimizeWindowAnimation::render(int percentage) {
                initialSize.height;
   double alpha = (percentage * maxAlpha) / 100;
 
-  cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, alpha);
+  cairo_set_line_width(ctx, 2);
+  cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),
+                        alpha);
   cairo_rectangle(ctx, x, y, width, height);
+  cairo_stroke_preserve(ctx);
+
+  cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_fill(ctx);
 
   this->windowSystem.flushSurface(this->surface);

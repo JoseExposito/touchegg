@@ -18,9 +18,12 @@
 #include "animations/maximize-window-animation.h"
 
 MaximizeWindowAnimation::MaximizeWindowAnimation(
-    const WindowSystem &windowSystem, const WindowT &window)
+    const WindowSystem &windowSystem, const WindowT &window, Color color,
+    Color borderColor)
     : Animation(windowSystem, window),
-      maxSize(this->windowSystem.getDesktopWorkarea()) {}
+      maxSize(this->windowSystem.getDesktopWorkarea()),
+      color(color),
+      borderColor(borderColor) {}
 
 void MaximizeWindowAnimation::render(int percentage) {
   cairo_t *ctx = this->cairoContext;
@@ -36,9 +39,14 @@ void MaximizeWindowAnimation::render(int percentage) {
   int height = (percentage * maxSize.height) / 100;
   double alpha = (percentage * maxAlpha) / 100;
 
-  cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, alpha);
+  cairo_set_line_width(ctx, 2);
+  cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),
+                        alpha);
   cairo_rectangle(ctx, maxSize.x + ((maxSize.width - width) / 2), maxSize.y,
                   width, height);
+  cairo_stroke_preserve(ctx);
+
+  cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_fill(ctx);
 
   this->windowSystem.flushSurface(this->surface);

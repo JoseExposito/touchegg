@@ -101,6 +101,19 @@ Rectangle X11::getWindowSize(const WindowT &window) const {
   size.y = attrs.y;
   size.width = attrs.width;
   size.height = attrs.height;
+
+  int x;
+  int y;
+  Window child;
+  Bool translated = XTranslateCoordinates(this->display, x11Window.window,
+                                          XDefaultRootWindow(this->display), 0,
+                                          0, &x, &y, &child);
+  if (translated == False) {
+    return size;
+  }
+
+  size.x = x;
+  size.y = y;
   return size;
 }
 

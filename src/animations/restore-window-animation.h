@@ -19,11 +19,17 @@
 #define ANIMATIONS_RESTORE_WINDOW_ANIMATION_H_
 
 #include "animations/animation.h"
+#include "utils/rectangle.h"
 
 class RestoreWindowAnimation : public Animation {
  public:
   using Animation::Animation;
+  RestoreWindowAnimation(const WindowSystem &windowSystem,
+                         const WindowT &window);
   void render(int percentage) override;
+
+ private:
+  Rectangle maxSize;
 };
 
 #endif  // ANIMATIONS_RESTORE_WINDOW_ANIMATION_H_

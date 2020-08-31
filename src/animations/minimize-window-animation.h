@@ -23,8 +23,9 @@
 
 class MinimizeWindowAnimation : public Animation {
  public:
-  explicit MinimizeWindowAnimation(const WindowSystem &windowSystem,
-                                   const WindowT &window);
+  using Animation::Animation;
+  MinimizeWindowAnimation(const WindowSystem &windowSystem,
+                          const WindowT &window);
   void render(int percentage) override;
 
  private:

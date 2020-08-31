@@ -19,8 +19,13 @@
 
 #include <algorithm>
 
+RestoreWindowAnimation::RestoreWindowAnimation(const WindowSystem &windowSystem,
+                                               const WindowT &window)
+    : Animation(windowSystem, window),
+      maxSize(this->windowSystem.getDesktopWorkarea()) {}
+
 void RestoreWindowAnimation::render(int percentage) {
-  cairo_t* ctx = this->cairoContext;
+  cairo_t *ctx = this->cairoContext;
 
   // Clear the background
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
@@ -29,24 +34,22 @@ void RestoreWindowAnimation::render(int percentage) {
 
   // This animation draws a full-screen rectangle with color and a smaller
   // transparent rectangle inside
-  int maxWidth = this->windowSystem.getSurfaceWidth(this->surface);
-  int maxHeight = this->windowSystem.getSurfaceHeight(this->surface);
   double maxAlpha = 0.6;
 
   // Full-screen colored rectangle
   double alpha = (percentage * maxAlpha) / 100;
   cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, alpha);
-  cairo_rectangle(ctx, 0, 0, maxWidth, maxHeight);
+  cairo_rectangle(ctx, maxSize.x, maxSize.y, maxSize.width, maxSize.height);
   cairo_fill(ctx);
 
   // Calculate the size of the transparent rectangle
-  int maxDiff = (5 * std::max(maxWidth, maxHeight)) / 100;
-  int width = maxWidth - ((percentage * maxDiff) / 100);
-  int height = maxHeight - ((percentage * maxDiff) / 100);
+  int maxDiff = (5 * std::max(maxSize.width, maxSize.height)) / 100;
+  int width = maxSize.width - ((percentage * maxDiff) / 100);
+  int height = maxSize.height - ((percentage * maxDiff) / 100);
 
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
-  cairo_rectangle(ctx, (maxWidth - width) / 2, (maxHeight - height) / 2, width,
-                  height);
+  cairo_rectangle(ctx, maxSize.x + (maxSize.width - width) / 2,
+                  maxSize.y + (maxSize.height - height) / 2, width, height);
   cairo_fill(ctx);
 
   this->windowSystem.flushSurface(this->surface);

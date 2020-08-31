@@ -17,8 +17,13 @@
  */
 #include "animations/maximize-window-animation.h"
 
+MaximizeWindowAnimation::MaximizeWindowAnimation(
+    const WindowSystem &windowSystem, const WindowT &window)
+    : Animation(windowSystem, window),
+      maxSize(this->windowSystem.getDesktopWorkarea()) {}
+
 void MaximizeWindowAnimation::render(int percentage) {
-  cairo_t* ctx = this->cairoContext;
+  cairo_t *ctx = this->cairoContext;
 
   // Clear the background
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
@@ -26,15 +31,14 @@ void MaximizeWindowAnimation::render(int percentage) {
   cairo_paint(ctx);
 
   // Draw the rectangle
-  int maxWidth = this->windowSystem.getSurfaceWidth(this->surface);
-  int maxHeight = this->windowSystem.getSurfaceHeight(this->surface);
   double maxAlpha = 0.6;
-  int width = (percentage * maxWidth) / 100;
-  int height = (percentage * maxHeight) / 100;
+  int width = (percentage * maxSize.width) / 100;
+  int height = (percentage * maxSize.height) / 100;
   double alpha = (percentage * maxAlpha) / 100;
 
   cairo_set_source_rgba(ctx, 62.0 / 255.0, 159.0 / 255.0, 237.0 / 255.0, alpha);
-  cairo_rectangle(ctx, ((maxWidth - width) / 2), 0.0, width, height);
+  cairo_rectangle(ctx, maxSize.x + ((maxSize.width - width) / 2), maxSize.y,
+                  width, height);
   cairo_fill(ctx);
 
   this->windowSystem.flushSurface(this->surface);

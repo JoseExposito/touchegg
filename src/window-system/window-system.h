@@ -63,6 +63,33 @@ class WindowSystem {
   virtual Rectangle getWindowSize(const WindowT &window) const = 0;
 
   /**
+   * @returns If the window is maximized or not.
+   */
+  virtual bool isWindowMaximized(const WindowT &window) const = 0;
+
+  /**
+   * If the window is not maximized, maximize it, otherwise restore its size.
+   */
+  virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;
+
+  /**
+   * Minimize a window.
+   */
+  virtual void minimizeWindow(const WindowT &window) const = 0;
+
+  /**
+   * @returns The size of the window icon in the toolbar/dock or similar. Useful
+   * to perform minimize animations.
+   */
+  virtual Rectangle minimizeWindowIconSize(const WindowT &window) const = 0;
+
+  /**
+   * @returns The size of the desktop workarea, ie, the area of the desktop not
+   * used by system elements like docks, panels, etc.
+   */
+  virtual Rectangle getDesktopWorkarea() const = 0;
+
+  /**
    * Creates a Cairo surface to draw on.
    * IMPORTANT! Destroy the surface with WindowSystem::destroySurface().
    */
@@ -89,27 +116,6 @@ class WindowSystem {
    * @param cairoSurface The surface.
    */
   virtual void destroySurface(cairo_surface_t *cairoSurface) const = 0;
-
-  /**
-   * @returns If the window is maximized or not.
-   */
-  virtual bool isWindowMaximized(const WindowT &window) const = 0;
-
-  /**
-   * If the window is not maximized, maximize it, otherwise restore its size.
-   */
-  virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;
-
-  /**
-   * Minimize a window.
-   */
-  virtual void minimizeWindow(const WindowT &window) const = 0;
-
-  /**
-   * @returns The size of the window icon in the toolbar/dock or similar. Useful
-   * to perform minimize animations.
-   */
-  virtual Rectangle minimizeWindowIconSize(const WindowT &window) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

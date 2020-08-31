@@ -203,64 +203,6 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
   return std::make_pair(found, ret);
 }
 
-cairo_surface_t *X11::createSurface() const {
-  Window rootWindow = XDefaultRootWindow(this->display);
-  int screen = XDefaultScreen(this->display);
-
-  // Get the current desktop size (without dock, panels, etc)
-  std::vector<int> currenDesktop = this->getWindowProperty<int>(
-      rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
-  std::vector<uint64_t> workArea = this->getWindowProperty<uint64_t>(
-      rootWindow, "_NET_WORKAREA", XA_CARDINAL);
-  int x = workArea[0 + (currenDesktop[0] * 4)];
-  int y = workArea[1 + (currenDesktop[0] * 4)];
-  int width = workArea[2 + (currenDesktop[0] * 4)];
-  int height = workArea[3 + (currenDesktop[0] * 4)];
-
-  // Create a transparent window
-  XVisualInfo vInfo;
-  XMatchVisualInfo(this->display, screen, 32, TrueColor, &vInfo);
-
-  XSetWindowAttributes attr;
-  attr.colormap =
-      XCreateColormap(this->display, rootWindow, vInfo.visual, AllocNone);
-  attr.border_pixel = 0;
-  attr.background_pixel = 0;
-  attr.override_redirect = 1;
-
-  Window window = XCreateWindow(
-      this->display, rootWindow, x, y, width, height, 0, vInfo.depth,
-      InputOutput, vInfo.visual,
-      CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
-  XMapWindow(display, window);
-
-  // Create the surface
-  cairo_surface_t *surface = cairo_xlib_surface_create(
-      this->display, window, vInfo.visual, width, height);
-  cairo_xlib_surface_set_size(surface, width, height);
-
-  return surface;
-}
-
-int X11::getSurfaceWidth(cairo_surface_t *cairoSurface) const {
-  return cairo_xlib_surface_get_width(cairoSurface);
-}
-
-int X11::getSurfaceHeight(cairo_surface_t *cairoSurface) const {
-  return cairo_xlib_surface_get_height(cairoSurface);
-}
-
-void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
-  XFlush(this->display);
-}
-
-void X11::destroySurface(cairo_surface_t *cairoSurface) const {
-  Window window = cairo_xlib_surface_get_drawable(cairoSurface);
-  cairo_surface_destroy(cairoSurface);
-  XDestroyWindow(this->display, window);
-  XFlush(this->display);
-}
-
 bool X11::isWindowMaximized(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);
   if (x11Window.window == None) {
@@ -349,4 +291,75 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
   size.width = iconSize[2];
   size.height = iconSize[3];
   return size;
+}
+
+Rectangle X11::getDesktopWorkarea() const {
+  Window rootWindow = XDefaultRootWindow(this->display);
+
+  std::vector<int> currenDesktop = this->getWindowProperty<int>(
+      rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
+  std::vector<uint64_t> workArea = this->getWindowProperty<uint64_t>(
+      rootWindow, "_NET_WORKAREA", XA_CARDINAL);
+
+  Rectangle size;
+  size.x = workArea[0 + (currenDesktop[0] * 4)];
+  size.y = workArea[1 + (currenDesktop[0] * 4)];
+  size.width = workArea[2 + (currenDesktop[0] * 4)];
+  size.height = workArea[3 + (currenDesktop[0] * 4)];
+  return size;
+}
+
+cairo_surface_t *X11::createSurface() const {
+  Window rootWindow = XDefaultRootWindow(this->display);
+  int screen = XDefaultScreen(this->display);
+
+  // Get the screen size. If multiple physical screens are connected this is the
+  // size of all of them, like they were a single screen
+  int x = 0;
+  int y = 0;
+  int width = XWidthOfScreen(XDefaultScreenOfDisplay(this->display));
+  int height = XHeightOfScreen(XDefaultScreenOfDisplay(this->display));
+
+  // Create a transparent window
+  XVisualInfo vInfo;
+  XMatchVisualInfo(this->display, screen, 32, TrueColor, &vInfo);
+
+  XSetWindowAttributes attr;
+  attr.colormap =
+      XCreateColormap(this->display, rootWindow, vInfo.visual, AllocNone);
+  attr.border_pixel = 0;
+  attr.background_pixel = 0;
+  attr.override_redirect = 1;
+
+  Window window = XCreateWindow(
+      this->display, rootWindow, x, y, width, height, 0, vInfo.depth,
+      InputOutput, vInfo.visual,
+      CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
+  XMapWindow(display, window);
+
+  // Create the surface
+  cairo_surface_t *surface = cairo_xlib_surface_create(
+      this->display, window, vInfo.visual, width, height);
+  cairo_xlib_surface_set_size(surface, width, height);
+
+  return surface;
+}
+
+int X11::getSurfaceWidth(cairo_surface_t *cairoSurface) const {
+  return cairo_xlib_surface_get_width(cairoSurface);
+}
+
+int X11::getSurfaceHeight(cairo_surface_t *cairoSurface) const {
+  return cairo_xlib_surface_get_height(cairoSurface);
+}
+
+void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
+  XFlush(this->display);
+}
+
+void X11::destroySurface(cairo_surface_t *cairoSurface) const {
+  Window window = cairo_xlib_surface_get_drawable(cairoSurface);
+  cairo_surface_destroy(cairoSurface);
+  XDestroyWindow(this->display, window);
+  XFlush(this->display);
 }

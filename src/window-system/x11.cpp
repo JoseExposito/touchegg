@@ -311,6 +311,50 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
   return size;
 }
 
+void X11::tileWindowToTheLeft(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  // Window can not be maximized
+  XClientMessageEvent event;
+  event.window = x11Window.window;
+  event.type = ClientMessage;
+  event.message_type = XInternAtom(this->display, "_NET_WM_STATE", False);
+  event.format = 32;
+  event.data.l[0] = 0;  // _NET_WM_STATE_REMOVE = 0  // NOLINT
+  // NOLINTNEXTLINE
+  event.data.l[1] =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+  // NOLINTNEXTLINE
+  event.data.l[2] =
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+
+  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
+
+  // Move and resize the window
+  Rectangle maxSize = this->getDesktopWorkarea();
+
+  event.message_type =
+      XInternAtom(this->display, "_NET_MOVERESIZE_WINDOW", False);
+  event.format = 32;
+  event.data.l[0] =  // NOLINT
+      StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
+  event.data.l[1] = maxSize.x;            // NOLINT
+  event.data.l[2] = maxSize.y;            // NOLINT
+  event.data.l[3] = (maxSize.width / 2);  // NOLINT
+  event.data.l[4] = maxSize.height;       // NOLINT
+
+  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
+}
+
 Rectangle X11::getDesktopWorkarea() const {
   // TODO(jose) When multiple physical screens are connected, the root
   // window's size is the sum of all of them. Use X11/extensions/Xrandr.h to

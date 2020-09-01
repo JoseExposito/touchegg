@@ -22,6 +22,7 @@
 #include "actions/action.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
+#include "actions/tile-window.h"
 
 std::unique_ptr<Action> ActionFactory::buildAction(
     ActionType type, std::unordered_map<std::string, std::string> settings,
@@ -34,6 +35,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::MINIMIZE_WINDOW:
       return std::make_unique<MinimizeWindow>(std::move(settings), windowSystem,
                                               window, config);
+    case ActionType::TILE_WINDOW:
+      return std::make_unique<TileWindow>(std::move(settings), windowSystem,
+                                          window, config);
     default:
       return nullptr;
   }

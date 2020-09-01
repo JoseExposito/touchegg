@@ -189,6 +189,9 @@ ActionType XmlConfigLoader::getActionType(const std::string &str) {
   if (str == "MINIMIZE_WINDOW") {
     return ActionType::MINIMIZE_WINDOW;
   }
+  if (str == "TILE_WINDOW") {
+    return ActionType::TILE_WINDOW;
+  }
   return ActionType::NO_ACTION;
 }
 

@@ -56,6 +56,7 @@ class X11 : public WindowSystem {
   void maximizeOrRestoreWindow(const WindowT &window) const override;
   void minimizeWindow(const WindowT &window) const override;
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;
+  void tileWindowToTheLeft(const WindowT &window) const override;
 
   Rectangle getDesktopWorkarea() const override;
 

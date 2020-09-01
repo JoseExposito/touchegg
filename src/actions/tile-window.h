@@ -15,16 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_ACTION_TYPE_H_
-#define ACTIONS_ACTION_TYPE_H_
+#ifndef ACTIONS_TILE_WINDOW_H_
+#define ACTIONS_TILE_WINDOW_H_
 
-enum class ActionType {
-  NO_ACTION,
-  MAXIMIZE_RESTORE_WINDOW,
-  MINIMIZE_WINDOW,
-  TILE_WINDOW,
-  // Adding a new action? Don't forget to add it in
-  // XmlConfigLoader::getActionType and ActionFactory::buildAction
+#include <memory>
+
+#include "actions/animated-action.h"
+
+class TileWindow : public AnimatedAction {
+ public:
+  using AnimatedAction::AnimatedAction;
+  bool runOnSystemWindows() override { return false; }
+  void onGestureBegin(const Gesture &gesture) override;
+  void executeAction(const Gesture &gesture) override;
+
+ private:
+  bool toTheLeft = true;
 };
 
-#endif  // ACTIONS_ACTION_TYPE_H_
+#endif  // ACTIONS_TILE_WINDOW_H_

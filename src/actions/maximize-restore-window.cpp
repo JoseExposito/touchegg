@@ -17,65 +17,23 @@
  */
 #include "actions/maximize-restore-window.h"
 
-#include <utility>
+#include <memory>
 
 #include "animations/maximize-window-animation.h"
 #include "animations/restore-window-animation.h"
-#include "utils/color.h"
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
-  if (this->windowSystem.isSystemWindow(this->window)) {
-    this->ignoreAction = true;
-    return;
-  }
-
-  bool animate = true;
-  if (this->settings.count("animate") == 1) {
-    animate = this->settings.at("animate") == "true";
-  }
-
-  if (animate) {
-    Color color;
-    Color borderColor;
-
-    if (this->settings.count("color") == 1) {
-      color = Color{this->settings.at("color")};
-    }
-
-    if (this->settings.count("borderColor") == 1) {
-      borderColor = Color{this->settings.at("borderColor")};
-    }
-
+  if (this->animate) {
     if (this->windowSystem.isWindowMaximized(this->window)) {
       this->animation = std::make_unique<RestoreWindowAnimation>(
-          this->windowSystem, this->window, color, borderColor);
+          this->windowSystem, this->window, this->color, this->borderColor);
     } else {
       this->animation = std::make_unique<MaximizeWindowAnimation>(
-          this->windowSystem, this->window, color, borderColor);
+          this->windowSystem, this->window, this->color, this->borderColor);
     }
   }
 }
 
-void MaximizeRestoreWindow::onGestureUpdate(const Gesture& gesture) {
-  if (this->ignoreAction) {
-    return;
-  }
-
-  if (this->animation &&
-      gesture.elapsedTime() >
-          std::stoull(this->config.getGlobalSetting("animation_delay"))) {
-    this->animation->render(gesture.percentage());
-  }
-}
-
-void MaximizeRestoreWindow::onGestureEnd(const Gesture& gesture) {
-  if (this->ignoreAction) {
-    return;
-  }
-
-  if (!this->animation ||
-      gesture.percentage() > std::stoi(this->config.getGlobalSetting(
-                                 "action_execute_threshold"))) {
-    this->windowSystem.maximizeOrRestoreWindow(this->window);
-  }
+void MaximizeRestoreWindow::executeAction(const Gesture& /*gesture*/) {
+  this->windowSystem.maximizeOrRestoreWindow(this->window);
 }

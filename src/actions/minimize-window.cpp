@@ -17,54 +17,17 @@
  */
 #include "actions/minimize-window.h"
 
+#include <memory>
+
+#include "animations/minimize-window-animation.h"
+
 void MinimizeWindow::onGestureBegin(const Gesture& /*gesture*/) {
-  if (this->windowSystem.isSystemWindow(this->window)) {
-    this->ignoreAction = true;
-    return;
-  }
-
-  bool animate = true;
-  if (this->settings.count("animate") == 1) {
-    animate = this->settings.at("animate") == "true";
-  }
-
-  if (animate) {
-    Color color;
-    Color borderColor;
-
-    if (this->settings.count("color") == 1) {
-      color = Color{this->settings.at("color")};
-    }
-
-    if (this->settings.count("borderColor") == 1) {
-      borderColor = Color{this->settings.at("borderColor")};
-    }
-
+  if (this->animate) {
     this->animation = std::make_unique<MinimizeWindowAnimation>(
-        this->windowSystem, this->window, color, borderColor);
+        this->windowSystem, this->window, this->color, this->borderColor);
   }
 }
 
-void MinimizeWindow::onGestureUpdate(const Gesture& gesture) {
-  if (this->ignoreAction) {
-    return;
-  }
-
-  if (this->animation &&
-      gesture.elapsedTime() >
-          std::stoull(this->config.getGlobalSetting("animation_delay"))) {
-    this->animation->render(gesture.percentage());
-  }
-}
-
-void MinimizeWindow::onGestureEnd(const Gesture& gesture) {
-  if (this->ignoreAction) {
-    return;
-  }
-
-  if (!this->animation ||
-      gesture.percentage() > std::stoi(this->config.getGlobalSetting(
-                                 "action_execute_threshold"))) {
-    this->windowSystem.minimizeWindow(this->window);
-  }
+void MinimizeWindow::executeAction(const Gesture& /*gesture*/) {
+  this->windowSystem.minimizeWindow(this->window);
 }

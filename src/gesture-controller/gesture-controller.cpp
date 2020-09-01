@@ -39,6 +39,7 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   std::cout << "onGestureBegin" << std::endl;
 
   this->window = this->windowSystem.getWindowUnderCursor();
+  this->executeAction = false;
 
   // TODO(jose) Check if there is a gesture configured for the window
   std::string className = this->windowSystem.getWindowClassName(*this->window);
@@ -63,7 +64,15 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
         actionType, std::move(actionSettings), this->windowSystem,
         *this->window, this->config);
 
-    if (this->action != nullptr) {
+    // Check if we should run the action
+    bool isSystemWindow = this->windowSystem.isSystemWindow(*this->window);
+    this->executeAction =
+        (this->action != nullptr)  // Not nullptr action
+        && (!isSystemWindow        // Not system window
+                                   // The action can run on system windows:
+            || (isSystemWindow && this->action->runOnSystemWindows()));
+
+    if (this->executeAction) {
       std::cout << "Starting action" << std::endl;
       this->action->onGestureBegin(*gesture);
     }
@@ -82,7 +91,7 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
-  if (this->action) {
+  if (this->executeAction) {
     this->action->onGestureUpdate(*gesture);
 
     // TODO(jose)
@@ -97,7 +106,7 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
-  if (this->action) {
+  if (this->executeAction) {
     this->action->onGestureEnd(*gesture);
 
     // TODO(jose)

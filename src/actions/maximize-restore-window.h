@@ -18,25 +18,18 @@
 #ifndef ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
 #define ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_
 
-#include <memory>
-
-#include "actions/action.h"
-#include "animations/animation.h"
+#include "actions/animated-action.h"
 
 /**
  * Action to maximize or restore the window under the pointer.
  * If the window is not maximized, maximize it, otherwise restore its size.
  */
-class MaximizeRestoreWindow : public Action {
+class MaximizeRestoreWindow : public AnimatedAction {
  public:
-  using Action::Action;
+  using AnimatedAction::AnimatedAction;
+  bool runOnSystemWindows() override { return false; }
   void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
-
- private:
-  std::unique_ptr<Animation> animation;
-  bool ignoreAction = false;
+  void executeAction(const Gesture &gesture) override;
 };
 
 #endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_

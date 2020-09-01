@@ -47,12 +47,17 @@ class GestureController : public GestureControllerDelegate {
   /**
    * The action to perform.
    */
-  std::unique_ptr<Action> action;
+  std::unique_ptr<Action> action = nullptr;
 
   /**
    * The window the action is performed on.
    */
   std::unique_ptr<WindowT> window;
+
+  /**
+   * A flag indicating if we should run the action.
+   */
+  bool executeAction = false;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_

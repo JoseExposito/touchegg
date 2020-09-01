@@ -18,21 +18,14 @@
 #ifndef ACTIONS_MINIMIZE_WINDOW_H_
 #define ACTIONS_MINIMIZE_WINDOW_H_
 
-#include <memory>
+#include "actions/animated-action.h"
 
-#include "actions/action.h"
-#include "animations/minimize-window-animation.h"
-
-class MinimizeWindow : public Action {
+class MinimizeWindow : public AnimatedAction {
  public:
-  using Action::Action;
+  using AnimatedAction::AnimatedAction;
+  bool runOnSystemWindows() override { return false; }
   void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
-
- private:
-  std::unique_ptr<MinimizeWindowAnimation> animation;
-  bool ignoreAction = false;
+  void executeAction(const Gesture &gesture) override;
 };
 
 #endif  // ACTIONS_MINIMIZE_WINDOW_H_

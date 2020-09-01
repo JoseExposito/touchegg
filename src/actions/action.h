@@ -20,6 +20,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 #include "config/config.h"
 #include "gesture/gesture.h"
@@ -35,15 +36,22 @@ class Action {
    * @param settings Action settings.
    * @param windowSystem Object to access the underlaying window system.
    * @param window The window the gesture is performed on.
+   * @param config Configuration.
    */
   Action(std::unordered_map<std::string, std::string> settings,
          const WindowSystem &windowSystem, const WindowT &window,
          const Config &config)
-      : settings(settings),
+      : settings(std::move(settings)),
         windowSystem(windowSystem),
         window(window),
         config(config) {}
   virtual ~Action() = default;
+
+  /**
+   * The action must return a bool indicating if it can be executed in system
+   * windows (dock, panel, desktop, etc).
+   */
+  virtual bool runOnSystemWindows() = 0;
 
   virtual void onGestureBegin(const Gesture &gesture) = 0;
   virtual void onGestureUpdate(const Gesture &gesture) = 0;

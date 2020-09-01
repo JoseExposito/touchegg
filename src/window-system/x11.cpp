@@ -114,6 +114,21 @@ Rectangle X11::getWindowSize(const WindowT &window) const {
 
   size.x = x;
   size.y = y;
+
+  // When the window uses client-side decorantion, the WM is not able to know
+  // the size of the shadows.
+  // Some WMs, like Gala, Mutter and even KWin, use the non-standard
+  // _GTK_FRAME_EXTENTS (left, right, top, bottom) atom to indicate the size of
+  // the shadow.
+  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
+      x11Window.window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
+  if (decoration.size() == 4) {
+    size.x += decoration[0];
+    size.y += decoration[2];
+    size.width -= (decoration[0] + decoration[1]);
+    size.height -= (decoration[2] + decoration[3]);
+  }
+
   return size;
 }
 
@@ -304,6 +319,10 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
 
   std::vector<uint64_t> iconSize = this->getWindowProperty<uint64_t>(
       x11Window.window, "_NET_WM_ICON_GEOMETRY", XA_CARDINAL);
+  if (iconSize.size() < 4) {
+    return size;
+  }
+
   size.x = iconSize[0];
   size.y = iconSize[1];
   size.width = iconSize[2];
@@ -316,6 +335,14 @@ void X11::tileWindowToTheLeft(const WindowT &window) const {
   if (x11Window.window == None) {
     return;
   }
+
+  // When the window uses client-side decorantion, the WM is not able to know
+  // the size of the shadows.
+  // Some WMs, like Gala, Mutter and even KWin, use the non-standard
+  // _GTK_FRAME_EXTENTS (left, right, top, bottom) atom to indicate the size of
+  // the shadow.
+  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
+      x11Window.window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
 
   // Window can not be maximized
   XClientMessageEvent event;
@@ -338,16 +365,27 @@ void X11::tileWindowToTheLeft(const WindowT &window) const {
 
   // Move and resize the window
   Rectangle maxSize = this->getDesktopWorkarea();
+  int x = maxSize.x;
+  int y = maxSize.y;
+  int width = (maxSize.width / 2);
+  int height = maxSize.height;
+
+  if (decoration.size() == 4) {
+    x -= decoration[0];
+    y -= decoration[2];
+    width += decoration[0] + decoration[1];
+    height += decoration[2] + decoration[3];
+  }
 
   event.message_type =
       XInternAtom(this->display, "_NET_MOVERESIZE_WINDOW", False);
   event.format = 32;
   event.data.l[0] =  // NOLINT
-      StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
-  event.data.l[1] = maxSize.x;            // NOLINT
-  event.data.l[2] = maxSize.y;            // NOLINT
-  event.data.l[3] = (maxSize.width / 2);  // NOLINT
-  event.data.l[4] = maxSize.height;       // NOLINT
+      StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 15);
+  event.data.l[1] = x;       // NOLINT
+  event.data.l[2] = y;       // NOLINT
+  event.data.l[3] = width;   // NOLINT
+  event.data.l[4] = height;  // NOLINT
 
   XSendEvent(this->display, XDefaultRootWindow(this->display), False,
              (SubstructureNotifyMask | SubstructureRedirectMask),

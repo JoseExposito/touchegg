@@ -349,7 +349,7 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
 
   // Move and resize the window
   Rectangle maxSize = this->getDesktopWorkarea();
-  int x = toTheLeft ? maxSize.x : (maxSize.width / 2);
+  int x = toTheLeft ? maxSize.x : maxSize.x + (maxSize.width / 2);
   int y = maxSize.y;
   int width = (maxSize.width / 2);
   int height = maxSize.height;

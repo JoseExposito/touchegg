@@ -28,7 +28,7 @@ TileWindowAnimation::TileWindowAnimation(const WindowSystem &windowSystem,
       borderColor(borderColor),
       toTheLeft(toTheLeft) {
   Rectangle workarea = this->windowSystem.getDesktopWorkarea();
-  maxSize.x = toTheLeft ? workarea.x : (workarea.width / 2);
+  maxSize.x = toTheLeft ? workarea.x : workarea.x + (workarea.width / 2);
   maxSize.y = workarea.y;
   maxSize.width = (workarea.width / 2);
   maxSize.height = workarea.height;

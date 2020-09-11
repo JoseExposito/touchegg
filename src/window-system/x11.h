@@ -56,7 +56,7 @@ class X11 : public WindowSystem {
   void maximizeOrRestoreWindow(const WindowT &window) const override;
   void minimizeWindow(const WindowT &window) const override;
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;
-  void tileWindowToTheLeft(const WindowT &window) const override;
+  void tileWindow(const WindowT &window, bool toTheLeft) const override;
 
   Rectangle getDesktopWorkarea() const override;
 
@@ -125,6 +125,15 @@ class X11 : public WindowSystem {
   Window getTopLevelWindow(Window window) const;
   std::pair<bool, Window> findTopLevelWindowInChildren(
       Window window, const std::vector<Window> &topLevelWindows) const;
+
+  /**
+   * When the window uses client-side decorantion, the WM is not able to know
+   * the size of the shadows and other decorations.
+   * Some WMs, like Gala, Mutter and even KWin, are able to use the non-standard
+   * _GTK_FRAME_EXTENTS (left, right, top, bottom) atom where the size of the
+   * decorations are stored.
+   */
+  Rectangle getWindowDecorationSize(Window window) const;
 };
 
 #endif  // WINDOW_SYSTEM_X11_H_

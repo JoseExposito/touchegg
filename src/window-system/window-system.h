@@ -90,9 +90,9 @@ class WindowSystem {
   virtual Rectangle minimizeWindowIconSize(const WindowT &window) const = 0;
 
   /**
-   * Change a window size to use the left half of the screen,
+   * Change a window size to use the left or right half of the screen.
    */
-  virtual void tileWindowToTheLeft(const WindowT &window) const = 0;
+  virtual void tileWindow(const WindowT &window, bool toTheLeft) const = 0;
 
   /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not

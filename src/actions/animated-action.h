@@ -43,7 +43,7 @@ class AnimatedAction : public Action {
   /**
    * Override this method to configure the animation.
    */
-  virtual void onGestureBegin(const Gesture &gesture) = 0;
+  // virtual void onGestureBegin(const Gesture &gesture) = 0;
 
   /**
    * Run the animation.

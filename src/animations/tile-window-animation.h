@@ -15,22 +15,25 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "actions/tile-window.h"
+#ifndef ANIMATIONS_TILE_WINDOW_ANIMATION_H_
+#define ANIMATIONS_TILE_WINDOW_ANIMATION_H_
 
-#include "animations/tile-window-animation.h"
+#include "animations/animation.h"
+#include "utils/color.h"
+#include "utils/rectangle.h"
 
-void TileWindow::onGestureBegin(const Gesture& /*gesture*/) {
-  if (this->settings.count("direction") == 1) {
-    this->toTheLeft = this->settings.at("direction") == "left";
-  }
+class TileWindowAnimation : public Animation {
+ public:
+  using Animation::Animation;
+  TileWindowAnimation(const WindowSystem &windowSystem, const WindowT &window,
+                      Color color, Color borderColor, bool toTheLeft);
+  void render(int percentage) override;
 
-  if (this->animate) {
-    this->animation = std::make_unique<TileWindowAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor,
-        this->toTheLeft);
-  }
-}
+ private:
+  Rectangle maxSize;
+  Color color;
+  Color borderColor;
+  bool toTheLeft;
+};
 
-void TileWindow::executeAction(const Gesture& /*gesture*/) {
-  this->windowSystem.tileWindow(this->window, this->toTheLeft);
-}
+#endif  // ANIMATIONS_TILE_WINDOW_ANIMATION_H_

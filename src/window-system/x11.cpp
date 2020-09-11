@@ -115,19 +115,11 @@ Rectangle X11::getWindowSize(const WindowT &window) const {
   size.x = x;
   size.y = y;
 
-  // When the window uses client-side decorantion, the WM is not able to know
-  // the size of the shadows.
-  // Some WMs, like Gala, Mutter and even KWin, use the non-standard
-  // _GTK_FRAME_EXTENTS (left, right, top, bottom) atom to indicate the size of
-  // the shadow.
-  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
-      x11Window.window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
-  if (decoration.size() == 4) {
-    size.x += decoration[0];
-    size.y += decoration[2];
-    size.width -= (decoration[0] + decoration[1]);
-    size.height -= (decoration[2] + decoration[3]);
-  }
+  Rectangle decoration = this->getWindowDecorationSize(x11Window.window);
+  size.x += decoration.x;
+  size.y += decoration.y;
+  size.width -= decoration.width;
+  size.height -= decoration.height;
 
   return size;
 }
@@ -330,19 +322,11 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
   return size;
 }
 
-void X11::tileWindowToTheLeft(const WindowT &window) const {
+void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);
   if (x11Window.window == None) {
     return;
   }
-
-  // When the window uses client-side decorantion, the WM is not able to know
-  // the size of the shadows.
-  // Some WMs, like Gala, Mutter and even KWin, use the non-standard
-  // _GTK_FRAME_EXTENTS (left, right, top, bottom) atom to indicate the size of
-  // the shadow.
-  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
-      x11Window.window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
 
   // Window can not be maximized
   XClientMessageEvent event;
@@ -365,17 +349,16 @@ void X11::tileWindowToTheLeft(const WindowT &window) const {
 
   // Move and resize the window
   Rectangle maxSize = this->getDesktopWorkarea();
-  int x = maxSize.x;
+  int x = toTheLeft ? maxSize.x : (maxSize.width / 2);
   int y = maxSize.y;
   int width = (maxSize.width / 2);
   int height = maxSize.height;
 
-  if (decoration.size() == 4) {
-    x -= decoration[0];
-    y -= decoration[2];
-    width += decoration[0] + decoration[1];
-    height += decoration[2] + decoration[3];
-  }
+  Rectangle decoration = this->getWindowDecorationSize(x11Window.window);
+  x -= decoration.x;
+  y -= decoration.y;
+  width += decoration.width;
+  height += decoration.height;
 
   event.message_type =
       XInternAtom(this->display, "_NET_MOVERESIZE_WINDOW", False);
@@ -411,6 +394,24 @@ Rectangle X11::getDesktopWorkarea() const {
   size.y = workArea[1 + (currenDesktop[0] * 4)];
   size.width = workArea[2 + (currenDesktop[0] * 4)];
   size.height = workArea[3 + (currenDesktop[0] * 4)];
+  return size;
+}
+
+Rectangle X11::getWindowDecorationSize(Window window) const {
+  Rectangle size;
+
+  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
+      window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
+
+  if (decoration.size() != 4) {
+    return size;
+  }
+
+  size.x = decoration[0];
+  size.y = decoration[2];
+  size.width = (decoration[0] + decoration[1]);
+  size.height = (decoration[2] + decoration[3]);
+
   return size;
 }
 

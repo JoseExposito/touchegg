@@ -27,7 +27,17 @@ MinimizeWindowAnimation::MinimizeWindowAnimation(
       initialSize(this->windowSystem.getWindowSize(this->window)),
       finalSize(this->windowSystem.minimizeWindowIconSize(this->window)),
       color(color),
-      borderColor(borderColor) {}
+      borderColor(borderColor) {
+  // If the icon size is not set (for example, Ubuntu 20.04) set the finale size
+  // to the center of the window
+  if (this->finalSize.x == 0 && this->finalSize.y == 0 &&
+      this->finalSize.width == 0 && this->finalSize.height == 0) {
+    this->finalSize.x = this->initialSize.x + (this->initialSize.width / 2);
+    this->finalSize.y = this->initialSize.y + (this->initialSize.height / 2);
+    this->finalSize.width = 0;
+    this->finalSize.height = 0;
+  }
+}
 
 void MinimizeWindowAnimation::render(int percentage) {
   cairo_t *ctx = this->cairoContext;

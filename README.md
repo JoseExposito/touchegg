@@ -25,7 +25,7 @@ For more information check the [wiki](https://github.com/JoseExposito/touchegg/w
 
 ## Maximize or restore a window (MAXIMIZE_RESTORE_WINDOW)
 
-Maximize a window. If it is already maximized, restore it.
+Maximize the window under the pointer. If it is already maximized, restore it.
 
 Options:
 
@@ -48,6 +48,108 @@ Example:
 ```
 
 ![Animation](.github/images/MAXIMIZE_RESTORE_WINDOW.gif)
+
+## Minimize a window (MINIMIZE_WINDOW)
+
+Minimize the window under the pointer.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="DRAG" fingers="3" direction="DOWN">
+  <action type="MINIMIZE_WINDOW">
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/MINIMIZE_WINDOW.gif)
+
+## Tile/snap a widow (TILE_WINDOW)
+
+Resize and move the window under the pointer to use half of the screen.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| direction | `left`/`right` | Use the `left` or `right` half of the screen |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="DRAG" fingers="3" direction="LEFT">
+  <action type="TILE_WINDOW">
+    <direction>right</direction>
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+
+<gesture type="DRAG" fingers="3" direction="RIGHT">
+  <action type="TILE_WINDOW">
+    <direction>left</direction>
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/TILE_WINDOW.gif)
+
+## Switch desktops/workspaces (CHANGE_DESKTOP)
+
+Change to the next or previous desktop/workspace.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| direction | `left`/`right` | Use the `left` or `right` half of the screen |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="DRAG" fingers="4" direction="LEFT">
+  <action type="CHANGE_DESKTOP">
+    <direction>next</direction>
+    <animate>true</animate>
+    <animationPosition>right</animationPosition>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+
+<gesture type="DRAG" fingers="4" direction="RIGHT">
+  <action type="CHANGE_DESKTOP">
+    <direction>previous</direction>
+    <animate>true</animate>
+    <animationPosition>left</animationPosition>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/CHANGE_DESKTOP.gif)
 
 
 # Compilation and installation:

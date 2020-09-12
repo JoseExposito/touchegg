@@ -18,19 +18,26 @@
 #include "actions/change-desktop.h"
 
 #include <memory>
+#include <string>
 
-// #include "animations/change-desktop-animation.h"
+#include "animations/change-desktop-animation.h"
 
 void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->settings.count("direction") == 1) {
     this->next = this->settings.at("direction") == "next";
   }
 
-  // if (this->animate) {
-  //   this->animation = std::make_unique<TileWindowAnimation>(
-  //       this->windowSystem, this->window, this->color, this->borderColor,
-  //       this->toTheLeft);
-  // }
+  if (this->animate) {
+    // If animation position is unset, fallback to left/right
+    std::string animationPosition = this->next ? "right" : "left";
+    if (this->settings.count("animationPosition") == 1) {
+      animationPosition = this->settings.at("animationPosition");
+    }
+
+    this->animation = std::make_unique<ChangeDesktopAnimation>(
+        this->windowSystem, this->window, this->color, this->borderColor,
+        animationPosition);
+  }
 }
 
 void ChangeDesktop::executeAction(const Gesture& /*gesture*/) {

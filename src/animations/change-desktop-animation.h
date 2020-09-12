@@ -15,23 +15,28 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_CHANGE_DESKTOP_H_
-#define ACTIONS_CHANGE_DESKTOP_H_
+#ifndef ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_
+#define ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_
 
-#include "actions/animated-action.h"
+#include <string>
 
-/**
- * Action to change to the next or previous desktop.
- */
-class ChangeDesktop : public AnimatedAction {
+#include "animations/animation.h"
+#include "utils/color.h"
+#include "utils/rectangle.h"
+
+class ChangeDesktopAnimation : public Animation {
  public:
-  using AnimatedAction::AnimatedAction;
-  bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void executeAction(const Gesture &gesture) override;
+  using Animation::Animation;
+  ChangeDesktopAnimation(const WindowSystem &windowSystem,
+                         const WindowT &window, Color color, Color borderColor,
+                         const std::string &animationPosition);
+  void render(int percentage) override;
 
  private:
-  bool next = true;
+  Rectangle maxSize;
+  Color color;
+  Color borderColor;
+  double angle;
 };
 
-#endif  // ACTIONS_CHANGE_DESKTOP_H_
+#endif  // ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_

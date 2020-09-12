@@ -114,6 +114,7 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
       // case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
       // case LIBINPUT_EVENT_GESTURE_PINCH_END:
     default:
+      libinput_event_destroy(event);
       break;
   }
 }

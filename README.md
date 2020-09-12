@@ -1,11 +1,15 @@
-**Follow Touchégg on...** [![](https://lh3.googleusercontent.com/-kRgKvb-T4_4/T9psNwZN3TI/AAAAAAAAANA/pwasxapdWm0/s33/twitter.png "Twitter")](https://twitter.com/#!/Jose__Exposito)
+**Follow Touchégg on...** [![Twitter](.github/images/twitter.png "Twitter")](https://twitter.com/Jose__Exposito)
 
-About Touchégg:
-===============
 
-Touchégg allows the GNU/Linux users to make full use of their trackpacks.
+# Touchégg:
 
-By editing a simple configuration file you can attach an action to a particular gesture and –by performing those gestures on your trackpad– maximize, minimize or resize windows, show your desktop, emulate mouse clicks and more.
+Touchégg is an app that runs in the background and transform the gestures you make in your touchpad
+into visible actions in your desktop.
+
+For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to
+switch to the next desktop.
+
+Many more actions and gestures are available and everything is easily configurable.
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=1Ek4QaFQ1qo">
@@ -13,16 +17,45 @@ By editing a simple configuration file you can attach an action to a particular 
   </a>
 </p>
 
-For more information check the [wiki](https://github.com/JoseExposito/touchegg/wiki) or [ask a question](https://github.com/JoseExposito/touchegg/issues).
+For more information check the [wiki](https://github.com/JoseExposito/touchegg/wiki) or
+[ask a question](https://github.com/JoseExposito/touchegg/issues).
 
-Compilation and installation:
-=============================
 
-Follow the instructions available in the [wiki](https://github.com/JoseExposito/touchegg/wiki/How-to-compile-Touch%C3%A9gg-source-code)
+# Available actions:
 
-Copyright:
-==========
+## Maximize or restore a window (MAXIMIZE_RESTORE_WINDOW)
 
-Copyright (C) 2011 - 2016 José Expósito <<jose.exposito89@gmail.com>> 
+Maximize a window. If it is already maximized, restore it.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="DRAG" fingers="3" direction="UP">
+  <action type="MAXIMIZE_RESTORE_WINDOW">
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/MAXIMIZE_RESTORE_WINDOW.gif)
+
+
+# Compilation and installation:
+
+Follow the instructions available in the [HACKING.md](HACKING.md) file.
+
+# Copyright:
+
+Copyright 2011 - 2020 José Expósito <<jose.exposito89@gmail.com>>
 
 The source code is available under GPL v2 license on [GitHub](https://github.com/JoseExposito/touchegg)

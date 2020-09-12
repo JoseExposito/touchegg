@@ -15,17 +15,24 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_ACTION_TYPE_H_
-#define ACTIONS_ACTION_TYPE_H_
+#include "actions/change-desktop.h"
 
-enum class ActionType {
-  NO_ACTION,
-  MAXIMIZE_RESTORE_WINDOW,
-  MINIMIZE_WINDOW,
-  TILE_WINDOW,
-  CHANGE_DESKTOP,
-  // Adding a new action? Don't forget to add it in
-  // XmlConfigLoader::getActionType and ActionFactory::buildAction
-};
+#include <memory>
 
-#endif  // ACTIONS_ACTION_TYPE_H_
+// #include "animations/change-desktop-animation.h"
+
+void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
+  if (this->settings.count("direction") == 1) {
+    this->next = this->settings.at("direction") == "next";
+  }
+
+  // if (this->animate) {
+  //   this->animation = std::make_unique<TileWindowAnimation>(
+  //       this->windowSystem, this->window, this->color, this->borderColor,
+  //       this->toTheLeft);
+  // }
+}
+
+void ChangeDesktop::executeAction(const Gesture& /*gesture*/) {
+  this->windowSystem.changeDesktop(this->next);
+}

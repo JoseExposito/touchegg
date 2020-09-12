@@ -20,6 +20,7 @@
 #include <utility>
 
 #include "actions/action.h"
+#include "actions/change-desktop.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
 #include "actions/tile-window.h"
@@ -38,6 +39,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::TILE_WINDOW:
       return std::make_unique<TileWindow>(std::move(settings), windowSystem,
                                           window, config);
+    case ActionType::CHANGE_DESKTOP:
+      return std::make_unique<ChangeDesktop>(std::move(settings), windowSystem,
+                                             window, config);
     default:
       return nullptr;
   }

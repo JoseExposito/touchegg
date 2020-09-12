@@ -192,6 +192,9 @@ ActionType XmlConfigLoader::getActionType(const std::string &str) {
   if (str == "TILE_WINDOW") {
     return ActionType::TILE_WINDOW;
   }
+  if (str == "CHANGE_DESKTOP") {
+    return ActionType::CHANGE_DESKTOP;
+  }
   return ActionType::NO_ACTION;
 }
 

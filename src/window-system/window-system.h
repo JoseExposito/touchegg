@@ -101,6 +101,11 @@ class WindowSystem {
   virtual Rectangle getDesktopWorkarea() const = 0;
 
   /**
+   * Changes to the next/previous desktop.
+   */
+  virtual void changeDesktop(bool next) const = 0;
+
+  /**
    * Creates a Cairo surface to draw on.
    * IMPORTANT! Destroy the surface with WindowSystem::destroySurface().
    */

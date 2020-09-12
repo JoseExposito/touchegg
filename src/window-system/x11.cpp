@@ -397,6 +397,38 @@ Rectangle X11::getDesktopWorkarea() const {
   return size;
 }
 
+void X11::changeDesktop(bool next) const {
+  Window rootWindow = XDefaultRootWindow(this->display);
+
+  std::vector<int32_t> total = this->getWindowProperty<int32_t>(
+      rootWindow, "_NET_NUMBER_OF_DESKTOPS", XA_CARDINAL);
+  std::vector<int32_t> current = this->getWindowProperty<int32_t>(
+      rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
+
+  if (total.size() != 1 || current.size() != 1) {
+    return;
+  }
+
+  int32_t totalDesktops = total.front();
+  int32_t currentDesktop = current.front();
+
+  int32_t toDesktop = next ? std::min(totalDesktops - 1, currentDesktop + 1)
+                           : std::max(0, currentDesktop - 1);
+
+  XClientMessageEvent event;
+  event.window = rootWindow;
+  event.type = ClientMessage;
+  event.message_type =
+      XInternAtom(this->display, "_NET_CURRENT_DESKTOP", False);
+  event.format = 32;
+  event.data.l[0] = toDesktop;  // NOLINT
+
+  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
+}
+
 Rectangle X11::getWindowDecorationSize(Window window) const {
   Rectangle size;
 

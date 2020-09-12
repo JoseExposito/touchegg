@@ -59,6 +59,7 @@ class X11 : public WindowSystem {
   void tileWindow(const WindowT &window, bool toTheLeft) const override;
 
   Rectangle getDesktopWorkarea() const override;
+  void changeDesktop(bool next) const override;
 
   cairo_surface_t *createSurface() const override;
   int getSurfaceWidth(cairo_surface_t *cairoSurface) const override;

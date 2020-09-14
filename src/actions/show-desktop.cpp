@@ -15,20 +15,19 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_ACTION_TYPE_H_
-#define ACTIONS_ACTION_TYPE_H_
+#include "actions/show-desktop.h"
 
-enum class ActionType {
-  NO_ACTION,
-  MAXIMIZE_RESTORE_WINDOW,
-  MINIMIZE_WINDOW,
-  TILE_WINDOW,
-  CHANGE_DESKTOP,
-  SHOW_DESKTOP,
-  SEND_KEYS,
-  RUN_COMMAND,
-  // Adding a new action? Don't forget to add it in
-  // XmlConfigLoader::getActionType and ActionFactory::buildAction
-};
+#include <memory>
 
-#endif  // ACTIONS_ACTION_TYPE_H_
+#include "animations/restore-window-animation.h"
+
+void ShowDesktop::onGestureBegin(const Gesture& /*gesture*/) {
+  if (this->animate) {
+    this->animation = std::make_unique<RestoreWindowAnimation>(
+        this->windowSystem, this->window, this->color, this->borderColor);
+  }
+}
+
+void ShowDesktop::executeAction(const Gesture& /*gesture*/) {
+  this->windowSystem.showDesktop();
+}

@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <exception>
+#include <iostream>
 #include <vector>
 
 X11::X11() {
@@ -475,6 +476,20 @@ void X11::changeDesktop(bool next) const {
              (SubstructureNotifyMask | SubstructureRedirectMask),
              reinterpret_cast<XEvent *>(&event));  // NOLINT
   XFlush(this->display);
+}
+
+void X11::showDesktop() const {
+  Window rootWindow = XDefaultRootWindow(this->display);
+
+  std::vector<bool> showingDesktop = this->getWindowProperty<bool>(
+      rootWindow, "_NET_SHOWING_DESKTOP", XA_CARDINAL);
+
+  if (showingDesktop.empty()) {
+    return;
+  }
+
+  this->sendEvent(rootWindow, rootWindow, "_NET_SHOWING_DESKTOP",
+                  {showingDesktop.at(0) ? False : True});
 }
 
 Rectangle X11::getWindowDecorationSize(Window window) const {

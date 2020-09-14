@@ -118,6 +118,11 @@ class WindowSystem {
   virtual void changeDesktop(bool next) const = 0;
 
   /**
+   * Show the desktop.
+   */
+  virtual void showDesktop() const = 0;
+
+  /**
    * Creates a Cairo surface to draw on.
    * IMPORTANT! Destroy the surface with WindowSystem::destroySurface().
    */

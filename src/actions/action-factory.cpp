@@ -25,6 +25,7 @@
 #include "actions/minimize-window.h"
 #include "actions/run-command.h"
 #include "actions/send-keys.h"
+#include "actions/show-desktop.h"
 #include "actions/tile-window.h"
 
 std::unique_ptr<Action> ActionFactory::buildAction(
@@ -44,6 +45,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::CHANGE_DESKTOP:
       return std::make_unique<ChangeDesktop>(std::move(settings), windowSystem,
                                              window, config);
+    case ActionType::SHOW_DESKTOP:
+      return std::make_unique<ShowDesktop>(std::move(settings), windowSystem,
+                                           window, config);
     case ActionType::SEND_KEYS:
       return std::make_unique<SendKeys>(std::move(settings), windowSystem,
                                         window, config);

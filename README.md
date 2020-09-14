@@ -151,6 +151,32 @@ Example:
 
 ![Animation](.github/images/CHANGE_DESKTOP.gif)
 
+## Show desktop (SHOW_DESKTOP)
+
+Show the desktop. If the desktop is already being shown, restore all the windows.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="SWIPE" fingers="4" direction="DOWN">
+  <action type="SHOW_DESKTOP">
+    <animate>true</animate>
+    <color>909090</color>
+    <borderColor>FFFFFF</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/SHOW_DESKTOP.gif)
+
 ## Keyboard shortcut (SEND_KEYS)
 
 Emulate a keyboard shortcut.

@@ -4,7 +4,7 @@ Before you start coding, you will need to install some dependencies:
 
 ```
 $ sudo apt-get install git build-essential gdb cmake \
-  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev
+  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:

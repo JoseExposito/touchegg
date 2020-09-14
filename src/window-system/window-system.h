@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "utils/rectangle.h"
 
@@ -93,6 +94,17 @@ class WindowSystem {
    * Change a window size to use the left or right half of the screen.
    */
   virtual void tileWindow(const WindowT &window, bool toTheLeft) const = 0;
+
+  /**
+   * Bring the window to the front.
+   */
+  virtual void activateWindow(const WindowT &window) const = 0;
+
+  /**
+   * Simulate a key press.
+   */
+  virtual void sendKeys(const std::vector<std::string> &keycodes,
+                        bool isPress) const = 0;
 
   /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not

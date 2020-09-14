@@ -19,6 +19,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/XTest.h>
 #include <cairo-xlib.h>
 
 #include <algorithm>
@@ -159,6 +160,25 @@ std::vector<T> X11::getWindowProperty(Window window,
   } while (status == Success && bytesAfterReturn != 0 && numItems != 0);
 
   return propertiesVector;
+}
+
+void X11::sendEvent(Window targetWindow, Window eventWidow,
+                    const std::string &atomName,
+                    const std::vector<long> &data) const {  // NOLINT
+  XClientMessageEvent event;
+  event.window = eventWidow;
+  event.type = ClientMessage;
+  event.message_type = XInternAtom(this->display, atomName.c_str(), False);
+  event.format = 32;
+
+  for (int n = 0; n < data.size(); n++) {
+    event.data.l[n] = data.at(n);  // NOLINT
+  }
+
+  XSendEvent(this->display, targetWindow, False,
+             (SubstructureNotifyMask | SubstructureRedirectMask),
+             reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
 }
 
 Window X11::getTopLevelWindow(Window window) const {
@@ -373,6 +393,34 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
   XSendEvent(this->display, XDefaultRootWindow(this->display), False,
              (SubstructureNotifyMask | SubstructureRedirectMask),
              reinterpret_cast<XEvent *>(&event));  // NOLINT
+  XFlush(this->display);
+}
+
+void X11::activateWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  // NOLINTNEXTLINE
+  std::vector<long> data{
+      1,  // Should be 1 when the request comes from an application
+      CurrentTime,
+      0  // Requestor's currently active window, 0 if none
+  };
+
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "_NET_ACTIVE_WINDOW", data);
+}
+
+void X11::sendKeys(const std::vector<std::string> &keycodes,
+                   bool isPress) const {
+  for (const std::string &keycode : keycodes) {
+    KeySym sym = XStringToKeysym(keycode.c_str());
+    KeyCode code = XKeysymToKeycode(this->display, sym);
+    XTestFakeKeyEvent(this->display, code, isPress ? True : False, 0);
+  }
+
   XFlush(this->display);
 }
 

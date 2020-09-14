@@ -20,6 +20,9 @@
 
 #include "actions/animated-action.h"
 
+/**
+ * Minimize the window under the pointer.
+ */
 class MinimizeWindow : public AnimatedAction {
  public:
   using AnimatedAction::AnimatedAction;

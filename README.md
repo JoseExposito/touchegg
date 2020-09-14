@@ -38,7 +38,7 @@ Options:
 Example:
 
 ```
-<gesture type="DRAG" fingers="3" direction="UP">
+<gesture type="SWIPE" fingers="3" direction="UP">
   <action type="MAXIMIZE_RESTORE_WINDOW">
     <animate>true</animate>
     <color>3E9FED</color>
@@ -64,7 +64,7 @@ Options:
 Example:
 
 ```
-<gesture type="DRAG" fingers="3" direction="DOWN">
+<gesture type="SWIPE" fingers="3" direction="DOWN">
   <action type="MINIMIZE_WINDOW">
     <animate>true</animate>
     <color>3E9FED</color>
@@ -91,7 +91,7 @@ Options:
 Example:
 
 ```
-<gesture type="DRAG" fingers="3" direction="LEFT">
+<gesture type="SWIPE" fingers="3" direction="LEFT">
   <action type="TILE_WINDOW">
     <direction>right</direction>
     <animate>true</animate>
@@ -100,7 +100,7 @@ Example:
   </action>
 </gesture>
 
-<gesture type="DRAG" fingers="3" direction="RIGHT">
+<gesture type="SWIPE" fingers="3" direction="RIGHT">
   <action type="TILE_WINDOW">
     <direction>left</direction>
     <animate>true</animate>
@@ -128,7 +128,7 @@ Options:
 Example:
 
 ```
-<gesture type="DRAG" fingers="4" direction="LEFT">
+<gesture type="SWIPE" fingers="4" direction="LEFT">
   <action type="CHANGE_DESKTOP">
     <direction>next</direction>
     <animate>true</animate>
@@ -138,7 +138,7 @@ Example:
   </action>
 </gesture>
 
-<gesture type="DRAG" fingers="4" direction="RIGHT">
+<gesture type="SWIPE" fingers="4" direction="RIGHT">
   <action type="CHANGE_DESKTOP">
     <direction>previous</direction>
     <animate>true</animate>
@@ -151,10 +151,58 @@ Example:
 
 ![Animation](.github/images/CHANGE_DESKTOP.gif)
 
+## Keyboard shortcut (SEND_KEYS)
+
+Emulate a keyboard shortcut.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| repeat | `true`/`false` | `true` if the keyboard shortcut should be executed multiple times. `false` otherwise. This is useful to perform actions like pinch to zoom. |
+| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" bellow for more information. |
+| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" bellow for more information. |
+| on | `begin`/`end` | Only used when `repeat` is `true`. If the shortcut should be executed on the beginning or on the end of the gesture. |
+| decreaseKeys | Keycode | Only used when `repeat` is `false`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` bellow. |
+
+Keycodes:
+
+For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favorite text editor.
+
+It is important to remove the `XK_` prefix. For example, the super keycode is defined as
+`XK_Super_L` but it must be used as `Super_L` in the configuration.
+
+Example 1:
+
+```
+<gesture type="SWIPE" fingers="4" direction="UP">
+  <action type="SEND_KEYS">
+    <repeat>false</repeat>
+    <modifiers>Super_L</modifiers>
+    <keys>W</keys>
+    <on>begin</on>
+  </action>
+</gesture>
+```
+
+Example 2: Pinch to zoom example
+
+```
+<gesture type="PINCH" fingers="2" direction="OUT">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Control_L</modifiers>
+    <keys>KP_Add</keys>
+    <decreaseKeys>KP_Subtract</decreaseKeys>
+  </action>
+</gesture>
+```
+
 
 # Compilation and installation:
 
 Follow the instructions available in the [HACKING.md](HACKING.md) file.
+
 
 # Copyright:
 

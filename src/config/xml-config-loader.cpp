@@ -195,6 +195,9 @@ ActionType XmlConfigLoader::getActionType(const std::string &str) {
   if (str == "CHANGE_DESKTOP") {
     return ActionType::CHANGE_DESKTOP;
   }
+  if (str == "SEND_KEYS") {
+    return ActionType::SEND_KEYS;
+  }
   return ActionType::NO_ACTION;
 }
 

@@ -57,6 +57,10 @@ class X11 : public WindowSystem {
   void minimizeWindow(const WindowT &window) const override;
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;
   void tileWindow(const WindowT &window, bool toTheLeft) const override;
+  void activateWindow(const WindowT &window) const override;
+
+  void sendKeys(const std::vector<std::string> &keycodes,
+                bool isPress) const override;
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(bool next) const override;
@@ -84,6 +88,18 @@ class X11 : public WindowSystem {
   template <typename T>
   std::vector<T> getWindowProperty(Window window, const std::string &atomName,
                                    Atom atomType) const;
+
+  /**
+   * A developer friendly wrapper around XSendEvent
+   * https://tronche.com/gui/x/xlib/event-handling/XSendEvent.html.
+   * @param targetWindow Window to send the event to.
+   * @param eventWidow XClientMessageEvent.window
+   * @param atomName Name of the Atom to send.
+   * @param data Event data.
+   */
+  void sendEvent(Window targetWindow, Window eventWidow,
+                 const std::string &atomName,
+                 const std::vector<long> &data) const;  // NOLINT
 
   /**
    * The top-level window contains useful attributes like WM_CLASS or WM_NAME

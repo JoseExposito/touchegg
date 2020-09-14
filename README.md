@@ -198,6 +198,43 @@ Example 2: Pinch to zoom example
 </gesture>
 ```
 
+# Execute a command (RUN_COMMAND)
+
+Run any command.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
+| command | Command | The command to execute. |
+| on | `begin`/`end` | Only used when `repeat` is `true`. If the command should be executed on the beginning or on the end of the gesture. |
+| decreaseCommand | Keycode | Only used when `repeat` is `false`. Command to run when you change the gesture direction to the opposite. Check `Example 2` bellow. |
+
+Example 1:
+
+```
+<gesture type="SWIPE" fingers="4" direction="DOWN">
+  <action type="RUN_COMMAND">
+    <repeat>false</repeat>
+    <command>notify-send 'Hello' 'World'</command>
+    <on>begin</on>
+  </action>
+</gesture>
+```
+
+Example 2:
+
+```
+<gesture type="SWIPE" fingers="4" direction="DOWN">
+  <action type="RUN_COMMAND">
+    <repeat>true</repeat>
+    <command>notify-send 'Swipe direction' 'DOWN'</command>
+    <decreaseCommand>notify-send 'Swipe direction' 'UP'</decreaseCommand>
+  </action>
+</gesture>
+```
+
 
 # Compilation and installation:
 

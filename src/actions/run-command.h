@@ -15,19 +15,30 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_ACTION_TYPE_H_
-#define ACTIONS_ACTION_TYPE_H_
+#ifndef ACTIONS_RUN_COMMAND_H_
+#define ACTIONS_RUN_COMMAND_H_
 
-enum class ActionType {
-  NO_ACTION,
-  MAXIMIZE_RESTORE_WINDOW,
-  MINIMIZE_WINDOW,
-  TILE_WINDOW,
-  CHANGE_DESKTOP,
-  SEND_KEYS,
-  RUN_COMMAND,
-  // Adding a new action? Don't forget to add it in
-  // XmlConfigLoader::getActionType and ActionFactory::buildAction
+#include <string>
+
+#include "actions/action.h"
+
+/**
+ * Action to emulate a shortcut.
+ */
+class RunCommand : public Action {
+ public:
+  using Action::Action;
+  bool runOnSystemWindows() override { return true; }
+  void onGestureBegin(const Gesture &gesture) override;
+  void onGestureUpdate(const Gesture &gesture) override;
+  void onGestureEnd(const Gesture &gesture) override;
+
+ private:
+  std::string command;
+  std::string decreaseCommand;
+  bool repeat = false;
+  int repeatPercentage = 0;
+  bool onBegin = true;
 };
 
-#endif  // ACTIONS_ACTION_TYPE_H_
+#endif  // ACTIONS_RUN_COMMAND_H_

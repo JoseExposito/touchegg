@@ -15,21 +15,17 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "actions/send-keys.h"
+#include "actions/run-command.h"
 
-#include "utils/split.h"
+#include <cstdlib>
 
-void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
-  if (this->settings.count("modifiers") == 1) {
-    this->modifiers = split(this->settings.at("modifiers"), '+');
+void RunCommand::onGestureBegin(const Gesture& /*gesture*/) {
+  if (this->settings.count("command") == 1) {
+    this->command = this->settings.at("command");
   }
 
-  if (this->settings.count("keys") == 1) {
-    this->keys = split(this->settings.at("keys"), '+');
-  }
-
-  if (this->settings.count("decreaseKeys") == 1) {
-    this->decreaseKeys = split(this->settings.at("decreaseKeys"), '+');
+  if (this->settings.count("decreaseCommand") == 1) {
+    this->decreaseCommand = this->settings.at("decreaseCommand");
   }
 
   if (this->settings.count("repeat") == 1) {
@@ -40,43 +36,31 @@ void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
     this->onBegin = (this->settings.at("on") == "begin");
   }
 
-  // Only the active window receives shortcuts
-  this->windowSystem.activateWindow(this->window);
-
-  // "Press" the modifiers and keys if required
-  this->windowSystem.sendKeys(this->modifiers, true);
-
   if (!this->repeat && this->onBegin) {
-    this->windowSystem.sendKeys(this->keys, true);
-    this->windowSystem.sendKeys(this->keys, false);
+    system(this->command.c_str());
   }
 }
 
-void SendKeys::onGestureUpdate(const Gesture& gesture) {
+void RunCommand::onGestureUpdate(const Gesture& gesture) {
   if (this->repeat) {
     constexpr int step = 10;
     bool increased = (gesture.percentage() >= (this->repeatPercentage + step));
     bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
 
     if (increased) {
-      this->windowSystem.sendKeys(this->keys, true);
-      this->windowSystem.sendKeys(this->keys, false);
+      system(this->command.c_str());
       this->repeatPercentage += step;
     }
 
     if (decreased) {
-      this->windowSystem.sendKeys(this->decreaseKeys, true);
-      this->windowSystem.sendKeys(this->decreaseKeys, false);
+      system(this->decreaseCommand.c_str());
       this->repeatPercentage -= step;
     }
   }
 }
 
-void SendKeys::onGestureEnd(const Gesture& /*gesture*/) {
+void RunCommand::onGestureEnd(const Gesture& /*gesture*/) {
   if (!this->repeat && !this->onBegin) {
-    this->windowSystem.sendKeys(this->keys, true);
-    this->windowSystem.sendKeys(this->keys, false);
+    system(this->command.c_str());
   }
-
-  this->windowSystem.sendKeys(this->modifiers, false);
 }

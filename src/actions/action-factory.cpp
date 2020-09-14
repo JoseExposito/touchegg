@@ -23,6 +23,7 @@
 #include "actions/change-desktop.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
+#include "actions/run-command.h"
 #include "actions/send-keys.h"
 #include "actions/tile-window.h"
 
@@ -46,6 +47,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::SEND_KEYS:
       return std::make_unique<SendKeys>(std::move(settings), windowSystem,
                                         window, config);
+    case ActionType::RUN_COMMAND:
+      return std::make_unique<RunCommand>(std::move(settings), windowSystem,
+                                          window, config);
     default:
       return nullptr;
   }

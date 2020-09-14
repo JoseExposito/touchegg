@@ -198,6 +198,9 @@ ActionType XmlConfigLoader::getActionType(const std::string &str) {
   if (str == "SEND_KEYS") {
     return ActionType::SEND_KEYS;
   }
+  if (str == "RUN_COMMAND") {
+    return ActionType::RUN_COMMAND;
+  }
   return ActionType::NO_ACTION;
 }
 

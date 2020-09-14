@@ -33,7 +33,7 @@ class LibinputGesture : public Gesture {
   /**
    * Default contructor, takes the libinput raw event.
    * Memory cleanup is handled by this class.
-   * @param Libinput general event.
+   * @param event Libinput general event.
    */
   explicit LibinputGesture(struct libinput_event *event);
 

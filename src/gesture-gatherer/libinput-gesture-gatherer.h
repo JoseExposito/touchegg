@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "gesture-gatherer/gesture-gatherer.h"
+#include "gesture-gatherer/libinput-pinch-state.h"
 #include "gesture-gatherer/libinput-swipe-state.h"
 class Config;
 class GestureControllerDelegate;
@@ -63,6 +64,11 @@ class LibinputGestureGatherer : public GestureGatherer {
    * Required data to handle swipes.
    */
   LibinputSwipeState swipeState;
+
+  /**
+   * Required data to handle pinchs.
+   */
+  LibinputPinchState pinchState;
 
   /**
    * Handles the supported libinput events.
@@ -105,12 +111,26 @@ class LibinputGestureGatherer : public GestureGatherer {
   int calculateSwipeAnimationPercentage() const;
 
   /**
+   * When the user starts a pinch, we still don't know the direction, so here we
+   * just reset this->swipeState.
+   * @param gesture Libinput specialized gesture.
+   */
+  void handlePinchBegin(std::unique_ptr<LibinputGesture> gesture);
+  void handlePinchUpdate(std::unique_ptr<LibinputGesture> gesture);
+  void handlePinchEnd(std::unique_ptr<LibinputGesture> gesture);
+
+  /**
+   * @returns The percentage (between 0 and 100) of the gesture animation.
+   */
+  int calculatePinchAnimationPercentage() const;
+
+  /**
    * @returns The current epoch time in milliseconds.
    */
   uint64_t getTimestamp() const;
 
   /**
-   * @return Elapsed milliseconds  since the beginning of the gesture.
+   * @return Elapsed milliseconds since the beginning of the gesture.
    */
   uint64_t calculateElapsedTime() const;
 

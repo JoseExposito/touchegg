@@ -94,6 +94,20 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
     this->action->onGestureUpdate(*gesture);
 
+    // std::cout << "Fingers: " << gesture->fingers() << std::endl;
+    // std::cout << "Pinch?: "
+    //           << ((gesture->type() == GestureType::PINCH) ? "Yes" : "No")
+    //           << std::endl;
+    // std::cout << "IN? "
+    //           << (gesture->direction() == GestureDirection::IN ? "Yes" :
+    //           "No")
+    //           << std::endl;
+    // std::cout << "OUT? "
+    //           << (gesture->direction() == GestureDirection::OUT ? "Yes" :
+    //           "No")
+    //           << std::endl;
+    // std::cout << "%: " << gesture->percentage() << std::endl;
+    // std::cout << "Delta: " << gesture->radiusDelta() << std::endl;
     // TODO(jose)
     // std::cout << "onGestureUpdate" << std::endl;
     // std::cout << "Fingers: " << gesture->fingers() << std::endl;

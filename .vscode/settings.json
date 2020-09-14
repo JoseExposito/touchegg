@@ -46,6 +46,7 @@
         "typeinfo": "cpp",
         "thread": "cpp",
         "cstring": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "functional": "cpp"
     }
 }

@@ -262,28 +262,26 @@ void LibinputGestureGatherer::handlePinchEnd(
 }
 
 int LibinputGestureGatherer::calculatePinchAnimationPercentage() const {
-  // Delta starts at 1.0.
-  // With direction IN, 0% is returned when the delta is 0.0 and 100% when the
-  // delta is 1.0. With direction OUT, 0% is returned when the delta is 1.0 and
-  // 100% when the delta is 2.0.
+  // Delta starts at 1.0:
   // https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#pinch-gestures
-  double current = 0;
   GestureDirection direction = this->pinchState.direction;
+  double delta = this->pinchState.delta;
 
-  switch (direction) {
-    case GestureDirection::IN:
-      current = this->pinchState.delta;
-      break;
-    case GestureDirection::OUT:
-      // By substracting 1.0 to the delta, now it goes from 0.0 to 1.0 like when
-      // the direction is IN
-      current = std::max(0.0, this->pinchState.delta - 1.0);
-      break;
-    default:
-      break;
+  // With direction IN, 0% is returned when the delta is 1.0 and 100% when the
+  // delta is 0.0.
+  if (direction == GestureDirection::IN) {
+    return std::min(100, static_cast<int>(std::abs(delta - 1.0) * 100));
   }
 
-  return std::min(static_cast<int>(current * 100), 100);
+  // With direction OUT, 0% is returned when the delta is 1.0 and 100% when the
+  // delta is 2.0.
+  if (direction == GestureDirection::OUT) {
+    return std::min(
+        100,
+        static_cast<int>(std::max(0.0, this->pinchState.delta - 1.0) * 100));
+  }
+
+  return 0;
 }
 
 uint64_t LibinputGestureGatherer::getTimestamp() const {

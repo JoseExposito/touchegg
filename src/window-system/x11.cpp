@@ -163,7 +163,6 @@ std::vector<T> X11::getWindowProperty(Window window,
   return propertiesVector;
 }
 
-// TODO(jose) Use this->sendEvent instead of raw XSendEvent
 void X11::sendEvent(Window targetWindow, Window eventWidow,
                     const std::string &atomName,
                     const std::vector<long> &data) const {  // NOLINT
@@ -284,23 +283,15 @@ void X11::maximizeOrRestoreWindow(const WindowT &window) const {
     return;
   }
 
-  XClientMessageEvent event;
-  event.window = x11Window.window;
-  event.type = ClientMessage;
-  event.message_type = XInternAtom(this->display, "_NET_WM_STATE", False);
-  event.format = 32;
-  event.data.l[0] = 2;  // _NET_WM_STATE_TOGGLE = 2  // NOLINT
-  // NOLINTNEXTLINE
-  event.data.l[1] =
-      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
-  // NOLINTNEXTLINE
-  event.data.l[2] =
-      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+  std::vector<long> data;  // NOLINT
+  data.push_back(2);       // _NET_WM_STATE_TOGGLE = 2
+  data.push_back(
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
+  data.push_back(
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False));
 
-  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
-             (SubstructureNotifyMask | SubstructureRedirectMask),
-             reinterpret_cast<XEvent *>(&event));  // NOLINT
-  XFlush(this->display);
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "_NET_WM_STATE", data);
 }
 
 void X11::minimizeWindow(const WindowT &window) const {
@@ -310,17 +301,8 @@ void X11::minimizeWindow(const WindowT &window) const {
   }
 
   // Minimize the window
-  XClientMessageEvent event;
-  event.window = x11Window.window;
-  event.type = ClientMessage;
-  event.message_type = XInternAtom(this->display, "WM_CHANGE_STATE", False);
-  event.format = 32;
-  event.data.l[0] = IconicState;  // NOLINT
-
-  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
-             (SubstructureNotifyMask | SubstructureRedirectMask),
-             reinterpret_cast<XEvent *>(&event));  // NOLINT
-  XFlush(this->display);
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "WM_CHANGE_STATE", {IconicState});
 }
 
 Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
@@ -350,24 +332,16 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
     return;
   }
 
-  // Window can not be maximized
-  XClientMessageEvent event;
-  event.window = x11Window.window;
-  event.type = ClientMessage;
-  event.message_type = XInternAtom(this->display, "_NET_WM_STATE", False);
-  event.format = 32;
-  event.data.l[0] = 0;  // _NET_WM_STATE_REMOVE = 0  // NOLINT
-  // NOLINTNEXTLINE
-  event.data.l[1] =
-      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
-  // NOLINTNEXTLINE
-  event.data.l[2] =
-      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+  Window rootWindow = XDefaultRootWindow(this->display);
 
-  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
-             (SubstructureNotifyMask | SubstructureRedirectMask),
-             reinterpret_cast<XEvent *>(&event));  // NOLINT
-  XFlush(this->display);
+  // Window can not be maximized
+  std::vector<long> data;  // NOLINT
+  data.push_back(0);       // _NET_WM_STATE_REMOVE = 0
+  data.push_back(
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
+  data.push_back(
+      XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False));
+  this->sendEvent(rootWindow, x11Window.window, "_NET_WM_STATE", data);
 
   // Move and resize the window
   Rectangle maxSize = this->getDesktopWorkarea();
@@ -382,20 +356,10 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
   width += decoration.width;
   height += decoration.height;
 
-  event.message_type =
-      XInternAtom(this->display, "_NET_MOVERESIZE_WINDOW", False);
-  event.format = 32;
-  event.data.l[0] =  // NOLINT
-      StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 15);
-  event.data.l[1] = x;       // NOLINT
-  event.data.l[2] = y;       // NOLINT
-  event.data.l[3] = width;   // NOLINT
-  event.data.l[4] = height;  // NOLINT
-
-  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
-             (SubstructureNotifyMask | SubstructureRedirectMask),
-             reinterpret_cast<XEvent *>(&event));  // NOLINT
-  XFlush(this->display);
+  this->sendEvent(
+      rootWindow, x11Window.window, "_NET_MOVERESIZE_WINDOW",
+      {StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 15),
+       x, y, width, height});
 }
 
 void X11::activateWindow(const WindowT &window) const {
@@ -465,18 +429,7 @@ void X11::changeDesktop(bool next) const {
   int32_t toDesktop = next ? std::min(totalDesktops - 1, currentDesktop + 1)
                            : std::max(0, currentDesktop - 1);
 
-  XClientMessageEvent event;
-  event.window = rootWindow;
-  event.type = ClientMessage;
-  event.message_type =
-      XInternAtom(this->display, "_NET_CURRENT_DESKTOP", False);
-  event.format = 32;
-  event.data.l[0] = toDesktop;  // NOLINT
-
-  XSendEvent(this->display, XDefaultRootWindow(this->display), False,
-             (SubstructureNotifyMask | SubstructureRedirectMask),
-             reinterpret_cast<XEvent *>(&event));  // NOLINT
-  XFlush(this->display);
+  this->sendEvent(rootWindow, rootWindow, "_NET_CURRENT_DESKTOP", {toDesktop});
 }
 
 void X11::showDesktop() const {

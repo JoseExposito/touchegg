@@ -18,8 +18,10 @@
 #ifndef ACTIONS_ACTION_TYPE_H_
 #define ACTIONS_ACTION_TYPE_H_
 
+#include <string>
+
 enum class ActionType {
-  NO_ACTION,
+  NOT_SUPPORTED,
   MAXIMIZE_RESTORE_WINDOW,
   MINIMIZE_WINDOW,
   TILE_WINDOW,
@@ -27,8 +29,54 @@ enum class ActionType {
   SHOW_DESKTOP,
   SEND_KEYS,
   RUN_COMMAND,
-  // Adding a new action? Don't forget to add it in
-  // XmlConfigLoader::getActionType and ActionFactory::buildAction
+  // Adding a new action? Don't forget to add it in actionTypeToStr,
+  // actionTypeFromStr and ActionFactory::buildAction
 };
+
+inline std::string actionTypeToStr(ActionType actionType) {
+  switch (actionType) {
+    case ActionType::MAXIMIZE_RESTORE_WINDOW:
+      return "MAXIMIZE_RESTORE_WINDOW";
+    case ActionType::MINIMIZE_WINDOW:
+      return "MINIMIZE_WINDOW";
+    case ActionType::TILE_WINDOW:
+      return "TILE_WINDOW";
+    case ActionType::CHANGE_DESKTOP:
+      return "CHANGE_DESKTOP";
+    case ActionType::SHOW_DESKTOP:
+      return "SHOW_DESKTOP";
+    case ActionType::SEND_KEYS:
+      return "SEND_KEYS";
+    case ActionType::RUN_COMMAND:
+      return "RUN_COMMAND";
+    default:
+      return "NOT_SUPPORTED";
+  }
+}
+
+inline ActionType actionTypeFromStr(const std::string &str) {
+  if (str == "MAXIMIZE_RESTORE_WINDOW") {
+    return ActionType::MAXIMIZE_RESTORE_WINDOW;
+  }
+  if (str == "MINIMIZE_WINDOW") {
+    return ActionType::MINIMIZE_WINDOW;
+  }
+  if (str == "TILE_WINDOW") {
+    return ActionType::TILE_WINDOW;
+  }
+  if (str == "CHANGE_DESKTOP") {
+    return ActionType::CHANGE_DESKTOP;
+  }
+  if (str == "SHOW_DESKTOP") {
+    return ActionType::SHOW_DESKTOP;
+  }
+  if (str == "SEND_KEYS") {
+    return ActionType::SEND_KEYS;
+  }
+  if (str == "RUN_COMMAND") {
+    return ActionType::RUN_COMMAND;
+  }
+  return ActionType::NOT_SUPPORTED;
+}
 
 #endif  // ACTIONS_ACTION_TYPE_H_

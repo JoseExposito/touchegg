@@ -47,6 +47,9 @@
         "thread": "cpp",
         "cstring": "cpp",
         "iterator": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "bitset": "cpp",
+        "map": "cpp",
+        "regex": "cpp"
     }
 }

@@ -163,6 +163,7 @@ std::vector<T> X11::getWindowProperty(Window window,
   return propertiesVector;
 }
 
+// TODO(jose) Use this->sendEvent instead of raw XSendEvent
 void X11::sendEvent(Window targetWindow, Window eventWidow,
                     const std::string &atomName,
                     const std::vector<long> &data) const {  // NOLINT

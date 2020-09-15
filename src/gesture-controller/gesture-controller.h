@@ -58,6 +58,12 @@ class GestureController : public GestureControllerDelegate {
    * A flag indicating if we should run the action.
    */
   bool executeAction = false;
+
+  /**
+   * @returns The action associated to a gesture or nullptr.
+   */
+  std::unique_ptr<Action> getActionForGesture(const Gesture &gesture,
+                                              const WindowT &window) const;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_

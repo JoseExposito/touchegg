@@ -15,21 +15,16 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "utils/split.h"
+#ifndef UTILS_STRING_H_
+#define UTILS_STRING_H_
 
-#include <sstream>
 #include <string>
-#include <utility>
 #include <vector>
 
-std::vector<std::string> split(const std::string &string, char delimiter) {
-  std::stringstream ss(string);
-  std::string item;
-  std::vector<std::string> elems;
+std::vector<std::string> split(const std::string& string, char delimiter);
 
-  while (std::getline(ss, item, delimiter)) {
-    elems.push_back(std::move(item));
-  }
+std::string ltrim(const std::string& s);
+std::string rtrim(const std::string& s);
+std::string trim(const std::string& s);
 
-  return elems;
-}
+#endif  // UTILS_STRING_H_

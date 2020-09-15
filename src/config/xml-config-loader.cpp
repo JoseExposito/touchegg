@@ -35,7 +35,7 @@
 
 #include "config/config.h"
 #include "utils/filesystem.h"
-#include "utils/split.h"
+#include "utils/string.h"
 
 namespace {
 const char *USR_SHARE_CONFIG_DIR = "/usr/share/touchegg";
@@ -104,9 +104,9 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
       // Save the gesture config for each application
       for (const std::string &application : applications) {
         this->config->saveGestureConfig(
-            application, XmlConfigLoader::getGestureType(gestureType), fingers,
-            XmlConfigLoader::getGestureDirection(direction),
-            XmlConfigLoader::getActionType(actionType), actionSettings);
+            trim(application), gestureTypeFromStr(gestureType), fingers,
+            gestureDirectionFromStr(direction), actionTypeFromStr(actionType),
+            actionSettings);
       }
     }
   }
@@ -145,66 +145,6 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     }
   }};
   watchThread.detach();
-}
-
-GestureType XmlConfigLoader::getGestureType(const std::string &str) {
-  if (str == "SWIPE" || str == "DRAG") {
-    return GestureType::SWIPE;
-  }
-  if (str == "PINCH") {
-    return GestureType::PINCH;
-  }
-  return GestureType::NOT_SUPPORTED;
-}
-
-GestureDirection XmlConfigLoader::getGestureDirection(const std::string &str) {
-  if (str == "UP") {
-    return GestureDirection::UP;
-  }
-  if (str == "DOWN") {
-    return GestureDirection::DOWN;
-  }
-  if (str == "LEFT") {
-    return GestureDirection::LEFT;
-  }
-  if (str == "RIGHT") {
-    return GestureDirection::RIGHT;
-  }
-  if (str == "IN") {
-    return GestureDirection::IN;
-  }
-  if (str == "OUT") {
-    return GestureDirection::OUT;
-  }
-  if (str == "ALL") {
-    return GestureDirection::ALL;
-  }
-  return GestureDirection::UNKNOWN;
-}
-
-ActionType XmlConfigLoader::getActionType(const std::string &str) {
-  if (str == "MAXIMIZE_RESTORE_WINDOW") {
-    return ActionType::MAXIMIZE_RESTORE_WINDOW;
-  }
-  if (str == "MINIMIZE_WINDOW") {
-    return ActionType::MINIMIZE_WINDOW;
-  }
-  if (str == "TILE_WINDOW") {
-    return ActionType::TILE_WINDOW;
-  }
-  if (str == "CHANGE_DESKTOP") {
-    return ActionType::CHANGE_DESKTOP;
-  }
-  if (str == "SHOW_DESKTOP") {
-    return ActionType::SHOW_DESKTOP;
-  }
-  if (str == "SEND_KEYS") {
-    return ActionType::SEND_KEYS;
-  }
-  if (str == "RUN_COMMAND") {
-    return ActionType::RUN_COMMAND;
-  }
-  return ActionType::NO_ACTION;
 }
 
 void XmlConfigLoader::copyConfingIfNotPresent() {

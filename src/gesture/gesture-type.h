@@ -18,10 +18,36 @@
 #ifndef GESTURE_GESTURE_TYPE_H_
 #define GESTURE_GESTURE_TYPE_H_
 
+#include <string>
+
 enum class GestureType {
   SWIPE,
   PINCH,
   NOT_SUPPORTED,
+  // Adding a new GestureType? Don't forget to add it in gestureTypeToStr and
+  // gestureTypeFromStr as well
 };
+
+inline std::string gestureTypeToStr(GestureType gestureType) {
+  switch (gestureType) {
+    case GestureType::SWIPE:
+      return "SWIPE";
+    case GestureType::PINCH:
+      return "PINCH";
+    default:
+      return "NOT_SUPPORTED";
+  }
+}
+
+inline GestureType gestureTypeFromStr(const std::string &str) {
+  // Support "DRAG" for compatibility with v0 and v1
+  if (str == "SWIPE" || str == "DRAG") {
+    return GestureType::SWIPE;
+  }
+  if (str == "PINCH") {
+    return GestureType::PINCH;
+  }
+  return GestureType::NOT_SUPPORTED;
+}
 
 #endif  // GESTURE_GESTURE_TYPE_H_

@@ -36,102 +36,89 @@ GestureController::GestureController(const Config &config,
     : config(config), windowSystem(windowSystem) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
-  std::cout << "onGestureBegin" << std::endl;
+  std::cout << "Gesture begin detected" << std::endl;
+  std::cout << "\tGesture information:" << std::endl;
+  std::cout << "\t\tFingers: " << gesture->fingers() << std::endl;
+  std::cout << "\t\tType: " << gestureTypeToStr(gesture->type()) << std::endl;
+  std::cout << "\t\tDirection: " << gestureDirectionToStr(gesture->direction())
+            << std::endl;
 
   this->window = this->windowSystem.getWindowUnderCursor();
-  this->executeAction = false;
+  this->action = this->getActionForGesture(*gesture, *this->window);
 
-  // TODO(jose) Check if there is a gesture configured for the window
-  std::string className = this->windowSystem.getWindowClassName(*this->window);
-  std::cout << className << std::endl;
+  // Check if we should run the action
+  bool isSystemWindow = this->windowSystem.isSystemWindow(*this->window);
+  this->executeAction =
+      (this->action != nullptr)  // Not nullptr action
+      && (!isSystemWindow        // Not system window
+                                 // The action can run on system windows:
+          || (isSystemWindow && this->action->runOnSystemWindows()));
 
-  const std::string application = "All";
-  const GestureType gestureType = gesture->type();
-  int fingers = gesture->fingers();
-  const GestureDirection direction = gesture->direction();
-
-  bool hasAction = this->config.hasGestureConfig(application, gestureType,
-                                                 fingers, direction);
-  if (hasAction) {
-    std::cout << "Action configured for this gesture" << std::endl;
-
-    auto pair = this->config.getGestureConfig(application, gestureType, fingers,
-                                              direction);
-    ActionType actionType = pair.first;
-    std::unordered_map<std::string, std::string> actionSettings = pair.second;
-
-    this->action = ActionFactory::buildAction(
-        actionType, std::move(actionSettings), this->windowSystem,
-        *this->window, this->config);
-
-    // Check if we should run the action
-    bool isSystemWindow = this->windowSystem.isSystemWindow(*this->window);
-    this->executeAction =
-        (this->action != nullptr)  // Not nullptr action
-        && (!isSystemWindow        // Not system window
-                                   // The action can run on system windows:
-            || (isSystemWindow && this->action->runOnSystemWindows()));
-
-    if (this->executeAction) {
-      std::cout << "Starting action" << std::endl;
-      this->action->onGestureBegin(*gesture);
-    }
-
-    // TODO(jose) TEST!
-    if (actionType == ActionType::MAXIMIZE_RESTORE_WINDOW) {
-      std::cout << "onGestureBegin" << std::endl;
-      std::cout << "Fingers: " << gesture->fingers() << std::endl;
-      std::cout << "Delta X: " << gesture->deltaX() << std::endl;
-      std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
-      if (gesture->direction() == GestureDirection::UP) {
-        std::cout << "UP" << std::endl;
-      }
-    }
+  if (!executeAction) {
+    std::cout
+        << "\tIgnoring this gesture. This could mean no action is configured, "
+           "the configured action is not supported or that it was performed in "
+           "a system window (panel, dock, desktop, etc)"
+        << std::endl;
+    return;
   }
+
+  std::cout << "\tStarting action" << std::endl;
+  this->action->onGestureBegin(*gesture);
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
-    this->action->onGestureUpdate(*gesture);
+    std::cout << "Gesture update detected (" << gesture->percentage() << "%)"
+              << std::endl;
 
-    // std::cout << "Fingers: " << gesture->fingers() << std::endl;
-    // std::cout << "Pinch?: "
-    //           << ((gesture->type() == GestureType::PINCH) ? "Yes" : "No")
-    //           << std::endl;
-    // std::cout << "IN? "
-    //           << (gesture->direction() == GestureDirection::IN ? "Yes" :
-    //           "No")
-    //           << std::endl;
-    // std::cout << "OUT? "
-    //           << (gesture->direction() == GestureDirection::OUT ? "Yes" :
-    //           "No")
-    //           << std::endl;
-    // std::cout << "%: " << gesture->percentage() << std::endl;
-    // std::cout << "Delta: " << gesture->radiusDelta() << std::endl;
-    // TODO(jose)
-    // std::cout << "onGestureUpdate" << std::endl;
-    // std::cout << "Fingers: " << gesture->fingers() << std::endl;
-    // std::cout << "Delta X: " << gesture->deltaX() << std::endl;
-    // std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
-    // if (gesture->direction() == GestureDirection::UP) {
-    //   std::cout << "UP" << std::endl;
-    // }
+    this->action->onGestureUpdate(*gesture);
   }
 }
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
+    std::cout << "Gesture end detected" << std::endl;
     this->action->onGestureEnd(*gesture);
-
-    // TODO(jose)
-    std::cout << "onGestureEnd" << std::endl;
-    std::cout << "Fingers: " << gesture->fingers() << std::endl;
-    std::cout << "Delta X: " << gesture->deltaX() << std::endl;
-    std::cout << "Delta Y: " << gesture->deltaY() << std::endl;
-    if (gesture->direction() == GestureDirection::UP) {
-      std::cout << "UP" << std::endl;
-    }
   }
 
   this->action.reset();
+}
+
+std::unique_ptr<Action> GestureController::getActionForGesture(
+    const Gesture &gesture, const WindowT &window) const {
+  bool hasAction = false;
+  std::string application;
+  const GestureType gestureType = gesture.type();
+  int fingers = gesture.fingers();
+  const GestureDirection direction = gesture.direction();
+
+  // First check if there is an specific application gesture
+  application = this->windowSystem.getWindowClassName(window);
+  std::cout << "\tGesture performed on app: " << application << std::endl;
+  hasAction = this->config.hasGestureConfig(application, gestureType, fingers,
+                                            direction);
+
+  // If no gesture was configured, check the global gestures
+  if (!hasAction) {
+    application = "All";
+    hasAction = this->config.hasGestureConfig(application, gestureType, fingers,
+                                              direction);
+  }
+
+  if (!hasAction) {
+    std::cout << "\tNo action configured for this gesture" << std::endl;
+    return nullptr;
+  }
+
+  std::cout << "\tAction configured for this gesture" << std::endl;
+
+  auto pair = this->config.getGestureConfig(application, gestureType, fingers,
+                                            direction);
+  ActionType actionType = pair.first;
+  std::unordered_map<std::string, std::string> actionSettings = pair.second;
+
+  return ActionFactory::buildAction(actionType, std::move(actionSettings),
+                                    this->windowSystem, *this->window,
+                                    this->config);
 }

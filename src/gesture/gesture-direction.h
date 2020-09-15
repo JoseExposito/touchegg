@@ -18,6 +18,8 @@
 #ifndef GESTURE_GESTURE_DIRECTION_H_
 #define GESTURE_GESTURE_DIRECTION_H_
 
+#include <string>
+
 enum class GestureDirection {
   // A gesture may have an unknow direction until we have more information
   UNKNOWN,
@@ -32,8 +34,49 @@ enum class GestureDirection {
   IN,
   OUT,
 
-  // Matches any direction
-  ALL
+  // Adding a new GestureDirection? Don't forget to add it in
+  // gestureDirectionToStr and gestureDirectionFromStr as well
 };
+
+inline std::string gestureDirectionToStr(GestureDirection gestureDirection) {
+  switch (gestureDirection) {
+    case GestureDirection::UP:
+      return "UP";
+    case GestureDirection::DOWN:
+      return "DOWN";
+    case GestureDirection::LEFT:
+      return "LEFT";
+    case GestureDirection::RIGHT:
+      return "RIGHT";
+    case GestureDirection::IN:
+      return "IN";
+    case GestureDirection::OUT:
+      return "OUT";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+inline GestureDirection gestureDirectionFromStr(const std::string &str) {
+  if (str == "UP") {
+    return GestureDirection::UP;
+  }
+  if (str == "DOWN") {
+    return GestureDirection::DOWN;
+  }
+  if (str == "LEFT") {
+    return GestureDirection::LEFT;
+  }
+  if (str == "RIGHT") {
+    return GestureDirection::RIGHT;
+  }
+  if (str == "IN") {
+    return GestureDirection::IN;
+  }
+  if (str == "OUT") {
+    return GestureDirection::OUT;
+  }
+  return GestureDirection::UNKNOWN;
+}
 
 #endif  // GESTURE_GESTURE_DIRECTION_H_

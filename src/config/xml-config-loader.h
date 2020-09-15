@@ -80,21 +80,6 @@ class XmlConfigLoader {
   void watchFile(const std::filesystem::path &configPath);
 
   /**
-   * Transform a gesture type as found in config to the enum type.
-   */
-  static GestureType getGestureType(const std::string &str);
-
-  /**
-   * Transform a gesture direction as found in config to the enum type.
-   */
-  static GestureDirection getGestureDirection(const std::string &str);
-
-  /**
-   * Transform an action type as found in config to the enum type.
-   */
-  static ActionType getActionType(const std::string &str);
-
-  /**
    * Check that the required configuration files are in place.
    */
   static void copyConfingIfNotPresent();

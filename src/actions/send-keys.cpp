@@ -17,7 +17,7 @@
  */
 #include "actions/send-keys.h"
 
-#include "utils/split.h"
+#include "utils/string.h"
 
 void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->settings.count("modifiers") == 1) {

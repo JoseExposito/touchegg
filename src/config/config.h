@@ -49,6 +49,11 @@ class Config {
   void saveGlobalSetting(const std::string &name, const std::string &value);
 
   /**
+   * @returns If the global setting is set.
+   */
+  bool hasGlobalSetting(const std::string &name) const;
+
+  /**
    * Return a global settings value.
    * @param Setting name, for example "threshold".
    * @returns Setting value, for example "1000".

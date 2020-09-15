@@ -76,6 +76,11 @@ class LibinputGesture : public Gesture {
    */
   void setElapsedTime(uint64_t elapsedTime);
 
+  /**
+   * Returns the libinput device that performed the gesture.
+   */
+  struct libinput_device *getDevice() const;
+
  private:
   /**
    * Pointer to the libinput event with the gesture information.

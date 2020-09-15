@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "gesture-gatherer/gesture-gatherer.h"
+#include "gesture-gatherer/libinput-device-info.h"
 #include "gesture-gatherer/libinput-pinch-state.h"
 #include "gesture-gatherer/libinput-swipe-state.h"
 class Config;
@@ -76,6 +77,22 @@ class LibinputGestureGatherer : public GestureGatherer {
   void handleEvent(struct libinput_event *event);
 
   /**
+   * Called on startup for each device and every time a device is added.
+   * Print useful information and calculates LibinputDeviceInfo.
+   *
+   * Calculating optimal "threshold" and "animation_finish_threshold" is really
+   * complicated on touchpads with DPI < 1000, that's why this values are
+   * configurable. However this methods works with the bast majority of devices
+   * out there.
+   */
+  void handleDeviceAdded(struct libinput_event *event) const;
+
+  /**
+   * @return The LibinputDeviceInfo for the device that generated the gesture.
+   */
+  LibinputDeviceInfo getDeviceInfo(const LibinputGesture &gesture) const;
+
+  /**
    * When the user starts a swipe, we still don't know the direction, so here we
    * just reset this->swipeState.
    * @param gesture Libinput specialized gesture.
@@ -108,7 +125,7 @@ class LibinputGestureGatherer : public GestureGatherer {
   /**
    * @returns The percentage (between 0 and 100) of the gesture animation.
    */
-  int calculateSwipeAnimationPercentage() const;
+  int calculateSwipeAnimationPercentage(const LibinputGesture &gesture) const;
 
   /**
    * When the user starts a pinch, we still don't know the direction, so here we

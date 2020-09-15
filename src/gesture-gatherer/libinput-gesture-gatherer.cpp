@@ -99,6 +99,10 @@ void LibinputGestureGatherer::run() {
 void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
   libinput_event_type eventType = libinput_event_get_type(event);
   switch (eventType) {
+    case LIBINPUT_EVENT_DEVICE_ADDED:
+      this->handleDeviceAdded(event);
+      break;
+
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
       this->handleSwipeBegin(std::make_unique<LibinputGesture>(event));
       break;
@@ -125,6 +129,95 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
   }
 }
 
+void LibinputGestureGatherer::handleDeviceAdded(
+    struct libinput_event *event) const {
+  struct libinput_device *device = libinput_event_get_device(event);
+  if (libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_GESTURE) !=
+      0) {
+    std::cout << "Compatible device detected:" << std::endl;
+
+    const char *name = libinput_device_get_name(device);
+    std::cout << "\tName: " << name << std::endl;
+
+    auto info = new LibinputDeviceInfo{};  // NOLINT
+
+    double widthMm = 0;
+    double heightMm = 0;
+    if (libinput_device_get_size(device, &widthMm, &heightMm) == 0) {
+      // From the official documentation:
+      // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
+      //
+      // libinput does partial normalization of relative input. For devices
+      // with a resolution of 1000dpi and higher, motion events are
+      // normalized to a default of 1000dpi before pointer acceleration is
+      // applied.
+      //
+      // Touchpads may have a different resolution for the horizontal and
+      // vertical axis. Interpreting coordinates from the touchpad without
+      // taking resolution into account results in uneven motion.
+      // libinput scales unaccelerated touchpad motion to the resolution of
+      // the touchpad’s x axis, i.e. the unaccelerated value for the y axis
+      // is: y = (x / resolution_x) * resolution_y.
+
+      // Size is expressed in mm, but gesture deltaX/Y is normalized to
+      // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
+      //  - threshold -> 2% of the maximum deltaX/Y
+      //  - animation_finish_threshold -> 20% of the maximum deltaX/Y
+      std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
+                << std::endl;
+
+      std::cout << "\tCalculating threshold and animation_finish_threshold. "
+                   "You can tune this values in your configuration file"
+                << std::endl;
+
+      double minSize = std::min(widthMm, heightMm);
+      double inches = minSize / 25.4;  // 1 inch == 25.4 mm
+      double dpi = (inches * 1000);
+      info->threshold = ((2 * dpi) / 100);
+      info->animationFinishThreshold = ((20 * dpi) / 100);
+    } else {
+      std::cout
+          << "\tIt wasn't possible to get your device physical size, falling "
+             "back to default threshold and animation_finish_threshold. You "
+             "can tune this values in your configuration file"
+          << std::endl;
+    }
+
+    std::cout << "\tthreshold: " << info->threshold << std::endl;
+    std::cout << "\tanimation_finish_threshold: "
+              << info->animationFinishThreshold << std::endl;
+
+    libinput_device_set_user_data(device, static_cast<void *>(info));
+  }
+}
+
+LibinputDeviceInfo LibinputGestureGatherer::getDeviceInfo(
+    const LibinputGesture &gesture) const {
+  LibinputDeviceInfo info;
+
+  // Get the precalculated thresholds
+  struct libinput_device *device = gesture.getDevice();
+  void *userData = libinput_device_get_user_data(device);
+
+  if (userData != nullptr) {
+    auto aux = static_cast<LibinputDeviceInfo *>(userData);
+    info.threshold = aux->threshold;
+    info.animationFinishThreshold = aux->animationFinishThreshold;
+  }
+
+  // User preferences override the thresholds
+  if (this->config.hasGlobalSetting("threshold")) {
+    info.threshold = std::stod(this->config.getGlobalSetting("threshold"));
+  }
+
+  if (this->config.hasGlobalSetting("animation_finish_threshold")) {
+    info.animationFinishThreshold =
+        std::stod(this->config.getGlobalSetting("animation_finish_threshold"));
+  }
+
+  return info;
+}
+
 void LibinputGestureGatherer::handleSwipeBegin(
     std::unique_ptr<LibinputGesture> /*gesture*/) {
   this->swipeState.reset();
@@ -136,15 +229,15 @@ void LibinputGestureGatherer::handleSwipeUpdate(
   this->swipeState.deltaY += gesture->deltaY();
 
   if (!this->swipeState.started) {
-    const double threshold =
-        std::stod(this->config.getGlobalSetting("threshold"));
+    LibinputDeviceInfo info = this->getDeviceInfo(*gesture);
 
-    if (std::abs(this->swipeState.deltaX) > threshold ||
-        std::abs(this->swipeState.deltaY) > threshold) {
+    if (std::abs(this->swipeState.deltaX) > info.threshold ||
+        std::abs(this->swipeState.deltaY) > info.threshold) {
       this->swipeState.started = true;
       this->gestureStartTimestamp = this->getTimestamp();
       this->swipeState.direction = this->calculateSwipeDirection();
-      this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
+      this->swipeState.percentage =
+          this->calculateSwipeAnimationPercentage(*gesture);
 
       gesture->setPercentage(this->swipeState.percentage);
       gesture->setDirection(this->swipeState.direction);
@@ -152,7 +245,8 @@ void LibinputGestureGatherer::handleSwipeUpdate(
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
-    this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
+    this->swipeState.percentage =
+        this->calculateSwipeAnimationPercentage(*gesture);
 
     gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
@@ -164,7 +258,8 @@ void LibinputGestureGatherer::handleSwipeUpdate(
 void LibinputGestureGatherer::handleSwipeEnd(
     std::unique_ptr<LibinputGesture> gesture) {
   if (this->swipeState.started) {
-    this->swipeState.percentage = this->calculateSwipeAnimationPercentage();
+    this->swipeState.percentage =
+        this->calculateSwipeAnimationPercentage(*gesture);
 
     gesture->setPercentage(this->swipeState.percentage);
     gesture->setDirection(this->swipeState.direction);
@@ -185,13 +280,13 @@ GestureDirection LibinputGestureGatherer::calculateSwipeDirection() const {
                                        : GestureDirection::UP;
 }
 
-int LibinputGestureGatherer::calculateSwipeAnimationPercentage() const {
-  const double threshold =
-      std::stod(this->config.getGlobalSetting("threshold"));
-  const int deltaMax =
-      std::stoi(this->config.getGlobalSetting("animation_finish_threshold"));
+int LibinputGestureGatherer::calculateSwipeAnimationPercentage(
+    const LibinputGesture &gesture) const {
+  LibinputDeviceInfo info = this->getDeviceInfo(gesture);
+  double threshold = info.threshold;
+  double animationFinishThreshold = info.animationFinishThreshold;
 
-  int max = threshold + deltaMax;
+  int max = threshold + animationFinishThreshold;
   int current = 0;
   GestureDirection direction = this->swipeState.direction;
 
@@ -268,13 +363,13 @@ int LibinputGestureGatherer::calculatePinchAnimationPercentage() const {
   double delta = this->pinchState.delta;
 
   // With direction IN, 0% is returned when the delta is 1.0 and 100% when the
-  // delta is 0.0.
+  // delta is 0.0
   if (direction == GestureDirection::IN) {
     return std::min(100, static_cast<int>(std::abs(delta - 1.0) * 100));
   }
 
   // With direction OUT, 0% is returned when the delta is 1.0 and 100% when the
-  // delta is 2.0.
+  // delta is 2.0
   if (direction == GestureDirection::OUT) {
     return std::min(
         100,

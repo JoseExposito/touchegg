@@ -97,3 +97,7 @@ void LibinputGesture::setPercentage(int percentage) {
 void LibinputGesture::setElapsedTime(uint64_t elapsedTime) {
   this->gestureElapsedTime = elapsedTime;
 }
+
+struct libinput_device *LibinputGesture::getDevice() const {
+  return libinput_event_get_device(this->event);
+}

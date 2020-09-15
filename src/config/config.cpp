@@ -33,6 +33,10 @@ void Config::saveGlobalSetting(const std::string &name,
   this->globalSettings[name] = value;
 }
 
+bool Config::hasGlobalSetting(const std::string &name) const {
+  return (this->globalSettings.count(name) == 1);
+}
+
 std::string Config::getGlobalSetting(const std::string &name) const {
   return this->globalSettings.at(name);
 }
@@ -65,9 +69,6 @@ Config::getGestureConfig(const std::string &application,
 }
 
 void Config::loadDefaultGlobalSettings() {
-  this->globalSettings["composed_gestures_time"] = "0";
-  this->globalSettings["threshold"] = "0";
-  this->globalSettings["animation_finish_threshold"] = "800";
   this->globalSettings["animation_delay"] = "150";
   this->globalSettings["action_execute_threshold"] = "50";
 }

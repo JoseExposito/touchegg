@@ -351,10 +351,10 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
   int height = maxSize.height;
 
   Rectangle decoration = this->getWindowDecorationSize(x11Window.window);
-  x -= decoration.x;
-  y -= decoration.y;
-  width += decoration.width;
-  height += decoration.height;
+  x += decoration.x;
+  y += decoration.y;
+  width -= decoration.width;
+  height -= decoration.height;
 
   this->sendEvent(
       rootWindow, x11Window.window, "_NET_MOVERESIZE_WINDOW",
@@ -449,17 +449,35 @@ void X11::showDesktop() const {
 Rectangle X11::getWindowDecorationSize(Window window) const {
   Rectangle size;
 
-  std::vector<uint64_t> decoration = this->getWindowProperty<uint64_t>(
+  std::vector<uint64_t> gtk = this->getWindowProperty<uint64_t>(
       window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
-
-  if (decoration.size() != 4) {
+  if (gtk.size() == 4) {
+    size.x = gtk[0];
+    size.y = gtk[2];
+    size.width = (gtk[0] + gtk[1]);
+    size.height = (gtk[2] + gtk[3]);
     return size;
   }
 
-  size.x = decoration[0];
-  size.y = decoration[2];
-  size.width = (decoration[0] + decoration[1]);
-  size.height = (decoration[2] + decoration[3]);
+  std::vector<uint64_t> frame = this->getWindowProperty<uint64_t>(
+      window, "_NET_FRAME_EXTENTS", XA_CARDINAL);
+  if (frame.size() == 4) {
+    size.x = frame[0];
+    size.y = frame[2];
+    size.width = (frame[0] + frame[1]);
+    size.height = (frame[2] + frame[3]);
+    return size;
+  }
+
+  std::vector<uint64_t> kde = this->getWindowProperty<uint64_t>(
+      window, "_KDE_NET_WM_FRAME_STRUT", XA_CARDINAL);
+  if (kde.size() == 4) {
+    size.x = kde[0];
+    size.y = kde[2];
+    size.width = (kde[0] + kde[1]);
+    size.height = (kde[2] + kde[3]);
+    return size;
+  }
 
   return size;
 }

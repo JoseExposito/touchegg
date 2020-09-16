@@ -147,9 +147,10 @@ class X11 : public WindowSystem {
   /**
    * When the window uses client-side decorantion, the WM is not able to know
    * the size of the shadows and other decorations.
-   * Some WMs, like Gala, Mutter and even KWin, are able to use the non-standard
+   * Some WMs, like Mutter or Gala are able to use the non-standard
    * _GTK_FRAME_EXTENTS (left, right, top, bottom) atom where the size of the
    * decorations are stored.
+   * KWin supports both _NET_FRAME_EXTENTS and _KDE_NET_WM_FRAME_STRUT.
    */
   Rectangle getWindowDecorationSize(Window window) const;
 };

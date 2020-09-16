@@ -29,7 +29,7 @@
 class SendKeys : public Action {
  public:
   using Action::Action;
-  bool runOnSystemWindows() override { return false; }
+  bool runOnSystemWindows() override { return true; }
   void onGestureBegin(const Gesture &gesture) override;
   void onGestureUpdate(const Gesture &gesture) override;
   void onGestureEnd(const Gesture &gesture) override;

@@ -438,12 +438,10 @@ void X11::showDesktop() const {
   std::vector<bool> showingDesktop = this->getWindowProperty<bool>(
       rootWindow, "_NET_SHOWING_DESKTOP", XA_CARDINAL);
 
-  if (showingDesktop.empty()) {
-    return;
-  }
+  bool show = showingDesktop.empty() ? true : !showingDesktop.at(0);
 
   this->sendEvent(rootWindow, rootWindow, "_NET_SHOWING_DESKTOP",
-                  {showingDesktop.at(0) ? False : True});
+                  {show ? True : False});
 }
 
 Rectangle X11::getWindowDecorationSize(Window window) const {

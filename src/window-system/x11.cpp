@@ -432,16 +432,16 @@ void X11::changeDesktop(bool next) const {
   this->sendEvent(rootWindow, rootWindow, "_NET_CURRENT_DESKTOP", {toDesktop});
 }
 
-void X11::showDesktop() const {
+void X11::showDesktop(bool show) const {
   Window rootWindow = XDefaultRootWindow(this->display);
-
-  std::vector<bool> showingDesktop = this->getWindowProperty<bool>(
-      rootWindow, "_NET_SHOWING_DESKTOP", XA_CARDINAL);
-
-  bool show = showingDesktop.empty() ? true : !showingDesktop.at(0);
-
   this->sendEvent(rootWindow, rootWindow, "_NET_SHOWING_DESKTOP",
                   {show ? True : False});
+}
+
+bool X11::isShowingDesktop() const {
+  std::vector<bool> showingDesktop = this->getWindowProperty<bool>(
+      XDefaultRootWindow(this->display), "_NET_SHOWING_DESKTOP", XA_CARDINAL);
+  return showingDesktop.empty() ? false : showingDesktop.at(0);
 }
 
 Rectangle X11::getWindowDecorationSize(Window window) const {

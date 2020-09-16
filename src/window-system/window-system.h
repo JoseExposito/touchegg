@@ -120,7 +120,12 @@ class WindowSystem {
   /**
    * Show the desktop.
    */
-  virtual void showDesktop() const = 0;
+  virtual void showDesktop(bool show) const = 0;
+
+  /**
+   * @returns If the desktop is being shown.
+   */
+  virtual bool isShowingDesktop() const = 0;
 
   /**
    * Creates a Cairo surface to draw on.

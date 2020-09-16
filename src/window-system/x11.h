@@ -64,7 +64,8 @@ class X11 : public WindowSystem {
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(bool next) const override;
-  void showDesktop() const override;
+  void showDesktop(bool show) const override;
+  bool isShowingDesktop() const;
 
   cairo_surface_t *createSurface() const override;
   int getSurfaceWidth(cairo_surface_t *cairoSurface) const override;

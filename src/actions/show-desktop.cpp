@@ -19,15 +19,18 @@
 
 #include <memory>
 
-#include "animations/restore-window-animation.h"
+#include "animations/show-desktop-animation.h"
 
 void ShowDesktop::onGestureBegin(const Gesture& /*gesture*/) {
+  this->showingDesktop = this->windowSystem.isShowingDesktop();
+
   if (this->animate) {
-    this->animation = std::make_unique<RestoreWindowAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor);
+    this->animation = std::make_unique<ShowDesktopAnimation>(
+        this->windowSystem, this->window, this->color, this->borderColor,
+        this->showingDesktop);
   }
 }
 
 void ShowDesktop::executeAction(const Gesture& /*gesture*/) {
-  this->windowSystem.showDesktop();
+  this->windowSystem.showDesktop(!this->showingDesktop);
 }

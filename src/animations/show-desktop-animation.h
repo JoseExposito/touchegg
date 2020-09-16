@@ -15,23 +15,25 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_SHOW_DESKTOP_H_
-#define ACTIONS_SHOW_DESKTOP_H_
+#ifndef ANIMATIONS_SHOW_DESKTOP_ANIMATION_H_
+#define ANIMATIONS_SHOW_DESKTOP_ANIMATION_H_
 
-#include "actions/animated-action.h"
+#include "animations/animation.h"
+#include "utils/color.h"
+#include "utils/rectangle.h"
 
-/**
- * Minimize the window under the pointer.
- */
-class ShowDesktop : public AnimatedAction {
+class ShowDesktopAnimation : public Animation {
  public:
-  using AnimatedAction::AnimatedAction;
-  bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void executeAction(const Gesture &gesture) override;
+  using Animation::Animation;
+  ShowDesktopAnimation(const WindowSystem &windowSystem, const WindowT &window,
+                       Color color, Color borderColor, bool showingDesktop);
+  void render(int percentage) override;
 
  private:
-  bool showingDesktop = false;
+  Rectangle maxSize;
+  Color color;
+  Color borderColor;
+  bool showingDesktop;
 };
 
-#endif  // ACTIONS_SHOW_DESKTOP_H_
+#endif  // ANIMATIONS_SHOW_DESKTOP_ANIMATION_H_

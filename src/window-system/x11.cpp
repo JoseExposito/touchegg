@@ -20,6 +20,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XTest.h>
+#include <X11/extensions/Xrandr.h>
 #include <cairo-xlib.h>
 
 #include <algorithm>

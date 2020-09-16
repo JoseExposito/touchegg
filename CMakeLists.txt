@@ -18,6 +18,7 @@ find_package(PugiXML REQUIRED)
 find_package(Cairo REQUIRED)
 find_package(X11 REQUIRED)
 find_package(XTest REQUIRED)
+find_package(Xrandr REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
@@ -30,6 +31,7 @@ target_include_directories(touchegg PUBLIC
   ${CAIRO_INCLUDE_DIRS}
   ${X11_INCLUDE_DIRS}
   ${XTEST_INCLUDE_DIRS}
+  ${XRANDR_INCLUDE_DIRS}
 )
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
@@ -40,6 +42,7 @@ target_link_libraries(touchegg
   ${CAIRO_LIBRARIES}
   ${X11_LIBRARIES}
   ${XTEST_LIBRARIES}
+  ${XRANDR_LIBRARIES}
 )
 
 

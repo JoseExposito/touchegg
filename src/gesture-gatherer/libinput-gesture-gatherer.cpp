@@ -162,7 +162,7 @@ void LibinputGestureGatherer::handleDeviceAdded(
       // Size is expressed in mm, but gesture deltaX/Y is normalized to
       // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
       //  - threshold -> 2% of the maximum deltaX/Y
-      //  - animation_finish_threshold -> 20% of the maximum deltaX/Y
+      //  - animation_finish_threshold -> 10% of the maximum deltaX/Y
       std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
                 << std::endl;
 
@@ -174,7 +174,7 @@ void LibinputGestureGatherer::handleDeviceAdded(
       double inches = minSize / 25.4;  // 1 inch == 25.4 mm
       double dpi = (inches * 1000);
       info->threshold = ((2 * dpi) / 100);
-      info->animationFinishThreshold = ((20 * dpi) / 100);
+      info->animationFinishThreshold = ((10 * dpi) / 100);
     } else {
       std::cout
           << "\tIt wasn't possible to get your device physical size, falling "

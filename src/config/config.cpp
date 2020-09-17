@@ -70,7 +70,7 @@ Config::getGestureConfig(const std::string &application,
 
 void Config::loadDefaultGlobalSettings() {
   this->globalSettings["animation_delay"] = "150";
-  this->globalSettings["action_execute_threshold"] = "50";
+  this->globalSettings["action_execute_threshold"] = "20";
 }
 
 std::string Config::getConfigKey(const std::string &application,

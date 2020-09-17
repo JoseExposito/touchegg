@@ -32,7 +32,13 @@ AnimatedAction::AnimatedAction(
   }
 
   if (this->animate) {
-    // TODO(jose) Allow to use a global color
+    if (this->config.hasGlobalSetting("color")) {
+      this->color = Color{this->config.getGlobalSetting("color")};
+    }
+
+    if (this->config.hasGlobalSetting("borderColor")) {
+      this->borderColor = Color{this->config.getGlobalSetting("borderColor")};
+    }
 
     if (this->settings.count("color") == 1) {
       this->color = Color{this->settings.at("color")};

@@ -1,7 +1,7 @@
 **Follow Touchégg on...** [![Twitter](.github/images/twitter.png "Twitter")](https://twitter.com/Jose__Exposito)
 
 
-# Touchégg:
+# Touchégg
 
 Touchégg is an app that runs in the background and transform the gestures you make in your touchpad
 into visible actions in your desktop.
@@ -17,19 +17,113 @@ Many more actions and gestures are available and everything is easily configurab
   </a>
 </p>
 
-For more information check the [wiki](https://github.com/JoseExposito/touchegg/wiki) or
-[ask a question](https://github.com/JoseExposito/touchegg/issues).
+
+# Table of contents
+
+  * [Installation](#installation)
+  * [Configuration](#configuration)
+    * [Global settings](#global-settings)
+    * [Available gestures](#available-gestures)
+      * [Swipe](#swipe)
+      * [Pinch](#pinch)
+    * [Available actions](#available-actions)
+      * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
+      * [Minimize a window](#minimize-a-window-minimize_window)
+      * [Tile/snap a widow](#tilesnap-a-widow-tile_window)
+      * [Close a window](#close-a-window-close_window)
+      * [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop)
+      * [Show desktop](#show-desktop-show_desktop)
+      * [Keyboard shortcut](#keyboard-shortcut-send_keys)
+      * [Execute a command](#execute-a-command-run_command)
+  * [Copyright](#copyright)
 
 
-# Available actions:
+# Installation
 
-## Maximize or restore a window (MAXIMIZE_RESTORE_WINDOW)
+TODO(jose) Add installation instructions.
+
+In addition, you can compile the source code. Follow the instructions available in the
+[HACKING.md](HACKING.md) file.
+
+
+# Configuration
+
+After [installing](#installation) Touchégg you'll notice that you can start using multi-touch
+gestures. However, you are not forced to use the gestures and actions that come out of the box, you
+can configure the gestures you'd like to use and the actions they'll trigger.
+
+Your configuration file is placed in `~/.config/touchegg/touchegg.conf`, open it with your favorite
+text editor. It is a XML document with 3 main sections:
+
+  * [Global settings](#global-settings)
+  * Global gestures: `<application name="All">...</application>`
+  * Application specified gestures: `<application name="Google-chrome,Firefox"></application>`
+
+Find more information in the sections below.
+
+
+## Global settings
+
+| Option | Value | Default | Description | Example
+| - | - | - | - | - |
+| animation_delay | Number | 150 | Delay, in milliseconds, since the gesture starts before the animation is displayed | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that no animation is displayed if you complete the action quick enough. This property configures that time |
+| action_execute_threshold | Number | 20 | Percentage of the animation to be completed to apply the action | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not moved your fingers far enough. This property configures the percentage of the animation that must be reached to execute the action |
+| color | Hex color | 3E9FED | Color of the animation | `#909090`
+| borderColor | Hex color | 3E9FED | Color of the animation | `FFFFFF`
+| threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
+| animation_finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
+
+It is recommended NOT to configure `threshold` and `animation_finish_threshold` since an optimal
+value is calculated for you. This value is printed to the terminal on application startup or when a
+new multi-touch device is connected.
+
+
+## Available gestures
+
+### Swipe
+
+From [libinput documentation](https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#swipe-gestures):
+Swipe gestures are executed when three or more fingers are moved synchronously in the same
+direction.
+
+Example:
+
+```
+<gesture type="SWIPE" fingers="3" direction="UP">
+  <action type="MAXIMIZE_RESTORE_WINDOW">
+    <animate>true</animate>
+  </action>
+</gesture>
+```
+
+### Pinch
+
+From [libinput documentation](https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#pinch-gestures):
+Pinch gestures are executed when two or more fingers are located on the touchpad and are either
+changing the relative distance to each other (pinching) or are changing the relative angle (rotate).
+
+Example:
+
+```
+<gesture type="PINCH" fingers="4" direction="IN">
+  <action type="CLOSE_WINDOW">
+    <animate>true</animate>
+    <color>F84A53</color>
+    <borderColor>F84A53</borderColor>
+  </action>
+</gesture>
+```
+
+
+## Available actions
+
+### Maximize or restore a window (MAXIMIZE_RESTORE_WINDOW)
 
 Maximize the window under the pointer. If it is already maximized, restore it.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
@@ -49,13 +143,13 @@ Example:
 
 ![Animation](.github/images/MAXIMIZE_RESTORE_WINDOW.gif)
 
-## Minimize a window (MINIMIZE_WINDOW)
+### Minimize a window (MINIMIZE_WINDOW)
 
 Minimize the window under the pointer.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
@@ -75,13 +169,13 @@ Example:
 
 ![Animation](.github/images/MINIMIZE_WINDOW.gif)
 
-## Tile/snap a widow (TILE_WINDOW)
+### Tile/snap a widow (TILE_WINDOW)
 
 Resize and move the window under the pointer to use half of the screen.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | direction | `left`/`right` | Use the `left` or `right` half of the screen |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
@@ -112,13 +206,13 @@ Example:
 
 ![Animation](.github/images/TILE_WINDOW.gif)
 
-## Close a window (CLOSE_WINDOW)
+### Close a window (CLOSE_WINDOW)
 
 Close the window under the pointer.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
@@ -138,13 +232,13 @@ Example:
 
 ![Animation](.github/images/CLOSE_WINDOW.gif)
 
-## Switch desktops/workspaces (CHANGE_DESKTOP)
+### Switch desktops/workspaces (CHANGE_DESKTOP)
 
 Change to the next or previous desktop/workspace.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | direction | `left`/`right` | Use the `left` or `right` half of the screen |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
@@ -177,13 +271,13 @@ Example:
 
 ![Animation](.github/images/CHANGE_DESKTOP.gif)
 
-## Show desktop (SHOW_DESKTOP)
+### Show desktop (SHOW_DESKTOP)
 
 Show the desktop. If the desktop is already being shown, restore all the windows.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
@@ -203,19 +297,19 @@ Example:
 
 ![Animation](.github/images/SHOW_DESKTOP.gif)
 
-## Keyboard shortcut (SEND_KEYS)
+### Keyboard shortcut (SEND_KEYS)
 
 Emulate a keyboard shortcut.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | repeat | `true`/`false` | `true` if the keyboard shortcut should be executed multiple times. `false` otherwise. This is useful to perform actions like pinch to zoom. |
-| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" bellow for more information. |
-| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" bellow for more information. |
+| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
+| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `true`. If the shortcut should be executed on the beginning or on the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `false`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` bellow. |
+| decreaseKeys | Keycode | Only used when `repeat` is `false`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
 Keycodes:
 
@@ -240,6 +334,15 @@ Example 1:
 Example 2: Pinch to zoom example
 
 ```
+<gesture type="PINCH" fingers="2" direction="IN">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Control_L</modifiers>
+    <keys>KP_Subtract</keys>
+    <decreaseKeys>KP_Add</decreaseKeys>
+  </action>
+</gesture>
+
 <gesture type="PINCH" fingers="2" direction="OUT">
   <action type="SEND_KEYS">
     <repeat>true</repeat>
@@ -247,21 +350,21 @@ Example 2: Pinch to zoom example
     <keys>KP_Add</keys>
     <decreaseKeys>KP_Subtract</decreaseKeys>
   </action>
-</gesture>
+    </gesture>
 ```
 
-# Execute a command (RUN_COMMAND)
+### Execute a command (RUN_COMMAND)
 
 Run any command.
 
 Options:
 
-| Option | Values | Description |
+| Option | Value | Description |
 | - | - | - |
 | repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
 | command | Command | The command to execute. |
 | on | `begin`/`end` | Only used when `repeat` is `true`. If the command should be executed on the beginning or on the end of the gesture. |
-| decreaseCommand | Keycode | Only used when `repeat` is `false`. Command to run when you change the gesture direction to the opposite. Check `Example 2` bellow. |
+| decreaseCommand | Keycode | Only used when `repeat` is `false`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
 
 Example 1:
 
@@ -287,13 +390,7 @@ Example 2:
 </gesture>
 ```
 
-
-# Compilation and installation:
-
-Follow the instructions available in the [HACKING.md](HACKING.md) file.
-
-
-# Copyright:
+# Copyright
 
 Copyright 2011 - 2020 José Expósito <<jose.exposito89@gmail.com>>
 

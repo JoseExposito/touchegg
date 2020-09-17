@@ -28,9 +28,11 @@ int main(/* int, char ** */) {
   std::cout << "Starting Touchégg..." << std::endl;
 
   // Load the configuration using the XML loader
+  std::cout << "Parsing you configuration file..." << std::endl;
   Config config;
   XmlConfigLoader loader(&config);
   loader.load();
+  std::cout << "Configuration parsed successfully" << std::endl;
 
   // Use X11 as window system
   X11 windowSystem;
@@ -39,6 +41,9 @@ int main(/* int, char ** */) {
   GestureController gestureController(config, windowSystem);
 
   // Use libinput as gesture gatherer
+  std::cout << "A list of detected compatible devices will be displayed below:"
+            << std::endl;
+
   LibinputGestureGatherer gestureGatherer(config, &gestureController);
   gestureGatherer.run();
 }

@@ -392,24 +392,83 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
 }
 
 Rectangle X11::getDesktopWorkarea() const {
-  // TODO(jose) When multiple physical screens are connected, the root
-  // window's size is the sum of all of them. Use X11/extensions/Xrandr.h to
-  // get the screen size of the window to animate in order to display the
-  // animation in the correct screen.
+  // When multiple physical screens are connected, the root window's size is the
+  // sum of all of them. Use Xrandr to get the screen size of the physical
+  // screens the mouse pointer is placed on in order to display the animation
+  // there
+  Window rootWindow = None;
+  Window childWindow = None;
+  int pointerX = 0;
+  int pointerY = 0;
+  int childX = 0;
+  int childY = 0;
+  unsigned int mask = 0;
+  XQueryPointer(this->display, XDefaultRootWindow(this->display), &rootWindow,
+                &childWindow, &pointerX, &pointerY, &childX, &childY, &mask);
 
-  Window rootWindow = XDefaultRootWindow(this->display);
+  // Get the physical screen size the mouse pointer is placed on
+  bool screenFound = false;
+  Rectangle screen;
+  int nOutput = 0;
+  XRRScreenResources *resources =
+      XRRGetScreenResources(this->display, rootWindow);
 
+  while (!screenFound && nOutput < resources->noutput) {
+    XRROutputInfo *output =
+        // NOLINTNEXTLINE
+        XRRGetOutputInfo(this->display, resources, resources->outputs[nOutput]);
+
+    if (output->connection == RR_Connected) {
+      XRRCrtcInfo *crtc =
+          XRRGetCrtcInfo(this->display, resources, output->crtc);
+
+      if (pointerX >= crtc->x && pointerX <= (crtc->x + crtc->width) &&
+          pointerY >= crtc->y && pointerY <= (crtc->y + crtc->height)) {
+        screenFound = true;
+        screen.x = crtc->x;
+        screen.y = crtc->y;
+        screen.width = crtc->width;
+        screen.height = crtc->height;
+      }
+
+      XRRFreeCrtcInfo(crtc);
+    }
+
+    XRRFreeOutputInfo(output);
+    nOutput++;
+  }
+
+  XRRFreeScreenResources(resources);
+
+  // Get the workarea. Notice that this size applies to the root window, ie, the
+  // sum of all physical screens
   std::vector<int> currenDesktop = this->getWindowProperty<int>(
       rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
-  std::vector<uint64_t> workArea = this->getWindowProperty<uint64_t>(
+  std::vector<uint64_t> workareas = this->getWindowProperty<uint64_t>(
       rootWindow, "_NET_WORKAREA", XA_CARDINAL);
 
-  Rectangle size;
-  size.x = workArea[0 + (currenDesktop[0] * 4)];
-  size.y = workArea[1 + (currenDesktop[0] * 4)];
-  size.width = workArea[2 + (currenDesktop[0] * 4)];
-  size.height = workArea[3 + (currenDesktop[0] * 4)];
-  return size;
+  Rectangle workarea;
+  workarea.x = workareas[0 + (currenDesktop[0] * 4)];
+  workarea.y = workareas[1 + (currenDesktop[0] * 4)];
+  workarea.width = workareas[2 + (currenDesktop[0] * 4)];
+  workarea.height = workareas[3 + (currenDesktop[0] * 4)];
+
+  // Transform the workarea size to the physical screen size
+  if (screenFound) {
+    int x = std::max(workarea.x, screen.x);
+    int y = std::max(workarea.y, screen.y);
+    int width =
+        std::min(workarea.x + workarea.width, screen.x + screen.width) - x;
+    int height =
+        std::min(workarea.y + workarea.height, screen.y + screen.height) - y;
+
+    workarea.x = x;
+    workarea.y = y;
+    workarea.width = width;
+    workarea.height = height;
+  }
+
+  return workarea;
 }
 
 void X11::changeDesktop(bool next) const {

@@ -58,6 +58,7 @@ class X11 : public WindowSystem {
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;
   void tileWindow(const WindowT &window, bool toTheLeft) const override;
   void activateWindow(const WindowT &window) const override;
+  void closeWindow(const WindowT &window) const override;
 
   void sendKeys(const std::vector<std::string> &keycodes,
                 bool isPress) const override;

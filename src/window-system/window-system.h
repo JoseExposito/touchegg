@@ -101,6 +101,11 @@ class WindowSystem {
   virtual void activateWindow(const WindowT &window) const = 0;
 
   /**
+   * Close the window.
+   */
+  virtual void closeWindow(const WindowT &window) const = 0;
+
+  /**
    * Simulate a key press.
    */
   virtual void sendKeys(const std::vector<std::string> &keycodes,

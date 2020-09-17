@@ -32,6 +32,8 @@ AnimatedAction::AnimatedAction(
   }
 
   if (this->animate) {
+    // TODO(jose) Allow to use a global color
+
     if (this->settings.count("color") == 1) {
       this->color = Color{this->settings.at("color")};
     }

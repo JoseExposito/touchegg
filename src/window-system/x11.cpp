@@ -380,6 +380,22 @@ void X11::activateWindow(const WindowT &window) const {
                   "_NET_ACTIVE_WINDOW", data);
 }
 
+void X11::closeWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  // NOLINTNEXTLINE
+  std::vector<long> data{
+      CurrentTime,
+      1,  // Should be 1 when the request comes from an application
+  };
+
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "_NET_CLOSE_WINDOW", data);
+}
+
 void X11::sendKeys(const std::vector<std::string> &keycodes,
                    bool isPress) const {
   for (const std::string &keycode : keycodes) {

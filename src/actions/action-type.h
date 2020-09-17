@@ -25,6 +25,7 @@ enum class ActionType {
   MAXIMIZE_RESTORE_WINDOW,
   MINIMIZE_WINDOW,
   TILE_WINDOW,
+  CLOSE_WINDOW,
   CHANGE_DESKTOP,
   SHOW_DESKTOP,
   SEND_KEYS,
@@ -41,6 +42,8 @@ inline std::string actionTypeToStr(ActionType actionType) {
       return "MINIMIZE_WINDOW";
     case ActionType::TILE_WINDOW:
       return "TILE_WINDOW";
+    case ActionType::CLOSE_WINDOW:
+      return "CLOSE_WINDOW";
     case ActionType::CHANGE_DESKTOP:
       return "CHANGE_DESKTOP";
     case ActionType::SHOW_DESKTOP:
@@ -63,6 +66,9 @@ inline ActionType actionTypeFromStr(const std::string &str) {
   }
   if (str == "TILE_WINDOW") {
     return ActionType::TILE_WINDOW;
+  }
+  if (str == "CLOSE_WINDOW") {
+    return ActionType::CLOSE_WINDOW;
   }
   if (str == "CHANGE_DESKTOP") {
     return ActionType::CHANGE_DESKTOP;

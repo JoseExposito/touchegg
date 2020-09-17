@@ -21,6 +21,7 @@
 
 #include "actions/action.h"
 #include "actions/change-desktop.h"
+#include "actions/close-window.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
 #include "actions/run-command.h"
@@ -42,6 +43,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::TILE_WINDOW:
       return std::make_unique<TileWindow>(std::move(settings), windowSystem,
                                           window, config);
+    case ActionType::CLOSE_WINDOW:
+      return std::make_unique<CloseWindow>(std::move(settings), windowSystem,
+                                           window, config);
     case ActionType::CHANGE_DESKTOP:
       return std::make_unique<ChangeDesktop>(std::move(settings), windowSystem,
                                              window, config);

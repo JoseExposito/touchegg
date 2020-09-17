@@ -112,6 +112,32 @@ Example:
 
 ![Animation](.github/images/TILE_WINDOW.gif)
 
+## Close a window (CLOSE_WINDOW)
+
+Close the window under the pointer.
+
+Options:
+
+| Option | Values | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```
+<gesture type="PINCH" fingers="4" direction="IN">
+  <action type="CLOSE_WINDOW">
+    <animate>true</animate>
+    <color>F84A53</color>
+    <borderColor>F84A53</borderColor>
+  </action>
+</gesture>
+```
+
+![Animation](.github/images/CLOSE_WINDOW.gif)
+
 ## Switch desktops/workspaces (CHANGE_DESKTOP)
 
 Change to the next or previous desktop/workspace.

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(touchegg VERSION 2.0.0)
+project(touchegg)
+SET(MAJOR_VERSION "2")
+SET(MINOR_VERSION "0")
+SET(PATCH_VERSION "0")
+add_definitions(-D_VERSION="v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -46,9 +50,28 @@ target_link_libraries(touchegg
 )
 
 
-# include(CTest)
-# enable_testing()
+# Installation
+# TODO(jose) Copy the service file to /lib/systemd/system
+# TODO(jose) Generate a proper DEB package
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION share/touchegg)
+install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION bin)
 
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# include(CPack)
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+SET(CPACK_PACKAGE_VERSION_MAJOR "${MAJOR_VERSION}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${MINOR_VERSION}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${PATCH_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Multi-touch gesture recognizer.
+Touchégg is an app that runs in the background and transform the gestures you make in your touchpad into visible actions in your desktop.
+For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to switch to the next desktop.")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/JoseExposito/touchegg")
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
+
+# DEB package
+# Run: $ cpack -G DEB
+set(CPACK_DEBIAN_PACKAGE_SECTION "misc")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "José Expósito <jose.exposito89@gmail.com>")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libudev-dev, libinput-dev, libpugixml-dev, libcairo2-dev, libx11-dev, libxtst-dev, libxrandr-dev")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+# set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/installation/debian/control")
+
+include(CPack)

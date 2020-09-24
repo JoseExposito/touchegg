@@ -27,40 +27,55 @@
  */
 class Gesture {
  public:
+  Gesture() = default;
+
+  Gesture(GestureType type, GestureDirection direction, int percentage,
+          int fingers, double deltaX, double deltaY, double angleDelta,
+          double radiusDelta, uint64_t elapsedTime)
+      : gestureType(type),
+        gestureDirection(direction),
+        gesturePercentage(percentage),
+        gestureFingers(fingers),
+        gestureDeltaX(deltaX),
+        gestureDeltaY(deltaY),
+        gestureAngleDelta(angleDelta),
+        gestureRadiusDelta(radiusDelta),
+        gestureElapsedTime(elapsedTime) {}
+
   virtual ~Gesture() = default;
 
   /**
    * @returns The gesture type.
    * @see GestureType
    */
-  virtual GestureType type() const = 0;
+  virtual GestureType type() const { return this->gestureType; }
 
   /**
    * @returns The gesture direction.
    * @see GestureDirection
    */
-  virtual GestureDirection direction() const = 0;
+  virtual GestureDirection direction() const { return this->gestureDirection; }
 
   /**
    * Percentage of the gesture performed, used for animations.
    * @return Value between 0 and 100.
    */
-  virtual int percentage() const = 0;
+  virtual int percentage() const { return this->gesturePercentage; }
 
   /**
    * @returns The number of fingers used to perform the gesture.
    */
-  virtual int fingers() const = 0;
+  virtual int fingers() const { return this->gestureFingers; }
 
   /**
    * @returns Gesture change in the X since its last update.
    */
-  virtual double deltaX() const = 0;
+  virtual double deltaX() const { return this->gestureDeltaX; }
 
   /**
    * @returns Gesture change in the Y since its last update.
    */
-  virtual double deltaY() const = 0;
+  virtual double deltaY() const { return this->gestureDeltaY; }
 
   /**
    * @returns If the gesture type is GestureType::PINCH, returns the angle
@@ -69,19 +84,30 @@ class Gesture {
    * plate and they move to the 1 resp. 7 location in a single event then the
    * angle delta is 30 degrees.
    */
-  virtual double angleDelta() const = 0;
+  virtual double angleDelta() const { return this->gestureAngleDelta; }
 
   /**
    * @returns If the gesture type is GestureType::PINCH, return the change in
    * the radius of the gesture since last update. Otherwise return 0.
    */
-  virtual double radiusDelta() const = 0;
+  virtual double radiusDelta() const { return this->gestureRadiusDelta; }
 
   /**
    * Elapsed time since the beginning of the gesture.
    * @returns The elapsed time in milliseconds.
    */
-  virtual uint64_t elapsedTime() const = 0;
+  virtual uint64_t elapsedTime() const { return this->gestureElapsedTime; }
+
+ protected:
+  GestureType gestureType = GestureType::NOT_SUPPORTED;
+  GestureDirection gestureDirection = GestureDirection::UNKNOWN;
+  int gesturePercentage = -1;
+  int gestureFingers = -1;
+  double gestureDeltaX = -1;
+  double gestureDeltaY = -1;
+  double gestureAngleDelta = -1;
+  double gestureRadiusDelta = -1;
+  uint64_t gestureElapsedTime = -1;
 };
 
 #endif  // GESTURE_GESTURE_H_

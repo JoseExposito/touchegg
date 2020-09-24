@@ -396,7 +396,10 @@ int LibinputGestureGatherer::openRestricted(const char *path, int flags,
   if (fd < 0) {
     throw std::runtime_error{
         "Error initialising Touchégg: libinput open.\n"
-        "Please execute the following command:\n"
+        "Touchégg should be run in daemon mode by systemd in order to be part "
+        "of the 'input' group and have access to your touchpad.\n"
+        "If you prefer to run Touchégg in a single process (touchegg --all) "
+        "without using systemd, please execute the following command:\n"
         "$ sudo usermod -a -G input $USER\n"
         "And reboot to solve this issue"};
   }

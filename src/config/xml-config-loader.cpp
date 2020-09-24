@@ -27,6 +27,7 @@
 #include <exception>
 #include <iostream>
 #include <pugixml.hpp>  // NOLINT
+#include <stdexcept>
 #include <string>
 #include <thread>  // NOLINT
 #include <unordered_map>

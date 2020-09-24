@@ -41,9 +41,9 @@ class LibinputGesture : public Gesture {
 
   GestureType type() const override;
 
-  GestureDirection direction() const override;
+  // GestureDirection direction() const;
 
-  int percentage() const override;
+  // int percentage() const;
 
   int fingers() const override;
 
@@ -55,7 +55,7 @@ class LibinputGesture : public Gesture {
 
   double radiusDelta() const override;
 
-  uint64_t elapsedTime() const override;
+  // uint64_t elapsedTime() const;
 
   /**
    * The direction is not implicit in the libinput_event_gesture, instead
@@ -91,22 +91,6 @@ class LibinputGesture : public Gesture {
    * Pointer to the gesture libinput event, obtained from this->event.
    */
   struct libinput_event_gesture *gestureEvent;
-
-  /**
-   * Gesture direction. Defaults to GestureDirection::UNKNOWN unless it is set
-   * from the outside.
-   */
-  GestureDirection gestureDirection;
-
-  /**
-   * Value between 0 and 100 indicating the percentage of the animation.
-   */
-  int animationPercentage;
-
-  /**
-   * Elapsed time since the beginning of the gesture.
-   */
-  uint64_t gestureElapsedTime;
 };
 
 #endif  // GESTURE_LIBINPUT_GESTURE_H_

@@ -3,7 +3,7 @@
 
 # Touchégg
 
-Touchégg is an app that runs in the background and transform the gestures you make in your touchpad
+Touchégg is an app that runs in the background and transform the gestures you make on your touchpad
 into visible actions in your desktop.
 
 For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to

@@ -20,11 +20,7 @@
 #include <iostream>
 
 LibinputGesture::LibinputGesture(struct libinput_event *event)
-    : event(event),
-      gestureEvent(libinput_event_get_gesture_event(event)),
-      gestureDirection(GestureDirection::UNKNOWN),
-      animationPercentage(0),
-      gestureElapsedTime(0) {}
+    : event(event), gestureEvent(libinput_event_get_gesture_event(event)) {}
 
 LibinputGesture::~LibinputGesture() { libinput_event_destroy(this->event); }
 
@@ -47,12 +43,6 @@ GestureType LibinputGesture::type() const {
       return GestureType::NOT_SUPPORTED;
   }
 }
-
-GestureDirection LibinputGesture::direction() const {
-  return this->gestureDirection;
-}
-
-int LibinputGesture::percentage() const { return this->animationPercentage; }
 
 int LibinputGesture::fingers() const {
   return libinput_event_gesture_get_finger_count(this->gestureEvent);
@@ -82,16 +72,12 @@ double LibinputGesture::radiusDelta() const {
   return libinput_event_gesture_get_scale(this->gestureEvent);
 }
 
-uint64_t LibinputGesture::elapsedTime() const {
-  return this->gestureElapsedTime;
-}
-
 void LibinputGesture::setDirection(GestureDirection direction) {
   this->gestureDirection = direction;
 }
 
 void LibinputGesture::setPercentage(int percentage) {
-  this->animationPercentage = percentage;
+  this->gesturePercentage = percentage;
 }
 
 void LibinputGesture::setElapsedTime(uint64_t elapsedTime) {

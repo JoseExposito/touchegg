@@ -37,7 +37,7 @@ void RunCommand::onGestureBegin(const Gesture& /*gesture*/) {
   }
 
   if (!this->repeat && this->onBegin) {
-    system(this->command.c_str());
+    RunCommand::runCommand(this->command);
   }
 }
 
@@ -48,12 +48,12 @@ void RunCommand::onGestureUpdate(const Gesture& gesture) {
     bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
 
     if (increased) {
-      system(this->command.c_str());
+      RunCommand::runCommand(this->command);
       this->repeatPercentage += step;
     }
 
     if (decreased) {
-      system(this->decreaseCommand.c_str());
+      RunCommand::runCommand(this->decreaseCommand);
       this->repeatPercentage -= step;
     }
   }
@@ -61,6 +61,11 @@ void RunCommand::onGestureUpdate(const Gesture& gesture) {
 
 void RunCommand::onGestureEnd(const Gesture& /*gesture*/) {
   if (!this->repeat && !this->onBegin) {
-    system(this->command.c_str());
+    RunCommand::runCommand(this->command);
   }
+}
+
+bool RunCommand::runCommand(const std::string& command) {
+  int ret = system(command.c_str());
+  return (ret == 0);
 }

@@ -39,6 +39,8 @@ class RunCommand : public Action {
   bool repeat = false;
   int repeatPercentage = 0;
   bool onBegin = true;
+
+  static bool runCommand(const std::string &command);
 };
 
 #endif  // ACTIONS_RUN_COMMAND_H_

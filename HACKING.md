@@ -18,6 +18,25 @@ $ cmake -DCMAKE_BUILD_TYPE=Release ..
 $ make -j$(nproc)
 ```
 
+# Installation
+
+After building the source code, you can install Touchégg by running this commands:
+
+```
+$ sudo make install
+$ sudo systemctl daemon-reload && sudo systemctl restart touchegg # Start the daemon
+$ touchegg # Run Touchégg
+```
+
+In addition, you can generate a Debian package and install it:
+
+```
+$ cpack -G DEB
+$ sudo dpkg -i touchegg_*.deb # Install the package
+$ sudo apt -f install # Install missing dependencies
+$ touchegg # Run Touchégg
+```
+
 # Code Style
 
 This project follows Google C++ Style Guide:

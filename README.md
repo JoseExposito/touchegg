@@ -41,7 +41,26 @@ Many more actions and gestures are available and everything is easily configurab
 
 # Installation
 
-TODO(jose) Add installation instructions.
+On the [releases](https://github.com/JoseExposito/touchegg/releases) page you will hopefully find a
+package for your distribution.
+
+## Ubuntu, Debian and derivatives
+
+Download the `.deb` package and install it. Double click on the package may work, otherwise install
+it from the terminal:
+
+```
+$ cd ~/Downloads # Or to the path where the deb package is placed at
+$ sudo dpkg -i touchegg_*.deb # Install the package
+$ sudo apt -f install # Install missing dependencies
+$ touchegg # Run Touchégg
+```
+
+## Fedora, Red Hat and derivatives
+
+TODO(jose) Add instructions
+
+## From source code
 
 In addition, you can compile the source code. Follow the instructions available in the
 [HACKING.md](HACKING.md) file.

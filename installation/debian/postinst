@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+#DEBHELPER#
+
+systemctl daemon-reload
+systemctl restart touchegg
+
+exit 0

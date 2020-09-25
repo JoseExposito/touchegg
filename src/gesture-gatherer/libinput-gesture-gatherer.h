@@ -36,8 +36,9 @@ class LibinputGesture;
  */
 class LibinputGestureGatherer : public GestureGatherer {
  public:
-  LibinputGestureGatherer(const Config &config,
-                          GestureControllerDelegate *gestureController);
+  LibinputGestureGatherer(GestureControllerDelegate *gestureController,
+                          double threshold = -1,
+                          double animationFinishThreshold = -1);
   ~LibinputGestureGatherer();
 
   /**

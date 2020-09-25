@@ -16,7 +16,8 @@
 # Debugging:
 # Change the ExecStart to your binary path:
 # ExecStart=/home/jose/Devel/touchegg/build/touchegg --daemon
-# Copy the service file and restart it.
+# Copy the service file and restart it:
+# $ sudo systemctl daemon-reload && sudo systemctl restart touchegg
 
 [Unit]
 Description=Touchégg

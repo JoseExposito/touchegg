@@ -41,8 +41,9 @@
 #include "gesture/libinput-gesture.h"
 
 LibinputGestureGatherer::LibinputGestureGatherer(
-    const Config &config, GestureControllerDelegate *gestureController)
-    : GestureGatherer(config, gestureController) {
+    GestureControllerDelegate *gestureController, double threshold,
+    double animationFinishThreshold)
+    : GestureGatherer(gestureController, threshold, animationFinishThreshold) {
   this->udevContext = udev_new();
   if (this->udevContext == nullptr) {
     throw std::runtime_error{"Error initialising Touchégg: udev"};
@@ -167,7 +168,7 @@ void LibinputGestureGatherer::handleDeviceAdded(
                 << std::endl;
 
       std::cout << "\tCalculating threshold and animation_finish_threshold. "
-                   "You can tune this values in your configuration file"
+                   "You can tune this values in your service file"
                 << std::endl;
 
       double minSize = std::min(widthMm, heightMm);
@@ -179,8 +180,17 @@ void LibinputGestureGatherer::handleDeviceAdded(
       std::cout
           << "\tIt wasn't possible to get your device physical size, falling "
              "back to default threshold and animation_finish_threshold. You "
-             "can tune this values in your configuration file"
+             "can tune this values in your service file"
           << std::endl;
+    }
+
+    // User preferences override the thresholds
+    if (this->threshold != -1) {
+      info->threshold = this->threshold;
+    }
+
+    if (this->animationFinishThreshold != -1) {
+      info->animationFinishThreshold = this->animationFinishThreshold;
     }
 
     std::cout << "\tthreshold: " << info->threshold << std::endl;
@@ -203,16 +213,6 @@ LibinputDeviceInfo LibinputGestureGatherer::getDeviceInfo(
     auto aux = static_cast<LibinputDeviceInfo *>(userData);
     info.threshold = aux->threshold;
     info.animationFinishThreshold = aux->animationFinishThreshold;
-  }
-
-  // User preferences override the thresholds
-  if (this->config.hasGlobalSetting("threshold")) {
-    info.threshold = std::stod(this->config.getGlobalSetting("threshold"));
-  }
-
-  if (this->config.hasGlobalSetting("animation_finish_threshold")) {
-    info.animationFinishThreshold =
-        std::stod(this->config.getGlobalSetting("animation_finish_threshold"));
   }
 
   return info;

@@ -35,6 +35,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Show desktop](#show-desktop-show_desktop)
       * [Keyboard shortcut](#keyboard-shortcut-send_keys)
       * [Execute a command](#execute-a-command-run_command)
+    * [Daemon configuration](#daemon-configuration)
   * [Copyright](#copyright)
 
 
@@ -70,12 +71,6 @@ Find more information in the sections below.
 | action_execute_threshold | Number | 20 | Percentage of the animation to be completed to apply the action | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not moved your fingers far enough. This property configures the percentage of the animation that must be reached to execute the action |
 | color | Hex color | 3E9FED | Color of the animation | `#909090`
 | borderColor | Hex color | 3E9FED | Color of the animation | `FFFFFF`
-| threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
-| animation_finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
-
-It is recommended NOT to configure `threshold` and `animation_finish_threshold` since an optimal
-value is calculated for you. This value is printed to the terminal on application startup or when a
-new multi-touch device is connected.
 
 
 ## Available gestures
@@ -389,6 +384,41 @@ Example 2:
   </action>
 </gesture>
 ```
+
+
+## Daemon configuration
+
+This is an advanced topic and my recommendation is to ignore it.
+
+Touchégg runs in two different processes, one of them is a systemd daemon configured in
+`/lib/systemd/system/touchegg.service`. In addition to the `--daemon` argument, you can pass two optional arguments:
+
+| Option | Value | Default | Description | Example
+| - | - | - | - | - |
+| threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
+| animation_finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
+
+It is recommended NOT to configure `threshold` and `animation_finish_threshold` since an optimal
+value is calculated for you. This value is printed to the terminal on application startup or when a
+new multi-touch device is connected.
+
+Example:
+
+```
+$ cat /lib/systemd/system/touchegg.service | grep ExecStart
+ExecStart=/usr/bin/touchegg --daemon 100 500
+
+$ sudo systemctl daemon-reload && sudo systemctl restart touchegg
+
+$ journalctl -u touchegg -b -f
+Compatible device detected:
+  Name: Apple Inc. Magic Trackpad 2
+  Size: 161.957mm x 115.114mm
+  Calculating threshold and animation_finish_threshold. You can tune this values in your service file
+  threshold: 100
+  animation_finish_threshold: 500
+```
+
 
 # Copyright
 

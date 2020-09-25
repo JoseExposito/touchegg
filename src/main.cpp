@@ -35,7 +35,10 @@
 
 void printWelcomeMessage() {
   std::cout << "Touchégg " << VERSION << "." << std::endl;
-  std::cout << "Usage: touchegg [OPTIONS]" << std::endl << std::endl;
+  std::cout << "Usage: touchegg [--daemon [threshold "
+               "animation_finish_threshold]] [--client] [--all]"
+            << std::endl
+            << std::endl;
 
   std::cout << "Multi-touch gesture recognizer." << std::endl;
   std::cout << "Touchégg is an app that runs in the background and transform "
@@ -56,21 +59,27 @@ void printWelcomeMessage() {
   std::cout << " --all\t\tExecute both daemon and client in a single process"
             << std::endl;
   std::cout << "Without arguments Touchégg starts in client mode" << std::endl
-            << std::endl
             << std::endl;
 }
 
 int main(int argc, char **argv) {
   printWelcomeMessage();
 
-  // Parse the mode
+  // Parse the command line arguments
   bool daemonMode = false;
   bool clientMode = (argc == 1);
+  double threshold = -1;
+  double animationFinishThreshold = -1;
 
   if (argc > 1) {
     std::string param{argv[1]};  // NOLINT
     daemonMode = (param == "--daemon") || (param == "--all");
     clientMode = (param == "--client") || (param == "--all");
+
+    if (daemonMode && argc == 4) {
+      threshold = std::stod(argv[2]);                 // NOLINT
+      animationFinishThreshold = std::stod(argv[3]);  // NOLINT
+    }
   }
 
   if (!daemonMode && !clientMode) {
@@ -99,9 +108,8 @@ int main(int argc, char **argv) {
         << "A list of detected compatible devices will be displayed below:"
         << std::endl;
 
-    // TODO(jose) Remove config from gestureGatherer
-    Config config;
-    LibinputGestureGatherer gestureGatherer(config, &daemonServer);
+    LibinputGestureGatherer gestureGatherer(&daemonServer, threshold,
+                                            animationFinishThreshold);
     gestureGatherer.run();
   }
 

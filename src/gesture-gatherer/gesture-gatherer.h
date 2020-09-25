@@ -35,13 +35,25 @@ class GestureGatherer {
  public:
   /**
    * Default contructor.
-   * @param config Object to access the configuration.
    * @param gestureController GestureController where the GestureGatherer will
    * send the gestures.
+   * @param threshold Amount of motion to be made on the touchpad before a
+   * gesture is started.
+   * For example: put 3 fingers on your touchpad. You will notice that the
+   * action does not start until you move them a little bit. This property
+   * configures how much you should move your fingers before the action starts.
+   * @param animationFinishThreshold Amount of motion to be made on the touchpad
+   * to reach the 100% of an animation.
+   * For example, use the MAXIMIZE_RESTORE_WINDOW action. You will notice that
+   * you need to move your fingers a certain ammount until the animation fills
+   * your entire screen. This property configures how much you need to move your
+   * fingers
    */
-  GestureGatherer(const Config &config,
-                  GestureControllerDelegate *gestureController)
-      : config(config), gestureController(gestureController) {}
+  GestureGatherer(GestureControllerDelegate *gestureController,
+                  double threshold = -1, double animationFinishThreshold = -1)
+      : gestureController(gestureController),
+        threshold(threshold),
+        animationFinishThreshold(animationFinishThreshold) {}
 
   virtual ~GestureGatherer() = default;
 
@@ -51,9 +63,9 @@ class GestureGatherer {
   virtual void run() = 0;
 
  protected:
-  const Config &config;
-
   GestureControllerDelegate *gestureController;
+  double threshold = -1;
+  double animationFinishThreshold = -1;
 };
 
 #endif  // GESTURE_GATHERER_GESTURE_GATHERER_H_

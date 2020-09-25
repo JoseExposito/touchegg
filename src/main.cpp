@@ -36,7 +36,7 @@
 void printWelcomeMessage() {
   std::cout << "Touchégg " << VERSION << "." << std::endl;
   std::cout << "Usage: touchegg [--daemon [threshold "
-               "animation_finish_threshold]] [--client] [--all]"
+               "animation_finish_threshold]] [--client]"
             << std::endl
             << std::endl;
 
@@ -56,8 +56,6 @@ void printWelcomeMessage() {
   std::cout << " --client\tConnect to an existing Touchégg daemon and "
                "execute actions in your desktop"
             << std::endl;
-  std::cout << " --all\t\tExecute both daemon and client in a single process"
-            << std::endl;
   std::cout << "Without arguments Touchégg starts in client mode" << std::endl
             << std::endl;
 }
@@ -73,8 +71,8 @@ int main(int argc, char **argv) {
 
   if (argc > 1) {
     std::string param{argv[1]};  // NOLINT
-    daemonMode = (param == "--daemon") || (param == "--all");
-    clientMode = (param == "--client") || (param == "--all");
+    daemonMode = (param == "--daemon");
+    clientMode = (param == "--client");
 
     if (daemonMode && argc == 4) {
       threshold = std::stod(argv[2]);                 // NOLINT
@@ -87,15 +85,10 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  std::cout << "Starting Touchégg in ";
-  if (daemonMode && clientMode) {
-    // TODO(jose) "all" mode is not working because run blocks the main thread
-    std::cout << "daemon and client mode" << std::endl;
-  } else if (daemonMode) {
-    std::cout << "daemon mode" << std::endl;
-  } else {
-    std::cout << "client mode" << std::endl;
-  }
+  std::cout << "Starting Touchégg in "
+            << (daemonMode ? std::string{"daemon mode"}
+                           : std::string{"client mode"})
+            << std::endl;
 
   // Execute the daemon/client bits
   if (daemonMode) {
@@ -131,26 +124,4 @@ int main(int argc, char **argv) {
     DaemonClient daemonClient{&gestureController};
     daemonClient.run();
   }
-
-  /*
-  // Load the configuration using the XML loader
-  std::cout << "Parsing you configuration file..." << std::endl;
-  Config config;
-  XmlConfigLoader loader(&config);
-  loader.load();
-  std::cout << "Configuration parsed successfully" << std::endl;
-
-  // Use X11 as window system
-  X11 windowSystem;
-
-  // Initialize the gesture controller
-  GestureController gestureController(config, windowSystem);
-
-  // Use libinput as gesture gatherer
-  std::cout << "A list of detected compatible devices will be displayed below:"
-            << std::endl;
-
-  LibinputGestureGatherer gestureGatherer(config, &gestureController);
-  gestureGatherer.run();
-  */
 }

@@ -59,20 +59,27 @@ $ sudo apt -f install # Install missing dependencies
 $ touchegg # Run Touchégg
 ```
 
-## Fedora, Red Hat and derivatives
+## Red Hat, Fedora, CentOS and derivatives
 
-TODO(jose) Add instructions
+Download the `.rpm` package and install it. Double click on the package may work, otherwise install
+it from the terminal:
+
+```
+$ cd ~/Downloads # Or to the path where the rpm package is placed at
+$ sudo yum localinstall touchegg-*.rpm # Install the package
+```
 
 ## Add Touchégg to Startup Applications
 
 Depending on your desktop environment, this step is different
 You can easily add Touchégg to your startup applications following this steps:
 
-  * [Gnome](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html.en): Add `/usr/bin/touchegg` as command
+  * [Gnome](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html.en): Add
+    `/usr/bin/touchegg` as command
   * [KDE](https://docs.kde.org/trunk5/en/kde-workspace/kcontrol/autostart/index.html): Add
     `/usr/bin/touchegg` as script symlink
   * elementary OS: Open [System Settings](https://elementary.io/docs/learning-the-basics#system-settings)
-    -> Applications -> Startup -> Add custom command -> `touchegg`
+    -> Applications -> Startup -> Add custom command -> `/usr/bin/touchegg`
 
 
 # Configuration

@@ -4,6 +4,8 @@ set -e
 #DEBHELPER#
 
 systemctl daemon-reload
-systemctl restart touchegg
+systemctl reenable touchegg
+systemctl stop touchegg
+systemctl start touchegg
 
 exit 0

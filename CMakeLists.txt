@@ -55,11 +55,13 @@ set(CPACK_PACKAGE_NAME touchegg)
 set(CPACK_PACKAGE_VERSION_MAJOR "${MAJOR_VERSION}")
 set(CPACK_PACKAGE_VERSION_MINOR "${MINOR_VERSION}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PATCH_VERSION}")
-set(CMAKE_INSTALL_PREFIX "/")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/JoseExposito/touchegg")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Multi-touch gesture recognizer.
  Touchégg is an app that runs in the background and transform the gestures you make in your touchpad into visible actions in your desktop.
  For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to switch to the next desktop.")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/JoseExposito/touchegg")
+set(CMAKE_INSTALL_PREFIX "/")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION usr/share/touchegg)

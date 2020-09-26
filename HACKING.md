@@ -37,6 +37,14 @@ $ sudo apt -f install # Install missing dependencies
 $ touchegg # Run Touchégg
 ```
 
+Or a rpm package:
+
+```
+$ cpack -G RPM
+$ sudo yum localinstall touchegg-*.rpm # Install the package
+$ touchegg # Run Touchégg
+```
+
 # Code Style
 
 This project follows Google C++ Style Guide:

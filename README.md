@@ -41,8 +41,11 @@ Many more actions and gestures are available and everything is easily configurab
 
 # Installation
 
-On the [releases](https://github.com/JoseExposito/touchegg/releases) page you will hopefully find a
-package for your distribution.
+On the [releases](https://github.com/JoseExposito/touchegg/releases) page you will find a package
+for your distribution.
+
+Otherwise you can compile the source code yourself by following the instructions available in the
+[HACKING.md](HACKING.md) file.
 
 ## Ubuntu, Debian and derivatives
 
@@ -60,10 +63,16 @@ $ touchegg # Run Touchégg
 
 TODO(jose) Add instructions
 
-## From source code
+## Add Touchégg to Startup Applications
 
-In addition, you can compile the source code. Follow the instructions available in the
-[HACKING.md](HACKING.md) file.
+Depending on your desktop environment, this step is different
+You can easily add Touchégg to your startup applications following this steps:
+
+  * [Gnome](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html.en): Add `/usr/bin/touchegg` as command
+  * [KDE](https://docs.kde.org/trunk5/en/kde-workspace/kcontrol/autostart/index.html): Add
+    `/usr/bin/touchegg` as script symlink
+  * elementary OS: Open [System Settings](https://elementary.io/docs/learning-the-basics#system-settings)
+    -> Applications -> Startup -> Add custom command -> `touchegg`
 
 
 # Configuration

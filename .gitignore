@@ -14,6 +14,10 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# Doxygen documentation
+documentation/html/
+documentation/log
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json

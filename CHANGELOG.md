@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] - 2020-09-27 TODO(jose) Change release date
+## 2.0.0 - 2020-09-27
 
 The Linux desktop has changed a lot since I first released Touchégg back in 2011.
 This release is a total rewrite of the version 1.x aiming to incorporate the new technologies that
@@ -25,18 +25,18 @@ Here's what's new:
     - RUN_COMMAND
 
 
-## [1.1.1] - 2015-06-08
+## 1.1.1 - 2015-06-08
 
   - Fix pinch direction issues
   - Allow to select if the action is executed at the beginning or at the end of the gesture
 
 
-## [1.1.0] - 2012-07-22
+## 1.1.0 - 2012-07-22
 
   - Ubuntu Precise compatibility
 
 
-## [1.0] - 2011-09-02
+## 1.0 - 2011-09-02
 
   - Now Touchégg subscribe to gestures in their own window, to not conflict with applications that uses their own gestures
   - Touchégg ported to GEIS v2 API
@@ -52,7 +52,7 @@ Here's what's new:
     - DRAG       - With 1 finger
 
 
-## [0.3] - 2011-04-28
+## 0.3 - 2011-04-28
 
   - Touchégg now allow to assign different actions to different windows
   - Added compatibility with uTouch 2, and therefore, with the Synaptics driver
@@ -83,7 +83,7 @@ Here's what's new:
     - DRAG_AND_DROP now support any button emulation
 
 
-## [0.2] - 2011-03-11
+## 0.2 - 2011-03-11
 
 Solved bugs:
   - Solved problems at shutdown
@@ -107,7 +107,7 @@ Other features:
   - Added menu entries  to launch Touchégg and touchégg GUI
 
 
-## [0.1] - 2011-01-23
+## 0.1 - 2011-01-23
 
 Initial release, support for the following gestures:
   - TAP   - With 2, 3 and 4 fingers

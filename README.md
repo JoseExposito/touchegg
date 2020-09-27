@@ -458,4 +458,4 @@ Compatible device detected:
 
 Copyright 2011 - 2020 José Expósito <<jose.exposito89@gmail.com>>
 
-The source code is available under GPL v2 license on [GitHub](https://github.com/JoseExposito/touchegg)
+The source code is available under GPL v3 license on [GitHub](https://github.com/JoseExposito/touchegg)

@@ -344,20 +344,7 @@ For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favo
 It is important to remove the `XK_` prefix. For example, the super keycode is defined as
 `XK_Super_L` but it must be used as `Super_L` in the configuration.
 
-Example 1:
-
-```
-<gesture type="SWIPE" fingers="4" direction="UP">
-  <action type="SEND_KEYS">
-    <repeat>false</repeat>
-    <modifiers>Super_L</modifiers>
-    <keys>W</keys>
-    <on>begin</on>
-  </action>
-</gesture>
-```
-
-Example 2: Pinch to zoom example
+Example 1: Pinch to zoom example
 
 ```
 <gesture type="PINCH" fingers="2" direction="IN">
@@ -378,6 +365,22 @@ Example 2: Pinch to zoom example
   </action>
     </gesture>
 ```
+
+Example 2: Open Gnome application launcher
+
+```
+<gesture type="PINCH" fingers="4" direction="IN">
+  <action type="SEND_KEYS">
+    <repeat>false</repeat>
+    <modifiers>Super_L</modifiers>
+    <keys>A</keys>
+    <on>begin</on>
+  </action>
+</gesture>
+</application>
+```
+
+![Animation](.github/images/SEND_KEYS.gif)
 
 ### Execute a command (RUN_COMMAND)
 

@@ -14,7 +14,9 @@ Many more actions and gestures are available and everything is easily configurab
 ![Demo](.github/images/Ubuntu.gif)
 
 <p align="center">
-  <a href="https://youtu.be/nuMT-MwyTXU">elementary OS demo :movie_camera:</a>
+  <a href="https://youtu.be/PLsH-XPFuN4">:movie_camera: Ubuntu demo</a>
+  <br/>
+  <a href="https://youtu.be/nuMT-MwyTXU">:movie_camera: elementary OS demo</a>
 </p>
 
 # Table of contents

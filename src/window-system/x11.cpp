@@ -425,33 +425,25 @@ Rectangle X11::getDesktopWorkarea() const {
   // Get the physical screen size the mouse pointer is placed on
   bool screenFound = false;
   Rectangle screen;
-  int nOutput = 0;
+  int currentCrtc = 0;
   XRRScreenResources *resources =
       XRRGetScreenResources(this->display, rootWindow);
 
-  while (!screenFound && nOutput < resources->noutput) {
-    XRROutputInfo *output =
-        // NOLINTNEXTLINE
-        XRRGetOutputInfo(this->display, resources, resources->outputs[nOutput]);
+  while (!screenFound && currentCrtc < resources->ncrtc) {
+    XRRCrtcInfo *crtc =
+        XRRGetCrtcInfo(this->display, resources, resources->crtcs[currentCrtc]);
 
-    if (output->connection == RR_Connected) {
-      XRRCrtcInfo *crtc =
-          XRRGetCrtcInfo(this->display, resources, output->crtc);
-
-      if (pointerX >= crtc->x && pointerX <= (crtc->x + crtc->width) &&
-          pointerY >= crtc->y && pointerY <= (crtc->y + crtc->height)) {
-        screenFound = true;
-        screen.x = crtc->x;
-        screen.y = crtc->y;
-        screen.width = crtc->width;
-        screen.height = crtc->height;
-      }
-
-      XRRFreeCrtcInfo(crtc);
+    if (pointerX >= crtc->x && pointerX <= (crtc->x + crtc->width) &&
+        pointerY >= crtc->y && pointerY <= (crtc->y + crtc->height)) {
+      screenFound = true;
+      screen.x = crtc->x;
+      screen.y = crtc->y;
+      screen.width = crtc->width;
+      screen.height = crtc->height;
     }
 
-    XRRFreeOutputInfo(output);
-    nOutput++;
+    XRRFreeCrtcInfo(crtc);
+    currentCrtc++;
   }
 
   XRRFreeScreenResources(resources);

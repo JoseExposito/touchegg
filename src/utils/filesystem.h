@@ -23,16 +23,16 @@
  * namespace. This utility simplifies the process of including "filesystem".
  */
 
-#if __has_include(<experimental/filesystem>)
+#if __has_include(<filesystem>)
+
+#include <filesystem>
+
+#else
 
 #include <experimental/filesystem>
 namespace std {
 namespace filesystem = experimental::filesystem;
 }
-
-#else
-
-#include <filesystem>
 
 #endif
 

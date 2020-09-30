@@ -431,6 +431,7 @@ Rectangle X11::getDesktopWorkarea() const {
 
   while (!screenFound && currentCrtc < resources->ncrtc) {
     XRRCrtcInfo *crtc =
+        // NOLINTNEXTLINE
         XRRGetCrtcInfo(this->display, resources, resources->crtcs[currentCrtc]);
 
     if (pointerX >= crtc->x && pointerX <= (crtc->x + crtc->width) &&

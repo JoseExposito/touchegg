@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.1 - 2020-09-29
+
+This release is only a fix for Arch Linux and openSUSE compilation.
+
+Fixed:
+
+  - Fix Arch Linux and openSUSE compilation
+    https://github.com/JoseExposito/touchegg/issues/337
+
+
 ## 2.0.0 - 2020-09-27
 
 The Linux desktop has changed a lot since I first released Touchégg back in 2011.

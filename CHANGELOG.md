@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.2 - ????-??-??
+
+Fixed:
+
+  - Fix crash when a screen is connected but disabled
+    https://github.com/JoseExposito/touchegg/issues/341
+
+
 ## 2.0.1 - 2020-09-29
 
 This release is only a fix for Arch Linux and openSUSE compilation.

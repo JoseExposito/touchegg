@@ -53,7 +53,7 @@ Otherwise you can compile the source code yourself by following the instructions
 Download the `.deb` package and install it. Double click on the package may work, otherwise install
 it from the terminal:
 
-```
+```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
 $ sudo dpkg -i touchegg_*.deb # Install the package
 $ sudo apt -f install # Install missing dependencies
@@ -65,7 +65,7 @@ $ touchegg # Run Touchégg
 Download the `.rpm` package and install it. Double click on the package may work, otherwise install
 it from the terminal:
 
-```
+```bash
 $ cd ~/Downloads # Or to the path where the rpm package is placed at
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 ```
@@ -119,7 +119,7 @@ direction.
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="3" direction="UP">
   <action type="MAXIMIZE_RESTORE_WINDOW">
     <animate>true</animate>
@@ -135,7 +135,7 @@ changing the relative distance to each other (pinching) or are changing the rela
 
 Example:
 
-```
+```xml
 <gesture type="PINCH" fingers="4" direction="IN">
   <action type="CLOSE_WINDOW">
     <animate>true</animate>
@@ -162,7 +162,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="3" direction="UP">
   <action type="MAXIMIZE_RESTORE_WINDOW">
     <animate>true</animate>
@@ -188,7 +188,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="3" direction="DOWN">
   <action type="MINIMIZE_WINDOW">
     <animate>true</animate>
@@ -215,7 +215,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="3" direction="LEFT">
   <action type="TILE_WINDOW">
     <direction>right</direction>
@@ -251,7 +251,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="PINCH" fingers="4" direction="IN">
   <action type="CLOSE_WINDOW">
     <animate>true</animate>
@@ -278,7 +278,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="4" direction="LEFT">
   <action type="CHANGE_DESKTOP">
     <direction>next</direction>
@@ -316,7 +316,7 @@ Options:
 
 Example:
 
-```
+```xml
 <gesture type="SWIPE" fingers="4" direction="DOWN">
   <action type="SHOW_DESKTOP">
     <animate>true</animate>
@@ -336,11 +336,11 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
-| repeat | `true`/`false` | `true` if the keyboard shortcut should be executed multiple times. `false` otherwise. This is useful to perform actions like pinch to zoom. |
+| repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
 | modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
 | keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
-| on | `begin`/`end` | Only used when `repeat` is `true`. If the shortcut should be executed on the beginning or on the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `false`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
+| decreaseKeys | Keycode | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
 Keycodes:
 
@@ -351,7 +351,7 @@ It is important to remove the `XK_` prefix. For example, the super keycode is de
 
 Example 1: Pinch to zoom example
 
-```
+```xml
 <gesture type="PINCH" fingers="2" direction="IN">
   <action type="SEND_KEYS">
     <repeat>true</repeat>
@@ -373,7 +373,7 @@ Example 1: Pinch to zoom example
 
 Example 2: Open Gnome application launcher
 
-```
+```xml
 <gesture type="PINCH" fingers="4" direction="IN">
   <action type="SEND_KEYS">
     <repeat>false</repeat>
@@ -402,7 +402,7 @@ Options:
 
 Example 1:
 
-```
+```xml
 <gesture type="SWIPE" fingers="4" direction="DOWN">
   <action type="RUN_COMMAND">
     <repeat>false</repeat>
@@ -414,7 +414,7 @@ Example 1:
 
 Example 2:
 
-```
+```xml
 <gesture type="SWIPE" fingers="4" direction="DOWN">
   <action type="RUN_COMMAND">
     <repeat>true</repeat>
@@ -443,7 +443,7 @@ new multi-touch device is connected.
 
 Example:
 
-```
+```bash
 $ cat /lib/systemd/system/touchegg.service | grep ExecStart
 ExecStart=/usr/bin/touchegg --daemon 100 500
 

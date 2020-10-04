@@ -339,8 +339,8 @@ Options:
 | repeat | `true`/`false` | `true` if the keyboard shortcut should be executed multiple times. `false` otherwise. This is useful to perform actions like pinch to zoom. |
 | modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
 | keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
-| on | `begin`/`end` | Only used when `repeat` is `true`. If the shortcut should be executed on the beginning or on the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `false`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| on | `begin`/`end` | Only used when `repeat` is `false`. If the shortcut should be executed on the beginning or on the end of the gesture. |
+| decreaseKeys | Keycode | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
 Keycodes:
 

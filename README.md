@@ -70,6 +70,10 @@ $ cd ~/Downloads # Or to the path where the rpm package is placed at
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 ```
 
+## Arch Linux, Manjaro and derivatives
+
+Install the `touchegg` package from [AUR](https://aur.archlinux.org/packages/touchegg/).
+
 ## Add Touchégg to Startup Applications
 
 Depending on your desktop environment, this step is different

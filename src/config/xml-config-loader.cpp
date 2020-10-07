@@ -19,10 +19,12 @@
 
 #include <pwd.h>
 #include <sys/inotify.h>
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <array>
+#include <chrono>  // NOLINT
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -136,8 +138,22 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
   std::thread watchThread{[fd, configPath, this]() {
     std::array<char, WATCH_BUFFER_SIZE> buffer{};
     while (true) {
-      const std::size_t length = read(fd, buffer.data(), buffer.size());
-      if (length > 0) {
+      bool reloadSettings = false;
+      bool allEventsRead = false;
+
+      while (!allEventsRead) {
+        const std::size_t length = read(fd, buffer.data(), buffer.size());
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        unsigned int available = 0;
+        ioctl(fd, FIONREAD, &available);  // NOLINT
+
+        reloadSettings = (length > 0);
+        allEventsRead = (available <= 0);
+      }
+
+      if (reloadSettings) {
         std::cout << "Your configuration file changed, reloading your settings"
                   << std::endl;
         this->config->clear();

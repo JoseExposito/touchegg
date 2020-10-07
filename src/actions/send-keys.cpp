@@ -41,7 +41,9 @@ void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
   }
 
   // Only the active window receives shortcuts
-  this->windowSystem.activateWindow(this->window);
+  if (!this->windowSystem.isSystemWindow(this->window)) {
+    this->windowSystem.activateWindow(this->window);
+  }
 
   // "Press" the modifiers and keys if required
   this->windowSystem.sendKeys(this->modifiers, true);

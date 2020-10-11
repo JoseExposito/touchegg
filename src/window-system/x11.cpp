@@ -52,8 +52,14 @@ std::unique_ptr<WindowT> X11::getWindowUnderCursor() const {
   int childX;
   int childY;
   unsigned int mask;
-  XQueryPointer(this->display, XDefaultRootWindow(this->display), &rootWindow,
-                &childWindow, &rootX, &rootY, &childX, &childY, &mask);
+  int success = XQueryPointer(this->display, XDefaultRootWindow(this->display),
+                              &rootWindow, &childWindow, &rootX, &rootY,
+                              &childX, &childY, &mask);
+
+  if (success == True && childWindow == None) {
+    return std::make_unique<X11WindowT>(rootWindow);
+  }
+
   Window topLevelWindow = this->getTopLevelWindow(childWindow);
   return std::make_unique<X11WindowT>(topLevelWindow);
 }

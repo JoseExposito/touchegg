@@ -18,6 +18,7 @@
 #ifndef ACTIONS_CHANGE_DESKTOP_H_
 #define ACTIONS_CHANGE_DESKTOP_H_
 
+#include "actions/action-direction.h"
 #include "actions/animated-action.h"
 
 /**
@@ -31,7 +32,7 @@ class ChangeDesktop : public AnimatedAction {
   void executeAction(const Gesture &gesture) override;
 
  private:
-  bool next = true;
+  ActionDirection direction = ActionDirection::NEXT;
 };
 
 #endif  // ACTIONS_CHANGE_DESKTOP_H_

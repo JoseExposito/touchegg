@@ -269,14 +269,15 @@ Example:
 
 ### Switch desktops/workspaces (CHANGE_DESKTOP)
 
-Change to the next or previous desktop/workspace.
+Change to another desktop/workspace.
 
 Options:
 
 | Option | Value | Description |
 | - | - | - |
-| direction | `left`/`right` | Use the `left` or `right` half of the screen |
+| direction | `previous`/`next`/`up`/`down`/`left`/`right` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come handy. |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| animationPosition | `up`/`down`/`left`/`right` | Edge of the screen where the animation will be displayed. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
 

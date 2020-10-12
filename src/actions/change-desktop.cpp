@@ -24,14 +24,32 @@
 
 void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->settings.count("direction") == 1) {
-    this->next = this->settings.at("direction") == "next";
+    this->direction = actionDirectionFromStr(this->settings.at("direction"));
   }
 
   if (this->animate) {
-    // If animation position is unset, fallback to left/right
-    std::string animationPosition = this->next ? "right" : "left";
+    ActionDirection animationPosition = ActionDirection::UNKNOWN;
+
     if (this->settings.count("animationPosition") == 1) {
-      animationPosition = this->settings.at("animationPosition");
+      animationPosition =
+          actionDirectionFromStr(this->settings.at("animationPosition"));
+    } else {
+      // If animation position is unset, fallback to the action direction
+      switch (this->direction) {
+        case ActionDirection::UP:
+        case ActionDirection::DOWN:
+        case ActionDirection::LEFT:
+        case ActionDirection::RIGHT:
+          animationPosition = this->direction;
+          break;
+        case ActionDirection::NEXT:
+          animationPosition = ActionDirection::RIGHT;
+          break;
+        case ActionDirection::PREVIOUS:
+        default:
+          animationPosition = ActionDirection::LEFT;
+          break;
+      }
     }
 
     this->animation = std::make_unique<ChangeDesktopAnimation>(
@@ -41,5 +59,5 @@ void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
 }
 
 void ChangeDesktop::executeAction(const Gesture& /*gesture*/) {
-  this->windowSystem.changeDesktop(this->next);
+  this->windowSystem.changeDesktop(this->direction);
 }

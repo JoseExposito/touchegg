@@ -15,29 +15,43 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_
-#define ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_
+#ifndef ACTIONS_ACTION_DIRECTION_H_
+#define ACTIONS_ACTION_DIRECTION_H_
 
 #include <string>
 
-#include "actions/action-direction.h"
-#include "animations/animation.h"
-#include "utils/color.h"
-#include "utils/rectangle.h"
-
-class ChangeDesktopAnimation : public Animation {
- public:
-  using Animation::Animation;
-  ChangeDesktopAnimation(const WindowSystem &windowSystem,
-                         const WindowT &window, Color color, Color borderColor,
-                         ActionDirection animationPosition);
-  void render(int percentage) override;
-
- private:
-  Rectangle maxSize;
-  Color color;
-  Color borderColor;
-  double angle;
+enum class ActionDirection {
+  UNKNOWN,
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  PREVIOUS,
+  NEXT,
+  // Adding a new ActionDirection? Don't forget to add it in
+  // actionDirectionFromStr
 };
 
-#endif  // ANIMATIONS_CHANGE_DESKTOP_ANIMATION_H_
+inline ActionDirection actionDirectionFromStr(const std::string &str) {
+  if (str == "up") {
+    return ActionDirection::UP;
+  }
+  if (str == "down") {
+    return ActionDirection::DOWN;
+  }
+  if (str == "left") {
+    return ActionDirection::LEFT;
+  }
+  if (str == "right") {
+    return ActionDirection::RIGHT;
+  }
+  if (str == "previous") {
+    return ActionDirection::PREVIOUS;
+  }
+  if (str == "next") {
+    return ActionDirection::NEXT;
+  }
+  return ActionDirection::UNKNOWN;
+}
+
+#endif  // ACTIONS_ACTION_DIRECTION_H_

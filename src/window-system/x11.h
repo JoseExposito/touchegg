@@ -64,7 +64,7 @@ class X11 : public WindowSystem {
                 bool isPress) const override;
 
   Rectangle getDesktopWorkarea() const override;
-  void changeDesktop(bool next) const override;
+  void changeDesktop(ActionDirection direction) const override;
   void showDesktop(bool show) const override;
   bool isShowingDesktop() const override;
 
@@ -155,6 +155,14 @@ class X11 : public WindowSystem {
    * KWin supports both _NET_FRAME_EXTENTS and _KDE_NET_WM_FRAME_STRUT.
    */
   Rectangle getWindowDecorationSize(Window window) const;
+
+  /**
+   * Calculate the desktop to move to using _NET_DESKTOP_LAYOUT.
+   * https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html#idm45805408026320
+   * Asumes _NET_WM_ORIENTATION_HORZ and _NET_WM_TOPLEFT.
+   */
+  int32_t destinationDesktop(int32_t currentDesktop, int32_t totalDesktops,
+                             ActionDirection direction) const;
 };
 
 #endif  // WINDOW_SYSTEM_X11_H_

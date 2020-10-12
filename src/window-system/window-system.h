@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "actions/action-direction.h"
 #include "utils/rectangle.h"
 
 /**
@@ -120,7 +121,7 @@ class WindowSystem {
   /**
    * Changes to the next/previous desktop.
    */
-  virtual void changeDesktop(bool next) const = 0;
+  virtual void changeDesktop(ActionDirection direction) const = 0;
 
   /**
    * Show the desktop.

@@ -23,28 +23,33 @@
 
 ChangeDesktopAnimation::ChangeDesktopAnimation(
     const WindowSystem &windowSystem, const WindowT &window, Color color,
-    Color borderColor, const std::string &animationPosition)
+    Color borderColor, ActionDirection animationPosition)
     : Animation(windowSystem, window), color(color), borderColor(borderColor) {
   Rectangle workarea = this->windowSystem.getDesktopWorkarea();
   maxSize.height = (workarea.height / 7);
   maxSize.width = maxSize.height;
 
-  if (animationPosition == "up") {
-    maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
-    maxSize.y = workarea.y;
-    this->angle = M_PI + (M_PI / 2);
-  } else if (animationPosition == "down") {
-    maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
-    maxSize.y = workarea.y + workarea.height - maxSize.height;
-    this->angle = M_PI / 2;
-  } else if (animationPosition == "left") {
-    maxSize.x = workarea.x;
-    maxSize.y = workarea.y + (maxSize.height * 3);
-    this->angle = M_PI;
-  } else {
-    maxSize.x = (workarea.x + workarea.width - maxSize.width);
-    maxSize.y = workarea.y + (maxSize.height * 3);
-    this->angle = 0;
+  switch (animationPosition) {
+    case ActionDirection::UP:
+      maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
+      maxSize.y = workarea.y;
+      this->angle = M_PI + (M_PI / 2);
+      break;
+    case ActionDirection::DOWN:
+      maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
+      maxSize.y = workarea.y + workarea.height - maxSize.height;
+      this->angle = M_PI / 2;
+      break;
+    case ActionDirection::LEFT:
+      maxSize.x = workarea.x;
+      maxSize.y = workarea.y + (maxSize.height * 3);
+      this->angle = M_PI;
+      break;
+    default:
+      maxSize.x = (workarea.x + workarea.width - maxSize.width);
+      maxSize.y = workarea.y + (maxSize.height * 3);
+      this->angle = 0;
+      break;
   }
 }
 

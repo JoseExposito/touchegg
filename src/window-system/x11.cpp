@@ -24,6 +24,7 @@
 #include <cairo-xlib.h>
 
 #include <algorithm>
+#include <cmath>
 #include <exception>
 #include <iostream>
 #include <vector>
@@ -486,7 +487,7 @@ Rectangle X11::getDesktopWorkarea() const {
   return workarea;
 }
 
-void X11::changeDesktop(bool next) const {
+void X11::changeDesktop(ActionDirection direction) const {
   Window rootWindow = XDefaultRootWindow(this->display);
 
   std::vector<int32_t> total = this->getWindowProperty<int32_t>(
@@ -501,10 +502,74 @@ void X11::changeDesktop(bool next) const {
   int32_t totalDesktops = total.front();
   int32_t currentDesktop = current.front();
 
-  int32_t toDesktop = next ? std::min(totalDesktops - 1, currentDesktop + 1)
-                           : std::max(0, currentDesktop - 1);
+  int32_t toDesktop = -1;
+  switch (direction) {
+    case ActionDirection::UP:
+    case ActionDirection::DOWN:
+    case ActionDirection::LEFT:
+    case ActionDirection::RIGHT:
+      toDesktop =
+          this->destinationDesktop(currentDesktop, totalDesktops, direction);
+      break;
+    case ActionDirection::NEXT:
+      toDesktop = std::min(totalDesktops - 1, currentDesktop + 1);
+      break;
+    case ActionDirection::PREVIOUS:
+    default:
+      toDesktop = std::max(0, currentDesktop - 1);
+      break;
+  }
+
+  if (toDesktop < 0) {
+    return;
+  }
 
   this->sendEvent(rootWindow, rootWindow, "_NET_CURRENT_DESKTOP", {toDesktop});
+}
+
+int32_t X11::destinationDesktop(int32_t currentDesktop, int32_t totalDesktops,
+                                ActionDirection direction) const {
+  int32_t toDestop = -1;
+  Window rootWindow = XDefaultRootWindow(this->display);
+  std::vector<int64_t> layout = this->getWindowProperty<int64_t>(
+      rootWindow, "_NET_DESKTOP_LAYOUT", XA_CARDINAL);
+
+  if (layout.size() < 3) {
+    return toDestop;
+  }
+
+  int64_t columns = layout[1];
+
+  switch (direction) {
+    case ActionDirection::UP:
+      if (currentDesktop >= columns) {
+        toDestop = currentDesktop - columns;
+      }
+      break;
+    case ActionDirection::DOWN:
+      if (currentDesktop < totalDesktops - columns) {
+        toDestop = currentDesktop + columns;
+      }
+      break;
+    case ActionDirection::LEFT:
+      if (currentDesktop > (std::floor(currentDesktop / columns) * columns)) {
+        toDestop = currentDesktop - 1;
+      }
+      break;
+    case ActionDirection::RIGHT:
+      if (currentDesktop <
+          std::min(
+              totalDesktops - 1,
+              static_cast<int>(std::floor(currentDesktop / columns) * columns +
+                               columns - 1))) {
+        toDestop = currentDesktop + 1;
+      }
+      break;
+    default:
+      break;
+  }
+
+  return toDestop;
 }
 
 void X11::showDesktop(bool show) const {

@@ -70,6 +70,7 @@ set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION usr/share/touchegg)
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION lib/systemd/system)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION etc/xdg/autostart)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION usr/bin)
 
 # DEB package

@@ -42,7 +42,8 @@ LibinputGestureGatherer::LibinputGestureGatherer(
     : GestureGatherer(gestureController, threshold, animationFinishThreshold),
       deviceHandler(gestureController, threshold, animationFinishThreshold),
       swipeHandler(gestureController),
-      pinchHandler(gestureController) {
+      pinchHandler(gestureController),
+      touchHandler(gestureController) {
   this->udevContext = udev_new();
   if (this->udevContext == nullptr) {
     throw std::runtime_error{"Error initialising Touchégg: udev"};
@@ -127,6 +128,16 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
     case LIBINPUT_EVENT_GESTURE_PINCH_END:
       this->pinchHandler.handlePinchEnd(
           std::make_unique<LibinputGesture>(event));
+      break;
+
+    case LIBINPUT_EVENT_TOUCH_DOWN:
+      this->touchHandler.handleTouchDown(event);
+      break;
+    case LIBINPUT_EVENT_TOUCH_UP:
+      this->touchHandler.handleTouchUp(event);
+      break;
+    case LIBINPUT_EVENT_TOUCH_MOTION:
+      this->touchHandler.handleTouchMotion(event);
       break;
 
     default:

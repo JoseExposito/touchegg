@@ -28,8 +28,11 @@
 void LininputDeviceHandler::handleDeviceAdded(
     struct libinput_event *event) const {
   struct libinput_device *device = libinput_event_get_device(event);
-  if (libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_GESTURE) !=
-      0) {
+  bool hasGesturesCap =
+      libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_GESTURE) != 0;
+  bool hasTouchCap =
+      libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_TOUCH) != 0;
+  if (hasGesturesCap || hasTouchCap) {
     std::cout << "Compatible device detected:" << std::endl;
 
     const char *name = libinput_device_get_name(device);

@@ -28,6 +28,7 @@
 #include "gesture-gatherer/libinput-device-info.h"
 #include "gesture-gatherer/libinput-pinch-handler.h"
 #include "gesture-gatherer/libinput-swipe-handler.h"
+#include "gesture-gatherer/libinput-touch-handler.h"
 class Config;
 class GestureControllerDelegate;
 class LibinputGesture;
@@ -62,6 +63,7 @@ class LibinputGestureGatherer : public GestureGatherer {
   LininputDeviceHandler deviceHandler;
   LininputSwipeHandler swipeHandler;
   LininputPinchHandler pinchHandler;
+  LibinputTouchHandler touchHandler;
 
   /**
    * Handles the supported libinput events.

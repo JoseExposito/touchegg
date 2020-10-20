@@ -37,6 +37,7 @@ class LininputHandler {
    * @return The LibinputDeviceInfo for the device that generated the gesture.
    */
   LibinputDeviceInfo getDeviceInfo(const LibinputGesture &gesture) const;
+  LibinputDeviceInfo getDeviceInfo(struct libinput_device *device) const;
 
   /**
    * @returns The current epoch time in milliseconds.
@@ -47,5 +48,17 @@ class LininputHandler {
    * @return Elapsed milliseconds since the beginning of the gesture.
    */
   uint64_t calculateElapsedTime(uint64_t startTimestamp) const;
+
+  /**
+   * @returns The direction of a swipe gesture.
+   */
+  GestureDirection calculateSwipeDirection(double deltaX, double deltaY) const;
+
+  /**
+   * @returns The percentage (between 0 and 100) of the gesture animation.
+   */
+  int calculateSwipeAnimationPercentage(const LibinputDeviceInfo &info,
+                                        GestureDirection direction,
+                                        double deltaX, double deltaY) const;
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_HANDLER_H_

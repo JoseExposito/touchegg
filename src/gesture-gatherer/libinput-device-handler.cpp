@@ -28,11 +28,13 @@
 void LininputDeviceHandler::handleDeviceAdded(
     struct libinput_event *event) const {
   struct libinput_device *device = libinput_event_get_device(event);
-  bool hasGesturesCap =
+
+  bool hasGestureCap =
       libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_GESTURE) != 0;
   bool hasTouchCap =
       libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_TOUCH) != 0;
-  if (hasGesturesCap || hasTouchCap) {
+
+  if (hasGestureCap || hasTouchCap) {
     std::cout << "Compatible device detected:" << std::endl;
 
     const char *name = libinput_device_get_name(device);
@@ -43,37 +45,11 @@ void LininputDeviceHandler::handleDeviceAdded(
     double widthMm = 0;
     double heightMm = 0;
     if (libinput_device_get_size(device, &widthMm, &heightMm) == 0) {
-      // From the official documentation:
-      // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
-      //
-      // libinput does partial normalization of relative input. For devices
-      // with a resolution of 1000dpi and higher, motion events are
-      // normalized to a default of 1000dpi before pointer acceleration is
-      // applied.
-      //
-      // Touchpads may have a different resolution for the horizontal and
-      // vertical axis. Interpreting coordinates from the touchpad without
-      // taking resolution into account results in uneven motion.
-      // libinput scales unaccelerated touchpad motion to the resolution of
-      // the touchpad’s x axis, i.e. the unaccelerated value for the y axis
-      // is: y = (x / resolution_x) * resolution_y.
-
-      // Size is expressed in mm, but gesture deltaX/Y is normalized to
-      // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
-      //  - threshold -> 2% of the maximum deltaX/Y
-      //  - animation_finish_threshold -> 10% of the maximum deltaX/Y
-      std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
-                << std::endl;
-
-      std::cout << "\tCalculating threshold and animation_finish_threshold. "
-                   "You can tune this values in your service file"
-                << std::endl;
-
-      double minSize = std::min(widthMm, heightMm);
-      double inches = minSize / 25.4;  // 1 inch == 25.4 mm
-      double dpi = (inches * 1000);
-      info->threshold = ((2 * dpi) / 100);
-      info->animationFinishThreshold = ((10 * dpi) / 100);
+      if (hasGestureCap) {
+        this->calculateTouchpadThreshold(widthMm, heightMm, info);
+      } else {
+        this->calculateTouchscreenThreshold(widthMm, heightMm, info);
+      }
     } else {
       std::cout
           << "\tIt wasn't possible to get your device physical size, falling "
@@ -96,7 +72,53 @@ void LininputDeviceHandler::handleDeviceAdded(
               << info->animationFinishThreshold << std::endl;
 
     libinput_device_set_user_data(device, static_cast<void *>(info));
-
-    libinput_event_destroy(event);
   }
+
+  libinput_event_destroy(event);
+}
+
+void LininputDeviceHandler::calculateTouchpadThreshold(
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
+  auto info = new LibinputDeviceInfo{};  // NOLINT
+
+  // From the official documentation:
+  // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
+  //
+  // libinput does partial normalization of relative input. For devices
+  // with a resolution of 1000dpi and higher, motion events are
+  // normalized to a default of 1000dpi before pointer acceleration is
+  // applied.
+  //
+  // Touchpads may have a different resolution for the horizontal and
+  // vertical axis. Interpreting coordinates from the touchpad without
+  // taking resolution into account results in uneven motion.
+  // libinput scales unaccelerated touchpad motion to the resolution of
+  // the touchpad’s x axis, i.e. the unaccelerated value for the y axis
+  // is: y = (x / resolution_x) * resolution_y.
+
+  // Size is expressed in mm, but gesture deltaX/Y is normalized to
+  // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
+  //  - threshold -> 2% of the maximum deltaX/Y
+  //  - animation_finish_threshold -> 10% of the maximum deltaX/Y
+  std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
+            << std::endl;
+
+  std::cout << "\tCalculating threshold and animation_finish_threshold. "
+               "You can tune this values in your service file"
+            << std::endl;
+
+  double minSize = std::min(widthMm, heightMm);
+  double inches = minSize / 25.4;  // 1 inch == 25.4 mm
+  double dpi = (inches * 1000);
+  outInfo->threshold = ((2 * dpi) / 100);
+  outInfo->animationFinishThreshold = ((10 * dpi) / 100);
+}
+
+void LininputDeviceHandler::calculateTouchscreenThreshold(
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
+  // threshold -> 5% of the width/height
+  // animation_finish_threshold -> 25% of the width/height
+  double minSize = std::min(widthMm, heightMm);
+  outInfo->threshold = ((5 * minSize) / 100);
+  outInfo->animationFinishThreshold = ((25 * minSize) / 100);
 }

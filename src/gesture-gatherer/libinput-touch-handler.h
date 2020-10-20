@@ -18,6 +18,8 @@
 #ifndef GESTURE_GATHERER_LIBINPUT_TOUCH_HANDLER_H_
 #define GESTURE_GATHERER_LIBINPUT_TOUCH_HANDLER_H_
 
+#include <unordered_map>
+
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
@@ -28,11 +30,10 @@
 struct LibinputTouchState {
   bool started = false;
   uint64_t startTimestamp = 0;
-  double deltaX = 0;
-  double deltaY = 0;
+  std::unordered_map<int32_t, double> initialX;
+  std::unordered_map<int32_t, double> initialY;
   GestureDirection direction = GestureDirection::UNKNOWN;
   GestureType type = GestureType::NOT_SUPPORTED;
-  int percentage = 0;
   int fingers = 0;
   // TODO(jose) On pinch:
   // angleDelta
@@ -41,11 +42,10 @@ struct LibinputTouchState {
   void reset() {
     started = false;
     startTimestamp = 0;
-    deltaX = 0;
-    deltaY = 0;
+    initialX.clear();
+    initialY.clear();
     direction = GestureDirection::UNKNOWN;
     type = GestureType::NOT_SUPPORTED;
-    percentage = 0;
     fingers = 0;
   }
 };

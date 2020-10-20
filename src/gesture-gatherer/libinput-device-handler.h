@@ -40,16 +40,28 @@ class LininputDeviceHandler : public LininputHandler {
   /**
    * Called on startup for each device and every time a device is added.
    * Print useful information and calculates LibinputDeviceInfo.
-   *
-   * Calculating optimal "threshold" and "animation_finish_threshold" is really
-   * complicated on touchpads with DPI < 1000, that's why this values are
-   * configurable. However this methods works with the bast majority of devices
-   * out there.
    */
   void handleDeviceAdded(struct libinput_event *event) const;
 
  private:
   double threshold = -1;
   double animationFinishThreshold = -1;
+
+  /**
+   * Calculates LibinputDeviceInfo on touchpads.
+   *
+   * Calculating optimal "threshold" and "animation_finish_threshold" is really
+   * complicated on touchpads with DPI < 1000, that's why this values are
+   * configurable. However this methods works with the bast majority of devices
+   * out there.
+   */
+  void calculateTouchpadThreshold(double widthMm, double heightMm,
+                                  LibinputDeviceInfo *outInfo) const;
+
+  /**
+   * Calculates LibinputDeviceInfo on touchscreens.
+   */
+  void calculateTouchscreenThreshold(double widthMm, double heightMm,
+                                     LibinputDeviceInfo *outInfo) const;
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_DEVICE_HANDLER_H_

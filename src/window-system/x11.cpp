@@ -24,6 +24,7 @@
 #include <cairo-xlib.h>
 
 #include <algorithm>
+#include <chrono>  // NOLINT
 #include <cmath>
 #include <exception>
 #include <iostream>
@@ -674,7 +675,17 @@ cairo_surface_t *X11::createSurface() const {
 }
 
 void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
-  XFlush(this->display);
+  static uint64_t flushTimestamp = 0;
+  constexpr uint64_t frameRate = (1000 / 60);
+
+  auto now = std::chrono::system_clock::now().time_since_epoch();
+  uint64_t millis =
+      std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
+
+  if (millis > (flushTimestamp + frameRate)) {
+    XFlush(this->display);
+    flushTimestamp = millis;
+  }
 }
 
 void X11::destroySurface(cairo_surface_t *cairoSurface) const {

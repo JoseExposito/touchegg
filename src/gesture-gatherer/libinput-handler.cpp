@@ -17,6 +17,7 @@
  */
 #include "gesture-gatherer/libinput-handler.h"
 
+#include <algorithm>
 #include <chrono>  // NOLINT
 
 LibinputDeviceInfo LininputHandler::getDeviceInfo(

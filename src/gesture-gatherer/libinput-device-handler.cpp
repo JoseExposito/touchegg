@@ -79,8 +79,6 @@ void LininputDeviceHandler::handleDeviceAdded(
 
 void LininputDeviceHandler::calculateTouchpadThreshold(
     double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
-  auto info = new LibinputDeviceInfo{};  // NOLINT
-
   // From the official documentation:
   // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
   //

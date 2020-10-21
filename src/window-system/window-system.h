@@ -140,16 +140,6 @@ class WindowSystem {
   virtual cairo_surface_t *createSurface() const = 0;
 
   /**
-   * @returns Surface width.
-   */
-  virtual int getSurfaceWidth(cairo_surface_t *cairoSurface) const = 0;
-
-  /**
-   * @returns Surface height.
-   */
-  virtual int getSurfaceHeight(cairo_surface_t *cairoSurface) const = 0;
-
-  /**
    * Flush the Cairo surface.
    * @param cairoSurface The surface.
    */

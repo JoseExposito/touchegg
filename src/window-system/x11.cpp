@@ -173,7 +173,7 @@ std::vector<T> X11::getWindowProperty(Window window,
 
 void X11::sendEvent(Window targetWindow, Window eventWidow,
                     const std::string &atomName,
-                    const std::vector<long> &data) const {  // NOLINT
+                    const std::vector<unsigned long> &data) const {  // NOLINT
   XClientMessageEvent event;
   event.window = eventWidow;
   event.type = ClientMessage;
@@ -291,8 +291,8 @@ void X11::maximizeOrRestoreWindow(const WindowT &window) const {
     return;
   }
 
-  std::vector<long> data;  // NOLINT
-  data.push_back(2);       // _NET_WM_STATE_TOGGLE = 2
+  std::vector<unsigned long> data;  // NOLINT
+  data.push_back(2);                // _NET_WM_STATE_TOGGLE = 2
   data.push_back(
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
   data.push_back(
@@ -321,7 +321,8 @@ Rectangle X11::minimizeWindowIconSize(const WindowT &window) const {
     return size;
   }
 
-  std::vector<uint64_t> iconSize = this->getWindowProperty<uint64_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> iconSize = this->getWindowProperty<unsigned long>(
       x11Window.window, "_NET_WM_ICON_GEOMETRY", XA_CARDINAL);
   if (iconSize.size() < 4) {
     return size;
@@ -343,8 +344,8 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
   Window rootWindow = XDefaultRootWindow(this->display);
 
   // Window can not be maximized
-  std::vector<long> data;  // NOLINT
-  data.push_back(0);       // _NET_WM_STATE_REMOVE = 0
+  std::vector<unsigned long> data;  // NOLINT
+  data.push_back(0);                // _NET_WM_STATE_REMOVE = 0
   data.push_back(
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
   data.push_back(
@@ -353,10 +354,12 @@ void X11::tileWindow(const WindowT &window, bool toTheLeft) const {
 
   // Move and resize the window
   Rectangle maxSize = this->getDesktopWorkarea();
-  int x = toTheLeft ? maxSize.x : maxSize.x + (maxSize.width / 2);
-  int y = maxSize.y;
-  int width = (maxSize.width / 2);
-  int height = maxSize.height;
+  unsigned long x = toTheLeft  // NOLINT
+                        ? maxSize.x
+                        : maxSize.x + (maxSize.width / 2);
+  unsigned long y = maxSize.y;                // NOLINT
+  unsigned long width = (maxSize.width / 2);  // NOLINT
+  unsigned long height = maxSize.height;      // NOLINT
 
   Rectangle decoration = this->getWindowDecorationSize(x11Window.window);
   x -= decoration.x;
@@ -377,7 +380,7 @@ void X11::activateWindow(const WindowT &window) const {
   }
 
   // NOLINTNEXTLINE
-  std::vector<long> data{
+  std::vector<unsigned long> data{
       1,  // Should be 1 when the request comes from an application
       CurrentTime,
       0  // Requestor's currently active window, 0 if none
@@ -394,7 +397,7 @@ void X11::closeWindow(const WindowT &window) const {
   }
 
   // NOLINTNEXTLINE
-  std::vector<long> data{
+  std::vector<unsigned long> data{
       CurrentTime,
       1,  // Should be 1 when the request comes from an application
   };
@@ -458,9 +461,11 @@ Rectangle X11::getDesktopWorkarea() const {
 
   // Get the workarea. Notice that this size applies to the root window, ie, the
   // sum of all physical screens
-  std::vector<int> currenDesktop = this->getWindowProperty<int>(
-      rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
-  std::vector<uint64_t> workareas = this->getWindowProperty<uint64_t>(
+  std::vector<unsigned long> currenDesktop =   // NOLINT
+      this->getWindowProperty<unsigned long>(  // NOLINT
+          rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> workareas = this->getWindowProperty<unsigned long>(
       rootWindow, "_NET_WORKAREA", XA_CARDINAL);
 
   Rectangle workarea;
@@ -490,19 +495,21 @@ Rectangle X11::getDesktopWorkarea() const {
 void X11::changeDesktop(ActionDirection direction) const {
   Window rootWindow = XDefaultRootWindow(this->display);
 
-  std::vector<int32_t> total = this->getWindowProperty<int32_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> total = this->getWindowProperty<unsigned long>(
       rootWindow, "_NET_NUMBER_OF_DESKTOPS", XA_CARDINAL);
-  std::vector<int32_t> current = this->getWindowProperty<int32_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> current = this->getWindowProperty<unsigned long>(
       rootWindow, "_NET_CURRENT_DESKTOP", XA_CARDINAL);
 
   if (total.size() != 1 || current.size() != 1) {
     return;
   }
 
-  int32_t totalDesktops = total.front();
-  int32_t currentDesktop = current.front();
+  int totalDesktops = total.front();
+  int currentDesktop = current.front();
 
-  int32_t toDesktop = -1;
+  int toDesktop = -1;
   switch (direction) {
     case ActionDirection::UP:
     case ActionDirection::DOWN:
@@ -524,21 +531,23 @@ void X11::changeDesktop(ActionDirection direction) const {
     return;
   }
 
-  this->sendEvent(rootWindow, rootWindow, "_NET_CURRENT_DESKTOP", {toDesktop});
+  this->sendEvent(rootWindow, rootWindow, "_NET_CURRENT_DESKTOP",
+                  {static_cast<unsigned long>(toDesktop)});  // NOLINT
 }
 
-int32_t X11::destinationDesktop(int32_t currentDesktop, int32_t totalDesktops,
-                                ActionDirection direction) const {
-  int32_t toDestop = -1;
+int X11::destinationDesktop(int currentDesktop, int totalDesktops,
+                            ActionDirection direction) const {
+  int toDestop = -1;
   Window rootWindow = XDefaultRootWindow(this->display);
-  std::vector<int64_t> layout = this->getWindowProperty<int64_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> layout = this->getWindowProperty<unsigned long>(
       rootWindow, "_NET_DESKTOP_LAYOUT", XA_CARDINAL);
 
   if (layout.size() < 3) {
     return toDestop;
   }
 
-  int64_t columns = layout[1];
+  int columns = layout[1];
 
   switch (direction) {
     case ActionDirection::UP:
@@ -575,19 +584,26 @@ int32_t X11::destinationDesktop(int32_t currentDesktop, int32_t totalDesktops,
 void X11::showDesktop(bool show) const {
   Window rootWindow = XDefaultRootWindow(this->display);
   this->sendEvent(rootWindow, rootWindow, "_NET_SHOWING_DESKTOP",
-                  {show ? True : False});
+                  {show ? 1ul : 0ul});
 }
 
 bool X11::isShowingDesktop() const {
-  std::vector<bool> showingDesktop = this->getWindowProperty<bool>(
-      XDefaultRootWindow(this->display), "_NET_SHOWING_DESKTOP", XA_CARDINAL);
-  return showingDesktop.empty() ? false : showingDesktop.at(0);
+  std::vector<unsigned long> showingDesktop =  // NOLINT
+      this->getWindowProperty<unsigned long>(  // NOLINT
+          XDefaultRootWindow(this->display), "_NET_SHOWING_DESKTOP",
+          XA_CARDINAL);
+
+  if (showingDesktop.empty()) {
+    return false;
+  }
+
+  return (showingDesktop.at(0) != 0);
 }
 
 Rectangle X11::getWindowDecorationSize(Window window) const {
   Rectangle size;
-
-  std::vector<uint64_t> gtk = this->getWindowProperty<uint64_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> gtk = this->getWindowProperty<unsigned long>(
       window, "_GTK_FRAME_EXTENTS", XA_CARDINAL);
   if (gtk.size() == 4) {
     size.x += gtk[0];
@@ -596,7 +612,8 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
     size.height += (gtk[2] + gtk[3]);
   }
 
-  std::vector<uint64_t> frame = this->getWindowProperty<uint64_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> frame = this->getWindowProperty<unsigned long>(
       window, "_NET_FRAME_EXTENTS", XA_CARDINAL);
   if (frame.size() == 4) {
     size.x -= frame[0];
@@ -606,7 +623,8 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
     return size;
   }
 
-  std::vector<uint64_t> kde = this->getWindowProperty<uint64_t>(
+  // NOLINTNEXTLINE
+  std::vector<unsigned long> kde = this->getWindowProperty<unsigned long>(
       window, "_KDE_NET_WM_FRAME_STRUT", XA_CARDINAL);
   if (kde.size() == 4) {
     size.x -= kde[0];
@@ -653,14 +671,6 @@ cairo_surface_t *X11::createSurface() const {
   cairo_xlib_surface_set_size(surface, width, height);
 
   return surface;
-}
-
-int X11::getSurfaceWidth(cairo_surface_t *cairoSurface) const {
-  return cairo_xlib_surface_get_width(cairoSurface);
-}
-
-int X11::getSurfaceHeight(cairo_surface_t *cairoSurface) const {
-  return cairo_xlib_surface_get_height(cairoSurface);
 }
 
 void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {

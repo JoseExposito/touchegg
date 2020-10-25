@@ -52,7 +52,6 @@ struct GestureEvent {
   double angleDelta = 0;
   double radiusDelta = 0;
   uint64_t elapsedTime = 0;
-  uint64_t timestamp = 0;
 };
 
 #endif  // DAEMON_GESTURE_EVENT_H_

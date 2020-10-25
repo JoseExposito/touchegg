@@ -48,7 +48,6 @@ void LininputSwipeHandler::handleSwipeUpdate(
       gesture->setPercentage(this->state.percentage);
       gesture->setDirection(this->state.direction);
       gesture->setElapsedTime(0);
-      gesture->setTimestamp(this->getTimestamp());
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -60,7 +59,6 @@ void LininputSwipeHandler::handleSwipeUpdate(
     gesture->setDirection(this->state.direction);
     gesture->setElapsedTime(
         this->calculateElapsedTime(this->state.startTimestamp));
-    gesture->setTimestamp(this->getTimestamp());
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -76,7 +74,6 @@ void LininputSwipeHandler::handleSwipeEnd(
     gesture->setDirection(this->state.direction);
     gesture->setElapsedTime(
         this->calculateElapsedTime(this->state.startTimestamp));
-    gesture->setTimestamp(this->getTimestamp());
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

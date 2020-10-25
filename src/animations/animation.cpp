@@ -19,24 +19,18 @@
 
 #include <chrono>  // NOLINT
 
-void Animation::onUpdate(int percentage, uint64_t timestamp) {
+void Animation::onUpdate(int percentage) {
   constexpr uint64_t frameRate = (1000 / 30);
-  constexpr uint64_t eventWindow = 10;
 
+  // Discard draws that exceed the frame rate
   auto now = std::chrono::system_clock::now().time_since_epoch();
   uint64_t millis =
       std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
 
-  // Discard draws that exceed the frame rate (fast devices)
   if (millis < (this->lastRenderTimestamp + frameRate)) {
     return;
   }
   this->lastRenderTimestamp = millis;
-
-  // Discard updates that are too old (slow devices)
-  if (millis > (timestamp + eventWindow)) {
-    return;
-  }
 
   // Rely on the base class for rendering the animation
   this->render(percentage);

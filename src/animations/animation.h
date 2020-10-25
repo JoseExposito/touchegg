@@ -41,7 +41,7 @@ class Animation {
    * Called every time an action request an update.
    * Decide if rendering is required or not.
    */
-  void onUpdate(int percentage, uint64_t timestamp);
+  void onUpdate(int percentage);
 
   /**
    * Draw the animation on screen.

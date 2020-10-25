@@ -62,11 +62,10 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
         info, this->state.direction, deltaX, deltaY);
     uint64_t elapsedTime =
         this->calculateElapsedTime(this->state.startTimestamp);
-    uint64_t timestamp = this->getTimestamp();
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime, timestamp);
+        this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
 
     this->state.reset();
@@ -92,8 +91,6 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
   struct libinput_device *device = libinput_event_get_device(event);
   LibinputDeviceInfo info = this->getDeviceInfo(device);
 
-  uint64_t timestamp = this->getTimestamp();
-
   if (!this->state.started) {
     if (std::abs(deltaX) > info.threshold ||
         std::abs(deltaY) > info.threshold) {
@@ -108,7 +105,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
       auto gesture = std::make_unique<Gesture>(
           this->state.type, this->state.direction, percentage,
-          this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime, timestamp);
+          this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -119,7 +116,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime, timestamp);
+        this->state.fingers, deltaX, deltaY, -1, -1, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
 
     std::cout << "MOTION " << percentage << "%" << std::endl;

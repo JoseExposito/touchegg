@@ -1,10 +1,16 @@
 # Compilation
 
 Before you start coding, you will need to install some dependencies:
-
+For Ubuntu
 ```
 $ sudo apt-get install git build-essential gdb cmake \
   libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev
+```
+For Fedora
+```
+$ sudo yum groupinstall "Development Tools"
+$ sudo yum install git gdb cmake \
+  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:

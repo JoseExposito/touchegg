@@ -31,7 +31,7 @@ ShowDesktopAnimation::ShowDesktopAnimation(const WindowSystem &windowSystem,
       showingDesktop(showingDesktop) {}
 
 void ShowDesktopAnimation::render(int percentage) {
-  cairo_t *ctx = this->cairoContext;
+  cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
@@ -67,5 +67,5 @@ void ShowDesktopAnimation::render(int percentage) {
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
   cairo_fill(ctx);
 
-  this->windowSystem.flushSurface(this->surface);
+  this->cairoSurface->flush();
 }

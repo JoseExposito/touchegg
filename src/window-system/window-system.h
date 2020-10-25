@@ -26,6 +26,7 @@
 
 #include "actions/action-direction.h"
 #include "utils/rectangle.h"
+#include "window-system/cairo-surface.h"
 
 /**
  * Abstract window type.
@@ -135,21 +136,8 @@ class WindowSystem {
 
   /**
    * Creates a Cairo surface to draw on.
-   * IMPORTANT! Destroy the surface with WindowSystem::destroySurface().
    */
-  virtual cairo_surface_t *createSurface() const = 0;
-
-  /**
-   * Flush the Cairo surface.
-   * @param cairoSurface The surface.
-   */
-  virtual void flushSurface(cairo_surface_t *cairoSurface) const = 0;
-
-  /**
-   * Destroy the Cairo surface.
-   * @param cairoSurface The surface.
-   */
-  virtual void destroySurface(cairo_surface_t *cairoSurface) const = 0;
+  virtual std::unique_ptr<CairoSurface> createCairoSurface() const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

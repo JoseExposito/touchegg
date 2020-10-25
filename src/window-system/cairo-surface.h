@@ -15,36 +15,29 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_ANIMATION_H_
-#define ANIMATIONS_ANIMATION_H_
+#ifndef WINDOW_SYSTEM_CAIRO_SURFACE_H_
+#define WINDOW_SYSTEM_CAIRO_SURFACE_H_
 
 #include <cairo.h>
 
-#include <memory>
+#include <iostream>
 
-#include "window-system/cairo-surface.h"
-#include "window-system/window-system.h"
-
-class Animation {
+/**
+ * Window system independent cairo surface abstraction.
+ */
+class CairoSurface {
  public:
-  Animation(const WindowSystem &windowSystem, const WindowT &window)
-      : windowSystem(windowSystem),
-        window(window),
-        cairoSurface(this->windowSystem.createCairoSurface()) {}
-
-  virtual ~Animation() = default;
+  virtual ~CairoSurface() = default;
 
   /**
-   * Draw the animation on screen.
-   * @param percentage A number between 0 and 100 indicating the percentage of
-   * the animation.
+   * @returns The cairo context.
    */
-  virtual void render(int percentage) = 0;
+  virtual cairo_t *getContext() = 0;
 
- protected:
-  const WindowSystem &windowSystem;
-  const WindowT &window;
-  std::unique_ptr<CairoSurface> cairoSurface;
+  /**
+   * Flush and display on screen.
+   */
+  virtual void flush() = 0;
 };
 
-#endif  // ANIMATIONS_ANIMATION_H_
+#endif  // WINDOW_SYSTEM_CAIRO_SURFACE_H_

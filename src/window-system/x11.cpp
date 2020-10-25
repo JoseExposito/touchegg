@@ -24,11 +24,12 @@
 #include <cairo-xlib.h>
 
 #include <algorithm>
-#include <chrono>  // NOLINT
 #include <cmath>
 #include <exception>
 #include <iostream>
 #include <vector>
+
+#include "window-system/x11-cairo-surface.h"
 
 X11::X11() {
   this->display = XOpenDisplay(nullptr);
@@ -638,59 +639,6 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
   return size;
 }
 
-cairo_surface_t *X11::createSurface() const {
-  Window rootWindow = XDefaultRootWindow(this->display);
-  int screen = XDefaultScreen(this->display);
-
-  // Get the screen size. If multiple physical screens are connected this is
-  // the size of all of them, like they were a single screen
-  int x = 0;
-  int y = 0;
-  int width = XWidthOfScreen(XDefaultScreenOfDisplay(this->display));
-  int height = XHeightOfScreen(XDefaultScreenOfDisplay(this->display));
-
-  // Create a transparent window
-  XVisualInfo vInfo;
-  XMatchVisualInfo(this->display, screen, 32, TrueColor, &vInfo);
-
-  XSetWindowAttributes attr;
-  attr.colormap =
-      XCreateColormap(this->display, rootWindow, vInfo.visual, AllocNone);
-  attr.border_pixel = 0;
-  attr.background_pixel = 0;
-  attr.override_redirect = 1;
-
-  Window window = XCreateWindow(
-      this->display, rootWindow, x, y, width, height, 0, vInfo.depth,
-      InputOutput, vInfo.visual,
-      CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
-  XMapWindow(display, window);
-
-  // Create the surface
-  cairo_surface_t *surface = cairo_xlib_surface_create(
-      this->display, window, vInfo.visual, width, height);
-  cairo_xlib_surface_set_size(surface, width, height);
-
-  return surface;
-}
-
-void X11::flushSurface(cairo_surface_t * /*cairoSurface*/) const {
-  static uint64_t flushTimestamp = 0;
-  constexpr uint64_t frameRate = (1000 / 60);
-
-  auto now = std::chrono::system_clock::now().time_since_epoch();
-  uint64_t millis =
-      std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
-
-  if (millis > (flushTimestamp + frameRate)) {
-    XFlush(this->display);
-    flushTimestamp = millis;
-  }
-}
-
-void X11::destroySurface(cairo_surface_t *cairoSurface) const {
-  Window window = cairo_xlib_surface_get_drawable(cairoSurface);
-  cairo_surface_destroy(cairoSurface);
-  XDestroyWindow(this->display, window);
-  XFlush(this->display);
+std::unique_ptr<CairoSurface> X11::createCairoSurface() const {
+  return std::make_unique<X11CairoSurface>(this->display);
 }

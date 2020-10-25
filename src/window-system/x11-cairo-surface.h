@@ -15,36 +15,47 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ANIMATIONS_ANIMATION_H_
-#define ANIMATIONS_ANIMATION_H_
+#ifndef WINDOW_SYSTEM_X11_CAIRO_SURFACE_H_
+#define WINDOW_SYSTEM_X11_CAIRO_SURFACE_H_
 
+#include <X11/X.h>
+#include <X11/Xlib.h>
 #include <cairo.h>
 
-#include <memory>
-
 #include "window-system/cairo-surface.h"
-#include "window-system/window-system.h"
 
-class Animation {
+/**
+ * X11 cairo surface.
+ */
+class X11CairoSurface : public CairoSurface {
  public:
-  Animation(const WindowSystem &windowSystem, const WindowT &window)
-      : windowSystem(windowSystem),
-        window(window),
-        cairoSurface(this->windowSystem.createCairoSurface()) {}
+  explicit X11CairoSurface(Display *display);
+  ~X11CairoSurface();
+  cairo_t *getContext() override;
+  void flush() override;
 
-  virtual ~Animation() = default;
+ private:
+  /**
+   * X11 connection.
+   */
+  Display *display;
 
   /**
-   * Draw the animation on screen.
-   * @param percentage A number between 0 and 100 indicating the percentage of
-   * the animation.
+   * X11 window where the animation is drawn.
    */
-  virtual void render(int percentage) = 0;
+  Window window = None;
 
- protected:
-  const WindowSystem &windowSystem;
-  const WindowT &window;
-  std::unique_ptr<CairoSurface> cairoSurface;
+  /**
+   * Cairo surface and context for the window.
+   */
+  cairo_surface_t *windowSurface = nullptr;
+  cairo_t *windowContext = nullptr;
+
+  /**
+   * Cairo surface and context to draw in memory.
+   */
+  cairo_surface_t *imageSurface = nullptr;
+  cairo_t *imageContext = nullptr;
 };
 
-#endif  // ANIMATIONS_ANIMATION_H_
+#endif  // WINDOW_SYSTEM_X11_CAIRO_SURFACE_H_

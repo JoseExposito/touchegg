@@ -68,9 +68,7 @@ class X11 : public WindowSystem {
   void showDesktop(bool show) const override;
   bool isShowingDesktop() const override;
 
-  cairo_surface_t *createSurface() const override;
-  void flushSurface(cairo_surface_t *cairoSurface) const override;
-  void destroySurface(cairo_surface_t *cairoSurface) const override;
+  std::unique_ptr<CairoSurface> createCairoSurface() const override;
 
  private:
   /**

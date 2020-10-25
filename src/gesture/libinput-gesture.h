@@ -56,6 +56,7 @@ class LibinputGesture : public Gesture {
   double radiusDelta() const override;
 
   // uint64_t elapsedTime() const;
+  // uint64_t timestamp() const;
 
   /**
    * The direction is not implicit in the libinput_event_gesture, instead
@@ -75,6 +76,12 @@ class LibinputGesture : public Gesture {
    * @param elapsedTime Elapsed time in milliseconds.
    */
   void setElapsedTime(uint64_t elapsedTime);
+
+  /**
+   * Set the gesture timestamp.
+   * @param timestamp Timestamp in milliseconds
+   */
+  void setTimestamp(uint64_t timestamp);
 
   /**
    * Returns the libinput device that performed the gesture.

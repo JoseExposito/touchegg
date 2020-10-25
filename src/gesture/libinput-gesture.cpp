@@ -84,6 +84,10 @@ void LibinputGesture::setElapsedTime(uint64_t elapsedTime) {
   this->gestureElapsedTime = elapsedTime;
 }
 
+void LibinputGesture::setTimestamp(uint64_t timestamp) {
+  this->gestureTimestamp = timestamp;
+}
+
 struct libinput_device *LibinputGesture::getDevice() const {
   return libinput_event_get_device(this->event);
 }

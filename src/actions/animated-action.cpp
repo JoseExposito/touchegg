@@ -52,7 +52,7 @@ AnimatedAction::AnimatedAction(
 
 void AnimatedAction::onGestureUpdate(const Gesture &gesture) {
   if (this->animation && gesture.elapsedTime() > this->animationDelay) {
-    this->animation->render(gesture.percentage());
+    this->animation->onUpdate(gesture.percentage(), gesture.timestamp());
   }
 }
 

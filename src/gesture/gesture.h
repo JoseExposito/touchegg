@@ -31,7 +31,7 @@ class Gesture {
 
   Gesture(GestureType type, GestureDirection direction, int percentage,
           int fingers, double deltaX, double deltaY, double angleDelta,
-          double radiusDelta, uint64_t elapsedTime)
+          double radiusDelta, uint64_t elapsedTime, uint64_t timestamp)
       : gestureType(type),
         gestureDirection(direction),
         gesturePercentage(percentage),
@@ -40,7 +40,8 @@ class Gesture {
         gestureDeltaY(deltaY),
         gestureAngleDelta(angleDelta),
         gestureRadiusDelta(radiusDelta),
-        gestureElapsedTime(elapsedTime) {}
+        gestureElapsedTime(elapsedTime),
+        gestureTimestamp(timestamp) {}
 
   virtual ~Gesture() = default;
 
@@ -98,6 +99,8 @@ class Gesture {
    */
   virtual uint64_t elapsedTime() const { return this->gestureElapsedTime; }
 
+  virtual uint64_t timestamp() const { return this->gestureTimestamp; }
+
  protected:
   GestureType gestureType = GestureType::NOT_SUPPORTED;
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
@@ -108,6 +111,7 @@ class Gesture {
   double gestureAngleDelta = -1;
   double gestureRadiusDelta = -1;
   uint64_t gestureElapsedTime = -1;
+  uint64_t gestureTimestamp = -1;
 };
 
 #endif  // GESTURE_GESTURE_H_

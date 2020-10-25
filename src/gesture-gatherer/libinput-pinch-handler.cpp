@@ -39,6 +39,7 @@ void LininputPinchHandler::handlePinchUpdate(
     gesture->setPercentage(this->state.percentage);
     gesture->setDirection(this->state.direction);
     gesture->setElapsedTime(0);
+    gesture->setTimestamp(this->getTimestamp());
     this->gestureController->onGestureBegin(std::move(gesture));
   } else {
     this->state.delta = gesture->radiusDelta();
@@ -49,6 +50,7 @@ void LininputPinchHandler::handlePinchUpdate(
     gesture->setDirection(this->state.direction);
     gesture->setElapsedTime(
         this->calculateElapsedTime(this->state.startTimestamp));
+    gesture->setTimestamp(this->getTimestamp());
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -64,6 +66,7 @@ void LininputPinchHandler::handlePinchEnd(
     gesture->setDirection(this->state.direction);
     gesture->setElapsedTime(
         this->calculateElapsedTime(this->state.startTimestamp));
+    gesture->setTimestamp(this->getTimestamp());
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

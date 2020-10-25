@@ -22,8 +22,6 @@
 #include <X11/Xutil.h>
 #include <cairo-xlib.h>
 
-#include <iostream>
-
 X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   Window rootWindow = XDefaultRootWindow(this->display);
   int defaultScreen = XDefaultScreen(this->display);
@@ -80,7 +78,7 @@ X11CairoSurface::~X11CairoSurface() {
 cairo_t *X11CairoSurface::getContext() { return this->bufferContext; }
 
 void X11CairoSurface::flush() {
-  // Draw the image context in the window surface
+  // Draw the image context in the window surface and flush
   cairo_surface_flush(this->bufferSurface);
   cairo_set_source_rgba(this->windowContext, 0, 0, 0, 0);
   cairo_set_operator(this->windowContext, CAIRO_OPERATOR_SOURCE);
@@ -88,8 +86,4 @@ void X11CairoSurface::flush() {
   cairo_paint(this->windowContext);
   cairo_surface_flush(this->windowSurface);
   XFlush(this->display);
-
-  // Restore the context
-  cairo_set_source_surface(this->windowContext, this->windowSurface, 0, 0);
-  cairo_set_source_surface(this->bufferContext, this->bufferSurface, 0, 0);
 }

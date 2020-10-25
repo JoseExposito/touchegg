@@ -97,6 +97,7 @@ void DaemonServer::send(GestureEventType eventType,
   event.angleDelta = gesture->angleDelta();
   event.radiusDelta = gesture->radiusDelta();
   event.elapsedTime = gesture->elapsedTime();
+  event.timestamp = gesture->timestamp();
 
   // Send the gesture event to every client
   std::vector<int> disconnectedClients{};

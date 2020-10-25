@@ -59,36 +59,37 @@ X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   cairo_xlib_surface_set_size(this->windowSurface, width, height);
   this->windowContext = cairo_create(this->windowSurface);
 
-  // Create the image surface to draw in memory for double buffering
-  this->imageSurface =
-      cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-  this->imageContext = cairo_create(this->imageSurface);
+  // Create the buffer surface to draw in memory for double buffering
+  cairo_content_t content = cairo_surface_get_content(this->windowSurface);
+  this->bufferSurface =
+      cairo_surface_create_similar(this->windowSurface, content, width, height);
+  this->bufferContext = cairo_create(this->bufferSurface);
 }
 
 X11CairoSurface::~X11CairoSurface() {
   cairo_destroy(this->windowContext);
-  cairo_destroy(this->imageContext);
+  cairo_destroy(this->bufferContext);
 
   cairo_surface_destroy(this->windowSurface);
-  cairo_surface_destroy(this->imageSurface);
+  cairo_surface_destroy(this->bufferSurface);
 
   XDestroyWindow(this->display, this->window);
   XFlush(this->display);
 }
 
-cairo_t *X11CairoSurface::getContext() { return this->imageContext; }
+cairo_t *X11CairoSurface::getContext() { return this->bufferContext; }
 
 void X11CairoSurface::flush() {
   // Draw the image context in the window surface
-  cairo_surface_flush(this->imageSurface);
+  cairo_surface_flush(this->bufferSurface);
   cairo_set_source_rgba(this->windowContext, 0, 0, 0, 0);
   cairo_set_operator(this->windowContext, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_surface(this->windowContext, this->imageSurface, 0, 0);
+  cairo_set_source_surface(this->windowContext, this->bufferSurface, 0, 0);
   cairo_paint(this->windowContext);
   cairo_surface_flush(this->windowSurface);
   XFlush(this->display);
 
   // Restore the context
   cairo_set_source_surface(this->windowContext, this->windowSurface, 0, 0);
-  cairo_set_source_surface(this->imageContext, this->imageSurface, 0, 0);
+  cairo_set_source_surface(this->bufferContext, this->bufferSurface, 0, 0);
 }

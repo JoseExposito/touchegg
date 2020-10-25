@@ -54,8 +54,8 @@ class X11CairoSurface : public CairoSurface {
   /**
    * Cairo surface and context to draw in memory.
    */
-  cairo_surface_t *imageSurface = nullptr;
-  cairo_t *imageContext = nullptr;
+  cairo_surface_t *bufferSurface = nullptr;
+  cairo_t *bufferContext = nullptr;
 };
 
 #endif  // WINDOW_SYSTEM_X11_CAIRO_SURFACE_H_

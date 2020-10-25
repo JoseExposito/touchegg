@@ -1,21 +1,21 @@
 # Compilation
 
 Before you start coding, you will need to install some dependencies:
-For Ubuntu
-```
+
+```bash
+# Ubuntu, Debian and derivatives:
 $ sudo apt-get install git build-essential gdb cmake \
   libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev
-```
-For Fedora
-```
+  
+# Red Hat, Fedora, CentOS and derivatives:
 $ sudo yum groupinstall "Development Tools"
-$ sudo yum install git gdb cmake \
+$ sudo yum install git gcc g++ gdb cmake \
   libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:
 
-```
+```bash
 $ git clone https://github.com/JoseExposito/touchegg.git
 $ cd touchegg
 $ mkdir build
@@ -28,7 +28,7 @@ $ make -j$(nproc)
 
 After building the source code, you can install Touchégg by running this commands:
 
-```
+```bash
 $ sudo make install
 $ sudo systemctl daemon-reload && sudo systemctl restart touchegg # Start the daemon
 $ touchegg # Run Touchégg
@@ -36,7 +36,7 @@ $ touchegg # Run Touchégg
 
 In addition, you can generate a Debian package and install it:
 
-```
+```bash
 $ cpack -G DEB
 $ sudo dpkg -i touchegg_*.deb # Install the package
 $ sudo apt -f install # Install missing dependencies
@@ -45,7 +45,7 @@ $ touchegg # Run Touchégg
 
 Or a rpm package:
 
-```
+```bash
 $ cpack -G RPM
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 $ touchegg # Run Touchégg
@@ -61,8 +61,12 @@ And uses clang-format, clang-tidy and `cpplint.py` automatically to check potent
 
 In order to take advantage of those tools, install the following dependencies:
 
-```
+```bash
+# Ubuntu, Debian and derivatives:
 $ sudo apt-get install clang clang-format clang-tidy python2
+
+# Red Hat, Fedora, CentOS and derivatives:
+$ sudo yum install clang clang-tools-extra python2
 ```
 
 More information about `cpplint.py`:
@@ -131,7 +135,7 @@ pressing "Control + Shift + P" and typing "Preferences: Open Settings (JSON)":
 The entire code is documented with Doxygen. If want to see this documentation in HTML format execute
 the following commands:
 
-```
+```bash
 $ cd documentation
 $ doxygen doxyfile
 ```

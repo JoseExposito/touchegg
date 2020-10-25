@@ -20,8 +20,8 @@
 #include <chrono>  // NOLINT
 
 void Animation::onUpdate(int percentage, uint64_t timestamp) {
-  constexpr uint64_t frameRate = (1000 / 60);
-  constexpr uint64_t eventWindow = 100;
+  constexpr uint64_t frameRate = (1000 / 30);
+  constexpr uint64_t eventWindow = 10;
 
   auto now = std::chrono::system_clock::now().time_since_epoch();
   uint64_t millis =

@@ -29,6 +29,7 @@
 #include <cmath>
 #include <exception>
 #include <memory>
+#include <stdexcept>
 
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"

@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include <exception>
+#include <stdexcept>
 #include <string>
 
 #include "utils/paths.h"

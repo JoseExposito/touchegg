@@ -27,6 +27,7 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 #include "window-system/x11-cairo-surface.h"

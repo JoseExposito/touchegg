@@ -23,6 +23,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <stdexcept>
+
 std::filesystem::path Paths::getHomePath() {
   // $HOME should be checked first
   const char *homeEnvVar = getenv("HOME");

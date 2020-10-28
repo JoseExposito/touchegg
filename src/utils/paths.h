@@ -46,7 +46,7 @@ class Paths {
   static std::filesystem::path getUserLockFilePath();
 
   /**
-   * @return System config file path (/usr/share/touchegg).
+   * @return System config file path (/usr/share/touchegg/touchegg.conf).
    */
   static std::filesystem::path getSystemConfigFilePath();
 };

@@ -50,6 +50,9 @@
         "functional": "cpp",
         "bitset": "cpp",
         "map": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "cinttypes": "cpp",
+        "condition_variable": "cpp",
+        "mutex": "cpp"
     }
 }

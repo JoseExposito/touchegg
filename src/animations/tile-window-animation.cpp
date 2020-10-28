@@ -35,7 +35,7 @@ TileWindowAnimation::TileWindowAnimation(const WindowSystem &windowSystem,
 }
 
 void TileWindowAnimation::render(int percentage) {
-  cairo_t *ctx = this->cairoContext;
+  cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
@@ -59,5 +59,5 @@ void TileWindowAnimation::render(int percentage) {
   cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_fill(ctx);
 
-  this->windowSystem.flushSurface(this->surface);
+  this->cairoSurface->flush();
 }

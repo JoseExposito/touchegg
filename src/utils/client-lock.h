@@ -15,26 +15,19 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GESTURE_GATHERER_LIBINPUT_PINCH_STATE_H_
-#define GESTURE_GATHERER_LIBINPUT_PINCH_STATE_H_
-
-#include "gesture/gesture-direction.h"
+#ifndef UTILS_CLIENT_LOCK_H_
+#define UTILS_CLIENT_LOCK_H_
 
 /**
- * Data structure to save swipe state in a single place.
+ * Creates a lock file to avoid multiple client instances to run in parallel.
  */
-struct LibinputPinchState {
-  bool started = false;
-  double delta = 1;
-  GestureDirection direction = GestureDirection::UNKNOWN;
-  int percentage = 0;
+class ClientLock {
+ public:
+  ClientLock();
+  ~ClientLock();
 
-  void reset() {
-    started = false;
-    delta = 1;
-    direction = GestureDirection::UNKNOWN;
-    percentage = 0;
-  }
+ private:
+  int fd;
 };
 
-#endif  // GESTURE_GATHERER_LIBINPUT_PINCH_STATE_H_
+#endif  // UTILS_CLIENT_LOCK_H_

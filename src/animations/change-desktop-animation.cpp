@@ -54,7 +54,7 @@ ChangeDesktopAnimation::ChangeDesktopAnimation(
 }
 
 void ChangeDesktopAnimation::render(int percentage) {
-  cairo_t *ctx = this->cairoContext;
+  cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
@@ -108,5 +108,5 @@ void ChangeDesktopAnimation::render(int percentage) {
   cairo_rel_line_to(ctx, x5, y5);
   cairo_stroke(ctx);
 
-  this->windowSystem.flushSurface(this->surface);
+  this->cairoSurface->flush();
 }

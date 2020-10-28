@@ -68,11 +68,7 @@ class X11 : public WindowSystem {
   void showDesktop(bool show) const override;
   bool isShowingDesktop() const override;
 
-  cairo_surface_t *createSurface() const override;
-  int getSurfaceWidth(cairo_surface_t *cairoSurface) const override;
-  int getSurfaceHeight(cairo_surface_t *cairoSurface) const override;
-  void flushSurface(cairo_surface_t *cairoSurface) const override;
-  void destroySurface(cairo_surface_t *cairoSurface) const override;
+  std::unique_ptr<CairoSurface> createCairoSurface() const override;
 
  private:
   /**
@@ -102,7 +98,7 @@ class X11 : public WindowSystem {
    */
   void sendEvent(Window targetWindow, Window eventWidow,
                  const std::string &atomName,
-                 const std::vector<long> &data) const;  // NOLINT
+                 const std::vector<unsigned long> &data) const;  // NOLINT
 
   /**
    * The top-level window contains useful attributes like WM_CLASS or WM_NAME
@@ -161,8 +157,8 @@ class X11 : public WindowSystem {
    * https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html#idm45805408026320
    * Asumes _NET_WM_ORIENTATION_HORZ and _NET_WM_TOPLEFT.
    */
-  int32_t destinationDesktop(int32_t currentDesktop, int32_t totalDesktops,
-                             ActionDirection direction) const;
+  int destinationDesktop(int currentDesktop, int totalDesktops,
+                         ActionDirection direction) const;
 };
 
 #endif  // WINDOW_SYSTEM_X11_H_

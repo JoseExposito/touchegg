@@ -15,28 +15,23 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GESTURE_GATHERER_LIBINPUT_SWIPE_STATE_H_
-#define GESTURE_GATHERER_LIBINPUT_SWIPE_STATE_H_
+#include "animations/animation.h"
 
-#include "gesture/gesture-direction.h"
+#include <chrono>  // NOLINT
 
-/**
- * Data structure to save swipe state in a single place.
- */
-struct LibinputSwipeState {
-  bool started = false;
-  double deltaX = 0;
-  double deltaY = 0;
-  GestureDirection direction = GestureDirection::UNKNOWN;
-  int percentage = 0;
+void Animation::onUpdate(int percentage) {
+  constexpr uint64_t frameRate = (1000 / 30);
 
-  void reset() {
-    started = false;
-    deltaX = 0;
-    deltaY = 0;
-    direction = GestureDirection::UNKNOWN;
-    percentage = 0;
+  // Discard draws that exceed the frame rate
+  auto now = std::chrono::system_clock::now().time_since_epoch();
+  uint64_t millis =
+      std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
+
+  if (millis < (this->lastRenderTimestamp + frameRate)) {
+    return;
   }
-};
+  this->lastRenderTimestamp = millis;
 
-#endif  // GESTURE_GATHERER_LIBINPUT_SWIPE_STATE_H_
+  // Rely on the base class for rendering the animation
+  this->render(percentage);
+}

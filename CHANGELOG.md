@@ -1,11 +1,44 @@
 # Changelog
 
-## 2.0.2 - ????-??-??
+## 2.0.2 - 2020-10-28
+
+New:
+
+  - Touchscreen support. Now you can use PINCH and SWIPE gestures on your touchscreen.
+
+    https://github.com/JoseExposito/touchegg/issues/336
+
+  - Animations are smoother, even in devices with limited resources like the Raspberry Pi 4.
+
+    https://github.com/JoseExposito/touchegg/issues/372
+
+  - CHANGE_DESKTOP now allows to use up/down/left/right directions in addition to previous/next.
+    Made with love for KDE users.
+
+    https://github.com/JoseExposito/touchegg/issues/338
+
+  - Touchégg is added to startup automatically on installation.
+
+    https://github.com/JoseExposito/touchegg/issues/361
+
+  - In case you manually added it to startup you don't need to change anything, now you can not run
+    multiple instances in parallel by mistake.
+
+    https://github.com/JoseExposito/touchegg/issues/369
 
 Fixed:
 
-  - Fix crash when a screen is connected but disabled
+  - Crash when a screen is connected but disabled. Thanks to @magnus-gross.
+
     https://github.com/JoseExposito/touchegg/issues/341
+
+  - Intermittent crash after editing the configuration file.
+
+    https://github.com/JoseExposito/touchegg/issues/350
+
+  - Crash when performing a gesture on the root window.
+
+    https://github.com/JoseExposito/touchegg/issues/352
 
 
 ## 2.0.1 - 2020-09-29
@@ -15,6 +48,7 @@ This release is only a fix for Arch Linux and openSUSE compilation.
 Fixed:
 
   - Fix Arch Linux and openSUSE compilation
+
     https://github.com/JoseExposito/touchegg/issues/337
 
 

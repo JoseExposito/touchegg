@@ -22,20 +22,26 @@
 
 #include <memory>
 
+#include "window-system/cairo-surface.h"
 #include "window-system/window-system.h"
 
+/**
+ * Base class form animations.
+ */
 class Animation {
  public:
   Animation(const WindowSystem &windowSystem, const WindowT &window)
       : windowSystem(windowSystem),
         window(window),
-        surface(this->windowSystem.createSurface()),
-        cairoContext(cairo_create(this->surface)) {}
+        cairoSurface(this->windowSystem.createCairoSurface()) {}
 
-  virtual ~Animation() {
-    cairo_destroy(this->cairoContext);
-    this->windowSystem.destroySurface(this->surface);
-  }
+  virtual ~Animation() = default;
+
+  /**
+   * Called every time an action request an update.
+   * Decide if rendering is required or not.
+   */
+  void onUpdate(int percentage);
 
   /**
    * Draw the animation on screen.
@@ -47,8 +53,10 @@ class Animation {
  protected:
   const WindowSystem &windowSystem;
   const WindowT &window;
-  cairo_surface_t *surface;
-  cairo_t *cairoContext;
+  std::unique_ptr<CairoSurface> cairoSurface;
+
+ private:
+  uint64_t lastRenderTimestamp = 0;
 };
 
 #endif  // ANIMATIONS_ANIMATION_H_

@@ -17,7 +17,6 @@
  */
 #include "config/xml-config-loader.h"
 
-#include <pwd.h>
 #include <sys/inotify.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -38,13 +37,10 @@
 
 #include "config/config.h"
 #include "utils/filesystem.h"
+#include "utils/paths.h"
 #include "utils/string.h"
 
 namespace {
-const char *USR_SHARE_CONFIG_DIR = "/usr/share/touchegg";
-const char *HOME_CONFIG_DIR = ".config/touchegg";
-const char *CONFIG_FILE = "touchegg.conf";
-
 constexpr std::size_t WATCH_EVENT_SIZE = sizeof(struct inotify_event);
 constexpr std::size_t WATCH_BUFFER_SIZE = (100 * (WATCH_EVENT_SIZE + 16));
 }  // namespace
@@ -54,10 +50,7 @@ XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {
 }
 
 void XmlConfigLoader::load() {
-  const std::filesystem::path homePath = XmlConfigLoader::getHomePath();
-  const std::filesystem::path configPath =
-      homePath / HOME_CONFIG_DIR / CONFIG_FILE;
-
+  const std::filesystem::path configPath = Paths::getUserConfigFilePath();
   this->parseXml(configPath);
   this->watchFile(configPath);
 }
@@ -165,9 +158,8 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
 }
 
 void XmlConfigLoader::copyConfingIfNotPresent() {
-  const std::filesystem::path homePath = XmlConfigLoader::getHomePath();
-  const std::filesystem::path homeConfigDir = homePath / HOME_CONFIG_DIR;
-  const std::filesystem::path homeConfigFile = homeConfigDir / CONFIG_FILE;
+  const std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
+  const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
 
   // If the ~/.config/touchegg configuration file exists we can continue,
   // otherwise we need to copy it from /usr/share/touchegg/touchegg.conf
@@ -175,8 +167,7 @@ void XmlConfigLoader::copyConfingIfNotPresent() {
     return;
   }
 
-  const std::filesystem::path usrConfigDir{USR_SHARE_CONFIG_DIR};
-  const std::filesystem::path usrConfigFile{usrConfigDir / CONFIG_FILE};
+  const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
   if (!std::filesystem::exists(usrConfigFile)) {
     throw std::runtime_error{
         "File /usr/share/touchegg/touchegg.conf not found.\n"
@@ -185,31 +176,4 @@ void XmlConfigLoader::copyConfingIfNotPresent() {
 
   std::filesystem::create_directories(homeConfigDir);
   std::filesystem::copy_file(usrConfigFile, homeConfigFile);
-}
-
-std::filesystem::path XmlConfigLoader::getHomePath() {
-  // $HOME should be checked first
-  const char *homeEnvVar = getenv("HOME");
-  if (homeEnvVar != nullptr) {
-    return std::filesystem::path{homeEnvVar};
-  }
-
-  // In case $HOME is not set fallback to getpwuid
-  const struct passwd *userInfo = getpwuid(getuid());  // NOLINT
-  if (userInfo == nullptr) {
-    throw std::runtime_error{
-        "Error getting your home directory path (getpwuid).\n"
-        "Please file a bug report at "
-        "https://github.com/JoseExposito/touchegg/issues"};
-  }
-
-  const char *workingDir = userInfo->pw_dir;
-  if (workingDir == nullptr) {
-    throw std::runtime_error{
-        "Error getting your home directory path (pw_dir).\n"
-        "Please file a bug report at "
-        "https://github.com/JoseExposito/touchegg/issues"};
-  }
-
-  return std::filesystem::path{workingDir};
 }

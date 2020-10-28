@@ -15,33 +15,29 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DAEMON_DAEMON_CLIENT_H_
-#define DAEMON_DAEMON_CLIENT_H_
+#ifndef WINDOW_SYSTEM_CAIRO_SURFACE_H_
+#define WINDOW_SYSTEM_CAIRO_SURFACE_H_
 
-#include <memory>
+#include <cairo.h>
 
-#include "daemon/gesture-event.h"
-#include "gesture-controller/gesture-controller-delegate.h"
-#include "gesture/gesture.h"
+#include <iostream>
 
 /**
- * Class to connect to the daemon server and send the gestures received from the
- * server to the GestureControllerDelegate.
+ * Window system independent cairo surface abstraction.
  */
-class DaemonClient {
+class CairoSurface {
  public:
-  explicit DaemonClient(GestureControllerDelegate *gestureController)
-      : gestureController(gestureController) {}
+  virtual ~CairoSurface() = default;
 
-  void run();
+  /**
+   * @returns The cairo context.
+   */
+  virtual cairo_t *getContext() = 0;
 
- private:
-  GestureControllerDelegate *gestureController;
-
-  void sendToGestureController(const struct GestureEvent &event);
-
-  std::unique_ptr<Gesture> makeGestureFromEvent(
-      const struct GestureEvent &event) const;
+  /**
+   * Flush and display on screen.
+   */
+  virtual void flush() = 0;
 };
 
-#endif  // DAEMON_DAEMON_CLIENT_H_
+#endif  // WINDOW_SYSTEM_CAIRO_SURFACE_H_

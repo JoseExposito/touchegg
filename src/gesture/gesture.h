@@ -27,19 +27,12 @@
  */
 class Gesture {
  public:
-  Gesture() = default;
-
   Gesture(GestureType type, GestureDirection direction, int percentage,
-          int fingers, double deltaX, double deltaY, double angleDelta,
-          double radiusDelta, uint64_t elapsedTime)
+          int fingers, uint64_t elapsedTime)
       : gestureType(type),
         gestureDirection(direction),
         gesturePercentage(percentage),
         gestureFingers(fingers),
-        gestureDeltaX(deltaX),
-        gestureDeltaY(deltaY),
-        gestureAngleDelta(angleDelta),
-        gestureRadiusDelta(radiusDelta),
         gestureElapsedTime(elapsedTime) {}
 
   virtual ~Gesture() = default;
@@ -68,31 +61,6 @@ class Gesture {
   virtual int fingers() const { return this->gestureFingers; }
 
   /**
-   * @returns Gesture change in the X since its last update.
-   */
-  virtual double deltaX() const { return this->gestureDeltaX; }
-
-  /**
-   * @returns Gesture change in the Y since its last update.
-   */
-  virtual double deltaY() const { return this->gestureDeltaY; }
-
-  /**
-   * @returns If the gesture type is GestureType::PINCH, returns the angle
-   * covered by a gesture since its last update, in degrees, clockwise.
-   * For example: If the fingers are on the 12 and 6 location of a clock face
-   * plate and they move to the 1 resp. 7 location in a single event then the
-   * angle delta is 30 degrees.
-   */
-  virtual double angleDelta() const { return this->gestureAngleDelta; }
-
-  /**
-   * @returns If the gesture type is GestureType::PINCH, return the change in
-   * the radius of the gesture since last update. Otherwise return 0.
-   */
-  virtual double radiusDelta() const { return this->gestureRadiusDelta; }
-
-  /**
    * Elapsed time since the beginning of the gesture.
    * @returns The elapsed time in milliseconds.
    */
@@ -103,10 +71,6 @@ class Gesture {
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
   int gesturePercentage = -1;
   int gestureFingers = -1;
-  double gestureDeltaX = -1;
-  double gestureDeltaY = -1;
-  double gestureAngleDelta = -1;
-  double gestureRadiusDelta = -1;
   uint64_t gestureElapsedTime = -1;
 };
 

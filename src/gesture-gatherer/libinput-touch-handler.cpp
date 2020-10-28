@@ -20,7 +20,6 @@
 #include <libinput.h>
 
 #include <algorithm>
-#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -39,18 +38,15 @@ void LibinputTouchHandler::handleTouchDown(struct libinput_event *event) {
   this->state.startY[slot] = y;
   this->state.currentX[slot] = x;
   this->state.currentY[slot] = y;
-
-  std::cout << "DOWN " << this->state.currentFingers << std::endl;
 }
 
 void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
   this->state.currentFingers--;
-  std::cout << "UP " << this->state.currentFingers << std::endl;
 
   struct libinput_event_touch *tEvent = libinput_event_get_touch_event(event);
   int32_t slot = libinput_event_touch_get_slot(tEvent);
 
-  if (this->state.started && this->state.currentFingers == 0) {
+  if (this->state.started && this->state.currentFingers == 1) {
     LibinputDeviceInfo info = this->getDeviceInfo(event);
     double deltaX = this->state.currentX.at(slot) - this->state.startX.at(slot);
     double deltaY = this->state.currentY.at(slot) - this->state.startY.at(slot);
@@ -127,8 +123,6 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
         this->state.type, this->state.direction, percentage,
         this->state.startFingers, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
-
-    std::cout << "MOTION " << percentage << "%" << std::endl;
   }
 }
 
@@ -146,13 +140,13 @@ GestureType LibinputTouchHandler::getGestureType() const {
   }
 
   // In a SWIPE gestures, every finger has a positive or negative deltaX or Y
-  bool isSwipe = std::all_of(deltaX.begin(), deltaX.end(),
+  bool isSwipe = std::all_of(deltaX.cbegin(), deltaX.cend(),
                              [](double i) { return i >= 0; }) ||
-                 std::all_of(deltaX.begin(), deltaX.end(),
+                 std::all_of(deltaX.cbegin(), deltaX.cend(),
                              [](double i) { return i <= 0; }) ||
-                 std::all_of(deltaY.begin(), deltaY.end(),
+                 std::all_of(deltaY.cbegin(), deltaY.cend(),
                              [](double i) { return i >= 0; }) ||
-                 std::all_of(deltaY.begin(), deltaY.end(),
+                 std::all_of(deltaY.cbegin(), deltaY.cend(),
                              [](double i) { return i <= 0; });
 
   return isSwipe ? GestureType::SWIPE : GestureType::PINCH;
@@ -176,14 +170,14 @@ std::pair<double, double> LibinputTouchHandler::getStartCurrentPinchBBox()
     const {
   std::vector<double> start(this->state.startX.size());
   std::transform(this->state.startX.begin(), this->state.startX.end(),
-                 start.begin(), [](const auto &pair) { return pair.first; });
+                 start.begin(), [](const auto &pair) { return pair.second; });
   auto startPair = std::minmax_element(start.begin(), start.end());
   double startMin = *startPair.first;
   double startMax = *startPair.second;
 
   std::vector<double> current(this->state.currentX.size());
   std::transform(this->state.currentX.begin(), this->state.currentX.end(),
-                 current.begin(), [](const auto &pair) { return pair.first; });
+                 current.begin(), [](const auto &pair) { return pair.second; });
   auto currentPair =
       std::minmax_element(std::begin(current), std::end(current));
   double currentMin = *currentPair.first;

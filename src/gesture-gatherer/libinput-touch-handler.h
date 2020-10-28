@@ -46,11 +46,13 @@ struct LibinputTouchState {
     direction = GestureDirection::UNKNOWN;
     startTimestamp = 0;
     startFingers = 0;
-    startX.clear();
-    startY.clear();
-    currentFingers = 0;
-    currentX.clear();
-    currentY.clear();
+
+    // Do not reset this data as gestures finish when 1 finger is on the screen
+    // startX.clear();
+    // startY.clear();
+    // currentFingers = 0;
+    // currentX.clear();
+    // currentY.clear();
   }
 };
 

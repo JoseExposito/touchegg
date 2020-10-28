@@ -94,13 +94,15 @@ int LininputHandler::calculatePinchAnimationPercentage(
   // With direction IN, 0% is returned when the delta is 1.0 and 100% when the
   // delta is 0.0
   if (direction == GestureDirection::IN) {
-    return std::min(100, static_cast<int>(std::abs(delta - 1.0) * 100));
+    double nDelta = std::min(1.0, delta);
+    return std::min(100, static_cast<int>(std::abs(nDelta - 1.0) * 100));
   }
 
   // With direction OUT, 0% is returned when the delta is 1.0 and 100% when the
   // delta is 2.0
   if (direction == GestureDirection::OUT) {
-    return std::min(100, static_cast<int>(std::max(0.0, delta - 1.0) * 100));
+    double nDelta = std::min(2.0, delta);
+    return std::min(100, static_cast<int>(std::max(0.0, nDelta - 1.0) * 100));
   }
 
   return 0;

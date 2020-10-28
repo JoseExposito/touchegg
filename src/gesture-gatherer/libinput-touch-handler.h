@@ -19,6 +19,7 @@
 #define GESTURE_GATHERER_LIBINPUT_TOUCH_HANDLER_H_
 
 #include <unordered_map>
+#include <utility>
 
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
@@ -29,24 +30,27 @@
  */
 struct LibinputTouchState {
   bool started = false;
-  uint64_t startTimestamp = 0;
-  std::unordered_map<int32_t, double> initialX;
-  std::unordered_map<int32_t, double> initialY;
-  GestureDirection direction = GestureDirection::UNKNOWN;
   GestureType type = GestureType::NOT_SUPPORTED;
-  int fingers = 0;
-  // TODO(jose) On pinch:
-  // angleDelta
-  // radiusDelta
+  GestureDirection direction = GestureDirection::UNKNOWN;
+  uint64_t startTimestamp = 0;
+  int startFingers = 0;
+  std::unordered_map<int32_t, double> startX;
+  std::unordered_map<int32_t, double> startY;
+  int currentFingers = 0;
+  std::unordered_map<int32_t, double> currentX;
+  std::unordered_map<int32_t, double> currentY;
 
   void reset() {
     started = false;
-    startTimestamp = 0;
-    initialX.clear();
-    initialY.clear();
-    direction = GestureDirection::UNKNOWN;
     type = GestureType::NOT_SUPPORTED;
-    fingers = 0;
+    direction = GestureDirection::UNKNOWN;
+    startTimestamp = 0;
+    startFingers = 0;
+    startX.clear();
+    startY.clear();
+    currentFingers = 0;
+    currentX.clear();
+    currentY.clear();
   }
 };
 
@@ -61,6 +65,31 @@ class LibinputTouchHandler : public LininputHandler {
 
  private:
   LibinputTouchState state;
+
+  /**
+   * @returns When the gestures starts, uses "this->state" to differentiate
+   * between SWIPE and PINCH gestures.
+   */
+  GestureType getGestureType() const;
+
+  /**
+   * @returns GestureDirection::IN or GestureDirection::OUT.
+   */
+  GestureDirection calculatePinchDirection() const;
+
+  /**
+   * @returns Delta (similar to libinput_event_gesture_get_scale but for touch
+   * screens) of a pinch gesture.
+   */
+  double getPinchDelta() const;
+
+  /**
+   * Pinch deltas are calculated "drawing" a bounding box containing every
+   * finger involved in the gesture.
+   * This method returns that bounding box width (on the X axis) at the
+   * beginning of the gesture and in the moment it is called.
+   */
+  std::pair<double, double> getStartCurrentPinchBBox() const;
 };
 
 #endif  // GESTURE_GATHERER_LIBINPUT_TOUCH_HANDLER_H_

@@ -17,6 +17,8 @@ Many more actions and gestures are available and everything is easily configurab
   <a href="https://youtu.be/PLsH-XPFuN4">:movie_camera: Ubuntu demo</a>
   <br/>
   <a href="https://youtu.be/nuMT-MwyTXU">:movie_camera: elementary OS demo</a>
+  <br/>
+  <a href="https://www.youtube.com/watch?v=7gKONPKNZlc">:movie_camera: Touchscreen demo</a>
 </p>
 
 # Table of contents

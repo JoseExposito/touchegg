@@ -83,12 +83,6 @@ class XmlConfigLoader {
    * Check that the required configuration files are in place.
    */
   static void copyConfingIfNotPresent();
-
-  /**
-   * Return the path of the user's home directory.
-   * @return User's home directory.
-   */
-  static std::filesystem::path getHomePath();
 };
 
 #endif  // CONFIG_XML_CONFIG_LOADER_H_

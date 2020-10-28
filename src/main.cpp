@@ -24,6 +24,7 @@
 #include "daemon/daemon-server.h"
 #include "gesture-controller/gesture-controller.h"
 #include "gesture-gatherer/libinput-gesture-gatherer.h"
+#include "utils/client-lock.h"
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
 
@@ -107,6 +108,9 @@ int main(int argc, char **argv) {
   }
 
   if (clientMode) {
+    // Avoid running multiple client instances in parallel
+    ClientLock lock;
+
     // Load the configuration using the XML loader
     std::cout << "Parsing you configuration file..." << std::endl;
     Config config;

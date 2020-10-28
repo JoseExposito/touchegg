@@ -20,72 +20,57 @@
 #include <algorithm>
 #include <utility>
 
-void LininputPinchHandler::handlePinchBegin(
-    std::unique_ptr<LibinputGesture> /*gesture*/) {
+void LininputPinchHandler::handlePinchBegin(struct libinput_event * /*event*/) {
   this->state.reset();
 }
 
-void LininputPinchHandler::handlePinchUpdate(
-    std::unique_ptr<LibinputGesture> gesture) {
+void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
+  struct libinput_event_gesture *gestureEvent =
+      libinput_event_get_gesture_event(event);
+  this->state.delta = libinput_event_gesture_get_scale(gestureEvent);
+
   if (!this->state.started) {
     this->state.started = true;
     this->state.startTimestamp = this->getTimestamp();
-    this->state.delta = gesture->radiusDelta();
     this->state.direction =
         (this->state.delta > 1) ? GestureDirection::OUT : GestureDirection::IN;
     this->state.percentage = this->calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
+    this->state.fingers = libinput_event_gesture_get_finger_count(gestureEvent);
+    uint64_t elapsedTime = 0;
 
-    gesture->setPercentage(this->state.percentage);
-    gesture->setDirection(this->state.direction);
-    gesture->setElapsedTime(0);
+    auto gesture = std::make_unique<Gesture>(
+        GestureType::PINCH, this->state.direction, this->state.percentage,
+        this->state.fingers, elapsedTime);
     this->gestureController->onGestureBegin(std::move(gesture));
   } else {
-    this->state.delta = gesture->radiusDelta();
     this->state.percentage = this->calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
+    uint64_t elapsedTime =
+        this->calculateElapsedTime(this->state.startTimestamp);
 
-    gesture->setPercentage(this->state.percentage);
-    gesture->setDirection(this->state.direction);
-    gesture->setElapsedTime(
-        this->calculateElapsedTime(this->state.startTimestamp));
+    auto gesture = std::make_unique<Gesture>(
+        GestureType::PINCH, this->state.direction, this->state.percentage,
+        this->state.fingers, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
 
-void LininputPinchHandler::handlePinchEnd(
-    std::unique_ptr<LibinputGesture> gesture) {
+void LininputPinchHandler::handlePinchEnd(struct libinput_event *event) {
   if (this->state.started) {
-    this->state.delta = gesture->radiusDelta();
+    struct libinput_event_gesture *gestureEvent =
+        libinput_event_get_gesture_event(event);
+    this->state.delta = libinput_event_gesture_get_scale(gestureEvent);
     this->state.percentage = this->calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
+    uint64_t elapsedTime =
+        this->calculateElapsedTime(this->state.startTimestamp);
 
-    gesture->setPercentage(this->state.percentage);
-    gesture->setDirection(this->state.direction);
-    gesture->setElapsedTime(
-        this->calculateElapsedTime(this->state.startTimestamp));
+    auto gesture = std::make_unique<Gesture>(
+        GestureType::PINCH, this->state.direction, this->state.percentage,
+        this->state.fingers, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 
   this->state.reset();
-}
-
-int LininputPinchHandler::calculatePinchAnimationPercentage(
-    GestureDirection direction, double delta) const {
-  // Delta starts at 1.0:
-  // https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#pinch-gestures
-
-  // With direction IN, 0% is returned when the delta is 1.0 and 100% when the
-  // delta is 0.0
-  if (direction == GestureDirection::IN) {
-    return std::min(100, static_cast<int>(std::abs(delta - 1.0) * 100));
-  }
-
-  // With direction OUT, 0% is returned when the delta is 1.0 and 100% when the
-  // delta is 2.0
-  if (direction == GestureDirection::OUT) {
-    return std::min(100, static_cast<int>(std::max(0.0, delta - 1.0) * 100));
-  }
-
-  return 0;
 }

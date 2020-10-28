@@ -23,7 +23,6 @@
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
-#include "gesture/libinput-gesture.h"
 
 /**
  * Data structure to save swipe state in a single place.
@@ -35,6 +34,7 @@ struct LibinputSwipeState {
   double deltaY = 0;
   GestureDirection direction = GestureDirection::UNKNOWN;
   int percentage = 0;
+  int fingers = 0;
 
   void reset() {
     started = false;
@@ -43,6 +43,7 @@ struct LibinputSwipeState {
     deltaY = 0;
     direction = GestureDirection::UNKNOWN;
     percentage = 0;
+    fingers = 0;
   }
 };
 
@@ -60,7 +61,7 @@ class LininputSwipeHandler : public LininputHandler {
    * just reset the state.
    * @param gesture Libinput specialized gesture.
    */
-  void handleSwipeBegin(std::unique_ptr<LibinputGesture> gesture);
+  void handleSwipeBegin(struct libinput_event *event);
 
   /**
    * On every update we increase or decrease "this->state.deltaX" and
@@ -70,7 +71,7 @@ class LininputSwipeHandler : public LininputHandler {
    * gesture ends.
    * @param gesture Libinput specialized gesture.
    */
-  void handleSwipeUpdate(std::unique_ptr<LibinputGesture> gesture);
+  void handleSwipeUpdate(struct libinput_event *event);
 
   /**
    * Send a end event to the GestureControllerDelegate if a gesture was
@@ -78,22 +79,10 @@ class LininputSwipeHandler : public LininputHandler {
    * If the gesture didn't pass the threshold we should not notify it.
    * @param gesture Libinput specialized gesture.
    */
-  void handleSwipeEnd(std::unique_ptr<LibinputGesture> gesture);
+  void handleSwipeEnd(struct libinput_event *event);
 
  private:
   LibinputSwipeState state;
-
-  /**
-   * @returns The direction of a swipe gesture.
-   */
-  GestureDirection calculateSwipeDirection(double deltaX, double deltaY) const;
-
-  /**
-   * @returns The percentage (between 0 and 100) of the gesture animation.
-   */
-  int calculateSwipeAnimationPercentage(const LibinputGesture &gesture,
-                                        GestureDirection direction,
-                                        double deltaX, double deltaY) const;
 };
 
 #endif  // GESTURE_GATHERER_LIBINPUT_SWIPE_HANDLER_H_

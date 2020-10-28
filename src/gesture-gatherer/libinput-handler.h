@@ -18,9 +18,10 @@
 #ifndef GESTURE_GATHERER_LIBINPUT_HANDLER_H_
 #define GESTURE_GATHERER_LIBINPUT_HANDLER_H_
 
+#include <libinput.h>
+
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture-gatherer/libinput-device-info.h"
-#include "gesture/libinput-gesture.h"
 
 /**
  * Base class for every libinput handler.
@@ -36,8 +37,7 @@ class LininputHandler {
   /**
    * @return The LibinputDeviceInfo for the device that generated the gesture.
    */
-  LibinputDeviceInfo getDeviceInfo(const LibinputGesture &gesture) const;
-  LibinputDeviceInfo getDeviceInfo(struct libinput_device *device) const;
+  LibinputDeviceInfo getDeviceInfo(struct libinput_event *event) const;
 
   /**
    * @returns The current epoch time in milliseconds.
@@ -60,5 +60,11 @@ class LininputHandler {
   int calculateSwipeAnimationPercentage(const LibinputDeviceInfo &info,
                                         GestureDirection direction,
                                         double deltaX, double deltaY) const;
+
+  /**
+   * @returns The percentage (between 0 and 100) of the gesture animation.
+   */
+  int calculatePinchAnimationPercentage(GestureDirection direction,
+                                        double delta) const;
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_HANDLER_H_

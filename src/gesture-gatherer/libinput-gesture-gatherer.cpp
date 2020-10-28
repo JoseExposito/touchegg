@@ -33,8 +33,6 @@
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture/gesture-direction.h"
-#include "gesture/gesture.h"
-#include "gesture/libinput-gesture.h"
 
 LibinputGestureGatherer::LibinputGestureGatherer(
     GestureControllerDelegate *gestureController, double threshold,
@@ -105,29 +103,23 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
       break;
 
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
-      this->swipeHandler.handleSwipeBegin(
-          std::make_unique<LibinputGesture>(event));
+      this->swipeHandler.handleSwipeBegin(event);
       break;
     case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
-      this->swipeHandler.handleSwipeUpdate(
-          std::make_unique<LibinputGesture>(event));
+      this->swipeHandler.handleSwipeUpdate(event);
       break;
     case LIBINPUT_EVENT_GESTURE_SWIPE_END:
-      this->swipeHandler.handleSwipeEnd(
-          std::make_unique<LibinputGesture>(event));
+      this->swipeHandler.handleSwipeEnd(event);
       break;
 
     case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
-      this->pinchHandler.handlePinchBegin(
-          std::make_unique<LibinputGesture>(event));
+      this->pinchHandler.handlePinchBegin(event);
       break;
     case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
-      this->pinchHandler.handlePinchUpdate(
-          std::make_unique<LibinputGesture>(event));
+      this->pinchHandler.handlePinchUpdate(event);
       break;
     case LIBINPUT_EVENT_GESTURE_PINCH_END:
-      this->pinchHandler.handlePinchEnd(
-          std::make_unique<LibinputGesture>(event));
+      this->pinchHandler.handlePinchEnd(event);
       break;
 
     case LIBINPUT_EVENT_TOUCH_DOWN:
@@ -141,9 +133,10 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
       break;
 
     default:
-      libinput_event_destroy(event);
       break;
   }
+
+  libinput_event_destroy(event);
 }
 
 int LibinputGestureGatherer::openRestricted(const char *path, int flags,

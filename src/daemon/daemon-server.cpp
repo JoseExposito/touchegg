@@ -92,10 +92,6 @@ void DaemonServer::send(GestureEventType eventType,
   event.direction = gesture->direction();
   event.percentage = gesture->percentage();
   event.fingers = gesture->fingers();
-  event.deltaX = gesture->deltaX();
-  event.deltaY = gesture->deltaY();
-  event.angleDelta = gesture->angleDelta();
-  event.radiusDelta = gesture->radiusDelta();
   event.elapsedTime = gesture->elapsedTime();
 
   // Send the gesture event to every client

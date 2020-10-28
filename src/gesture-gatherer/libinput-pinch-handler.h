@@ -23,7 +23,6 @@
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
-#include "gesture/libinput-gesture.h"
 
 /**
  * Data structure to save pinch state in a single place.
@@ -34,6 +33,7 @@ struct LibinputPinchState {
   double delta = 1;
   GestureDirection direction = GestureDirection::UNKNOWN;
   int percentage = 0;
+  int fingers = 0;
 
   void reset() {
     started = false;
@@ -41,6 +41,7 @@ struct LibinputPinchState {
     delta = 1;
     direction = GestureDirection::UNKNOWN;
     percentage = 0;
+    fingers = 0;
   }
 };
 
@@ -58,7 +59,7 @@ class LininputPinchHandler : public LininputHandler {
    * just reset this->swipeState.
    * @param gesture Libinput specialized gesture.
    */
-  void handlePinchBegin(std::unique_ptr<LibinputGesture> gesture);
+  void handlePinchBegin(struct libinput_event *event);
 
   /**
    * Unlike swipe, a threshold is not required for this gesture.
@@ -66,22 +67,16 @@ class LininputPinchHandler : public LininputHandler {
    * Consecutive updates send a update event to the GestureControllerDelegate.
    * @param gesture Libinput specialized gesture.
    */
-  void handlePinchUpdate(std::unique_ptr<LibinputGesture> gesture);
+  void handlePinchUpdate(struct libinput_event *event);
 
   /**
    * Send a end event to the GestureControllerDelegate if a gesture was
    * detected.
    * @param gesture Libinput specialized gesture.
    */
-  void handlePinchEnd(std::unique_ptr<LibinputGesture> gesture);
+  void handlePinchEnd(struct libinput_event *event);
 
  private:
   LibinputPinchState state;
-
-  /**
-   * @returns The percentage (between 0 and 100) of the gesture animation.
-   */
-  int calculatePinchAnimationPercentage(GestureDirection direction,
-                                        double delta) const;
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_PINCH_HANDLER_H_

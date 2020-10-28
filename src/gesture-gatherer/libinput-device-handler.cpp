@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
  *
@@ -73,8 +72,6 @@ void LininputDeviceHandler::handleDeviceAdded(
 
     libinput_device_set_user_data(device, static_cast<void *>(info));
   }
-
-  libinput_event_destroy(event);
 }
 
 void LininputDeviceHandler::calculateTouchpadThreshold(

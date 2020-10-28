@@ -47,10 +47,6 @@ struct GestureEvent {
   GestureDirection direction = GestureDirection::UNKNOWN;
   int percentage = 0;
   int fingers = 0;
-  double deltaX = 0;
-  double deltaY = 0;
-  double angleDelta = 0;
-  double radiusDelta = 0;
   uint64_t elapsedTime = 0;
 };
 

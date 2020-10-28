@@ -23,7 +23,6 @@
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
-#include "gesture/libinput-gesture.h"
 
 /**
  * Class to handle libinput devices:

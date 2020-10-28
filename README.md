@@ -57,8 +57,8 @@ it from the terminal:
 $ cd ~/Downloads # Or to the path where the deb package is placed at
 $ sudo dpkg -i touchegg_*.deb # Install the package
 $ sudo apt -f install # Install missing dependencies
-$ touchegg # Run Touchégg
 ```
+Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
 ## Red Hat, Fedora, CentOS and derivatives
 
@@ -70,10 +70,13 @@ $ cd ~/Downloads # Or to the path where the rpm package is placed at
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 ```
 
+Run Touchégg manually by running the command `touchegg` or reboot to get started.
+
 ## Arch Linux, Manjaro and derivatives
 
 Install the `touchegg` package from [AUR](https://aur.archlinux.org/packages/touchegg/).
 
+Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
 # Configuration
 

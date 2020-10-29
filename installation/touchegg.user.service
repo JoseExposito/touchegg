@@ -20,7 +20,7 @@
 # $ systemctl --user daemon-reload && systemctl --user restart touchegg
 
 [Unit]
-Description=Touchégg
+Description=Touchégg Client
 
 [Service]
 Type=simple
@@ -29,4 +29,4 @@ Restart=on-failure
 RestartSec=5s
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target

@@ -70,6 +70,7 @@ set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION usr/share/touchegg)
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION lib/systemd/system)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.user.service DESTINATION usr/lib/systemd/user/)
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION etc/xdg/autostart)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION usr/bin)
 
@@ -94,5 +95,9 @@ set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_SOURCE_DIR}/installation/rpm/pos
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd/system")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib/systemd")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib/systemd/user")
 
 include(CPack)

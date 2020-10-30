@@ -38,7 +38,7 @@ In addition, you can generate a Debian package and install it:
 
 ```bash
 $ cpack -G DEB
-$ sudo apt -i ./touchegg_*.deb # Install the package and dependencies from apt
+$ sudo apt install ./touchegg_*.deb # Install the package and dependencies from apt
 $ touchegg # Run Touchégg
 ```
 

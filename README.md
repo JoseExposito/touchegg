@@ -57,8 +57,7 @@ it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
-$ sudo dpkg -i touchegg_*.deb # Install the package
-$ sudo apt -f install # Install missing dependencies
+$ sudo apt install ./touchegg_*.deb # Install the package and dependencies from apt
 ```
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 

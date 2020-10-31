@@ -6,7 +6,7 @@ Before you start coding, you will need to install some dependencies:
 # Ubuntu, Debian and derivatives:
 $ sudo apt-get install git build-essential gdb cmake \
   libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev
-  
+
 # Red Hat, Fedora, CentOS and derivatives:
 $ sudo yum groupinstall "Development Tools"
 $ sudo yum install git gcc g++ gdb cmake \
@@ -38,7 +38,7 @@ In addition, you can generate a Debian package and install it:
 
 ```bash
 $ cpack -G DEB
-$ sudo apt install ./touchegg_*.deb # Install the package and dependencies from apt
+$ sudo apt install ./touchegg_*.deb # Install the package
 $ touchegg # Run Touchégg
 ```
 

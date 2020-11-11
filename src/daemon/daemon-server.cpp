@@ -100,9 +100,6 @@ void DaemonServer::send(GestureEventType eventType,
   std::vector<int> disconnectedClients{};
 
   for (auto client : this->clients) {
-    std::cout << "sizeof(event) " << sizeof(event) << std::endl;
-    std::cout << "event.eventSize " << event.eventSize << std::endl;
-
     int written = write(client, &event, event.eventSize);
 
     if (written < 0) {

@@ -29,6 +29,7 @@ $ make -j$(nproc)
 After building the source code, you can install Touchégg by running this commands:
 
 ```bash
+$ cd build
 $ sudo make install
 $ sudo systemctl daemon-reload && sudo systemctl restart touchegg # Start the daemon
 $ touchegg # Run Touchégg
@@ -37,14 +38,15 @@ $ touchegg # Run Touchégg
 In addition, you can generate a Debian package and install it:
 
 ```bash
-$ cpack -G DEB
-$ sudo apt install ./touchegg_*.deb # Install the package
+$ dpkg-buildpackage -rfakeroot -us -uc -tc
+$ sudo apt install ../touchegg_*.deb # Install the package
 $ touchegg # Run Touchégg
 ```
 
 Or a rpm package:
 
 ```bash
+$ cd build
 $ cpack -G RPM
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 $ touchegg # Run Touchégg

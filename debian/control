@@ -1,0 +1,38 @@
+Source: touchegg
+Section: misc
+Priority: optional
+Maintainer: José Expósito <jose.exposito89@gmail.com>
+Build-Depends: cmake,
+               debhelper (>= 10.5.1),
+               dh-systemd (>= 1.5),
+               libc6-dev (>= 2.14),
+               libcairo2-dev (>= 1.2.4),
+               libinput-dev (>= 0.21.0),
+               libpugixml-dev (>= 1.4),
+               libudev-dev (>= 183),
+               libx11-dev,
+               libxrandr-dev (>= 2:1.2.0),
+               libxtst-dev
+Standards-Version: 4.1.1
+Homepage: https://github.com/JoseExposito/touchegg
+Vcs-Browser: https://github.com/JoseExposito/touchegg
+Vcs-Git: https://github.com/JoseExposito/touchegg.git
+
+Package: touchegg
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Multi-touch gesture recognizer
+ Touchégg is an app that runs in the background and transform the gestures you make in your touchpad
+ into visible actions in your desktop.
+ For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to
+ switch to the next desktop.
+
+Package: touchegg-dbg
+Section: debug
+Architecture: any
+Priority: extra
+Depends: touchegg (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for Touchégg
+ This package contains debugging files used to investigate problems with
+ Touchégg. Install this package if you are experiencing crashes of the
+ Touchégg application and wish to report a problem to the developers.

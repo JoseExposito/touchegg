@@ -21,9 +21,9 @@
 #include <string>
 
 enum class GestureType {
-  SWIPE,
-  PINCH,
-  NOT_SUPPORTED,
+  NOT_SUPPORTED = 0,
+  SWIPE = 1,
+  PINCH = 2,
   // Adding a new GestureType? Don't forget to add it in gestureTypeToStr and
   // gestureTypeFromStr as well
 };

@@ -85,8 +85,16 @@ After [installing](#installation) Touchégg you'll notice that you can start usi
 gestures. However, you are not forced to use the gestures and actions that come out of the box, you
 can configure the gestures you'd like to use and the actions they'll trigger.
 
-Your configuration file is placed in `~/.config/touchegg/touchegg.conf`, open it with your favorite
-text editor. It is a XML document with 3 main sections:
+Start by copying the default configuration from `/usr/share/touchegg/touchegg.conf` to
+`~/.config/touchegg/touchegg.conf`. You can do it using your file manager or by running this command
+in your terminal:
+
+```bash
+$ mkdir -p ~/.config/touchegg && cp -n /usr/share/touchegg/touchegg.conf ~/.config/touchegg/touchegg.conf
+```
+
+Now open `~/.config/touchegg/touchegg.conf` with your favorite text editor.
+It is a XML document with 3 main sections:
 
   * [Global settings](#global-settings)
   * Global gestures: `<application name="All">...</application>`

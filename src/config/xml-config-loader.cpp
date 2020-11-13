@@ -45,12 +45,21 @@ constexpr std::size_t WATCH_EVENT_SIZE = sizeof(struct inotify_event);
 constexpr std::size_t WATCH_BUFFER_SIZE = (100 * (WATCH_EVENT_SIZE + 16));
 }  // namespace
 
-XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {
-  XmlConfigLoader::copyConfingIfNotPresent();
-}
+XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {}
 
 void XmlConfigLoader::load() {
-  const std::filesystem::path configPath = Paths::getUserConfigFilePath();
+  const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
+  const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
+
+  if (!std::filesystem::exists(usrConfigFile)) {
+    throw std::runtime_error{
+        "File /usr/share/touchegg/touchegg.conf not found.\n"
+        "Reinstall Touchégg to solve this issue"};
+  }
+
+  const std::filesystem::path configPath =
+      std::filesystem::exists(homeConfigFile) ? homeConfigFile : usrConfigFile;
+  std::cout << "Using configuration file " << configPath << std::endl;
   this->parseXml(configPath);
   this->watchFile(configPath);
 }
@@ -155,25 +164,4 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     }
   }};
   watchThread.detach();
-}
-
-void XmlConfigLoader::copyConfingIfNotPresent() {
-  const std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
-  const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
-
-  // If the ~/.config/touchegg configuration file exists we can continue,
-  // otherwise we need to copy it from /usr/share/touchegg/touchegg.conf
-  if (std::filesystem::exists(homeConfigFile)) {
-    return;
-  }
-
-  const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
-  if (!std::filesystem::exists(usrConfigFile)) {
-    throw std::runtime_error{
-        "File /usr/share/touchegg/touchegg.conf not found.\n"
-        "Reinstall Touchégg to solve this issue"};
-  }
-
-  std::filesystem::create_directories(homeConfigDir);
-  std::filesystem::copy_file(usrConfigFile, homeConfigFile);
 }

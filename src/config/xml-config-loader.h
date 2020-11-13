@@ -31,7 +31,8 @@ class xml_node;
 
 /**
  * Default config loader. It reads the configuration from
- * "~/.config/touchegg/touchegg.conf" and stores it in `Config`.
+ * "~/.config/touchegg/touchegg.conf" if it exists. Otherwise it fallbacks to
+ * "/usr/share/touchegg/touchegg.conf".
  * @see Config
  */
 class XmlConfigLoader {
@@ -78,11 +79,6 @@ class XmlConfigLoader {
    * @param configPath Path to the configuration file.
    */
   void watchFile(const std::filesystem::path &configPath);
-
-  /**
-   * Check that the required configuration files are in place.
-   */
-  static void copyConfingIfNotPresent();
 };
 
 #endif  // CONFIG_XML_CONFIG_LOADER_H_

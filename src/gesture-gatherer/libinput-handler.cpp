@@ -37,6 +37,22 @@ LibinputDeviceInfo LininputHandler::getDeviceInfo(
   return info;
 }
 
+bool LininputHandler::isNaturalScrollEnabled(
+    struct libinput_event *event) const {
+  struct libinput_device *device = libinput_event_get_device(event);
+
+  // If the device does not support natural scrolling, fallback to true. For
+  // example, a touchscreen.
+  int supportsNaturalScroll =
+      libinput_device_config_scroll_has_natural_scroll(device);
+  if (supportsNaturalScroll == 0) {
+    return true;
+  }
+
+  int mode = libinput_device_config_scroll_get_natural_scroll_enabled(device);
+  return (mode != 0);
+}
+
 uint64_t LininputHandler::getTimestamp() const {
   auto now = std::chrono::system_clock::now().time_since_epoch();
   uint64_t millis =

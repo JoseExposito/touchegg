@@ -28,6 +28,7 @@ enum class ActionDirection {
   RIGHT,
   PREVIOUS,
   NEXT,
+  AUTO,
   // Adding a new ActionDirection? Don't forget to add it in
   // actionDirectionFromStr
 };
@@ -50,6 +51,9 @@ inline ActionDirection actionDirectionFromStr(const std::string &str) {
   }
   if (str == "next") {
     return ActionDirection::NEXT;
+  }
+  if (str == "auto") {
+    return ActionDirection::AUTO;
   }
   return ActionDirection::UNKNOWN;
 }

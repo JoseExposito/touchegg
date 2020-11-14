@@ -278,9 +278,9 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
-| direction | `previous`/`next`/`up`/`down`/`left`/`right` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come in handy. |
+| direction | `previous`/`next`/`up`/`down`/`left`/`right`/`auto` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come in handy. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the direction. |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
-| animationPosition | `up`/`down`/`left`/`right` | Edge of the screen where the animation will be displayed. |
+| animationPosition | `up`/`down`/`left`/`right`/`auto` | Edge of the screen where the animation will be displayed. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the animation position. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
 

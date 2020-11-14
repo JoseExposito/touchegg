@@ -23,6 +23,7 @@
 #include "daemon/gesture-event.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture/gesture.h"
+#include "window-system/window-system.h"
 
 /**
  * Class to connect to the daemon server and send the gestures received from the
@@ -30,13 +31,15 @@
  */
 class DaemonClient {
  public:
-  explicit DaemonClient(GestureControllerDelegate *gestureController)
-      : gestureController(gestureController) {}
+  explicit DaemonClient(GestureControllerDelegate *gestureController,
+                        const WindowSystem &windowSystem)
+      : gestureController(gestureController), windowSystem(windowSystem) {}
 
   void run();
 
  private:
   GestureControllerDelegate *gestureController;
+  const WindowSystem &windowSystem;
 
   void sendToGestureController(const struct GestureEvent &event);
 

@@ -15,27 +15,15 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_CHANGE_DESKTOP_H_
-#define ACTIONS_CHANGE_DESKTOP_H_
+#ifndef GESTURE_DEVICE_TYPE_H_
+#define GESTURE_DEVICE_TYPE_H_
 
-#include "actions/action-direction.h"
-#include "actions/animated-action.h"
+#include <string>
 
-/**
- * Action to change to the next or previous desktop.
- */
-class ChangeDesktop : public AnimatedAction {
- public:
-  using AnimatedAction::AnimatedAction;
-  bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void executeAction(const Gesture &gesture) override;
-
- private:
-  ActionDirection direction = ActionDirection::AUTO;
-
-  ActionDirection getAnimationAutoDirection(const Gesture &gesture) const;
-  ActionDirection getActionAutoDirection(const Gesture &gesture) const;
+enum class DeviceType {
+  NOT_SUPPORTED = 0,
+  TOUCHPAD = 1,
+  TOUCHSCREEN = 2,
 };
 
-#endif  // ACTIONS_CHANGE_DESKTOP_H_
+#endif  // GESTURE_DEVICE_TYPE_H_

@@ -21,6 +21,7 @@
 #include <utility>
 
 #include "gesture-gatherer/libinput-device-info.h"
+#include "gesture/device-type.h"
 #include "gesture/gesture.h"
 
 void LininputSwipeHandler::handleSwipeBegin(struct libinput_event * /*event*/) {
@@ -46,11 +47,13 @@ void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
           info, this->state.direction, this->state.deltaX, this->state.deltaY);
       this->state.fingers =
           libinput_event_gesture_get_finger_count(gestureEvent);
+      this->state.naturalScroll = this->isNaturalScrollEnabled(event);
       uint64_t elapsedTime = 0;
 
       auto gesture = std::make_unique<Gesture>(
           GestureType::SWIPE, this->state.direction, this->state.percentage,
-          this->state.fingers, elapsedTime);
+          this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
+          elapsedTime);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -61,7 +64,8 @@ void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::SWIPE, this->state.direction, this->state.percentage,
-        this->state.fingers, elapsedTime);
+        this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
+        elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -76,7 +80,8 @@ void LininputSwipeHandler::handleSwipeEnd(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::SWIPE, this->state.direction, this->state.percentage,
-        this->state.fingers, elapsedTime);
+        this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
+        elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

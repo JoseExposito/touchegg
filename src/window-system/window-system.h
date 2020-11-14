@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "actions/action-direction.h"
+#include "gesture/device-type.h"
 #include "utils/rectangle.h"
 #include "window-system/cairo-surface.h"
 
@@ -138,6 +139,17 @@ class WindowSystem {
    * Creates a Cairo surface to draw on.
    */
   virtual std::unique_ptr<CairoSurface> createCairoSurface() const = 0;
+
+  /**
+   * The libinput backend has access to this property as it is set on libinput.
+   * This property should be valid on Wayland, however, on X11 this property is
+   * stored on XInput2 and it is not synchronized with the libinput backend.
+   * This methods returns the natural scrolling preferences adapted to the
+   * current window system.
+   * @returns If natural scroll is enabled in the current window system.
+   */
+  virtual bool isNaturalScrollEnabled(DeviceType deviceType,
+                                      bool enabledInDaemon) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

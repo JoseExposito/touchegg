@@ -5,12 +5,12 @@ Before you start coding, you will need to install some dependencies:
 ```bash
 # Ubuntu, Debian and derivatives:
 $ sudo apt-get install git build-essential gdb cmake \
-  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev
+  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev
 
 # Red Hat, Fedora, CentOS and derivatives:
 $ sudo yum groupinstall "Development Tools"
 $ sudo yum install git gcc g++ gdb cmake \
-  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel
+  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:

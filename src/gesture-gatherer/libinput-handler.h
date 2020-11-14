@@ -40,6 +40,12 @@ class LininputHandler {
   LibinputDeviceInfo getDeviceInfo(struct libinput_event *event) const;
 
   /**
+   * @return If natural scroll is enabled for the device that generated the
+   * gesture.
+   */
+  bool isNaturalScrollEnabled(struct libinput_event *event) const;
+
+  /**
    * @returns The current epoch time in milliseconds.
    */
   uint64_t getTimestamp() const;

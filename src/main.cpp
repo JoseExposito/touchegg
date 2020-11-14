@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
     GestureController gestureController(config, windowSystem);
 
     // Connect to the daemon
-    DaemonClient daemonClient{&gestureController};
+    DaemonClient daemonClient{&gestureController, windowSystem};
     daemonClient.run();
   }
 }

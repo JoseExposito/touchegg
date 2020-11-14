@@ -109,7 +109,10 @@ void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
 
 std::unique_ptr<Gesture> DaemonClient::makeGestureFromEvent(
     const struct GestureEvent &event) const {
-  return std::make_unique<Gesture>(event.type, event.direction,
-                                   event.percentage, event.fingers,
-                                   event.elapsedTime);
+  bool naturalScrollEnabled = this->windowSystem.isNaturalScrollEnabled(
+      event.performedOnDeviceType, event.naturalScrollEnabled);
+
+  return std::make_unique<Gesture>(
+      event.type, event.direction, event.percentage, event.fingers,
+      naturalScrollEnabled, event.performedOnDeviceType, event.elapsedTime);
 }

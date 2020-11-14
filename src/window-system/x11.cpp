@@ -19,6 +19,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/XInput2.h>
 #include <X11/extensions/XTest.h>
 #include <X11/extensions/Xrandr.h>
 #include <cairo-xlib.h>
@@ -642,4 +643,80 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
 
 std::unique_ptr<CairoSurface> X11::createCairoSurface() const {
   return std::make_unique<X11CairoSurface>(this->display);
+}
+
+bool X11::isNaturalScrollEnabled(DeviceType deviceType,
+                                 bool /* enabledInDaemon */) const {
+  if (deviceType == DeviceType::TOUCHSCREEN) {
+    return true;
+  }
+
+  bool enabled = false;
+  int nDevices;
+  XIDeviceInfo *devices = XIQueryDevice(this->display, XIAllDevices, &nDevices);
+
+  for (int n = 0; n < nDevices; n++) {
+    XIDeviceInfo info = devices[n];  // NOLINT
+
+    if (info.use == XIMasterPointer || info.use == XISlavePointer) {
+      // Only touchpads have this property. I wasn't able to find a better way
+      // to differentiate between mouses and touchpads. Without this check,
+      // enabilling natural scroll on the mouse but not on the touchpad will
+      // make this method return true.
+      std::vector<unsigned char> touchpad =
+          this->getDeviceProperty<unsigned char>(
+              info.deviceid, "libinput Disable While Typing Enabled Default",
+              XA_INTEGER);
+      bool isTouchpad = (touchpad.size() == 1);
+
+      if (isTouchpad) {
+        std::vector<unsigned char> naturalScroll =
+            this->getDeviceProperty<unsigned char>(
+                info.deviceid, "libinput Natural Scrolling Enabled",
+                XA_INTEGER);
+        bool isNaturalScrollEnabled =
+            (naturalScroll.size() == 1 && naturalScroll[0] != 0);
+        enabled = enabled || isNaturalScrollEnabled;
+      }
+    }
+  }
+
+  XIFreeDeviceInfo(devices);
+  return enabled;
+}
+
+template <typename T>
+std::vector<T> X11::getDeviceProperty(int deviceId, const std::string &atomName,
+                                      Atom atomType) const {
+  std::vector<T> propertiesVector;
+
+  Atom atom = XInternAtom(this->display, atomName.c_str(), True);
+  if (atom == None) {
+    return propertiesVector;
+  }
+
+  long offset = 0;        // NOLINT
+  long offsetSize = 100;  // NOLINT
+  Atom atomRet;
+  int size;
+  unsigned long numItems;          // NOLINT
+  unsigned long bytesAfterReturn;  // NOLINT
+  unsigned char *ret;
+  int status;
+
+  do {
+    status = XIGetProperty(this->display, deviceId, atom, offset, offsetSize,
+                           False, atomType, &atomRet, &size, &numItems,
+                           &bytesAfterReturn, &ret);
+    if (status == Success) {
+      auto properties = reinterpret_cast<T *>(ret);  // NOLINT
+      for (int i = 0; i < numItems; i++) {
+        propertiesVector.push_back(properties[i]);
+      }
+      XFree(ret);
+      offset += offsetSize;
+    }
+  } while (status == Success && bytesAfterReturn != 0 && numItems != 0);
+
+  return propertiesVector;
 }

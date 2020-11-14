@@ -20,6 +20,7 @@
 
 #include <string>
 
+#include "gesture/device-type.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -53,6 +54,8 @@ struct GestureEvent {
   int percentage = 0;
   int fingers = 0;
   uint64_t elapsedTime = 0;
+  bool naturalScrollEnabled = false;
+  DeviceType performedOnDeviceType = DeviceType::NOT_SUPPORTED;
 };
 
 #endif  // DAEMON_GESTURE_EVENT_H_

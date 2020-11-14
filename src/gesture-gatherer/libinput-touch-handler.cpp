@@ -24,6 +24,7 @@
 #include <utility>
 #include <vector>
 
+#include "gesture/device-type.h"
 #include "gesture/gesture.h"
 
 void LibinputTouchHandler::handleTouchDown(struct libinput_event *event) {
@@ -61,7 +62,7 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.startFingers, elapsedTime);
+        this->state.startFingers, true, DeviceType::TOUCHSCREEN, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
 
     this->state.reset();
@@ -105,9 +106,9 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
             this->state.direction, pinchDelta);
       }
 
-      auto gesture =
-          std::make_unique<Gesture>(this->state.type, this->state.direction,
-                                    percentage, this->state.startFingers, 0);
+      auto gesture = std::make_unique<Gesture>(
+          this->state.type, this->state.direction, percentage,
+          this->state.startFingers, true, DeviceType::TOUCHSCREEN, 0);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -121,7 +122,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.startFingers, elapsedTime);
+        this->state.startFingers, true, DeviceType::TOUCHSCREEN, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }

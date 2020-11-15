@@ -54,8 +54,7 @@ struct GestureEvent {
   int percentage = 0;
   int fingers = 0;
   uint64_t elapsedTime = 0;
-  bool naturalScrollEnabled = false;
-  DeviceType performedOnDeviceType = DeviceType::NOT_SUPPORTED;
+  DeviceType performedOnDeviceType = DeviceType::UNKNOWN;
 };
 
 #endif  // DAEMON_GESTURE_EVENT_H_

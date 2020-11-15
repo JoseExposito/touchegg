@@ -148,8 +148,7 @@ class WindowSystem {
    * current window system.
    * @returns If natural scroll is enabled in the current window system.
    */
-  virtual bool isNaturalScrollEnabled(DeviceType deviceType,
-                                      bool enabledInDaemon) const = 0;
+  virtual bool isNaturalScrollEnabled(DeviceType deviceType) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

@@ -645,18 +645,18 @@ std::unique_ptr<CairoSurface> X11::createCairoSurface() const {
   return std::make_unique<X11CairoSurface>(this->display);
 }
 
-bool X11::isNaturalScrollEnabled(DeviceType deviceType,
-                                 bool /* enabledInDaemon */) const {
+bool X11::isNaturalScrollEnabled(DeviceType deviceType) const {
   if (deviceType == DeviceType::TOUCHSCREEN) {
     return true;
   }
 
   bool enabled = false;
+  int currentDevice = 0;
   int nDevices;
   XIDeviceInfo *devices = XIQueryDevice(this->display, XIAllDevices, &nDevices);
 
-  for (int n = 0; n < nDevices; n++) {
-    XIDeviceInfo info = devices[n];  // NOLINT
+  while (!enabled && currentDevice < nDevices) {
+    XIDeviceInfo info = devices[currentDevice];  // NOLINT
 
     if (info.use == XIMasterPointer || info.use == XISlavePointer) {
       // Only touchpads have this property. I wasn't able to find a better way
@@ -674,11 +674,11 @@ bool X11::isNaturalScrollEnabled(DeviceType deviceType,
             this->getDeviceProperty<unsigned char>(
                 info.deviceid, "libinput Natural Scrolling Enabled",
                 XA_INTEGER);
-        bool isNaturalScrollEnabled =
-            (naturalScroll.size() == 1 && naturalScroll[0] != 0);
-        enabled = enabled || isNaturalScrollEnabled;
+        enabled = (naturalScroll.size() == 1 && naturalScroll[0] != 0);
       }
     }
+
+    currentDevice++;
   }
 
   XIFreeDeviceInfo(devices);

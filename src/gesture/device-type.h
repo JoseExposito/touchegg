@@ -21,7 +21,7 @@
 #include <string>
 
 enum class DeviceType {
-  NOT_SUPPORTED = 0,
+  UNKNOWN = 0,
   TOUCHPAD = 1,
   TOUCHSCREEN = 2,
 };

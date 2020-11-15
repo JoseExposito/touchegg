@@ -31,15 +31,13 @@
  */
 class DaemonClient {
  public:
-  explicit DaemonClient(GestureControllerDelegate *gestureController,
-                        const WindowSystem &windowSystem)
-      : gestureController(gestureController), windowSystem(windowSystem) {}
+  explicit DaemonClient(GestureControllerDelegate *gestureController)
+      : gestureController(gestureController) {}
 
   void run();
 
  private:
   GestureControllerDelegate *gestureController;
-  const WindowSystem &windowSystem;
 
   void sendToGestureController(const struct GestureEvent &event);
 

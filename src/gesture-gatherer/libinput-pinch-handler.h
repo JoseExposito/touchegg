@@ -34,7 +34,6 @@ struct LibinputPinchState {
   GestureDirection direction = GestureDirection::UNKNOWN;
   int percentage = 0;
   int fingers = 0;
-  bool naturalScroll = false;
 
   void reset() {
     started = false;
@@ -43,7 +42,6 @@ struct LibinputPinchState {
     direction = GestureDirection::UNKNOWN;
     percentage = 0;
     fingers = 0;
-    naturalScroll = false;
   }
 };
 

@@ -72,7 +72,8 @@ void ChangeDesktop::executeAction(const Gesture& gesture) {
 
 ActionDirection ChangeDesktop::getAnimationAutoDirection(
     const Gesture& gesture) const {
-  bool natural = gesture.naturalScrollEnabled();
+  bool natural = this->windowSystem.isNaturalScrollEnabled(
+      gesture.performedOnDeviceType());
 
   switch (gesture.direction()) {
     case GestureDirection::UP:
@@ -89,7 +90,8 @@ ActionDirection ChangeDesktop::getAnimationAutoDirection(
 
 ActionDirection ChangeDesktop::getActionAutoDirection(
     const Gesture& gesture) const {
-  bool natural = gesture.naturalScrollEnabled();
+  bool natural = this->windowSystem.isNaturalScrollEnabled(
+      gesture.performedOnDeviceType());
 
   switch (gesture.direction()) {
     case GestureDirection::LEFT:

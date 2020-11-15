@@ -29,13 +29,11 @@
 class Gesture {
  public:
   Gesture(GestureType type, GestureDirection direction, int percentage,
-          int fingers, bool naturalScroll, DeviceType performedOnDeviceType,
-          uint64_t elapsedTime)
+          int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime)
       : gestureType(type),
         gestureDirection(direction),
         gesturePercentage(percentage),
         gestureFingers(fingers),
-        naturalScroll(naturalScroll),
         deviceType(performedOnDeviceType),
         gestureElapsedTime(elapsedTime) {}
 
@@ -63,12 +61,6 @@ class Gesture {
   int fingers() const { return this->gestureFingers; }
 
   /**
-   * @returns If natural scroll is enabled for this gesture. On touchscreens,
-   * this always returns true.
-   */
-  bool naturalScrollEnabled() const { return this->naturalScroll; }
-
-  /**
    * @returns The device type the gesture was performed on.
    */
   DeviceType performedOnDeviceType() const { return this->deviceType; }
@@ -84,8 +76,7 @@ class Gesture {
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
   int gesturePercentage = -1;
   int gestureFingers = -1;
-  bool naturalScroll = false;
-  DeviceType deviceType = DeviceType::NOT_SUPPORTED;
+  DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;
 };
 

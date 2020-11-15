@@ -62,7 +62,7 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.startFingers, true, DeviceType::TOUCHSCREEN, elapsedTime);
+        this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
 
     this->state.reset();
@@ -108,7 +108,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
       auto gesture = std::make_unique<Gesture>(
           this->state.type, this->state.direction, percentage,
-          this->state.startFingers, true, DeviceType::TOUCHSCREEN, 0);
+          this->state.startFingers, DeviceType::TOUCHSCREEN, 0);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
@@ -122,7 +122,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.startFingers, true, DeviceType::TOUCHSCREEN, elapsedTime);
+        this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }

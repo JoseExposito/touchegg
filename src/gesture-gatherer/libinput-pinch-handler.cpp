@@ -39,13 +39,11 @@ void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
     this->state.percentage = this->calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     this->state.fingers = libinput_event_gesture_get_finger_count(gestureEvent);
-    this->state.naturalScroll = this->isNaturalScrollEnabled(event);
     uint64_t elapsedTime = 0;
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
-        elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureBegin(std::move(gesture));
   } else {
     this->state.percentage = this->calculatePinchAnimationPercentage(
@@ -55,8 +53,7 @@ void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
-        elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -73,8 +70,7 @@ void LininputPinchHandler::handlePinchEnd(struct libinput_event *event) {
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, this->state.naturalScroll, DeviceType::TOUCHPAD,
-        elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

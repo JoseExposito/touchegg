@@ -70,8 +70,7 @@ class X11 : public WindowSystem {
 
   std::unique_ptr<CairoSurface> createCairoSurface() const override;
 
-  bool isNaturalScrollEnabled(DeviceType deviceType,
-                              bool enabledInDaemon) const override;
+  bool isNaturalScrollEnabled(DeviceType deviceType) const override;
 
  private:
   /**

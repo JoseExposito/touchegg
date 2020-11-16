@@ -20,6 +20,11 @@
 
 #include <string>
 
+enum class ColorType {
+  BACKGROUND,
+  BORDER,
+};
+
 /**
  * Simple class to parse color from config and use them with Cairo.
  */
@@ -28,18 +33,21 @@ class Color {
   Color() = default;
 
   /**
-   * @param hexString A string like "RRGGBB" or "#RRGGBB".
+   * @param hexString A string like "RRGGBB", "#RRGGBB" or "auto".
    */
-  explicit Color(const std::string &hexString);
+  Color(const std::string &hexString, ColorType colorType);
 
-  double r() const;
-  double g() const;
-  double b() const;
+  double r() const { return this->red; }
+  double g() const { return this->green; }
+  double b() const { return this->blue; }
 
  private:
-  double red = 62.0;
-  double green = 159.0;
-  double blue = 237.0;
+  double red = 0.6;
+  double green = 0.6;
+  double blue = 0.6;
+
+  void setFromHexString(const std::string &hexString);
+  void setFromAutoColor(ColorType colorType);
 };
 
 #endif  // UTILS_COLOR_H_

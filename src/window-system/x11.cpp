@@ -665,8 +665,7 @@ bool X11::isNaturalScrollEnabled(DeviceType deviceType) const {
       // make this method return true.
       std::vector<unsigned char> touchpad =
           this->getDeviceProperty<unsigned char>(
-              info.deviceid, "libinput Disable While Typing Enabled Default",
-              XA_INTEGER);
+              info.deviceid, "libinput Tapping Enabled", XA_INTEGER);
       bool isTouchpad = (touchpad.size() == 1);
 
       if (isTouchpad) {

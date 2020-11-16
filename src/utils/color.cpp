@@ -19,20 +19,68 @@
 
 #include <iostream>
 
-Color::Color(const std::string &hexString) {
+#ifdef AUTO_COLORS
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#endif
+
+Color::Color(const std::string &hexString, ColorType colorType) {
+  if (hexString == "auto") {
+    this->setFromAutoColor(colorType);
+  } else {
+    this->setFromHexString(hexString);
+  }
+}
+
+void Color::setFromHexString(const std::string &hexString) {
   if (hexString.size() != 6 &&
       (hexString.size() != 7 && hexString.front() != '#')) {
     return;
   }
 
   size_t offset = (hexString.size() == 6) ? 0 : 1;
-  this->red = std::stoi(hexString.substr(offset, 2), nullptr, 16);
-  this->green = std::stoi(hexString.substr(offset + 2, 2), nullptr, 16);
-  this->blue = std::stoi(hexString.substr(offset + 4, 2), nullptr, 16);
+
+  try {
+    this->red = std::stoi(hexString.substr(offset, 2), nullptr, 16) / 255.0;
+    this->green =
+        std::stoi(hexString.substr(offset + 2, 2), nullptr, 16) / 255.0;
+    this->blue =
+        std::stoi(hexString.substr(offset + 4, 2), nullptr, 16) / 255.0;
+  } catch (const std::exception & /* error */) {
+    std::cout << "Error: Invalid animation color, using default color"
+              << std::endl;
+  }
 }
 
-double Color::r() const { return this->red / 255.0; }
+void Color::setFromAutoColor(ColorType colorType) {
+#ifdef AUTO_COLORS
+  GtkWidget *label = gtk_label_new("");
+  g_object_ref_sink(label);
+  GtkStyleContext *labelStyleContext = gtk_widget_get_style_context(label);
+  GtkWidgetPath *path =
+      gtk_widget_path_copy(gtk_style_context_get_path(labelStyleContext));
+  gtk_widget_path_iter_set_object_name(path, -1, "selection");
 
-double Color::g() const { return this->green / 255.0; }
+  GtkStyleContext *colorStyleContext = gtk_style_context_new();
+  gtk_style_context_set_path(colorStyleContext, path);
+  gtk_style_context_set_parent(colorStyleContext, labelStyleContext);
 
-double Color::b() const { return this->blue / 255.0; }
+  GdkRGBA *color;
+  // NOLINTNEXTLINE
+  gtk_style_context_get(
+      colorStyleContext, GTK_STATE_FLAG_NORMAL,
+      (colorType == ColorType::BACKGROUND ? GTK_STYLE_PROPERTY_BACKGROUND_COLOR
+                                          : GTK_STYLE_PROPERTY_BORDER_COLOR),
+      &color, nullptr);
+
+  this->red = color->red;
+  this->green = color->green;
+  this->blue = color->blue;
+
+  gdk_rgba_free(color);
+  g_object_unref(colorStyleContext);
+  gtk_widget_path_free(path);
+  gtk_widget_destroy(label);
+  g_object_unref(label);
+#endif
+}

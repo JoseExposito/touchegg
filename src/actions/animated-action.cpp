@@ -32,20 +32,31 @@ AnimatedAction::AnimatedAction(
   }
 
   if (this->animate) {
+    std::string color;
+    std::string borderColor;
+
     if (this->config.hasGlobalSetting("color")) {
-      this->color = Color{this->config.getGlobalSetting("color")};
+      color = this->config.getGlobalSetting("color");
     }
 
     if (this->config.hasGlobalSetting("borderColor")) {
-      this->borderColor = Color{this->config.getGlobalSetting("borderColor")};
+      borderColor = this->config.getGlobalSetting("borderColor");
     }
 
     if (this->settings.count("color") == 1) {
-      this->color = Color{this->settings.at("color")};
+      color = this->settings.at("color");
     }
 
     if (this->settings.count("borderColor") == 1) {
-      this->borderColor = Color{this->settings.at("borderColor")};
+      borderColor = this->settings.at("borderColor");
+    }
+
+    if (!color.empty()) {
+      this->color = Color{color, ColorType::BACKGROUND};
+    }
+
+    if (!borderColor.empty()) {
+      this->borderColor = Color{borderColor, ColorType::BORDER};
     }
   }
 }

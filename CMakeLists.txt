@@ -52,6 +52,15 @@ target_link_libraries(touchegg
   ${XINPUT_LIBRARIES}
 )
 
+if(NOT DEFINED AUTO_COLORS OR AUTO_COLORS)
+  find_package(Gtk3 REQUIRED)
+  target_include_directories(touchegg PUBLIC ${GTK3_INCLUDE_DIRS})
+  target_link_libraries(touchegg ${GTK3_LIBRARIES})
+  add_definitions(-DAUTO_COLORS=ON)
+else()
+  message(WARNING "AUTO_COLORS OFF: GTK will NOT be used to and auto colors will NOT be available")
+endif()
+
 
 # Installation
 # https://cmake.org/cmake/help/v3.12/module/CPack.html

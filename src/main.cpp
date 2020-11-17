@@ -28,10 +28,6 @@
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
 
-#ifdef AUTO_COLORS
-#include <gtk/gtk.h>
-#endif
-
 #ifdef _VERSION
 #define VERSION _VERSION
 #else
@@ -114,10 +110,6 @@ int main(int argc, char **argv) {
   if (clientMode) {
     // Avoid running multiple client instances in parallel
     ClientLock lock;
-
-#ifdef AUTO_COLORS
-    gtk_init(&argc, &argv);
-#endif
 
     // Load the configuration using the XML loader
     std::cout << "Parsing you configuration file..." << std::endl;

@@ -54,6 +54,11 @@ void Color::setFromHexString(const std::string &hexString) {
 
 void Color::setFromAutoColor(ColorType colorType) {
 #ifdef AUTO_COLORS
+  gtk_init_check(nullptr, nullptr);
+  while (gtk_events_pending()) {
+    gtk_main_iteration_do(false);
+  }
+
   GtkWidget *label = gtk_label_new("");
   g_object_ref_sink(label);
   GtkStyleContext *labelStyleContext = gtk_widget_get_style_context(label);

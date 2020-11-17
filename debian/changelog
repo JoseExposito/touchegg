@@ -1,3 +1,14 @@
+touchegg (2.0.3) focal; urgency=medium
+
+  * Use "auto" with "color" and "borderColor" to use your theme's accent color
+  * Use "auto" with "CHANGE_DESKTOP" to follow natural scroll preferences
+
+  * Improve Debian packaging
+  * Now Linux distributions shipping Touchégg by default can update your configuration easily
+  * Improve protocol backward compatibility for third party integrations
+
+ -- José Expósito <jose.exposito89@gmail.com>  Tue, 17 Nov 2020 12:00:00 +0100
+
 touchegg (2.0.2) focal; urgency=medium
 
   * Touchscreen support. Now you can use PINCH and SWIPE gestures on your touchscreen

@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.0.3 - 2020-11-17
+
+New:
+
+  - Use `auto` with `color` and `borderColor` to use your theme's accent color
+
+    https://github.com/JoseExposito/touchegg/issues/360
+
+  - Use `auto` with `CHANGE_DESKTOP` to follow your natural scroll preferences
+
+    https://github.com/JoseExposito/touchegg/issues/382
+
+Improvements:
+
+  - You are downloading a much better Debian (.deb) package
+
+    https://github.com/JoseExposito/touchegg/issues/384
+
+  - Now Linux distributions shipping Touchégg by default can update your configuration easily
+
+    https://github.com/JoseExposito/touchegg/issues/368
+
+  - Improve protocol backward compatibility for third party integrations
+
+    https://github.com/JoseExposito/touchegg/issues/385
+
+
 ## 2.0.2 - 2020-10-28
 
 New:

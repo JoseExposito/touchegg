@@ -1,4 +1,0 @@
-usr/bin/*
-usr/share/*
-lib/systemd/system/*
-etc/xdg/autostart/*

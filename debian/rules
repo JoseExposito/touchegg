@@ -1,4 +1,4 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --dbg-package=touchegg-dbg --with=systemd
+	dh $@ --with=systemd

@@ -26,13 +26,3 @@ Description: Multi-touch gesture recognizer
  into visible actions in your desktop.
  For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to
  switch to the next desktop.
-
-Package: touchegg-dbg
-Section: debug
-Architecture: any
-Priority: extra
-Depends: touchegg (= ${binary:Version}), ${misc:Depends}
-Description: Debugging symbols for Touchégg
- This package contains debugging files used to investigate problems with
- Touchégg. Install this package if you are experiencing crashes of the
- Touchégg application and wish to report a problem to the developers.

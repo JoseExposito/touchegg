@@ -57,10 +57,14 @@ class XmlConfigLoader {
   Config *config;
 
   /**
-   * Parse the XML configuration file placed in path.
-   * @param configPath Path to the configuration file.
+   * @returns Path to the config file to use.
    */
-  void parseXml(const std::filesystem::path &configPath);
+  std::filesystem::path getConfigFilePath() const;
+
+  /**
+   * Parse the XML configuration file placed in path.
+   */
+  void parseConfig();
 
   /**
    * Parse the global settings.
@@ -75,10 +79,9 @@ class XmlConfigLoader {
   void parseApplicationXmlNodes(const pugi::xml_node &rootNode);
 
   /**
-   * Watch the configuration file and parse it on change.
-   * @param configPath Path to the configuration file.
+   * Watch the configuration file and parse it on change or creation.
    */
-  void watchFile(const std::filesystem::path &configPath);
+  void watchConfig();
 };
 
 #endif  // CONFIG_XML_CONFIG_LOADER_H_

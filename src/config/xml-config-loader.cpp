@@ -48,6 +48,11 @@ constexpr std::size_t WATCH_BUFFER_SIZE = (100 * (WATCH_EVENT_SIZE + 16));
 XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {}
 
 void XmlConfigLoader::load() {
+  this->parseConfig();
+  this->watchConfig();
+}
+
+std::filesystem::path XmlConfigLoader::getConfigFilePath() const {
   const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
   const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
 
@@ -57,14 +62,14 @@ void XmlConfigLoader::load() {
         "Reinstall Touchégg to solve this issue"};
   }
 
-  const std::filesystem::path configPath =
-      std::filesystem::exists(homeConfigFile) ? homeConfigFile : usrConfigFile;
-  std::cout << "Using configuration file " << configPath << std::endl;
-  this->parseXml(configPath);
-  this->watchFile(configPath);
+  return std::filesystem::exists(homeConfigFile) ? homeConfigFile
+                                                 : usrConfigFile;
 }
 
-void XmlConfigLoader::parseXml(const std::filesystem::path &configPath) {
+void XmlConfigLoader::parseConfig() {
+  std::filesystem::path configPath = this->getConfigFilePath();
+  std::cout << "Using configuration file " << configPath << std::endl;
+
   pugi::xml_document doc;
   pugi::xml_parse_result parsedSuccessfully = doc.load_file(configPath.c_str());
 
@@ -117,8 +122,12 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
   }
 }
 
-void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
+void XmlConfigLoader::watchConfig() {
   // https://developer.ibm.com/tutorials/l-ubuntu-inotify/
+
+  std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
+  std::filesystem::create_directories(homeConfigDir);
+
   const std::string warningMessage =
       "It was not posssible to monitor your configuration file for changes. "
       "Touchégg will not be able to automatically reload your configuration "
@@ -131,13 +140,15 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     return;
   }
 
-  int wd = inotify_add_watch(fd, configPath.c_str(), IN_MODIFY | IN_CREATE);
+  int wd = inotify_add_watch(fd, homeConfigDir.c_str(),
+                             IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE |
+                                 IN_MOVE_SELF | IN_DELETE_SELF);
   if (wd < 0) {
     std::cout << warningMessage << std::endl;
     return;
   }
 
-  std::thread watchThread{[fd, configPath, this]() {
+  std::thread watchThread{[fd, this]() {
     std::array<char, WATCH_BUFFER_SIZE> buffer{};
     while (true) {
       bool reloadSettings = false;
@@ -159,7 +170,7 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
         std::cout << "Your configuration file changed, reloading your settings"
                   << std::endl;
         this->config->clear();
-        this->parseXml(configPath);
+        this->parseConfig();
       }
     }
   }};

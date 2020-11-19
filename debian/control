@@ -12,6 +12,7 @@ Build-Depends: cmake,
                libpugixml-dev (>= 1.4),
                libudev-dev (>= 183),
                libx11-dev,
+               libxi-dev (>= 2:1.7.0),
                libxrandr-dev (>= 2:1.2.0),
                libxtst-dev
 Standards-Version: 4.1.1

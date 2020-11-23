@@ -352,10 +352,15 @@ Options:
 
 Keysyms:
 
-For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favorite text editor.
+Keysyms can be found in two places:
+ - Regular keys are in `/usr/include/X11/keysymdef.h`, you can open it with your favorite text editor.
 
-It is important to remove the `XK_` prefix. For example, the super keysym is defined as
-`XK_Super_L` but it must be used as `Super_L` in the configuration.
+   It is important to remove the `XK_` prefix. For example, the super keysym is defined as
+   `XK_Super_L` but it must be used as `Super_L` in the configuration.
+ - Special keys (e.g. media keys, browser back, sleep, etc.) are in `/usr/include/X11/XF86keysym.h`.
+
+   Again, remove `XK_`, but leave the rest (including the bit before the
+   `XK_`). For example, `XF86XK_Back` becomes `XF86Back`.
 
 Example 1: Pinch to zoom example
 

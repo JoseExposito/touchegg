@@ -362,6 +362,13 @@ Keysyms can be found in two places:
    Again, remove `XK_`, but leave the rest (including the bit before the
    `XK_`). For example, `XF86XK_Back` becomes `XF86Back`.
 
+Note that only keysyms that are mapped onto a keycode can be used by
+Touchégg. You can use `xmodmap -pk` to show the current mapping. To add
+a keysym that is not mapped by default (for example `XF86ZoomIn`), you
+can tell `xmodmap` to map it to any free keycode:
+
+    xmodmap -e 'keycode any=XF86ZoomIn'
+
 Example 1: Pinch to zoom example
 
 ```xml

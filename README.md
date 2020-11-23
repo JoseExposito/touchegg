@@ -345,16 +345,16 @@ Options:
 | Option | Value | Description |
 | - | - | - |
 | repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
-| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
-| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
+| modifiers | Keysym | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keysyms: `Control_L+Alt_L`.See "Keysyms" below for more information. |
+| keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
-Keycodes:
+Keysyms:
 
 For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favorite text editor.
 
-It is important to remove the `XK_` prefix. For example, the super keycode is defined as
+It is important to remove the `XK_` prefix. For example, the super keysym is defined as
 `XK_Super_L` but it must be used as `Super_L` in the configuration.
 
 Example 1: Pinch to zoom example

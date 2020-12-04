@@ -25,14 +25,18 @@
 X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   Window rootWindow = XDefaultRootWindow(this->display);
   int defaultScreen = XDefaultScreen(this->display);
-  Screen *screenOfDisplay = XDefaultScreenOfDisplay(this->display);
 
   // Get the screen size. If multiple physical screens are connected this is
   // the size of all of them, like they were a single screen
   int x = 0;
   int y = 0;
-  int width = XWidthOfScreen(screenOfDisplay);
-  int height = XHeightOfScreen(screenOfDisplay);
+  unsigned int width = 0;
+  unsigned int height = 0;
+  Window retRootWindow = None;
+  unsigned int retBorderWidth = 0;
+  unsigned int retDepth = 0;
+  XGetGeometry(display, rootWindow, &retRootWindow, &x, &y, &width, &height,
+               &retBorderWidth, &retDepth);
 
   // Create a transparent window
   XVisualInfo vInfo;

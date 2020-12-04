@@ -345,17 +345,29 @@ Options:
 | Option | Value | Description |
 | - | - | - |
 | repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
-| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
-| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
+| modifiers | Keysym | Typical values are: `Shift_L`, `Control_L`, `Alt_L`, `Alt_R`, `Meta_L`, `Super_L`, `Hyper_L`. You can use multiple keysyms: `Control_L+Alt_L`.See "Keysyms" below for more information. |
+| keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
-Keycodes:
+Keysyms:
 
-For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favorite text editor.
+Keysyms can be found in two places:
+ - Regular keys are in `/usr/include/X11/keysymdef.h`, you can open it with your favorite text editor.
 
-It is important to remove the `XK_` prefix. For example, the super keycode is defined as
-`XK_Super_L` but it must be used as `Super_L` in the configuration.
+   It is important to remove the `XK_` prefix. For example, the super keysym is defined as
+   `XK_Super_L` but it must be used as `Super_L` in the configuration.
+ - Special keys (e.g. media keys, browser back, sleep, etc.) are in `/usr/include/X11/XF86keysym.h`.
+
+   Again, remove `XK_`, but leave the rest (including the bit before the
+   `XK_`). For example, `XF86XK_Back` becomes `XF86Back`.
+
+Note that only keysyms that are mapped onto a keycode can be used by
+Touchégg. You can use `xmodmap -pk` to show the current mapping. To add
+a keysym that is not mapped by default (for example `XF86ZoomIn`), you
+can tell `xmodmap` to map it to any free keycode:
+
+    xmodmap -e 'keycode any=XF86ZoomIn'
 
 Example 1: Pinch to zoom example
 
@@ -406,7 +418,7 @@ Options:
 | repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
 | command | Command | The command to execute. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
-| decreaseCommand | Keycode | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
+| decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
 
 Example 1:
 

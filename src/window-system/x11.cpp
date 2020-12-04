@@ -478,6 +478,32 @@ Rectangle X11::getDesktopWorkarea() const {
   workarea.width = workareas[2 + (currenDesktop[0] * 4)];
   workarea.height = workareas[3 + (currenDesktop[0] * 4)];
 
+  // Mutter uses a non standard property that allow better multiscreen support
+  if (screenFound) {
+    // NOLINTNEXTLINE
+    std::vector<unsigned long> gtkWorkareas =
+        this->getWindowProperty<unsigned long>(  // NOLINT
+            rootWindow, "_GTK_WORKAREAS_D" + std::to_string(currenDesktop[0]),
+            XA_CARDINAL);
+    if (gtkWorkareas.size() >= 4) {
+      int offset = 0;
+      while (offset < gtkWorkareas.size()) {
+        int x = gtkWorkareas[0 + offset];
+        int y = gtkWorkareas[1 + offset];
+        int width = gtkWorkareas[2 + offset];
+        int height = gtkWorkareas[3 + offset];
+        if (x >= screen.x && x <= (screen.x + screen.width) && y >= screen.y &&
+            y <= (screen.y + screen.height)) {
+          workarea.x = x;
+          workarea.y = y;
+          workarea.width = width;
+          workarea.height = height;
+        }
+        offset += 4;
+      }
+    }
+  }
+
   // Transform the workarea size to the physical screen size
   if (screenFound) {
     int x = std::max(workarea.x, screen.x);

@@ -27,6 +27,10 @@
 #include "gesture/device-type.h"
 #include "gesture/gesture.h"
 
+namespace {
+constexpr int TAP_TIME = 150;
+}  // namespace
+
 void LibinputTouchHandler::handleTouchDown(struct libinput_event *event) {
   this->state.currentFingers++;
 
@@ -39,6 +43,12 @@ void LibinputTouchHandler::handleTouchDown(struct libinput_event *event) {
   this->state.startY[slot] = y;
   this->state.currentX[slot] = x;
   this->state.currentY[slot] = y;
+
+  // Save fingers and startTimestamp in case it is a TAP gesture
+  this->state.tapFingers = this->state.currentFingers;
+  if (this->state.currentFingers == 1) {
+    this->state.startTimestamp = this->getTimestamp();
+  }
 }
 
 void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
@@ -46,7 +56,25 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
 
   struct libinput_event_touch *tEvent = libinput_event_get_touch_event(event);
   int32_t slot = libinput_event_touch_get_slot(tEvent);
+  uint64_t elapsedTime = this->calculateElapsedTime(this->state.startTimestamp);
 
+  // TAP
+  if (!this->state.started && this->state.currentFingers == 0 &&
+      this->state.tapFingers >= 2 && elapsedTime < TAP_TIME) {
+    auto gestureBegin = std::make_unique<Gesture>(
+        GestureType::TAP, GestureDirection::UNKNOWN, 100,
+        this->state.tapFingers, DeviceType::TOUCHSCREEN, elapsedTime);
+    this->gestureController->onGestureBegin(std::move(gestureBegin));
+
+    auto gestureEnd = std::make_unique<Gesture>(
+        GestureType::TAP, GestureDirection::UNKNOWN, 100,
+        this->state.tapFingers, DeviceType::TOUCHSCREEN, elapsedTime);
+    this->gestureController->onGestureEnd(std::move(gestureEnd));
+
+    this->state.reset();
+  }
+
+  // SWIPE and PINCH
   if (this->state.started && this->state.currentFingers == 1) {
     LibinputDeviceInfo info = this->getDeviceInfo(event);
     double deltaX = this->state.currentX.at(slot) - this->state.startX.at(slot);
@@ -57,8 +85,6 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
                                info, this->state.direction, deltaX, deltaY)
                          : this->calculatePinchAnimationPercentage(
                                this->state.direction, this->getPinchDelta());
-    uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,

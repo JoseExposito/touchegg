@@ -421,6 +421,12 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
   XFlush(this->display);
 }
 
+void X11::sendMouseClick(int button) const {
+  XTestFakeButtonEvent(this->display, button, true, 0);
+  XTestFakeButtonEvent(this->display, button, false, 0);
+  XFlush(this->display);
+}
+
 Rectangle X11::getDesktopWorkarea() const {
   // When multiple physical screens are connected, the root window's size is the
   // sum of all of them. Use Xrandr to get the screen size of the physical

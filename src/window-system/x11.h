@@ -62,6 +62,7 @@ class X11 : public WindowSystem {
 
   void sendKeys(const std::vector<std::string> &keycodes,
                 bool isPress) const override;
+  void sendMouseClick(int button) const override;
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(ActionDirection direction) const override;

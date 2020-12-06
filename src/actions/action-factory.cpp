@@ -24,6 +24,7 @@
 #include "actions/close-window.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
+#include "actions/mouse-click.h"
 #include "actions/run-command.h"
 #include "actions/send-keys.h"
 #include "actions/show-desktop.h"
@@ -57,6 +58,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
                                         window, config);
     case ActionType::RUN_COMMAND:
       return std::make_unique<RunCommand>(std::move(settings), windowSystem,
+                                          window, config);
+    case ActionType::MOUSE_CLICK:
+      return std::make_unique<MouseClick>(std::move(settings), windowSystem,
                                           window, config);
     default:
       return nullptr;

@@ -30,6 +30,7 @@ enum class ActionType {
   SHOW_DESKTOP,
   SEND_KEYS,
   RUN_COMMAND,
+  MOUSE_CLICK,
   // Adding a new action? Don't forget to add it in actionTypeToStr,
   // actionTypeFromStr and ActionFactory::buildAction
 };
@@ -52,6 +53,8 @@ inline std::string actionTypeToStr(ActionType actionType) {
       return "SEND_KEYS";
     case ActionType::RUN_COMMAND:
       return "RUN_COMMAND";
+    case ActionType::MOUSE_CLICK:
+      return "MOUSE_CLICK";
     default:
       return "NOT_SUPPORTED";
   }
@@ -81,6 +84,9 @@ inline ActionType actionTypeFromStr(const std::string &str) {
   }
   if (str == "RUN_COMMAND") {
     return ActionType::RUN_COMMAND;
+  }
+  if (str == "MOUSE_CLICK") {
+    return ActionType::MOUSE_CLICK;
   }
   return ActionType::NOT_SUPPORTED;
 }

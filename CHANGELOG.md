@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.4 - 2020-12-07
+
+New:
+
+  - New gesture available for touchscreens: `TAP`
+
+    https://github.com/JoseExposito/touchegg/issues/378
+
+  - New action added: `MOUSE_CLICK`
+
+    https://github.com/JoseExposito/touchegg/issues/378
+
+Improvements:
+
+  - Better multi-monitor support
+
+    https://github.com/JoseExposito/touchegg/issues/364
+
+    https://github.com/JoseExposito/touchegg/issues/396
+
+  - Improve config file watcher
+
+    https://github.com/JoseExposito/touchegg/issues/399
+
+
 ## 2.0.3 - 2020-11-17
 
 New:

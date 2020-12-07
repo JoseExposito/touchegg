@@ -1,3 +1,13 @@
+touchegg (2.0.4) focal; urgency=medium
+
+  * New gesture available for touchscreens: "TAP"
+  * New action added: "MOUSE_CLICK"
+
+  * Better multi-monitor support
+  * Improve config file watcher
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 07 Dec 2020 12:00:00 +0100
+
 touchegg (2.0.3) focal; urgency=medium
 
   * Use "auto" with "color" and "borderColor" to use your theme's accent color

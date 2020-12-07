@@ -29,6 +29,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Available gestures](#available-gestures)
       * [Swipe](#swipe)
       * [Pinch](#pinch)
+      * [Tap](#tap)
     * [Available actions](#available-actions)
       * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
       * [Minimize a window](#minimize-a-window-minimize_window)
@@ -38,6 +39,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Show desktop](#show-desktop-show_desktop)
       * [Keyboard shortcut](#keyboard-shortcut-send_keys)
       * [Execute a command](#execute-a-command-run_command)
+      * [Mouse click](#mouse-click-mouse_click)
     * [Daemon configuration](#daemon-configuration)
   * [Copyright](#copyright)
 
@@ -148,6 +150,23 @@ Example:
     <animate>true</animate>
     <color>F84A53</color>
     <borderColor>F84A53</borderColor>
+  </action>
+</gesture>
+```
+
+### Tap
+
+Tap gestures are executed when two or more fingers "click" on the touchscreen.
+
+**Only available on touchscreens**
+
+Example:
+
+```xml
+<gesture type="TAP" fingers="2">
+  <action type="MOUSE_CLICK">
+    <button>3</button>
+    <on>begin</on>
   </action>
 </gesture>
 ```
@@ -440,6 +459,28 @@ Example 2:
     <repeat>true</repeat>
     <command>notify-send 'Swipe direction' 'DOWN'</command>
     <decreaseCommand>notify-send 'Swipe direction' 'UP'</decreaseCommand>
+  </action>
+</gesture>
+```
+
+### Mouse click (MOUSE_CLICK)
+
+Emulate a mouse click.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| button | `1`/`2`/`3` | Left click (1), middle click (2) or right click (3) |
+| on | `begin`/`end` | If the command should be executed on the beginning or on the end of the gesture. |
+
+Example:
+
+```xml
+<gesture type="TAP" fingers="2">
+  <action type="MOUSE_CLICK">
+    <button>3</button>
+    <on>begin</on>
   </action>
 </gesture>
 ```

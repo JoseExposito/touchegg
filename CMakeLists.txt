@@ -63,13 +63,15 @@ endif()
 
 
 # Installation
+# https://cmake.org/cmake/help/v3.4/module/GNUInstallDirs.html
 # https://cmake.org/cmake/help/v3.12/module/CPack.html
 # https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
-set(CMAKE_INSTALL_PREFIX "/")
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION usr/share/touchegg)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION lib/systemd/system)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION etc/xdg/autostart)
-install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION usr/bin)
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_PREFIX "/usr")
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION /lib/systemd/system)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
+install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
 
 set(CPACK_PACKAGE_NAME touchegg)
 set(CPACK_PACKAGE_VERSION_MAJOR "${MAJOR_VERSION}")
@@ -92,6 +94,9 @@ set(CPACK_RPM_PACKAGE_LICENSE GPLv3+)
 set(CPACK_RPM_PACKAGE_AUTOREQ 1)
 set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_SOURCE_DIR}/installation/rpm/postinst")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_PREFIX}")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_BINDIR}")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_DATAROOTDIR}")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd/system")

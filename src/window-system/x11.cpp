@@ -422,8 +422,8 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
 }
 
 void X11::sendMouseClick(int button) const {
-  XTestFakeButtonEvent(this->display, button, true, 0);
-  XTestFakeButtonEvent(this->display, button, false, 0);
+  XTestFakeButtonEvent(this->display, button, True, 0);
+  XTestFakeButtonEvent(this->display, button, False, 0);
   XFlush(this->display);
 }
 

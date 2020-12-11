@@ -479,10 +479,25 @@ Rectangle X11::getDesktopWorkarea() const {
       rootWindow, "_NET_WORKAREA", XA_CARDINAL);
 
   Rectangle workarea;
-  workarea.x = workareas[0 + (currenDesktop[0] * 4)];
-  workarea.y = workareas[1 + (currenDesktop[0] * 4)];
-  workarea.width = workareas[2 + (currenDesktop[0] * 4)];
-  workarea.height = workareas[3 + (currenDesktop[0] * 4)];
+
+  if (workareas.size() >= 4) {
+    workarea.x = workareas[0 + (currenDesktop[0] * 4)];
+    workarea.y = workareas[1 + (currenDesktop[0] * 4)];
+    workarea.width = workareas[2 + (currenDesktop[0] * 4)];
+    workarea.height = workareas[3 + (currenDesktop[0] * 4)];
+  } else {
+    // Some WMs don't set _NET_WORKAREA if there are no visible panels
+    // https://github.com/JoseExposito/touchegg/issues/381
+    unsigned int width = 0;
+    unsigned int height = 0;
+    Window retRootWindow = None;
+    unsigned int retBorderWidth = 0;
+    unsigned int retDepth = 0;
+    XGetGeometry(display, rootWindow, &retRootWindow, &workarea.x, &workarea.y,
+                 &width, &height, &retBorderWidth, &retDepth);
+    workarea.width = width;
+    workarea.height = height;
+  }
 
   // Mutter uses a non standard property that allow better multiscreen support
   if (screenFound) {

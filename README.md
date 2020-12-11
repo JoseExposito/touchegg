@@ -407,7 +407,7 @@ Example 1: Pinch to zoom example
     <keys>KP_Add</keys>
     <decreaseKeys>KP_Subtract</decreaseKeys>
   </action>
-    </gesture>
+</gesture>
 ```
 
 Example 2: Open Gnome application launcher
@@ -421,7 +421,6 @@ Example 2: Open Gnome application launcher
     <on>begin</on>
   </action>
 </gesture>
-</application>
 ```
 
 ![Animation](.github/images/SEND_KEYS.gif)

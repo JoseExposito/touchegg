@@ -410,7 +410,29 @@ Example 1: Pinch to zoom example
 </gesture>
 ```
 
-Example 2: Open Gnome application launcher
+Example 2: Switch between windows (Alt+Tab)
+
+```xml
+<gesture type="SWIPE" fingers="3" direction="LEFT">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Alt_L</modifiers>
+    <keys>Shift_L+Tab</keys>
+    <decreaseKeys>Tab</decreaseKeys>
+  </action>
+</gesture>
+
+<gesture type="SWIPE" fingers="3" direction="RIGHT">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Alt_L</modifiers>
+    <keys>Tab</keys>
+    <decreaseKeys>Shift_L+Tab</decreaseKeys>
+  </action>
+</gesture>
+```
+
+Example 3: Open Gnome application launcher
 
 ```xml
 <gesture type="PINCH" fingers="4" direction="IN">

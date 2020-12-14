@@ -70,3 +70,10 @@ std::filesystem::path Paths::getUserLockFilePath() {
 std::filesystem::path Paths::getSystemConfigFilePath() {
   return std::filesystem::path{"/usr/share/touchegg/touchegg.conf"};
 }
+
+void Paths::createUserConfigDir() {
+  std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
+  if (!std::filesystem::exists(homeConfigDir)) {
+    std::filesystem::create_directories(homeConfigDir);
+  }
+}

@@ -126,7 +126,7 @@ void XmlConfigLoader::watchConfig() {
   // https://developer.ibm.com/tutorials/l-ubuntu-inotify/
 
   std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
-  std::filesystem::create_directories(homeConfigDir);
+  Paths::createUserConfigDir();
 
   const std::string warningMessage =
       "It was not posssible to monitor your configuration file for changes. "

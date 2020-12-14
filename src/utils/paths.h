@@ -49,6 +49,11 @@ class Paths {
    * @return System config file path (/usr/share/touchegg/touchegg.conf).
    */
   static std::filesystem::path getSystemConfigFilePath();
+
+  /**
+   * Creates the "getUserConfigDirPath" directory.
+   */
+  static void createUserConfigDir();
 };
 
 #endif  // UTILS_PATHS_H_

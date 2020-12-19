@@ -30,8 +30,9 @@ LibinputDeviceInfo LininputHandler::getDeviceInfo(
 
   if (userData != nullptr) {
     auto aux = static_cast<LibinputDeviceInfo *>(userData);
-    info.threshold = aux->threshold;
-    info.animationFinishThreshold = aux->animationFinishThreshold;
+    info.startThreshold = aux->startThreshold;
+    info.finishThresholdHorizontal = aux->finishThresholdHorizontal;
+    info.finishThresholdVertical = aux->finishThresholdVertical;
   }
 
   return info;
@@ -60,24 +61,27 @@ GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
 int LininputHandler::calculateSwipeAnimationPercentage(
     const LibinputDeviceInfo &info, GestureDirection direction, double deltaX,
     double deltaY) const {
-  double threshold = info.threshold;
-  double animationFinishThreshold = info.animationFinishThreshold;
+  double startThreshold = info.startThreshold;
+  double finishThreshold = (direction == GestureDirection::LEFT ||
+                            direction == GestureDirection::RIGHT)
+                               ? info.finishThresholdHorizontal
+                               : info.finishThresholdVertical;
 
-  int max = threshold + animationFinishThreshold;
+  int max = startThreshold + finishThreshold;
   int current = 0;
 
   switch (direction) {
     case GestureDirection::UP:
-      current = std::abs(std::min(0.0, deltaY + threshold));
+      current = std::abs(std::min(0.0, deltaY + startThreshold));
       break;
     case GestureDirection::DOWN:
-      current = std::max(0.0, deltaY - threshold);
+      current = std::max(0.0, deltaY - startThreshold);
       break;
     case GestureDirection::LEFT:
-      current = std::abs(std::min(0.0, deltaX + threshold));
+      current = std::abs(std::min(0.0, deltaX + startThreshold));
       break;
     case GestureDirection::RIGHT:
-      current = std::max(0.0, deltaX - threshold);
+      current = std::max(0.0, deltaX - startThreshold);
       break;
     default:
       break;

@@ -36,10 +36,10 @@
 #include "gesture/gesture-direction.h"
 
 LibinputGestureGatherer::LibinputGestureGatherer(
-    GestureControllerDelegate *gestureController, double threshold,
-    double animationFinishThreshold)
-    : GestureGatherer(gestureController, threshold, animationFinishThreshold),
-      deviceHandler(gestureController, threshold, animationFinishThreshold),
+    GestureControllerDelegate *gestureController, double startThreshold,
+    double finishThreshold)
+    : GestureGatherer(gestureController, startThreshold, finishThreshold),
+      deviceHandler(gestureController, startThreshold, finishThreshold),
       swipeHandler(gestureController),
       pinchHandler(gestureController),
       touchHandler(gestureController) {

@@ -113,8 +113,8 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
 
   if (!this->state.started) {
     if (this->state.currentFingers >= 2 &&
-        (std::abs(deltaX) > info.threshold ||
-         std::abs(deltaY) > info.threshold)) {
+        (std::abs(deltaX) > info.startThreshold ||
+         std::abs(deltaY) > info.startThreshold)) {
       this->state.started = true;
       this->state.startFingers = this->state.currentFingers;
       this->state.startTimestamp = this->getTimestamp();

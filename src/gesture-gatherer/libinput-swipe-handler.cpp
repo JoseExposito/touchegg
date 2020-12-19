@@ -18,6 +18,7 @@
 #include "gesture-gatherer/libinput-swipe-handler.h"
 
 #include <algorithm>
+#include <iostream>
 #include <utility>
 
 #include "gesture-gatherer/libinput-device-info.h"
@@ -31,14 +32,16 @@ void LininputSwipeHandler::handleSwipeBegin(struct libinput_event * /*event*/) {
 void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
   struct libinput_event_gesture *gestureEvent =
       libinput_event_get_gesture_event(event);
-  this->state.deltaX += libinput_event_gesture_get_dx(gestureEvent);
-  this->state.deltaY += libinput_event_gesture_get_dy(gestureEvent);
+  this->state.deltaX +=
+      libinput_event_gesture_get_dx_unaccelerated(gestureEvent);
+  this->state.deltaY +=
+      libinput_event_gesture_get_dy_unaccelerated(gestureEvent);
 
   LibinputDeviceInfo info = this->getDeviceInfo(event);
 
   if (!this->state.started) {
-    if (std::abs(this->state.deltaX) > info.threshold ||
-        std::abs(this->state.deltaY) > info.threshold) {
+    if (std::abs(this->state.deltaX) > info.startThreshold ||
+        std::abs(this->state.deltaY) > info.startThreshold) {
       this->state.started = true;
       this->state.startTimestamp = this->getTimestamp();
       this->state.direction =

@@ -39,8 +39,8 @@ class LibinputGesture;
 class LibinputGestureGatherer : public GestureGatherer {
  public:
   LibinputGestureGatherer(GestureControllerDelegate *gestureController,
-                          double threshold = -1,
-                          double animationFinishThreshold = -1);
+                          double startThreshold = -1,
+                          double finishThreshold = -1);
   ~LibinputGestureGatherer();
 
   /**

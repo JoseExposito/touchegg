@@ -54,14 +54,14 @@ class LininputDeviceHandler : public LininputHandler {
    * configurable. However this methods works with the bast majority of devices
    * out there.
    */
-  void calculateTouchpadThreshold(double widthMm, double heightMm,
-                                  LibinputDeviceInfo *outInfo) const;
-  double mmToDpi(double mm) const;
+  static void calculateTouchpadThreshold(double widthMm, double heightMm,
+                                         LibinputDeviceInfo *outInfo);
+  static double mmToDpi(double mm);
 
   /**
    * Calculates LibinputDeviceInfo on touchscreens.
    */
-  void calculateTouchscreenThreshold(double widthMm, double heightMm,
-                                     LibinputDeviceInfo *outInfo) const;
+  static void calculateTouchscreenThreshold(double widthMm, double heightMm,
+                                            LibinputDeviceInfo *outInfo);
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_DEVICE_HANDLER_H_

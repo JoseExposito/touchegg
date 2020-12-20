@@ -53,6 +53,12 @@
         "regex": "cpp",
         "cinttypes": "cpp",
         "condition_variable": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "bit": "cpp",
+        "list": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "iomanip": "cpp",
+        "shared_mutex": "cpp"
     }
 }

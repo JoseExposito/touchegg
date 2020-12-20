@@ -45,9 +45,11 @@ void LininputDeviceHandler::handleDeviceAdded(
     double heightMm = 0;
     if (libinput_device_get_size(device, &widthMm, &heightMm) == 0) {
       if (hasGestureCap) {
-        this->calculateTouchpadThreshold(widthMm, heightMm, info);
+        LininputDeviceHandler::calculateTouchpadThreshold(widthMm, heightMm,
+                                                          info);
       } else {
-        this->calculateTouchscreenThreshold(widthMm, heightMm, info);
+        LininputDeviceHandler::calculateTouchscreenThreshold(widthMm, heightMm,
+                                                             info);
       }
     } else {
       std::cout
@@ -78,7 +80,7 @@ void LininputDeviceHandler::handleDeviceAdded(
 }
 
 void LininputDeviceHandler::calculateTouchpadThreshold(
-    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {
   // From the official documentation:
   // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
   //
@@ -109,14 +111,15 @@ void LininputDeviceHandler::calculateTouchpadThreshold(
   constexpr int FINISH_PERCENTAGE = 40;
 
   double minSize = std::min(widthMm, heightMm);
-  outInfo->startThreshold = ((this->mmToDpi(minSize) * START_PERCENTAGE) / 100);
+  outInfo->startThreshold =
+      ((LininputDeviceHandler::mmToDpi(minSize) * START_PERCENTAGE) / 100);
   outInfo->finishThresholdHorizontal =
-      ((this->mmToDpi(widthMm) * FINISH_PERCENTAGE) / 100);
+      ((LininputDeviceHandler::mmToDpi(widthMm) * FINISH_PERCENTAGE) / 100);
   outInfo->finishThresholdVertical =
-      ((this->mmToDpi(heightMm) * FINISH_PERCENTAGE) / 100);
+      ((LininputDeviceHandler::mmToDpi(heightMm) * FINISH_PERCENTAGE) / 100);
 }
 
-double LininputDeviceHandler::mmToDpi(double mm) const {
+double LininputDeviceHandler::mmToDpi(double mm) {
   constexpr double mmInOneInch = 25.4;  // 1 inch == 25.4 mm
   double inches = mm / mmInOneInch;
   double dpi = (inches * 1000);
@@ -124,7 +127,7 @@ double LininputDeviceHandler::mmToDpi(double mm) const {
 }
 
 void LininputDeviceHandler::calculateTouchscreenThreshold(
-    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {
   // start_threshold -> 5% of the width/height
   // finish_threshold -> 25% of the width/height
   constexpr int START_PERCENTAGE = 5;

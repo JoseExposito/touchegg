@@ -70,7 +70,7 @@ void Color::setFromAutoColor(ColorType colorType) {
   gtk_style_context_set_path(colorStyleContext, path);
   gtk_style_context_set_parent(colorStyleContext, labelStyleContext);
 
-  GdkRGBA *color;
+  GdkRGBA *color = nullptr;
   // NOLINTNEXTLINE
   gtk_style_context_get(
       colorStyleContext, GTK_STATE_FLAG_NORMAL,

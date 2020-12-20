@@ -41,8 +41,8 @@ class DaemonClient {
 
   void sendToGestureController(const struct GestureEvent &event);
 
-  std::unique_ptr<Gesture> makeGestureFromEvent(
-      const struct GestureEvent &event) const;
+  static std::unique_ptr<Gesture> makeGestureFromEvent(
+      const struct GestureEvent &event);
 };
 
 #endif  // DAEMON_DAEMON_CLIENT_H_

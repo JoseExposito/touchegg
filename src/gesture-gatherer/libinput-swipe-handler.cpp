@@ -37,17 +37,19 @@ void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
   this->state.deltaY +=
       libinput_event_gesture_get_dy_unaccelerated(gestureEvent);
 
-  LibinputDeviceInfo info = this->getDeviceInfo(event);
+  LibinputDeviceInfo info = LininputHandler::getDeviceInfo(event);
 
   if (!this->state.started) {
     if (std::abs(this->state.deltaX) > info.startThreshold ||
         std::abs(this->state.deltaY) > info.startThreshold) {
       this->state.started = true;
-      this->state.startTimestamp = this->getTimestamp();
-      this->state.direction =
-          this->calculateSwipeDirection(this->state.deltaX, this->state.deltaY);
-      this->state.percentage = this->calculateSwipeAnimationPercentage(
-          info, this->state.direction, this->state.deltaX, this->state.deltaY);
+      this->state.startTimestamp = LininputHandler::getTimestamp();
+      this->state.direction = LininputHandler::calculateSwipeDirection(
+          this->state.deltaX, this->state.deltaY);
+      this->state.percentage =
+          LininputHandler::calculateSwipeAnimationPercentage(
+              info, this->state.direction, this->state.deltaX,
+              this->state.deltaY);
       this->state.fingers =
           libinput_event_gesture_get_finger_count(gestureEvent);
       uint64_t elapsedTime = 0;
@@ -58,10 +60,10 @@ void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
-    this->state.percentage = this->calculateSwipeAnimationPercentage(
+    this->state.percentage = LininputHandler::calculateSwipeAnimationPercentage(
         info, this->state.direction, this->state.deltaX, this->state.deltaY);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::SWIPE, this->state.direction, this->state.percentage,
@@ -72,11 +74,11 @@ void LininputSwipeHandler::handleSwipeUpdate(struct libinput_event *event) {
 
 void LininputSwipeHandler::handleSwipeEnd(struct libinput_event *event) {
   if (this->state.started) {
-    LibinputDeviceInfo info = this->getDeviceInfo(event);
-    this->state.percentage = this->calculateSwipeAnimationPercentage(
+    LibinputDeviceInfo info = LininputHandler::getDeviceInfo(event);
+    this->state.percentage = LininputHandler::calculateSwipeAnimationPercentage(
         info, this->state.direction, this->state.deltaX, this->state.deltaY);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::SWIPE, this->state.direction, this->state.percentage,

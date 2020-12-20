@@ -59,7 +59,7 @@ class XmlConfigLoader {
   /**
    * @returns Path to the config file to use.
    */
-  std::filesystem::path getConfigFilePath() const;
+  static std::filesystem::path getConfigFilePath();
 
   /**
    * Parse the XML configuration file placed in path.

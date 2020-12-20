@@ -91,7 +91,7 @@ void DaemonClient::run() {
 }
 
 void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
-  std::unique_ptr<Gesture> gesture = this->makeGestureFromEvent(event);
+  std::unique_ptr<Gesture> gesture = DaemonClient::makeGestureFromEvent(event);
   switch (event.eventType) {
     case GestureEventType::BEGIN:
       this->gestureController->onGestureBegin(std::move(gesture));
@@ -108,7 +108,7 @@ void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
 }
 
 std::unique_ptr<Gesture> DaemonClient::makeGestureFromEvent(
-    const struct GestureEvent &event) const {
+    const struct GestureEvent &event) {
   return std::make_unique<Gesture>(
       event.type, event.direction, event.percentage, event.fingers,
       event.performedOnDeviceType, event.elapsedTime);

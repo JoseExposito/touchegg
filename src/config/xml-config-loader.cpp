@@ -52,7 +52,7 @@ void XmlConfigLoader::load() {
   this->watchConfig();
 }
 
-std::filesystem::path XmlConfigLoader::getConfigFilePath() const {
+std::filesystem::path XmlConfigLoader::getConfigFilePath() {
   const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
   const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
 
@@ -67,7 +67,7 @@ std::filesystem::path XmlConfigLoader::getConfigFilePath() const {
 }
 
 void XmlConfigLoader::parseConfig() {
-  std::filesystem::path configPath = this->getConfigFilePath();
+  std::filesystem::path configPath = XmlConfigLoader::getConfigFilePath();
   std::cout << "Using configuration file " << configPath << std::endl;
 
   pugi::xml_document doc;

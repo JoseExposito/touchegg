@@ -33,10 +33,10 @@ void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
 
   if (!this->state.started) {
     this->state.started = true;
-    this->state.startTimestamp = this->getTimestamp();
+    this->state.startTimestamp = LininputHandler::getTimestamp();
     this->state.direction =
         (this->state.delta > 1) ? GestureDirection::OUT : GestureDirection::IN;
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     this->state.fingers = libinput_event_gesture_get_finger_count(gestureEvent);
     uint64_t elapsedTime = 0;
@@ -46,10 +46,10 @@ void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
         this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureBegin(std::move(gesture));
   } else {
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
@@ -63,10 +63,10 @@ void LininputPinchHandler::handlePinchEnd(struct libinput_event *event) {
     struct libinput_event_gesture *gestureEvent =
         libinput_event_get_gesture_event(event);
     this->state.delta = libinput_event_gesture_get_scale(gestureEvent);
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,

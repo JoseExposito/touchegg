@@ -30,13 +30,15 @@ X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   // the size of all of them, like they were a single screen
   int x = 0;
   int y = 0;
-  unsigned int width = 0;
-  unsigned int height = 0;
+  unsigned int uWidth = 0;
+  unsigned int uHeight = 0;
   Window retRootWindow = None;
   unsigned int retBorderWidth = 0;
   unsigned int retDepth = 0;
-  XGetGeometry(display, rootWindow, &retRootWindow, &x, &y, &width, &height,
+  XGetGeometry(display, rootWindow, &retRootWindow, &x, &y, &uWidth, &uHeight,
                &retBorderWidth, &retDepth);
+  int width = static_cast<int>(uWidth);
+  int height = static_cast<int>(uHeight);
 
   // Create a transparent window
   XVisualInfo vInfo;

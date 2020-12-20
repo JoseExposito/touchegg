@@ -29,9 +29,9 @@
 #include "window-system/x11.h"
 
 #ifdef _VERSION
-#define VERSION _VERSION
+constexpr auto VERSION = _VERSION;
 #else
-#define VERSION "[Unkown version]"
+constexpr auto VERSION = "[Unkown version]";
 #endif
 
 void printWelcomeMessage() {

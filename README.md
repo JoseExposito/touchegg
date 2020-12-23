@@ -100,7 +100,12 @@ It is a XML document with 3 main sections:
 
   * [Global settings](#global-settings)
   * Global gestures: `<application name="All">...</application>`
-  * Application specified gestures: `<application name="Google-chrome,Firefox"></application>`
+  * Application specific gestures: `<application name="Google-chrome,Firefox"></application>`
+    
+    The application name can be obtained by running this command and clicking on the target application window:
+    ```bash
+    $ xprop | grep WM_CLASS
+    ```
 
 Find more information in the sections below.
 

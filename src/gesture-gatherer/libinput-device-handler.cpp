@@ -43,7 +43,18 @@ void LininputDeviceHandler::handleDeviceAdded(
 
     double widthMm = 0;
     double heightMm = 0;
-    if (libinput_device_get_size(device, &widthMm, &heightMm) == 0) {
+    int getSizeStatus = libinput_device_get_size(device, &widthMm, &heightMm);
+
+    // Some devices are reporting a size of 0x0mm:
+    // https://github.com/JoseExposito/touchegg/issues/415
+    if (getSizeStatus == 0 && widthMm != 0 && heightMm != 0) {
+      std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
+                << std::endl;
+
+      std::cout << "\tCalculating start_threshold and finish_threshold. "
+                   "You can tune this values in your service file"
+                << std::endl;
+
       if (hasGestureCap) {
         LininputDeviceHandler::calculateTouchpadThreshold(widthMm, heightMm,
                                                           info);
@@ -100,13 +111,6 @@ void LininputDeviceHandler::calculateTouchpadThreshold(
   // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
   //  - start_threshold -> 5% of the maximum deltaX/Y
   //  - finish_threshold -> 40% of the maximum deltaX/Y
-  std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
-            << std::endl;
-
-  std::cout << "\tCalculating start_threshold and finish_threshold. "
-               "You can tune this values in your service file"
-            << std::endl;
-
   constexpr int START_PERCENTAGE = 5;
   constexpr int FINISH_PERCENTAGE = 40;
 

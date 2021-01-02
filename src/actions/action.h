@@ -49,7 +49,7 @@ class Action {
         windowSystem(windowSystem),
         window(window),
         config(config),
-        threshold(this->readThreshold(config)) {}
+        threshold(Action::readThreshold(config)) {}
   virtual ~Action() = default;
 
   /**

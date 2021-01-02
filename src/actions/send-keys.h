@@ -30,10 +30,10 @@ class SendKeys : public RepeatedAction {
  public:
   using RepeatedAction::RepeatedAction;
   bool runOnSystemWindows() override { return true; }
-  virtual void executePrelude() override;
-  virtual void executePostlude() override;
-  virtual void executeAction(const Gesture &gesture) override;
-  virtual void executeReverse(const Gesture &gesture) override;
+  void executePrelude() override;
+  void executePostlude() override;
+  void executeAction(const Gesture &gesture) override;
+  void executeReverse(const Gesture &gesture) override;
 
  private:
   std::vector<std::string> modifiers;

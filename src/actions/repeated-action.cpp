@@ -17,13 +17,11 @@
  */
 #include "actions/repeated-action.h"
 
-
 void RepeatedAction::executePrelude() {}
 void RepeatedAction::executePostlude() {}
 
-void RepeatedAction::onGestureBegin(const Gesture &gesture)
-{
-  // read action settings
+void RepeatedAction::onGestureBegin(const Gesture &gesture) {
+  // read repeated action settings
   if (this->settings.count("repeat") == 1) {
     this->repeat = (this->settings.at("repeat") == "true");
   }
@@ -31,8 +29,10 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture)
   if (this->settings.count("on") == 1) {
     this->onBegin = (this->settings.at("on") == "begin");
   }
+
   // execute supplied prelude
   this->executePrelude();
+
   // run action if required
   if (!this->repeat && this->onBegin) {
     if (gesture.percentage() > this->threshold) {
@@ -42,8 +42,7 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture)
   }
 }
 
-void RepeatedAction::onGestureUpdate(const Gesture &gesture)
-{
+void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
   if (this->onBegin && !this->onBeginExecuted) {
     if (gesture.percentage() > this->threshold) {
       this->executeAction(gesture);
@@ -67,8 +66,7 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture)
   }
 }
 
-void RepeatedAction::onGestureEnd(const Gesture &gesture)
-{
+void RepeatedAction::onGestureEnd(const Gesture &gesture) {
   if (!this->repeat && !this->onBegin) {
     if (gesture.percentage() > this->threshold) {
       this->executeAction(gesture);

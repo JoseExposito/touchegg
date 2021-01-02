@@ -20,25 +20,22 @@
 
 #include <string>
 
-#include "actions/action.h"
+#include "actions/repeated-action.h"
 
 /**
  * Action to emulate a shortcut.
  */
-class RunCommand : public Action {
+class RunCommand : public RepeatedAction {
  public:
-  using Action::Action;
+  using RepeatedAction::RepeatedAction;
   bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
+  virtual void executePrelude() override;
+  virtual void executeAction(const Gesture &gesture) override;
+  virtual void executeReverse(const Gesture &gesture) override;
 
  private:
   std::string command;
   std::string decreaseCommand;
-  bool repeat = false;
-  int repeatPercentage = 0;
-  bool onBegin = true;
 
   static bool runCommand(const std::string &command);
 };

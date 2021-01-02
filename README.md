@@ -115,7 +115,7 @@ Find more information in the sections below.
 | Option | Value | Default | Description | Example
 | - | - | - | - | - |
 | animation_delay | Number | 150 | Delay, in milliseconds, since the gesture starts before the animation is displayed | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that no animation is displayed if you complete the action quick enough. This property configures that time |
-| action_execute_threshold | Number | 20 | Percentage of the animation to be completed to apply the action | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not moved your fingers far enough. This property configures the percentage of the animation that must be reached to execute the action |
+| action_execute_threshold | Number | 20 | Percentage of the gesture to be completed to apply the action | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not move your fingers far enough. This property configures the percentage of the gesture that must be reached to execute the action |
 | color | Hex color | 3E9FED | Color of the animation | `#909090`
 | borderColor | Hex color | 3E9FED | Color of the animation | `FFFFFF`
 

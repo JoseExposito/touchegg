@@ -68,10 +68,7 @@ void AnimatedAction::onGestureUpdate(const Gesture &gesture) {
 }
 
 void AnimatedAction::onGestureEnd(const Gesture &gesture) {
-  int threshold =
-      std::stoi(this->config.getGlobalSetting("action_execute_threshold"));
-
-  if (!this->animate || gesture.percentage() >= threshold) {
+  if (!this->animate || gesture.percentage() > this->threshold) {
     this->executeAction(gesture);
   }
 }

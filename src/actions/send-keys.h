@@ -21,26 +21,24 @@
 #include <string>
 #include <vector>
 
-#include "actions/action.h"
+#include "actions/repeated-action.h"
 
 /**
  * Action to emulate a shortcut.
  */
-class SendKeys : public Action {
+class SendKeys : public RepeatedAction {
  public:
-  using Action::Action;
+  using RepeatedAction::RepeatedAction;
   bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
+  virtual void executePrelude() override;
+  virtual void executePostlude() override;
+  virtual void executeAction(const Gesture &gesture) override;
+  virtual void executeReverse(const Gesture &gesture) override;
 
  private:
   std::vector<std::string> modifiers;
   std::vector<std::string> keys;
   std::vector<std::string> decreaseKeys;
-  bool repeat = false;
-  int repeatPercentage = 0;
-  bool onBegin = true;
 };
 
 #endif  // ACTIONS_SEND_KEYS_H_

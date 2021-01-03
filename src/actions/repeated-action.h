@@ -50,10 +50,12 @@ class RepeatedAction : public Action {
   virtual void executePostlude();
   /**
    * Override this method to configure what is executed for succesful gesture
+   * @param gesture The gesture that triggered the action
    */
   virtual void executeAction(const Gesture &gesture) = 0;
   /**
    * Override this method to configure what is executed for reversed gesture
+   * @param gesture The gesture that triggered the action
    */
   virtual void executeReverse(const Gesture &gesture) = 0;
 
@@ -61,8 +63,10 @@ class RepeatedAction : public Action {
   bool repeat = false;
   int repeatPercentage = 0;
   bool onBegin = true;
-  /** Safeguard against executing onBegin action multiple times when execution
-   * threshold is surpassed multiple times */
+  /**
+   * Safeguard against executing onBegin action multiple times when execution
+   * threshold is surpassed multiple times
+   */
   bool onBeginExecuted = false;
 };
 

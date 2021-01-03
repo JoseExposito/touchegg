@@ -31,7 +31,11 @@
  */
 class Action {
  private:
-  /** Failsafe read gesture threshold property from config */
+  /**
+   * Fail-safe read gesture threshold property from config.
+   * @param config Config to read threshold value from
+   * @returns non-negative value of execute_threshold
+   */
   static int readThreshold(const Config &config);
 
  public:
@@ -67,8 +71,10 @@ class Action {
   const WindowSystem &windowSystem;
   const WindowT &window;
   const Config &config;
-  /** Special config value: threshold to execute action. All derived actions
-   * must respect this */
+  /**
+   * Special config value: threshold to execute action. All derived actions
+   * must respect this.
+   */
   const int threshold;
 };
 

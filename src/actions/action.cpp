@@ -20,15 +20,15 @@
 #include <algorithm>
 
 int Action::readThreshold(const Config &config) {
-  int threshold = 0;
+  int threshold = 20;
+
   try {
-    threshold =
-      std::stoi(config.getGlobalSetting("action_execute_threshold"));
-  } catch (std::exception& e) {
-    std::cout << "Bad action_execute_threshold value: "
-              << e.what() << std::endl;
-    // leave default 0 if numeric conversion failed
+    threshold = std::stoi(config.getGlobalSetting("action_execute_threshold"));
+  } catch (std::exception &e) {
+    std::cout << "Bad action_execute_threshold value: " << e.what()
+              << std::endl;
+    // Leave default 20 if numeric conversion failed
   }
-  // discard negative percentage
+
   return std::clamp(threshold, 0, 100);
 }

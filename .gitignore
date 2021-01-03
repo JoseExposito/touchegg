@@ -27,6 +27,9 @@ documentation/log
 *.code-workspace
 .history/
 
+# ctags
+.cpptags
+
 # Debian packaging
 debian/*.log
 debian/*.substvars
@@ -47,6 +50,3 @@ obj-*-linux-gnu/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-
-# ctags
-.cpptags

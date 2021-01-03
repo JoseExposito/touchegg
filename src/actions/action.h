@@ -30,14 +30,6 @@
  * Base class for all actions. Use the ActionFactory to build actions.
  */
 class Action {
- private:
-  /**
-   * Fail-safe read gesture threshold property from config.
-   * @param config Config to read threshold value from
-   * @returns non-negative value of execute_threshold
-   */
-  static int readThreshold(const Config &config);
-
  public:
   /**
    * Default constructor.
@@ -76,6 +68,14 @@ class Action {
    * must respect this.
    */
   const int threshold;
+
+ private:
+  /**
+   * Fail-safe read gesture threshold property from config.
+   * @param config Config to read threshold value from.
+   * @returns action_execute_threshold.
+   */
+  static int readThreshold(const Config &config);
 };
 
 #endif  // ACTIONS_ACTION_H_

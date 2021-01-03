@@ -29,10 +29,12 @@ class RepeatedAction : public Action {
    * Execute gesture on begin
    */
   void onGestureBegin(const Gesture &gesture) override;
+
   /**
    * Execute gesture repeatedly
    */
   void onGestureUpdate(const Gesture &gesture) override;
+
   /**
    * Execute gesture on end if threshold passed
    */
@@ -43,16 +45,19 @@ class RepeatedAction : public Action {
    * executed unconditionally upon gesture beginning
    */
   virtual void executePrelude();
+
   /**
    * If your action requires some post-setup, override this method. This is
    * executed unconditionally upon gesture ending
    */
   virtual void executePostlude();
+
   /**
    * Override this method to configure what is executed for succesful gesture
    * @param gesture The gesture that triggered the action
    */
   virtual void executeAction(const Gesture &gesture) = 0;
+
   /**
    * Override this method to configure what is executed for reversed gesture
    * @param gesture The gesture that triggered the action
@@ -64,6 +69,5 @@ class RepeatedAction : public Action {
   int repeatPercentage = 0;
   bool onBegin = true;
 };
-
 
 #endif  // ACTIONS_REPEATED_ACTION_H_

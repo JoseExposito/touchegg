@@ -30,5 +30,5 @@ int Action::readThreshold(const Config &config) {
     // leave default 0 if numeric conversion failed
   }
   // discard negative percentage
-  return std::max(threshold, 0);
+  return std::clamp(threshold, 0, 100);
 }

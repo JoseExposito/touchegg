@@ -33,22 +33,13 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   // execute supplied prelude
   this->executePrelude();
 
-  // run action if required
+  // run action on begin
   if (!this->repeat && this->onBegin) {
-    if (gesture.percentage() > this->threshold) {
-      this->executeAction(gesture);
-      this->onBeginExecuted = true;
-    }
+    this->executeAction(gesture);
   }
 }
 
 void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
-  if (this->onBegin && !this->onBeginExecuted) {
-    if (gesture.percentage() > this->threshold) {
-      this->executeAction(gesture);
-      this->onBeginExecuted = true;
-    }
-  }
   if (this->repeat) {
     constexpr int step = 10;
     bool increased = (gesture.percentage() >= (this->repeatPercentage + step));

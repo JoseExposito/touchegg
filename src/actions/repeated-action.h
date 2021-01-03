@@ -26,7 +26,7 @@ class RepeatedAction : public Action {
   virtual ~RepeatedAction() = default;
 
   /**
-   * Execute gesture on begin if threshold passed
+   * Execute gesture on begin
    */
   void onGestureBegin(const Gesture &gesture) override;
   /**
@@ -63,11 +63,6 @@ class RepeatedAction : public Action {
   bool repeat = false;
   int repeatPercentage = 0;
   bool onBegin = true;
-  /**
-   * Safeguard against executing onBegin action multiple times when execution
-   * threshold is surpassed multiple times
-   */
-  bool onBeginExecuted = false;
 };
 
 

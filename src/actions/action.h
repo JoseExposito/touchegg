@@ -30,6 +30,14 @@
  * Base class for all actions. Use the ActionFactory to build actions.
  */
 class Action {
+ private:
+  /**
+   * Fail-safe read gesture threshold property from config.
+   * @param config Config to read threshold value from
+   * @returns non-negative value of execute_threshold
+   */
+  static int readThreshold(const Config &config);
+
  public:
   /**
    * Default constructor.
@@ -44,7 +52,8 @@ class Action {
       : settings(std::move(settings)),
         windowSystem(windowSystem),
         window(window),
-        config(config) {}
+        config(config),
+        threshold(Action::readThreshold(config)) {}
   virtual ~Action() = default;
 
   /**
@@ -62,6 +71,11 @@ class Action {
   const WindowSystem &windowSystem;
   const WindowT &window;
   const Config &config;
+  /**
+   * Special config value: threshold to execute action. All derived actions
+   * must respect this.
+   */
+  const int threshold;
 };
 
 #endif  // ACTIONS_ACTION_H_

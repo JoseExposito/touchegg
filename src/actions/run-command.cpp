@@ -19,7 +19,7 @@
 
 #include <cstdlib>
 
-void RunCommand::onGestureBegin(const Gesture& /*gesture*/) {
+void RunCommand::executePrelude() {
   if (this->settings.count("command") == 1) {
     this->command = this->settings.at("command");
   }
@@ -27,42 +27,14 @@ void RunCommand::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->settings.count("decreaseCommand") == 1) {
     this->decreaseCommand = this->settings.at("decreaseCommand");
   }
-
-  if (this->settings.count("repeat") == 1) {
-    this->repeat = (this->settings.at("repeat") == "true");
-  }
-
-  if (this->settings.count("on") == 1) {
-    this->onBegin = (this->settings.at("on") == "begin");
-  }
-
-  if (!this->repeat && this->onBegin) {
-    RunCommand::runCommand(this->command);
-  }
 }
 
-void RunCommand::onGestureUpdate(const Gesture& gesture) {
-  if (this->repeat) {
-    constexpr int step = 10;
-    bool increased = (gesture.percentage() >= (this->repeatPercentage + step));
-    bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
-
-    if (increased) {
-      RunCommand::runCommand(this->command);
-      this->repeatPercentage += step;
-    }
-
-    if (decreased) {
-      RunCommand::runCommand(this->decreaseCommand);
-      this->repeatPercentage -= step;
-    }
-  }
+void RunCommand::executeAction(const Gesture& /*gesture*/) {
+  RunCommand::runCommand(this->command);
 }
 
-void RunCommand::onGestureEnd(const Gesture& /*gesture*/) {
-  if (!this->repeat && !this->onBegin) {
-    RunCommand::runCommand(this->command);
-  }
+void RunCommand::executeReverse(const Gesture& /*gesture*/) {
+  RunCommand::runCommand(this->decreaseCommand);
 }
 
 bool RunCommand::runCommand(const std::string& command) {

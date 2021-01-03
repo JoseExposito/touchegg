@@ -19,7 +19,7 @@
 
 #include "utils/string.h"
 
-void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
+void SendKeys::executePrelude() {
   if (this->settings.count("modifiers") == 1) {
     this->modifiers = split(this->settings.at("modifiers"), '+');
   }
@@ -32,14 +32,6 @@ void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
     this->decreaseKeys = split(this->settings.at("decreaseKeys"), '+');
   }
 
-  if (this->settings.count("repeat") == 1) {
-    this->repeat = (this->settings.at("repeat") == "true");
-  }
-
-  if (this->settings.count("on") == 1) {
-    this->onBegin = (this->settings.at("on") == "begin");
-  }
-
   // Only the active window receives shortcuts
   if (!this->windowSystem.isSystemWindow(this->window)) {
     this->windowSystem.activateWindow(this->window);
@@ -47,38 +39,19 @@ void SendKeys::onGestureBegin(const Gesture& /*gesture*/) {
 
   // "Press" the modifiers and keys if required
   this->windowSystem.sendKeys(this->modifiers, true);
-
-  if (!this->repeat && this->onBegin) {
-    this->windowSystem.sendKeys(this->keys, true);
-    this->windowSystem.sendKeys(this->keys, false);
-  }
 }
 
-void SendKeys::onGestureUpdate(const Gesture& gesture) {
-  if (this->repeat) {
-    constexpr int step = 10;
-    bool increased = (gesture.percentage() >= (this->repeatPercentage + step));
-    bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
-
-    if (increased) {
-      this->windowSystem.sendKeys(this->keys, true);
-      this->windowSystem.sendKeys(this->keys, false);
-      this->repeatPercentage += step;
-    }
-
-    if (decreased) {
-      this->windowSystem.sendKeys(this->decreaseKeys, true);
-      this->windowSystem.sendKeys(this->decreaseKeys, false);
-      this->repeatPercentage -= step;
-    }
-  }
-}
-
-void SendKeys::onGestureEnd(const Gesture& /*gesture*/) {
-  if (!this->repeat && !this->onBegin) {
-    this->windowSystem.sendKeys(this->keys, true);
-    this->windowSystem.sendKeys(this->keys, false);
-  }
-
+void SendKeys::executePostlude() {
+  // "Release" the modifiers and keys if required
   this->windowSystem.sendKeys(this->modifiers, false);
+}
+
+void SendKeys::executeAction(const Gesture& /*gesture*/) {
+  this->windowSystem.sendKeys(this->keys, true);
+  this->windowSystem.sendKeys(this->keys, false);
+}
+
+void SendKeys::executeReverse(const Gesture& /*gesture*/) {
+  this->windowSystem.sendKeys(this->decreaseKeys, true);
+  this->windowSystem.sendKeys(this->decreaseKeys, false);
 }

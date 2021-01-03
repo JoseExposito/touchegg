@@ -15,29 +15,20 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_RUN_COMMAND_H_
-#define ACTIONS_RUN_COMMAND_H_
+#include "actions/action.h"
 
-#include <string>
+#include <algorithm>
 
-#include "actions/repeated-action.h"
-
-/**
- * Action to emulate a shortcut.
- */
-class RunCommand : public RepeatedAction {
- public:
-  using RepeatedAction::RepeatedAction;
-  bool runOnSystemWindows() override { return true; }
-  void executePrelude() override;
-  void executeAction(const Gesture &gesture) override;
-  void executeReverse(const Gesture &gesture) override;
-
- private:
-  std::string command;
-  std::string decreaseCommand;
-
-  static bool runCommand(const std::string &command);
-};
-
-#endif  // ACTIONS_RUN_COMMAND_H_
+int Action::readThreshold(const Config &config) {
+  int threshold = 0;
+  try {
+    threshold =
+      std::stoi(config.getGlobalSetting("action_execute_threshold"));
+  } catch (std::exception& e) {
+    std::cout << "Bad action_execute_threshold value: "
+              << e.what() << std::endl;
+    // leave default 0 if numeric conversion failed
+  }
+  // discard negative percentage
+  return std::clamp(threshold, 0, 100);
+}

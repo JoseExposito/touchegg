@@ -416,7 +416,7 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
     KeySym sym = XStringToKeysym(keycode.c_str());
     KeyCode code = XKeysymToKeycode(this->display, sym);
 
-    if (code != 0) {
+    if (sym != 0 && code != 0) {
       XTestFakeKeyEvent(this->display, code, isPress ? True : False, 0);
     } else {
       std::cout << "Error performing keyboard shortcut. Unknown key: "

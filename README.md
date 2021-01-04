@@ -101,7 +101,7 @@ It is a XML document with 3 main sections:
   * [Global settings](#global-settings)
   * Global gestures: `<application name="All">...</application>`
   * Application specific gestures: `<application name="Google-chrome,Firefox"></application>`
-    
+
     The application name can be obtained by running this command and clicking on the target application window:
     ```bash
     $ xprop | grep WM_CLASS
@@ -548,6 +548,6 @@ Compatible device detected:
 
 # Copyright
 
-Copyright 2011 - 2020 José Expósito <<jose.exposito89@gmail.com>>
+Copyright 2011 - 2021 José Expósito <<jose.exposito89@gmail.com>>
 
 The source code is available under GPL v3 license on [GitHub](https://github.com/JoseExposito/touchegg)

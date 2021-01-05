@@ -37,8 +37,8 @@ X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   unsigned int retDepth = 0;
   XGetGeometry(display, rootWindow, &retRootWindow, &x, &y, &uWidth, &uHeight,
                &retBorderWidth, &retDepth);
-  int width = static_cast<int>(uWidth);
-  int height = static_cast<int>(uHeight);
+  auto width = static_cast<int>(uWidth);
+  auto height = static_cast<int>(uHeight);
 
   // Create a transparent window
   XVisualInfo vInfo;

@@ -1,5 +1,41 @@
 # Changelog
 
+## 2.0.5 - 2021-01-05
+
+New:
+
+  - Allow to cancel non animated gestures when configured to run on end. Thanks to @d86leader
+
+    https://github.com/JoseExposito/touchegg/issues/419
+
+  - Using unaccelerated deltas and different horizontal and vertical finish thresholds for a better
+    user experience
+
+    https://github.com/JoseExposito/touchegg/issues/412
+
+Fixed:
+
+  - Fix crashes when incorrect keys are used on `SEND_KEYS`
+
+    https://github.com/JoseExposito/touchegg/issues/392
+
+    https://github.com/JoseExposito/touchegg/issues/419
+
+  - Handle devices reporting a size of 0x0 mm
+
+    https://github.com/JoseExposito/touchegg/issues/415
+
+  - Allow to use a symlink as configuration to Dotfiles users
+
+    https://github.com/JoseExposito/touchegg/issues/409
+
+  - Handles window managers that don't set the `_NET_WORKAREA` atom
+
+    https://github.com/JoseExposito/touchegg/issues/381
+
+    https://github.com/JoseExposito/touchegg/issues/383
+
+
 ## 2.0.4 - 2020-12-07
 
 New:

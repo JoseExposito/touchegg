@@ -57,6 +57,14 @@ X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
       CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
   XMapWindow(display, this->window);
 
+  // Add WM_NAME and WM_CLASS properties to the window
+  std::string name("touchégg");
+  XStoreName(display, this->window, &name[0]);
+  XClassHint *classHint = XAllocClassHint();
+  classHint->res_name = &name[0];
+  classHint->res_class = &name[0];
+  XSetClassHint(display, this->window, classHint);
+
   // Create the window cairo surface and context
   this->windowSurface = cairo_xlib_surface_create(this->display, this->window,
                                                   vInfo.visual, width, height);

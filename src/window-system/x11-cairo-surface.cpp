@@ -22,6 +22,8 @@
 #include <X11/Xutil.h>
 #include <cairo-xlib.h>
 
+#include <string>
+
 X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   Window rootWindow = XDefaultRootWindow(this->display);
   int defaultScreen = XDefaultScreen(this->display);

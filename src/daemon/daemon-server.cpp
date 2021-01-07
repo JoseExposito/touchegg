@@ -101,7 +101,7 @@ void DaemonServer::send(GestureEventType eventType,
   std::vector<int> disconnectedClients{};
 
   for (auto client : this->clients) {
-    int written = write(client, &event, event.eventSize);
+    int written = ::send(client, &event, event.eventSize, MSG_NOSIGNAL);
 
     if (written < 0) {
       std::cout << "Error sending message to client with ID " << client

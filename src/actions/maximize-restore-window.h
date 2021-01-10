@@ -30,6 +30,9 @@ class MaximizeRestoreWindow : public AnimatedAction {
   bool runOnSystemWindows() override { return false; }
   void onGestureBegin(const Gesture &gesture) override;
   void executeAction(const Gesture &gesture) override;
+
+ private:
+  bool fullscreen = false;
 };
 
 #endif  // ACTIONS_MAXIMIZE_RESTORE_WINDOW_H_

@@ -23,8 +23,15 @@
 #include "animations/restore-window-animation.h"
 
 void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
+  if (this->settings.count("fullscreen") == 1) {
+    this->fullscreen = this->settings.at("fullscreen") == "true";
+  }
+
   if (this->animate) {
-    if (this->windowSystem.isWindowMaximized(this->window)) {
+    bool restoreWindowAnimation =
+        this->fullscreen ? this->windowSystem.isWindowFullscreen(this->window)
+                         : this->windowSystem.isWindowMaximized(this->window);
+    if (restoreWindowAnimation) {
       this->animation = std::make_unique<RestoreWindowAnimation>(
           this->windowSystem, this->window, this->color, this->borderColor);
     } else {
@@ -35,5 +42,9 @@ void MaximizeRestoreWindow::onGestureBegin(const Gesture& /*gesture*/) {
 }
 
 void MaximizeRestoreWindow::executeAction(const Gesture& /*gesture*/) {
-  this->windowSystem.maximizeOrRestoreWindow(this->window);
+  if (this->fullscreen) {
+    this->windowSystem.toggleFullscreenWindow(this->window);
+  } else {
+    this->windowSystem.maximizeOrRestoreWindow(this->window);
+  }
 }

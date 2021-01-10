@@ -187,6 +187,7 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
+| fullscreen | `true`/`false` | Set it to `true` to display the window in fullscreen mode instead of maximizing it. `false` otherwise. |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |

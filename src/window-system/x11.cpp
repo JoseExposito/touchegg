@@ -271,6 +271,27 @@ bool X11::isWindowMaximized(const WindowT &window) const {
   return maximized;
 }
 
+bool X11::isWindowFullscreen(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return false;
+  }
+
+  Atom atomFullscreen =
+      XInternAtom(this->display, "_NET_WM_STATE_FULLSCREEN", True);
+  std::vector<Atom> states =
+      this->getWindowProperty<Atom>(x11Window.window, "_NET_WM_STATE", XA_ATOM);
+
+  bool fullscreen = false;
+  for (Atom atom : states) {
+    if (atom == atomFullscreen) {
+      fullscreen = true;
+    }
+  }
+
+  return fullscreen;
+}
+
 bool X11::isSystemWindow(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);
   if (x11Window.window == None) {
@@ -301,6 +322,20 @@ void X11::maximizeOrRestoreWindow(const WindowT &window) const {
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
   data.push_back(
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False));
+
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "_NET_WM_STATE", data);
+}
+
+void X11::toggleFullscreenWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  std::vector<unsigned long> data;  // NOLINT
+  data.push_back(2);                // _NET_WM_STATE_TOGGLE = 2
+  data.push_back(XInternAtom(this->display, "_NET_WM_STATE_FULLSCREEN", False));
 
   this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
                   "_NET_WM_STATE", data);

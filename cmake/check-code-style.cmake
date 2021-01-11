@@ -24,7 +24,7 @@ else()
 endif()
 
 find_program(PYTHON_EXEC NAMES "python2")
-if(NOT CLANG_TIDY_EXEC)
+if(NOT PYTHON_EXEC)
   message(WARNING "Check for python2: Not found, cpplint.py will not be executed")
 else()
   message(STATUS "Check for python2: Found")

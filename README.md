@@ -205,6 +205,30 @@ Example:
 
 ![Animation](.github/images/MAXIMIZE_RESTORE_WINDOW.gif)
 
+### Fullscreen a window (FULLSCREEN_WINDOW)
+
+Toggles fullscreen mode for the window under the pointer.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```xml
+<gesture type="SWIPE" fingers="3" direction="UP">
+  <action type="FULLSCREEN_WINDOW">
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
 ### Minimize a window (MINIMIZE_WINDOW)
 
 Minimize the window under the pointer.

@@ -34,7 +34,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
       * [Minimize a window](#minimize-a-window-minimize_window)
       * [Tile/snap a widow](#tilesnap-a-widow-tile_window)
-      * [Fullscreen a window](fullscreen-a-window-fullscreen_window)
+      * [Fullscreen a window](#fullscreen-a-window-fullscreen_window)
       * [Close a window](#close-a-window-close_window)
       * [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop)
       * [Show desktop](#show-desktop-show_desktop)

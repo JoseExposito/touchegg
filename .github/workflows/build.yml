@@ -61,8 +61,8 @@ jobs:
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.0
         with:
-          source_directory: "${{ github.workspace }}/"
-          artifacts_directory: "${{ github.workspace }}/artifacts"
+          source_directory: "./"
+          artifacts_directory: "./artifacts"
 
           docker_image: "pitop/deb-build:latest"
           distribution: "buster-backports"

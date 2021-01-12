@@ -40,7 +40,8 @@ jobs:
     needs: [ patch-src ]
     strategy:
       matrix:
-        target_arch: ["armhf", "arm64"]
+        # target_arch: ["armhf", "arm64"]
+        target_arch: ["amd64"]  # fast debugging
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -59,7 +60,7 @@ jobs:
             path: "${{ github.workspace }}/debian/changelog"
 
       - name: Build Debian package
-        uses: pi-top/action-debian-package@v0.2.1
+        uses: pi-top/action-debian-package@changelog-parse-logging
         with:
           source_directory: "${{ github.workspace }}"
           artifacts_directory: "${{ github.workspace }}/artifacts"

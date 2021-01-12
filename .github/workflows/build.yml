@@ -37,6 +37,7 @@ jobs:
 
   debian:
     runs-on: ubuntu-20.04
+    needs: [ patch-src ]
     strategy:
       matrix:
         target_arch: ["armhf", "arm64"]

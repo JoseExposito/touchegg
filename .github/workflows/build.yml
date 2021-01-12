@@ -48,6 +48,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Delete unpatched changelog
+        run: |
+          rm ${{ github.workspace }}/debian/changelog
+
       - name: Download patched changelog
         uses: "actions/download-artifact@v2"
         with:
@@ -57,8 +61,8 @@ jobs:
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.0
         with:
-          source_directory: "./"
-          artifacts_directory: "./artifacts"
+          source_directory: "${{ github.workspace }}/"
+          artifacts_directory: "${{ github.workspace }}/artifacts"
 
           docker_image: "pitop/deb-build:latest"
           distribution: "buster-backports"

@@ -59,10 +59,10 @@ jobs:
             path: "${{ github.workspace }}/debian/changelog"
 
       - name: Build Debian package
-        uses: pi-top/action-debian-package@v0.2.0
+        uses: pi-top/action-debian-package@v0.2.1
         with:
-          source_directory: "./"
-          artifacts_directory: "./artifacts"
+          source_directory: "${{ github.workspace }}"
+          artifacts_directory: "${{ github.workspace }}/artifacts"
 
           docker_image: "pitop/deb-build:latest"
           distribution: "buster-backports"

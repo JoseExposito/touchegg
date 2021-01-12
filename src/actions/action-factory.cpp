@@ -22,6 +22,7 @@
 #include "actions/action.h"
 #include "actions/change-desktop.h"
 #include "actions/close-window.h"
+#include "actions/fullscreen-window.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
 #include "actions/mouse-click.h"
@@ -38,6 +39,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::MAXIMIZE_RESTORE_WINDOW:
       return std::make_unique<MaximizeRestoreWindow>(
           std::move(settings), windowSystem, window, config);
+    case ActionType::FULLSCREEN_WINDOW:
+      return std::make_unique<FullscreenWindow>(std::move(settings),
+                                                windowSystem, window, config);
     case ActionType::MINIMIZE_WINDOW:
       return std::make_unique<MinimizeWindow>(std::move(settings), windowSystem,
                                               window, config);

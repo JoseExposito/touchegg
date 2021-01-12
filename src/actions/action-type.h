@@ -23,6 +23,7 @@
 enum class ActionType {
   NOT_SUPPORTED,
   MAXIMIZE_RESTORE_WINDOW,
+  FULLSCREEN_WINDOW,
   MINIMIZE_WINDOW,
   TILE_WINDOW,
   CLOSE_WINDOW,
@@ -39,6 +40,8 @@ inline std::string actionTypeToStr(ActionType actionType) {
   switch (actionType) {
     case ActionType::MAXIMIZE_RESTORE_WINDOW:
       return "MAXIMIZE_RESTORE_WINDOW";
+    case ActionType::FULLSCREEN_WINDOW:
+      return "FULLSCREEN_WINDOW";
     case ActionType::MINIMIZE_WINDOW:
       return "MINIMIZE_WINDOW";
     case ActionType::TILE_WINDOW:
@@ -63,6 +66,9 @@ inline std::string actionTypeToStr(ActionType actionType) {
 inline ActionType actionTypeFromStr(const std::string &str) {
   if (str == "MAXIMIZE_RESTORE_WINDOW") {
     return ActionType::MAXIMIZE_RESTORE_WINDOW;
+  }
+  if (str == "FULLSCREEN_WINDOW") {
+    return ActionType::FULLSCREEN_WINDOW;
   }
   if (str == "MINIMIZE_WINDOW") {
     return ActionType::MINIMIZE_WINDOW;

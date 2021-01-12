@@ -34,6 +34,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
       * [Minimize a window](#minimize-a-window-minimize_window)
       * [Tile/snap a widow](#tilesnap-a-widow-tile_window)
+      * [Fullscreen a window](fullscreen-a-window-fullscreen_window)
       * [Close a window](#close-a-window-close_window)
       * [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop)
       * [Show desktop](#show-desktop-show_desktop)
@@ -205,30 +206,6 @@ Example:
 
 ![Animation](.github/images/MAXIMIZE_RESTORE_WINDOW.gif)
 
-### Fullscreen a window (FULLSCREEN_WINDOW)
-
-Toggles fullscreen mode for the window under the pointer.
-
-Options:
-
-| Option | Value | Description |
-| - | - | - |
-| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
-| color | Hex color | Color of the animation. For example: `909090` |
-| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
-
-Example:
-
-```xml
-<gesture type="SWIPE" fingers="3" direction="UP">
-  <action type="FULLSCREEN_WINDOW">
-    <animate>true</animate>
-    <color>3E9FED</color>
-    <borderColor>3E9FED</borderColor>
-  </action>
-</gesture>
-```
-
 ### Minimize a window (MINIMIZE_WINDOW)
 
 Minimize the window under the pointer.
@@ -291,6 +268,30 @@ Example:
 ```
 
 ![Animation](.github/images/TILE_WINDOW.gif)
+
+### Fullscreen a window (FULLSCREEN_WINDOW)
+
+Toggles fullscreen mode for the window under the pointer.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```xml
+<gesture type="SWIPE" fingers="3" direction="UP">
+  <action type="FULLSCREEN_WINDOW">
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
 
 ### Close a window (CLOSE_WINDOW)
 

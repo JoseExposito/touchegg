@@ -1,3 +1,0 @@
-version=4
-opts=filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/touchegg-$1\.tar\.gz/ \
-  https://github.com/JoseExposito/touchegg/tags .*/v?(\d\S+)\.tar\.gz

@@ -1,26 +1,6 @@
-# Touchégg systemd service.
-# This service runs Touchégg in daemon mode (touchegg --daemon) as part of the "input" group.
-# The daemon will open a Unix domain socket so any service (usually touchegg --client) can have
-# access to libinput's multi-touch gestures.
-#
-# About systemd:
-# https://wiki.archlinux.org/index.php/Systemd#Basic_systemctl_usage
-#
-# Installation:
-# $ sudo cp installation/touchegg.service /lib/systemd/system
-# $ sudo systemctl enable touchegg.service
-# $ sudo systemctl start touchegg
-# $ systemctl status touchegg
-# $ journalctl -u touchegg -b -f # To see the logs
-#
-# Debugging:
-# Change the ExecStart to your binary path:
-# ExecStart=/home/jose/Devel/touchegg/build/touchegg --daemon
-# Copy the service file and restart it:
-# $ sudo systemctl daemon-reload && sudo systemctl restart touchegg
-
 [Unit]
 Description=Touchégg
+Documentation=https://github.com/JoseExposito/touchegg
 
 [Service]
 Type=simple

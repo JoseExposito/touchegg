@@ -64,12 +64,12 @@ jobs:
           distribution: "buster-backports"
           target_architecture: ${{ matrix.target_arch }}
 
-          lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides --fail-on error --fail-on warning --fail-on info"
+          lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
           # Package uses latest packaging syntax and Lintian opts/tags
           dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
 
       - name: Upload Debian package artifacts
         uses: "actions/upload-artifact@v2"
         with:
-          name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-deb"
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-${{matrix.target_arch}}-deb"
           path: "${{ github.workspace }}/artifacts"

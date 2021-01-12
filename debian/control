@@ -3,8 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: José Expósito <jose.exposito89@gmail.com>
 Build-Depends: cmake,
-               debhelper (>= 10.5.1),
-               dh-systemd (>= 1.5),
+               debhelper-compat (= 12),
                libc6-dev (>= 2.14),
                libcairo2-dev (>= 1.2.4),
                libgtk-3-dev,
@@ -15,7 +14,7 @@ Build-Depends: cmake,
                libxi-dev (>= 2:1.7.0),
                libxrandr-dev (>= 2:1.2.0),
                libxtst-dev
-Standards-Version: 4.1.1
+Standards-Version: 4.5.0
 Homepage: https://github.com/JoseExposito/touchegg
 Vcs-Browser: https://github.com/JoseExposito/touchegg
 Vcs-Git: https://github.com/JoseExposito/touchegg.git
@@ -24,7 +23,7 @@ Package: touchegg
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Multi-touch gesture recognizer
- Touchégg is an app that runs in the background and transform the gestures you make in your touchpad
- into visible actions in your desktop.
- For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to
- switch to the next desktop.
+ Touchégg is an app that runs in the background and transform the gestures you
+ make in your touchpad into visible actions in your desktop.
+ For example, you can swipe up with 3 fingers to maximize a window or swipe left
+ with 4 finger to switch to the next desktop.

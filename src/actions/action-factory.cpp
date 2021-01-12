@@ -40,8 +40,8 @@ std::unique_ptr<Action> ActionFactory::buildAction(
       return std::make_unique<MaximizeRestoreWindow>(
           std::move(settings), windowSystem, window, config);
     case ActionType::FULLSCREEN_WINDOW:
-      return std::make_unique<FullscreenWindow>(
-          std::move(settings), windowSystem, window, config);
+      return std::make_unique<FullscreenWindow>(std::move(settings),
+                                                windowSystem, window, config);
     case ActionType::MINIMIZE_WINDOW:
       return std::make_unique<MinimizeWindow>(std::move(settings), windowSystem,
                                               window, config);

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -31,10 +31,10 @@
 class LininputDeviceHandler : public LininputHandler {
  public:
   LininputDeviceHandler(GestureControllerDelegate *gestureController,
-                        double threshold, double animationFinishThreshold)
+                        double startThreshold, double finishThreshold)
       : LininputHandler(gestureController),
-        threshold(threshold),
-        animationFinishThreshold(animationFinishThreshold) {}
+        startThreshold(startThreshold),
+        finishThreshold(finishThreshold) {}
 
   /**
    * Called on startup for each device and every time a device is added.
@@ -43,24 +43,25 @@ class LininputDeviceHandler : public LininputHandler {
   void handleDeviceAdded(struct libinput_event *event) const;
 
  private:
-  double threshold = -1;
-  double animationFinishThreshold = -1;
+  double startThreshold = -1;
+  double finishThreshold = -1;
 
   /**
    * Calculates LibinputDeviceInfo on touchpads.
    *
-   * Calculating optimal "threshold" and "animation_finish_threshold" is really
+   * Calculating optimal "start_threshold" and "finish_threshold" is really
    * complicated on touchpads with DPI < 1000, that's why this values are
    * configurable. However this methods works with the bast majority of devices
    * out there.
    */
-  void calculateTouchpadThreshold(double widthMm, double heightMm,
-                                  LibinputDeviceInfo *outInfo) const;
+  static void calculateTouchpadThreshold(double widthMm, double heightMm,
+                                         LibinputDeviceInfo *outInfo);
+  static double mmToDpi(double mm);
 
   /**
    * Calculates LibinputDeviceInfo on touchscreens.
    */
-  void calculateTouchscreenThreshold(double widthMm, double heightMm,
-                                     LibinputDeviceInfo *outInfo) const;
+  static void calculateTouchscreenThreshold(double widthMm, double heightMm,
+                                            LibinputDeviceInfo *outInfo);
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_DEVICE_HANDLER_H_

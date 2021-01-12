@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -18,6 +18,7 @@
 #ifndef GESTURE_GESTURE_H_
 #define GESTURE_GESTURE_H_
 
+#include "gesture/device-type.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -28,49 +29,54 @@
 class Gesture {
  public:
   Gesture(GestureType type, GestureDirection direction, int percentage,
-          int fingers, uint64_t elapsedTime)
+          int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime)
       : gestureType(type),
         gestureDirection(direction),
         gesturePercentage(percentage),
         gestureFingers(fingers),
+        deviceType(performedOnDeviceType),
         gestureElapsedTime(elapsedTime) {}
-
-  virtual ~Gesture() = default;
 
   /**
    * @returns The gesture type.
    * @see GestureType
    */
-  virtual GestureType type() const { return this->gestureType; }
+  GestureType type() const { return this->gestureType; }
 
   /**
    * @returns The gesture direction.
    * @see GestureDirection
    */
-  virtual GestureDirection direction() const { return this->gestureDirection; }
+  GestureDirection direction() const { return this->gestureDirection; }
 
   /**
    * Percentage of the gesture performed, used for animations.
    * @return Value between 0 and 100.
    */
-  virtual int percentage() const { return this->gesturePercentage; }
+  int percentage() const { return this->gesturePercentage; }
 
   /**
    * @returns The number of fingers used to perform the gesture.
    */
-  virtual int fingers() const { return this->gestureFingers; }
+  int fingers() const { return this->gestureFingers; }
+
+  /**
+   * @returns The device type the gesture was performed on.
+   */
+  DeviceType performedOnDeviceType() const { return this->deviceType; }
 
   /**
    * Elapsed time since the beginning of the gesture.
    * @returns The elapsed time in milliseconds.
    */
-  virtual uint64_t elapsedTime() const { return this->gestureElapsedTime; }
+  uint64_t elapsedTime() const { return this->gestureElapsedTime; }
 
  protected:
   GestureType gestureType = GestureType::NOT_SUPPORTED;
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
   int gesturePercentage = -1;
   int gestureFingers = -1;
+  DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;
 };
 

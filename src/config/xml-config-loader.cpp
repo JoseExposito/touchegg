@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -45,17 +45,31 @@ constexpr std::size_t WATCH_EVENT_SIZE = sizeof(struct inotify_event);
 constexpr std::size_t WATCH_BUFFER_SIZE = (100 * (WATCH_EVENT_SIZE + 16));
 }  // namespace
 
-XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {
-  XmlConfigLoader::copyConfingIfNotPresent();
-}
+XmlConfigLoader::XmlConfigLoader(Config *config) : config(config) {}
 
 void XmlConfigLoader::load() {
-  const std::filesystem::path configPath = Paths::getUserConfigFilePath();
-  this->parseXml(configPath);
-  this->watchFile(configPath);
+  this->parseConfig();
+  this->watchConfig();
 }
 
-void XmlConfigLoader::parseXml(const std::filesystem::path &configPath) {
+std::filesystem::path XmlConfigLoader::getConfigFilePath() {
+  const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
+  const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
+
+  if (!std::filesystem::exists(usrConfigFile)) {
+    throw std::runtime_error{
+        "File /usr/share/touchegg/touchegg.conf not found.\n"
+        "Reinstall Touchégg to solve this issue"};
+  }
+
+  return std::filesystem::exists(homeConfigFile) ? homeConfigFile
+                                                 : usrConfigFile;
+}
+
+void XmlConfigLoader::parseConfig() {
+  std::filesystem::path configPath = XmlConfigLoader::getConfigFilePath();
+  std::cout << "Using configuration file " << configPath << std::endl;
+
   pugi::xml_document doc;
   pugi::xml_parse_result parsedSuccessfully = doc.load_file(configPath.c_str());
 
@@ -108,8 +122,12 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
   }
 }
 
-void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
+void XmlConfigLoader::watchConfig() {
   // https://developer.ibm.com/tutorials/l-ubuntu-inotify/
+
+  std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
+  Paths::createUserConfigDir();
+
   const std::string warningMessage =
       "It was not posssible to monitor your configuration file for changes. "
       "Touchégg will not be able to automatically reload your configuration "
@@ -122,13 +140,15 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
     return;
   }
 
-  int wd = inotify_add_watch(fd, configPath.c_str(), IN_MODIFY | IN_CREATE);
+  int wd = inotify_add_watch(fd, homeConfigDir.c_str(),
+                             IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE |
+                                 IN_MOVE_SELF | IN_DELETE_SELF);
   if (wd < 0) {
     std::cout << warningMessage << std::endl;
     return;
   }
 
-  std::thread watchThread{[fd, configPath, this]() {
+  std::thread watchThread{[fd, this]() {
     std::array<char, WATCH_BUFFER_SIZE> buffer{};
     while (true) {
       bool reloadSettings = false;
@@ -137,7 +157,7 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
       while (!allEventsRead) {
         const std::size_t length = read(fd, buffer.data(), buffer.size());
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         unsigned int available = 0;
         ioctl(fd, FIONREAD, &available);  // NOLINT
@@ -150,30 +170,9 @@ void XmlConfigLoader::watchFile(const std::filesystem::path &configPath) {
         std::cout << "Your configuration file changed, reloading your settings"
                   << std::endl;
         this->config->clear();
-        this->parseXml(configPath);
+        this->parseConfig();
       }
     }
   }};
   watchThread.detach();
-}
-
-void XmlConfigLoader::copyConfingIfNotPresent() {
-  const std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
-  const std::filesystem::path homeConfigFile = Paths::getUserConfigFilePath();
-
-  // If the ~/.config/touchegg configuration file exists we can continue,
-  // otherwise we need to copy it from /usr/share/touchegg/touchegg.conf
-  if (std::filesystem::exists(homeConfigFile)) {
-    return;
-  }
-
-  const std::filesystem::path usrConfigFile = Paths::getSystemConfigFilePath();
-  if (!std::filesystem::exists(usrConfigFile)) {
-    throw std::runtime_error{
-        "File /usr/share/touchegg/touchegg.conf not found.\n"
-        "Reinstall Touchégg to solve this issue"};
-  }
-
-  std::filesystem::create_directories(homeConfigDir);
-  std::filesystem::copy_file(usrConfigFile, homeConfigFile);
 }

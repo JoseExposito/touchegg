@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -39,8 +39,8 @@ class LibinputGesture;
 class LibinputGestureGatherer : public GestureGatherer {
  public:
   LibinputGestureGatherer(GestureControllerDelegate *gestureController,
-                          double threshold = -1,
-                          double animationFinishThreshold = -1);
+                          double startThreshold = -1,
+                          double finishThreshold = -1);
   ~LibinputGestureGatherer();
 
   /**

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -27,8 +27,7 @@
 #include "utils/paths.h"
 
 ClientLock::ClientLock() {
-  std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
-  std::filesystem::create_directories(homeConfigDir);
+  Paths::createUserConfigDir();
 
   std::filesystem::path lockPath = Paths::getUserLockFilePath();
   this->fd = open(lockPath.c_str(), O_CREAT | O_RDWR, 0640);  // NOLINT

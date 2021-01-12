@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -22,17 +22,17 @@
 
 enum class GestureDirection {
   // A gesture may have an unknow direction until we have more information
-  UNKNOWN,
+  UNKNOWN = 0,
 
   // GestureType::SWIPE
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
+  UP = 1,
+  DOWN = 2,
+  LEFT = 3,
+  RIGHT = 4,
 
   // GestureType::PINCH
-  IN,
-  OUT,
+  IN = 5,
+  OUT = 6,
 
   // Adding a new GestureDirection? Don't forget to add it in
   // gestureDirectionToStr and gestureDirectionFromStr as well

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -39,6 +39,7 @@ struct LibinputTouchState {
   int currentFingers = 0;
   std::unordered_map<int32_t, double> currentX;
   std::unordered_map<int32_t, double> currentY;
+  int tapFingers = 0;
 
   void reset() {
     started = false;
@@ -46,6 +47,7 @@ struct LibinputTouchState {
     direction = GestureDirection::UNKNOWN;
     startTimestamp = 0;
     startFingers = 0;
+    tapFingers = 0;
 
     // Do not reset this data as gestures finish when 1 finger is on the screen
     // startX.clear();

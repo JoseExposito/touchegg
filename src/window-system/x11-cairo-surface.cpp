@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -22,17 +22,25 @@
 #include <X11/Xutil.h>
 #include <cairo-xlib.h>
 
+#include <string>
+
 X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
   Window rootWindow = XDefaultRootWindow(this->display);
   int defaultScreen = XDefaultScreen(this->display);
-  Screen *screenOfDisplay = XDefaultScreenOfDisplay(this->display);
 
   // Get the screen size. If multiple physical screens are connected this is
   // the size of all of them, like they were a single screen
   int x = 0;
   int y = 0;
-  int width = XWidthOfScreen(screenOfDisplay);
-  int height = XHeightOfScreen(screenOfDisplay);
+  unsigned int uWidth = 0;
+  unsigned int uHeight = 0;
+  Window retRootWindow = None;
+  unsigned int retBorderWidth = 0;
+  unsigned int retDepth = 0;
+  XGetGeometry(display, rootWindow, &retRootWindow, &x, &y, &uWidth, &uHeight,
+               &retBorderWidth, &retDepth);
+  auto width = static_cast<int>(uWidth);
+  auto height = static_cast<int>(uHeight);
 
   // Create a transparent window
   XVisualInfo vInfo;
@@ -50,6 +58,15 @@ X11CairoSurface::X11CairoSurface(Display *display) : display(display) {
       InputOutput, vInfo.visual,
       CWColormap | CWBorderPixel | CWBackPixel | CWOverrideRedirect, &attr);
   XMapWindow(display, this->window);
+
+  // Add WM_NAME and WM_CLASS properties to the window
+  std::string name{"touchegg"};
+  XStoreName(display, this->window, name.c_str());
+  XClassHint *classHint = XAllocClassHint();
+  classHint->res_name = name.data();
+  classHint->res_class = name.data();
+  XSetClassHint(display, this->window, classHint);
+  XFree(classHint);
 
   // Create the window cairo surface and context
   this->windowSurface = cairo_xlib_surface_create(this->display, this->window,

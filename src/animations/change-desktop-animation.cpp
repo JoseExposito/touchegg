@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -63,10 +63,10 @@ void ChangeDesktopAnimation::render(int percentage) {
 
   // Draw the semi-circle background
   double maxAlpha = 0.6;
-  int xCenter = (maxSize.x + (maxSize.width / 2)) +
-                ((maxSize.width / 2) * std::cos(this->angle));
-  int yCenter = (maxSize.y + (maxSize.height / 2)) +
-                ((maxSize.height / 2) * std::sin(this->angle));
+  double xCenter = (maxSize.x + (maxSize.width / 2)) +
+                   ((maxSize.width / 2) * std::cos(this->angle));
+  double yCenter = (maxSize.y + (maxSize.height / 2)) +
+                   ((maxSize.height / 2) * std::sin(this->angle));
   int radius = (percentage * (maxSize.width / 2)) / 100;
   double angleStart = std::fmod(this->angle + 90 * (M_PI / 180), (2 * M_PI));
   double angleEnd = std::fmod(this->angle + 270 * (M_PI / 180), (2 * M_PI));

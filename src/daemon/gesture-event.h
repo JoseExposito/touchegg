@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -20,6 +20,7 @@
 
 #include <string>
 
+#include "gesture/device-type.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -32,22 +33,28 @@ static const std::string SOCKET_NAME{"\0/touchegg", 10};  // NOLINT
  * Event type sent through the socket.
  */
 enum class GestureEventType {
-  BEGIN,
-  UPDATE,
-  END,
-  UNKNOWN,
+  UNKNOWN = 0,
+  BEGIN = 1,
+  UPDATE = 2,
+  END = 3,
 };
 
 /**
  * Event sent through the socket.
+ * Clients must read first the "eventSize" and the as many bytes as specified to
+ * ensure backward compatibility.
  */
 struct GestureEvent {
+  // Warning: Do NOT change the order of this fields, add new fields always at
+  //          the end or the protocol will not be backward compatible!
+  uint32_t eventSize = 0;
   GestureEventType eventType = GestureEventType::UNKNOWN;
   GestureType type = GestureType::NOT_SUPPORTED;
   GestureDirection direction = GestureDirection::UNKNOWN;
   int percentage = 0;
   int fingers = 0;
   uint64_t elapsedTime = 0;
+  DeviceType performedOnDeviceType = DeviceType::UNKNOWN;
 };
 
 #endif  // DAEMON_GESTURE_EVENT_H_

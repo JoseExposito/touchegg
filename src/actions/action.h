@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -44,7 +44,8 @@ class Action {
       : settings(std::move(settings)),
         windowSystem(windowSystem),
         window(window),
-        config(config) {}
+        config(config),
+        threshold(Action::readThreshold(config)) {}
   virtual ~Action() = default;
 
   /**
@@ -62,6 +63,19 @@ class Action {
   const WindowSystem &windowSystem;
   const WindowT &window;
   const Config &config;
+  /**
+   * Special config value: threshold to execute action. All derived actions
+   * must respect this.
+   */
+  const int threshold;
+
+ private:
+  /**
+   * Fail-safe read gesture threshold property from config.
+   * @param config Config to read threshold value from.
+   * @returns action_execute_threshold.
+   */
+  static int readThreshold(const Config &config);
 };
 
 #endif  // ACTIONS_ACTION_H_

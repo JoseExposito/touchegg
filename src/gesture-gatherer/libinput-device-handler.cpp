@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -43,39 +43,55 @@ void LininputDeviceHandler::handleDeviceAdded(
 
     double widthMm = 0;
     double heightMm = 0;
-    if (libinput_device_get_size(device, &widthMm, &heightMm) == 0) {
+    int getSizeStatus = libinput_device_get_size(device, &widthMm, &heightMm);
+
+    // Some devices are reporting a size of 0x0mm:
+    // https://github.com/JoseExposito/touchegg/issues/415
+    if (getSizeStatus == 0 && widthMm != 0 && heightMm != 0) {
+      std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
+                << std::endl;
+
+      std::cout << "\tCalculating start_threshold and finish_threshold. "
+                   "You can tune this values in your service file"
+                << std::endl;
+
       if (hasGestureCap) {
-        this->calculateTouchpadThreshold(widthMm, heightMm, info);
+        LininputDeviceHandler::calculateTouchpadThreshold(widthMm, heightMm,
+                                                          info);
       } else {
-        this->calculateTouchscreenThreshold(widthMm, heightMm, info);
+        LininputDeviceHandler::calculateTouchscreenThreshold(widthMm, heightMm,
+                                                             info);
       }
     } else {
       std::cout
           << "\tIt wasn't possible to get your device physical size, falling "
-             "back to default threshold and animation_finish_threshold. You "
-             "can tune this values in your service file"
+             "back to default start_threshold and finish_threshold. You can "
+             "tune this values in your service file"
           << std::endl;
     }
 
     // User preferences override the thresholds
-    if (this->threshold != -1) {
-      info->threshold = this->threshold;
+    if (this->startThreshold != -1) {
+      info->startThreshold = this->startThreshold;
     }
 
-    if (this->animationFinishThreshold != -1) {
-      info->animationFinishThreshold = this->animationFinishThreshold;
+    if (this->finishThreshold != -1) {
+      info->finishThresholdHorizontal = this->finishThreshold;
+      info->finishThresholdVertical = this->finishThreshold;
     }
 
-    std::cout << "\tthreshold: " << info->threshold << std::endl;
-    std::cout << "\tanimation_finish_threshold: "
-              << info->animationFinishThreshold << std::endl;
+    std::cout << "\tstart_threshold: " << info->startThreshold << std::endl;
+    std::cout << "\tfinish_threshold_horizontal: "
+              << info->finishThresholdHorizontal << std::endl;
+    std::cout << "\tfinish_threshold_vertical: "
+              << info->finishThresholdVertical << std::endl;
 
     libinput_device_set_user_data(device, static_cast<void *>(info));
   }
 }
 
 void LininputDeviceHandler::calculateTouchpadThreshold(
-    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {
   // From the official documentation:
   // https://wayland.freedesktop.org/libinput/doc/latest/normalization-of-relative-motion.html#motion-normalization
   //
@@ -93,27 +109,36 @@ void LininputDeviceHandler::calculateTouchpadThreshold(
 
   // Size is expressed in mm, but gesture deltaX/Y is normalized to
   // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
-  //  - threshold -> 2% of the maximum deltaX/Y
-  //  - animation_finish_threshold -> 10% of the maximum deltaX/Y
-  std::cout << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
-            << std::endl;
-
-  std::cout << "\tCalculating threshold and animation_finish_threshold. "
-               "You can tune this values in your service file"
-            << std::endl;
+  //  - start_threshold -> 5% of the maximum deltaX/Y
+  //  - finish_threshold -> 40% of the maximum deltaX/Y
+  constexpr int START_PERCENTAGE = 5;
+  constexpr int FINISH_PERCENTAGE = 40;
 
   double minSize = std::min(widthMm, heightMm);
-  double inches = minSize / 25.4;  // 1 inch == 25.4 mm
+  outInfo->startThreshold =
+      ((LininputDeviceHandler::mmToDpi(minSize) * START_PERCENTAGE) / 100);
+  outInfo->finishThresholdHorizontal =
+      ((LininputDeviceHandler::mmToDpi(widthMm) * FINISH_PERCENTAGE) / 100);
+  outInfo->finishThresholdVertical =
+      ((LininputDeviceHandler::mmToDpi(heightMm) * FINISH_PERCENTAGE) / 100);
+}
+
+double LininputDeviceHandler::mmToDpi(double mm) {
+  constexpr double mmInOneInch = 25.4;  // 1 inch == 25.4 mm
+  double inches = mm / mmInOneInch;
   double dpi = (inches * 1000);
-  outInfo->threshold = ((2 * dpi) / 100);
-  outInfo->animationFinishThreshold = ((10 * dpi) / 100);
+  return dpi;
 }
 
 void LininputDeviceHandler::calculateTouchscreenThreshold(
-    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) const {
-  // threshold -> 5% of the width/height
-  // animation_finish_threshold -> 25% of the width/height
+    double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {
+  // start_threshold -> 5% of the width/height
+  // finish_threshold -> 25% of the width/height
+  constexpr int START_PERCENTAGE = 5;
+  constexpr int FINISH_PERCENTAGE = 25;
+
   double minSize = std::min(widthMm, heightMm);
-  outInfo->threshold = ((5 * minSize) / 100);
-  outInfo->animationFinishThreshold = ((25 * minSize) / 100);
+  outInfo->startThreshold = ((minSize * START_PERCENTAGE) / 100);
+  outInfo->finishThresholdHorizontal = ((widthMm * FINISH_PERCENTAGE) / 100);
+  outInfo->finishThresholdVertical = ((heightMm * FINISH_PERCENTAGE) / 100);
 }

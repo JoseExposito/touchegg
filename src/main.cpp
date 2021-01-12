@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -29,15 +29,15 @@
 #include "window-system/x11.h"
 
 #ifdef _VERSION
-#define VERSION _VERSION
+constexpr auto VERSION = _VERSION;
 #else
-#define VERSION "[Unkown version]"
+constexpr auto VERSION = "[Unkown version]";
 #endif
 
 void printWelcomeMessage() {
   std::cout << "Touchégg " << VERSION << "." << std::endl;
-  std::cout << "Usage: touchegg [--daemon [threshold "
-               "animation_finish_threshold]] [--client]"
+  std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "
+               "[--client]"
             << std::endl
             << std::endl;
 
@@ -67,8 +67,8 @@ int main(int argc, char **argv) {
   // Parse the command line arguments
   bool daemonMode = false;
   bool clientMode = (argc == 1);
-  double threshold = -1;
-  double animationFinishThreshold = -1;
+  double startThreshold = -1;
+  double finishThreshold = -1;
 
   if (argc > 1) {
     std::string param{argv[1]};  // NOLINT
@@ -76,8 +76,8 @@ int main(int argc, char **argv) {
     clientMode = (param == "--client");
 
     if (daemonMode && argc == 4) {
-      threshold = std::stod(argv[2]);                 // NOLINT
-      animationFinishThreshold = std::stod(argv[3]);  // NOLINT
+      startThreshold = std::stod(argv[2]);   // NOLINT
+      finishThreshold = std::stod(argv[3]);  // NOLINT
     }
   }
 
@@ -102,8 +102,8 @@ int main(int argc, char **argv) {
         << "A list of detected compatible devices will be displayed below:"
         << std::endl;
 
-    LibinputGestureGatherer gestureGatherer(&daemonServer, threshold,
-                                            animationFinishThreshold);
+    LibinputGestureGatherer gestureGatherer(&daemonServer, startThreshold,
+                                            finishThreshold);
     gestureGatherer.run();
   }
 

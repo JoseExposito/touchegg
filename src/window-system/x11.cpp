@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -19,6 +19,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/XInput2.h>
 #include <X11/extensions/XTest.h>
 #include <X11/extensions/Xrandr.h>
 #include <cairo-xlib.h>
@@ -49,13 +50,13 @@ X11::~X11() {
 }
 
 std::unique_ptr<WindowT> X11::getWindowUnderCursor() const {
-  Window rootWindow;
-  Window childWindow;
-  int rootX;
-  int rootY;
-  int childX;
-  int childY;
-  unsigned int mask;
+  Window rootWindow = None;
+  Window childWindow = None;
+  int rootX = 0;
+  int rootY = 0;
+  int childX = 0;
+  int childY = 0;
+  unsigned int mask = 0;
   int success = XQueryPointer(this->display, XDefaultRootWindow(this->display),
                               &rootWindow, &childWindow, &rootX, &rootY,
                               &childX, &childY, &mask);
@@ -115,9 +116,9 @@ Rectangle X11::getWindowSize(const WindowT &window) const {
   size.width = attrs.width;
   size.height = attrs.height;
 
-  int x;
-  int y;
-  Window child;
+  int x = 0;
+  int y = 0;
+  Window child = None;
   Bool translated = XTranslateCoordinates(this->display, x11Window.window,
                                           XDefaultRootWindow(this->display), 0,
                                           0, &x, &y, &child);
@@ -150,12 +151,12 @@ std::vector<T> X11::getWindowProperty(Window window,
 
   long offset = 0;        // NOLINT
   long offsetSize = 100;  // NOLINT
-  Atom atomRet;
-  int size;
-  unsigned long numItems;          // NOLINT
-  unsigned long bytesAfterReturn;  // NOLINT
-  unsigned char *ret;
-  int status;
+  Atom atomRet = None;
+  int size = 0;
+  unsigned long numItems = 0;          // NOLINT
+  unsigned long bytesAfterReturn = 0;  // NOLINT
+  unsigned char *ret = nullptr;
+  int status = 0;
 
   do {
     status = XGetWindowProperty(this->display, window, atom, offset, offsetSize,
@@ -164,7 +165,7 @@ std::vector<T> X11::getWindowProperty(Window window,
     if (status == Success) {
       auto properties = reinterpret_cast<T *>(ret);  // NOLINT
       for (int i = 0; i < numItems; i++) {
-        propertiesVector.push_back(properties[i]);
+        propertiesVector.push_back(properties[i]);  // NOLINT
       }
       XFree(ret);
       offset += offsetSize;
@@ -213,10 +214,10 @@ std::pair<bool, Window> X11::findTopLevelWindowInChildren(
   }
 
   // Otherwise, find the top level window in the "window" children
-  Window root;
-  Window parent;
-  Window *children;
-  unsigned int numChildren;
+  Window root = None;
+  Window parent = None;
+  Window *children = nullptr;
+  unsigned int numChildren = 0;
 
   int status = XQueryTree(this->display, window, &root, &parent, &children,
                           &numChildren);
@@ -270,6 +271,27 @@ bool X11::isWindowMaximized(const WindowT &window) const {
   return maximized;
 }
 
+bool X11::isWindowFullscreen(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return false;
+  }
+
+  Atom atomFullscreen =
+      XInternAtom(this->display, "_NET_WM_STATE_FULLSCREEN", True);
+  std::vector<Atom> states =
+      this->getWindowProperty<Atom>(x11Window.window, "_NET_WM_STATE", XA_ATOM);
+
+  bool fullscreen = false;
+  for (Atom atom : states) {
+    if (atom == atomFullscreen) {
+      fullscreen = true;
+    }
+  }
+
+  return fullscreen;
+}
+
 bool X11::isSystemWindow(const WindowT &window) const {
   auto x11Window = dynamic_cast<const X11WindowT &>(window);
   if (x11Window.window == None) {
@@ -300,6 +322,20 @@ void X11::maximizeOrRestoreWindow(const WindowT &window) const {
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_VERT", False));
   data.push_back(
       XInternAtom(this->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False));
+
+  this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
+                  "_NET_WM_STATE", data);
+}
+
+void X11::toggleFullscreenWindow(const WindowT &window) const {
+  auto x11Window = dynamic_cast<const X11WindowT &>(window);
+  if (x11Window.window == None) {
+    return;
+  }
+
+  std::vector<unsigned long> data;  // NOLINT
+  data.push_back(2);                // _NET_WM_STATE_TOGGLE = 2
+  data.push_back(XInternAtom(this->display, "_NET_WM_STATE_FULLSCREEN", False));
 
   this->sendEvent(XDefaultRootWindow(this->display), x11Window.window,
                   "_NET_WM_STATE", data);
@@ -414,9 +450,21 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
   for (const std::string &keycode : keycodes) {
     KeySym sym = XStringToKeysym(keycode.c_str());
     KeyCode code = XKeysymToKeycode(this->display, sym);
-    XTestFakeKeyEvent(this->display, code, isPress ? True : False, 0);
+
+    if (sym != 0 && code != 0) {
+      XTestFakeKeyEvent(this->display, code, isPress ? True : False, 0);
+    } else {
+      std::cout << "Error performing keyboard shortcut. Unknown key: "
+                << keycode << std::endl;
+    }
   }
 
+  XFlush(this->display);
+}
+
+void X11::sendMouseClick(int button) const {
+  XTestFakeButtonEvent(this->display, button, True, 0);
+  XTestFakeButtonEvent(this->display, button, False, 0);
   XFlush(this->display);
 }
 
@@ -452,8 +500,8 @@ Rectangle X11::getDesktopWorkarea() const {
       screenFound = true;
       screen.x = crtc->x;
       screen.y = crtc->y;
-      screen.width = crtc->width;
-      screen.height = crtc->height;
+      screen.width = static_cast<int>(crtc->width);
+      screen.height = static_cast<int>(crtc->height);
     }
 
     XRRFreeCrtcInfo(crtc);
@@ -472,10 +520,51 @@ Rectangle X11::getDesktopWorkarea() const {
       rootWindow, "_NET_WORKAREA", XA_CARDINAL);
 
   Rectangle workarea;
-  workarea.x = workareas[0 + (currenDesktop[0] * 4)];
-  workarea.y = workareas[1 + (currenDesktop[0] * 4)];
-  workarea.width = workareas[2 + (currenDesktop[0] * 4)];
-  workarea.height = workareas[3 + (currenDesktop[0] * 4)];
+
+  if (workareas.size() >= 4) {
+    workarea.x = workareas[0 + (currenDesktop[0] * 4)];
+    workarea.y = workareas[1 + (currenDesktop[0] * 4)];
+    workarea.width = workareas[2 + (currenDesktop[0] * 4)];
+    workarea.height = workareas[3 + (currenDesktop[0] * 4)];
+  } else {
+    // Some WMs don't set _NET_WORKAREA if there are no visible panels
+    // https://github.com/JoseExposito/touchegg/issues/381
+    unsigned int width = 0;
+    unsigned int height = 0;
+    Window retRootWindow = None;
+    unsigned int retBorderWidth = 0;
+    unsigned int retDepth = 0;
+    XGetGeometry(display, rootWindow, &retRootWindow, &workarea.x, &workarea.y,
+                 &width, &height, &retBorderWidth, &retDepth);
+    workarea.width = static_cast<int>(width);
+    workarea.height = static_cast<int>(height);
+  }
+
+  // Mutter uses a non standard property that allow better multiscreen support
+  if (screenFound) {
+    // NOLINTNEXTLINE
+    std::vector<unsigned long> gtkWorkareas =
+        this->getWindowProperty<unsigned long>(  // NOLINT
+            rootWindow, "_GTK_WORKAREAS_D" + std::to_string(currenDesktop[0]),
+            XA_CARDINAL);
+    if (gtkWorkareas.size() >= 4) {
+      int offset = 0;
+      while (offset < gtkWorkareas.size()) {
+        int x = gtkWorkareas[0 + offset];
+        int y = gtkWorkareas[1 + offset];
+        int width = gtkWorkareas[2 + offset];
+        int height = gtkWorkareas[3 + offset];
+        if (x >= screen.x && x <= (screen.x + screen.width) && y >= screen.y &&
+            y <= (screen.y + screen.height)) {
+          workarea.x = x;
+          workarea.y = y;
+          workarea.width = width;
+          workarea.height = height;
+        }
+        offset += 4;
+      }
+    }
+  }
 
   // Transform the workarea size to the physical screen size
   if (screenFound) {
@@ -587,7 +676,7 @@ int X11::destinationDesktop(int currentDesktop, int totalDesktops,
 void X11::showDesktop(bool show) const {
   Window rootWindow = XDefaultRootWindow(this->display);
   this->sendEvent(rootWindow, rootWindow, "_NET_SHOWING_DESKTOP",
-                  {show ? 1ul : 0ul});
+                  {show ? 1UL : 0UL});
 }
 
 bool X11::isShowingDesktop() const {
@@ -611,8 +700,8 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
   if (gtk.size() == 4) {
     size.x += gtk[0];
     size.y += gtk[2];
-    size.width += (gtk[0] + gtk[1]);
-    size.height += (gtk[2] + gtk[3]);
+    size.width += static_cast<int>(gtk[0] + gtk[1]);
+    size.height += static_cast<int>(gtk[2] + gtk[3]);
   }
 
   // NOLINTNEXTLINE
@@ -621,8 +710,8 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
   if (frame.size() == 4) {
     size.x -= frame[0];
     size.y -= frame[2];
-    size.width -= (frame[0] + frame[1]);
-    size.height -= (frame[2] + frame[3]);
+    size.width -= static_cast<int>(frame[0] + frame[1]);
+    size.height -= static_cast<int>(frame[2] + frame[3]);
     return size;
   }
 
@@ -632,8 +721,8 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
   if (kde.size() == 4) {
     size.x -= kde[0];
     size.y -= kde[2];
-    size.width -= (kde[0] + kde[1]);
-    size.height -= (kde[2] + kde[3]);
+    size.width -= static_cast<int>(kde[0] + kde[1]);
+    size.height -= static_cast<int>(kde[2] + kde[3]);
     return size;
   }
 
@@ -642,4 +731,81 @@ Rectangle X11::getWindowDecorationSize(Window window) const {
 
 std::unique_ptr<CairoSurface> X11::createCairoSurface() const {
   return std::make_unique<X11CairoSurface>(this->display);
+}
+
+bool X11::isNaturalScrollEnabled(DeviceType deviceType) const {
+  if (deviceType == DeviceType::TOUCHSCREEN) {
+    return true;
+  }
+
+  bool enabled = false;
+  int currentDevice = 0;
+  int nDevices = 0;
+  XIDeviceInfo *devices = XIQueryDevice(this->display, XIAllDevices, &nDevices);
+
+  while (!enabled && currentDevice < nDevices) {
+    XIDeviceInfo info = devices[currentDevice];  // NOLINT
+
+    if (info.use == XIMasterPointer || info.use == XISlavePointer) {
+      // Only touchpads have this property. I wasn't able to find a better way
+      // to differentiate between mouses and touchpads. Without this check,
+      // enabilling natural scroll on the mouse but not on the touchpad will
+      // make this method return true.
+      // It seems like the same flag is used by GTK:
+      // https://gitlab.gnome.org/GNOME/gtk/-/blob/4.0.0/gdk/x11/gdkdevicemanager-xi2.c#L452
+      std::vector<unsigned char> touchpad =
+          this->getDeviceProperty<unsigned char>(
+              info.deviceid, "libinput Tapping Enabled", XA_INTEGER);
+      bool isTouchpad = (touchpad.size() == 1);
+
+      if (isTouchpad) {
+        std::vector<unsigned char> naturalScroll =
+            this->getDeviceProperty<unsigned char>(
+                info.deviceid, "libinput Natural Scrolling Enabled",
+                XA_INTEGER);
+        enabled = (naturalScroll.size() == 1 && naturalScroll[0] != 0);
+      }
+    }
+
+    currentDevice++;
+  }
+
+  XIFreeDeviceInfo(devices);
+  return enabled;
+}
+
+template <typename T>
+std::vector<T> X11::getDeviceProperty(int deviceId, const std::string &atomName,
+                                      Atom atomType) const {
+  std::vector<T> propertiesVector;
+
+  Atom atom = XInternAtom(this->display, atomName.c_str(), True);
+  if (atom == None) {
+    return propertiesVector;
+  }
+
+  long offset = 0;        // NOLINT
+  long offsetSize = 100;  // NOLINT
+  Atom atomRet = None;
+  int size = 0;
+  unsigned long numItems = 0;          // NOLINT
+  unsigned long bytesAfterReturn = 0;  // NOLINT
+  unsigned char *ret = nullptr;
+  int status = 0;
+
+  do {
+    status = XIGetProperty(this->display, deviceId, atom, offset, offsetSize,
+                           False, atomType, &atomRet, &size, &numItems,
+                           &bytesAfterReturn, &ret);
+    if (status == Success) {
+      auto properties = reinterpret_cast<T *>(ret);  // NOLINT
+      for (int i = 0; i < numItems; i++) {
+        propertiesVector.push_back(properties[i]);  // NOLINT
+      }
+      XFree(ret);
+      offset += offsetSize;
+    }
+  } while (status == Success && bytesAfterReturn != 0 && numItems != 0);
+
+  return propertiesVector;
 }

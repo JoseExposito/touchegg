@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -20,6 +20,8 @@
 #include <algorithm>
 #include <utility>
 
+#include "gesture/device-type.h"
+
 void LininputPinchHandler::handlePinchBegin(struct libinput_event * /*event*/) {
   this->state.reset();
 }
@@ -31,27 +33,27 @@ void LininputPinchHandler::handlePinchUpdate(struct libinput_event *event) {
 
   if (!this->state.started) {
     this->state.started = true;
-    this->state.startTimestamp = this->getTimestamp();
+    this->state.startTimestamp = LininputHandler::getTimestamp();
     this->state.direction =
         (this->state.delta > 1) ? GestureDirection::OUT : GestureDirection::IN;
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     this->state.fingers = libinput_event_gesture_get_finger_count(gestureEvent);
     uint64_t elapsedTime = 0;
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureBegin(std::move(gesture));
   } else {
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
 }
@@ -61,14 +63,14 @@ void LininputPinchHandler::handlePinchEnd(struct libinput_event *event) {
     struct libinput_event_gesture *gestureEvent =
         libinput_event_get_gesture_event(event);
     this->state.delta = libinput_event_gesture_get_scale(gestureEvent);
-    this->state.percentage = this->calculatePinchAnimationPercentage(
+    this->state.percentage = LininputHandler::calculatePinchAnimationPercentage(
         this->state.direction, this->state.delta);
     uint64_t elapsedTime =
-        this->calculateElapsedTime(this->state.startTimestamp);
+        LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 
     auto gesture = std::make_unique<Gesture>(
         GestureType::PINCH, this->state.direction, this->state.percentage,
-        this->state.fingers, elapsedTime);
+        this->state.fingers, DeviceType::TOUCHPAD, elapsedTime);
     this->gestureController->onGestureEnd(std::move(gesture));
   }
 

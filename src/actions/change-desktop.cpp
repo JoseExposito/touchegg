@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -22,7 +22,7 @@
 
 #include "animations/change-desktop-animation.h"
 
-void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
+void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
   if (this->settings.count("direction") == 1) {
     this->direction = actionDirectionFromStr(this->settings.at("direction"));
   }
@@ -36,6 +36,7 @@ void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
     } else {
       // If animation position is unset, fallback to the action direction
       switch (this->direction) {
+        case ActionDirection::AUTO:
         case ActionDirection::UP:
         case ActionDirection::DOWN:
         case ActionDirection::LEFT:
@@ -52,12 +53,51 @@ void ChangeDesktop::onGestureBegin(const Gesture& /*gesture*/) {
       }
     }
 
+    animationPosition = (animationPosition == ActionDirection::AUTO)
+                            ? this->getAnimationAutoDirection(gesture)
+                            : animationPosition;
+
     this->animation = std::make_unique<ChangeDesktopAnimation>(
         this->windowSystem, this->window, this->color, this->borderColor,
         animationPosition);
   }
 }
 
-void ChangeDesktop::executeAction(const Gesture& /*gesture*/) {
-  this->windowSystem.changeDesktop(this->direction);
+void ChangeDesktop::executeAction(const Gesture& gesture) {
+  ActionDirection actionDirection = (this->direction == ActionDirection::AUTO)
+                                        ? this->getActionAutoDirection(gesture)
+                                        : this->direction;
+  this->windowSystem.changeDesktop(actionDirection);
+}
+
+ActionDirection ChangeDesktop::getAnimationAutoDirection(
+    const Gesture& gesture) const {
+  bool natural = this->windowSystem.isNaturalScrollEnabled(
+      gesture.performedOnDeviceType());
+
+  switch (gesture.direction()) {
+    case GestureDirection::UP:
+      return natural ? ActionDirection::DOWN : ActionDirection::UP;
+    case GestureDirection::DOWN:
+      return natural ? ActionDirection::UP : ActionDirection::DOWN;
+    case GestureDirection::RIGHT:
+      return natural ? ActionDirection::LEFT : ActionDirection::RIGHT;
+    case GestureDirection::LEFT:
+    default:
+      return natural ? ActionDirection::RIGHT : ActionDirection::LEFT;
+  }
+}
+
+ActionDirection ChangeDesktop::getActionAutoDirection(
+    const Gesture& gesture) const {
+  bool natural = this->windowSystem.isNaturalScrollEnabled(
+      gesture.performedOnDeviceType());
+
+  switch (gesture.direction()) {
+    case GestureDirection::LEFT:
+    case GestureDirection::UP:
+      return natural ? ActionDirection::NEXT : ActionDirection::PREVIOUS;
+    default:
+      return natural ? ActionDirection::PREVIOUS : ActionDirection::NEXT;
+  }
 }

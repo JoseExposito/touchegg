@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -91,7 +91,7 @@ void DaemonClient::run() {
 }
 
 void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
-  std::unique_ptr<Gesture> gesture = this->makeGestureFromEvent(event);
+  std::unique_ptr<Gesture> gesture = DaemonClient::makeGestureFromEvent(event);
   switch (event.eventType) {
     case GestureEventType::BEGIN:
       this->gestureController->onGestureBegin(std::move(gesture));
@@ -108,8 +108,8 @@ void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
 }
 
 std::unique_ptr<Gesture> DaemonClient::makeGestureFromEvent(
-    const struct GestureEvent &event) const {
-  return std::make_unique<Gesture>(event.type, event.direction,
-                                   event.percentage, event.fingers,
-                                   event.elapsedTime);
+    const struct GestureEvent &event) {
+  return std::make_unique<Gesture>(
+      event.type, event.direction, event.percentage, event.fingers,
+      event.performedOnDeviceType, event.elapsedTime);
 }

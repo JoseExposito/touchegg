@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -24,8 +24,9 @@
  * https://wayland.freedesktop.org/libinput/doc/latest/api/group__device.html#ga6243ad6005b2ce2a5ecfd1b04787fe93
  */
 struct LibinputDeviceInfo {
-  double threshold = 50;
-  double animationFinishThreshold = 400;
+  double startThreshold = 200;
+  double finishThresholdHorizontal = 2500;
+  double finishThresholdVertical = 2500;
 };
 
 #endif  // GESTURE_GATHERER_LIBINPUT_DEVICE_INFO_H_

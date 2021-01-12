@@ -4,13 +4,15 @@ Before you start coding, you will need to install some dependencies:
 
 ```bash
 # Ubuntu, Debian and derivatives:
-$ sudo apt-get install git build-essential gdb cmake \
-  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev
-  
+$ sudo apt-get install git build-essential gdb cmake debhelper dh-systemd \
+  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev \
+  libgtk-3-dev # GTK is optional, see "Compilation flags"
+
 # Red Hat, Fedora, CentOS and derivatives:
 $ sudo yum groupinstall "Development Tools"
 $ sudo yum install git gcc g++ gdb cmake \
-  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel
+  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel \
+  gtk3-devel # GTK is optional, see "Compilation flags"
 ```
 
 Now clone the source code and compile it following the usual CMake compilation steps:
@@ -29,6 +31,7 @@ $ make -j$(nproc)
 After building the source code, you can install Touchégg by running this commands:
 
 ```bash
+$ cd build
 $ sudo make install
 $ sudo systemctl daemon-reload && sudo systemctl restart touchegg # Start the daemon
 $ touchegg # Run Touchégg
@@ -37,19 +40,39 @@ $ touchegg # Run Touchégg
 In addition, you can generate a Debian package and install it:
 
 ```bash
-$ cpack -G DEB
-$ sudo dpkg -i touchegg_*.deb # Install the package
-$ sudo apt -f install # Install missing dependencies
+$ dpkg-buildpackage -rfakeroot -us -uc -tc
+$ sudo apt install ../touchegg_*.deb # Install the package
 $ touchegg # Run Touchégg
 ```
 
 Or a rpm package:
 
 ```bash
+$ cd build
 $ cpack -G RPM
 $ sudo yum localinstall touchegg-*.rpm # Install the package
 $ touchegg # Run Touchégg
 ```
+
+# Compilation flags
+
+In addition to the default CMake flags, this compilation options are available:
+
+## cmake -DAUTO_COLORS=[ON|OFF]
+
+GTK is used in to get your theme's color and use it in animations:
+
+```xml
+<settings>
+  <property name="color">auto</property>
+  <property name="borderColor">auto</property>
+</settings>
+```
+
+By default this flag is set to `ON`, i.e., `auto` is available for `color` and `borderColor`.
+
+Set it to `OFF` if you don't want to install GTK in your system. Have in mind that `auto` will
+**not** be available for `color` and `borderColor` and you will have to manually set them up.
 
 # Code Style
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -23,6 +23,7 @@
 #include "daemon/gesture-event.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture/gesture.h"
+#include "window-system/window-system.h"
 
 /**
  * Class to connect to the daemon server and send the gestures received from the
@@ -40,8 +41,8 @@ class DaemonClient {
 
   void sendToGestureController(const struct GestureEvent &event);
 
-  std::unique_ptr<Gesture> makeGestureFromEvent(
-      const struct GestureEvent &event) const;
+  static std::unique_ptr<Gesture> makeGestureFromEvent(
+      const struct GestureEvent &event);
 };
 
 #endif  // DAEMON_DAEMON_CLIENT_H_

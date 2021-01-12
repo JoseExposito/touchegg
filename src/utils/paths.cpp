@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -69,4 +69,11 @@ std::filesystem::path Paths::getUserLockFilePath() {
 
 std::filesystem::path Paths::getSystemConfigFilePath() {
   return std::filesystem::path{"/usr/share/touchegg/touchegg.conf"};
+}
+
+void Paths::createUserConfigDir() {
+  std::filesystem::path homeConfigDir = Paths::getUserConfigDirPath();
+  if (!std::filesystem::exists(homeConfigDir)) {
+    std::filesystem::create_directories(homeConfigDir);
+  }
 }

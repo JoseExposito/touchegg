@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "actions/action-direction.h"
+#include "gesture/device-type.h"
 #include "utils/rectangle.h"
 #include "window-system/cairo-surface.h"
 
@@ -71,6 +72,11 @@ class WindowSystem {
   virtual bool isWindowMaximized(const WindowT &window) const = 0;
 
   /**
+   * @returns If the window is in fullscreen.
+   */
+  virtual bool isWindowFullscreen(const WindowT &window) const = 0;
+
+  /**
    * @returns If the window is a system window, like the desktop window, the
    * dock, a panel, etc
    */
@@ -80,6 +86,12 @@ class WindowSystem {
    * If the window is not maximized, maximize it, otherwise restore its size.
    */
   virtual void maximizeOrRestoreWindow(const WindowT &window) const = 0;
+
+  /**
+   * Fullscreen a window if it isn't using the whole screen, otherwise restore
+   * its size.
+   */
+  virtual void toggleFullscreenWindow(const WindowT &window) const = 0;
 
   /**
    * Minimize a window.
@@ -114,6 +126,15 @@ class WindowSystem {
                         bool isPress) const = 0;
 
   /**
+   * Simulates a mouse click.
+   * @param button One of this values:
+   * 1 – Left button click
+   * 2 – Middle button click
+   * 3 – Right button click
+   */
+  virtual void sendMouseClick(int button) const = 0;
+
+  /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not
    * used by system elements like docks, panels, etc.
    */
@@ -138,6 +159,16 @@ class WindowSystem {
    * Creates a Cairo surface to draw on.
    */
   virtual std::unique_ptr<CairoSurface> createCairoSurface() const = 0;
+
+  /**
+   * The libinput backend has access to this property as it is set on libinput.
+   * This property should be valid on Wayland, however, on X11 this property is
+   * stored on XInput2 and it is not synchronized with the libinput backend.
+   * This methods returns the natural scrolling preferences adapted to the
+   * current window system.
+   * @returns If natural scroll is enabled in the current window system.
+   */
+  virtual bool isNaturalScrollEnabled(DeviceType deviceType) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

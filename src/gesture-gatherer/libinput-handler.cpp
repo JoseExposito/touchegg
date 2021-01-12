@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -21,7 +21,7 @@
 #include <chrono>  // NOLINT
 
 LibinputDeviceInfo LininputHandler::getDeviceInfo(
-    struct libinput_event *event) const {
+    struct libinput_event *event) {
   LibinputDeviceInfo info;
 
   // Get the precalculated thresholds
@@ -29,27 +29,28 @@ LibinputDeviceInfo LininputHandler::getDeviceInfo(
   void *userData = libinput_device_get_user_data(device);
 
   if (userData != nullptr) {
-    auto aux = static_cast<LibinputDeviceInfo *>(userData);
-    info.threshold = aux->threshold;
-    info.animationFinishThreshold = aux->animationFinishThreshold;
+    auto *aux = static_cast<LibinputDeviceInfo *>(userData);
+    info.startThreshold = aux->startThreshold;
+    info.finishThresholdHorizontal = aux->finishThresholdHorizontal;
+    info.finishThresholdVertical = aux->finishThresholdVertical;
   }
 
   return info;
 }
 
-uint64_t LininputHandler::getTimestamp() const {
+uint64_t LininputHandler::getTimestamp() {
   auto now = std::chrono::system_clock::now().time_since_epoch();
   uint64_t millis =
       std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
   return millis;
 }
 
-uint64_t LininputHandler::calculateElapsedTime(uint64_t startTimestamp) const {
-  return this->getTimestamp() - startTimestamp;
+uint64_t LininputHandler::calculateElapsedTime(uint64_t startTimestamp) {
+  return LininputHandler::getTimestamp() - startTimestamp;
 }
 
 GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
-                                                          double deltaY) const {
+                                                          double deltaY) {
   if (std::abs(deltaX) > std::abs(deltaY)) {
     return (deltaX > 0) ? GestureDirection::RIGHT : GestureDirection::LEFT;
   }
@@ -59,35 +60,38 @@ GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
 
 int LininputHandler::calculateSwipeAnimationPercentage(
     const LibinputDeviceInfo &info, GestureDirection direction, double deltaX,
-    double deltaY) const {
-  double threshold = info.threshold;
-  double animationFinishThreshold = info.animationFinishThreshold;
+    double deltaY) {
+  double startThreshold = info.startThreshold;
+  double finishThreshold = (direction == GestureDirection::LEFT ||
+                            direction == GestureDirection::RIGHT)
+                               ? info.finishThresholdHorizontal
+                               : info.finishThresholdVertical;
 
-  int max = threshold + animationFinishThreshold;
-  int current = 0;
+  double max = startThreshold + finishThreshold;
+  double current = 0;
 
   switch (direction) {
     case GestureDirection::UP:
-      current = std::abs(std::min(0.0, deltaY + threshold));
+      current = std::abs(std::min(0.0, deltaY + startThreshold));
       break;
     case GestureDirection::DOWN:
-      current = std::max(0.0, deltaY - threshold);
+      current = std::max(0.0, deltaY - startThreshold);
       break;
     case GestureDirection::LEFT:
-      current = std::abs(std::min(0.0, deltaX + threshold));
+      current = std::abs(std::min(0.0, deltaX + startThreshold));
       break;
     case GestureDirection::RIGHT:
-      current = std::max(0.0, deltaX - threshold);
+      current = std::max(0.0, deltaX - startThreshold);
       break;
     default:
       break;
   }
 
-  return std::min((current * 100) / max, 100);
+  return static_cast<int>(std::min((current * 100) / max, 100.0));
 }
 
 int LininputHandler::calculatePinchAnimationPercentage(
-    GestureDirection direction, double delta) const {
+    GestureDirection direction, double delta) {
   // Delta starts at 1.0:
   // https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#pinch-gestures
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -49,6 +49,11 @@ class Paths {
    * @return System config file path (/usr/share/touchegg/touchegg.conf).
    */
   static std::filesystem::path getSystemConfigFilePath();
+
+  /**
+   * Creates the "getUserConfigDirPath" directory.
+   */
+  static void createUserConfigDir();
 };
 
 #endif  // UTILS_PATHS_H_

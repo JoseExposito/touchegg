@@ -29,15 +29,18 @@ Many more actions and gestures are available and everything is easily configurab
     * [Available gestures](#available-gestures)
       * [Swipe](#swipe)
       * [Pinch](#pinch)
+      * [Tap](#tap)
     * [Available actions](#available-actions)
       * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
       * [Minimize a window](#minimize-a-window-minimize_window)
       * [Tile/snap a widow](#tilesnap-a-widow-tile_window)
+      * [Fullscreen a window](#fullscreen-a-window-fullscreen_window)
       * [Close a window](#close-a-window-close_window)
       * [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop)
       * [Show desktop](#show-desktop-show_desktop)
       * [Keyboard shortcut](#keyboard-shortcut-send_keys)
       * [Execute a command](#execute-a-command-run_command)
+      * [Mouse click](#mouse-click-mouse_click)
     * [Daemon configuration](#daemon-configuration)
   * [Copyright](#copyright)
 
@@ -57,8 +60,7 @@ it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
-$ sudo dpkg -i touchegg_*.deb # Install the package
-$ sudo apt -f install # Install missing dependencies
+$ sudo apt install ./touchegg_*.deb # Install the package
 ```
 
 ## Red Hat, Fedora, CentOS and derivatives
@@ -95,12 +97,25 @@ After [installing](#installation) Touchégg you'll notice that you can start usi
 gestures. However, you are not forced to use the gestures and actions that come out of the box, you
 can configure the gestures you'd like to use and the actions they'll trigger.
 
-Your configuration file is placed in `~/.config/touchegg/touchegg.conf`, open it with your favorite
-text editor. It is a XML document with 3 main sections:
+Start by copying the default configuration from `/usr/share/touchegg/touchegg.conf` to
+`~/.config/touchegg/touchegg.conf`. You can do it using your file manager or by running this command
+in your terminal:
+
+```bash
+$ mkdir -p ~/.config/touchegg && cp -n /usr/share/touchegg/touchegg.conf ~/.config/touchegg/touchegg.conf
+```
+
+Now open `~/.config/touchegg/touchegg.conf` with your favorite text editor.
+It is a XML document with 3 main sections:
 
   * [Global settings](#global-settings)
   * Global gestures: `<application name="All">...</application>`
-  * Application specified gestures: `<application name="Google-chrome,Firefox"></application>`
+  * Application specific gestures: `<application name="Google-chrome,Firefox"></application>`
+
+    The application name can be obtained by running this command and clicking on the target application window:
+    ```bash
+    $ xprop | grep WM_CLASS
+    ```
 
 Find more information in the sections below.
 
@@ -110,7 +125,7 @@ Find more information in the sections below.
 | Option | Value | Default | Description | Example
 | - | - | - | - | - |
 | animation_delay | Number | 150 | Delay, in milliseconds, since the gesture starts before the animation is displayed | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that no animation is displayed if you complete the action quick enough. This property configures that time |
-| action_execute_threshold | Number | 20 | Percentage of the animation to be completed to apply the action | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not moved your fingers far enough. This property configures the percentage of the animation that must be reached to execute the action |
+| action_execute_threshold | Number | 20 | Percentage of the gesture to be completed to apply the action. Set to 0 to execute actions unconditionally | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the animation is displayed, the action is not executed if you did not move your fingers far enough. This property configures the percentage of the gesture that must be reached to execute the action |
 | color | Hex color | 3E9FED | Color of the animation | `#909090`
 | borderColor | Hex color | 3E9FED | Color of the animation | `FFFFFF`
 
@@ -150,6 +165,23 @@ Example:
     <animate>true</animate>
     <color>F84A53</color>
     <borderColor>F84A53</borderColor>
+  </action>
+</gesture>
+```
+
+### Tap
+
+Tap gestures are executed when two or more fingers "click" on the touchscreen.
+
+**Only available on touchscreens**
+
+Example:
+
+```xml
+<gesture type="TAP" fingers="2">
+  <action type="MOUSE_CLICK">
+    <button>3</button>
+    <on>begin</on>
   </action>
 </gesture>
 ```
@@ -246,6 +278,30 @@ Example:
 
 ![Animation](.github/images/TILE_WINDOW.gif)
 
+### Fullscreen a window (FULLSCREEN_WINDOW)
+
+Toggles fullscreen mode for the window under the pointer.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+
+Example:
+
+```xml
+<gesture type="SWIPE" fingers="3" direction="UP">
+  <action type="FULLSCREEN_WINDOW">
+    <animate>true</animate>
+    <color>3E9FED</color>
+    <borderColor>3E9FED</borderColor>
+  </action>
+</gesture>
+```
+
 ### Close a window (CLOSE_WINDOW)
 
 Close the window under the pointer.
@@ -280,9 +336,9 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
-| direction | `previous`/`next`/`up`/`down`/`left`/`right` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come in handy. |
+| direction | `previous`/`next`/`up`/`down`/`left`/`right`/`auto` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come in handy. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the direction. |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
-| animationPosition | `up`/`down`/`left`/`right` | Edge of the screen where the animation will be displayed. |
+| animationPosition | `up`/`down`/`left`/`right`/`auto` | Edge of the screen where the animation will be displayed. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the animation position. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
 
@@ -347,17 +403,29 @@ Options:
 | Option | Value | Description |
 | - | - | - |
 | repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
-| modifiers | Keycode | Typical values are: Shift_L, Control_L, Alt_L, Alt_R, Meta_L, Super_L, Hyper_L. You can use multiple keycodes: `Control_L+Alt_L`.See "Keycodes" below for more information. |
-| keys | Keycode | Shortcut keys. You can use multiple keycodes: `A+B+C`. See "Keycodes" below for more information. |
+| modifiers | Keysym | Typical values are: `Shift_L`, `Control_L`, `Alt_L`, `Alt_R`, `Meta_L`, `Super_L`, `Hyper_L`. You can use multiple keysyms: `Control_L+Alt_L`.See "Keysyms" below for more information. |
+| keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
-| decreaseKeys | Keycode | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keycodes: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 
-Keycodes:
+Keysyms:
 
-For a full list of key codes, open `/usr/include/X11/keysymdef.h` with your favorite text editor.
+Keysyms can be found in two places:
+ - Regular keys are in `/usr/include/X11/keysymdef.h`, you can open it with your favorite text editor.
 
-It is important to remove the `XK_` prefix. For example, the super keycode is defined as
-`XK_Super_L` but it must be used as `Super_L` in the configuration.
+   It is important to remove the `XK_` prefix. For example, the super keysym is defined as
+   `XK_Super_L` but it must be used as `Super_L` in the configuration.
+ - Special keys (e.g. media keys, browser back, sleep, etc.) are in `/usr/include/X11/XF86keysym.h`.
+
+   Again, remove `XK_`, but leave the rest (including the bit before the
+   `XK_`). For example, `XF86XK_Back` becomes `XF86Back`.
+
+Note that only keysyms that are mapped onto a keycode can be used by
+Touchégg. You can use `xmodmap -pk` to show the current mapping. To add
+a keysym that is not mapped by default (for example `XF86ZoomIn`), you
+can tell `xmodmap` to map it to any free keycode:
+
+    xmodmap -e 'keycode any=XF86ZoomIn'
 
 Example 1: Pinch to zoom example
 
@@ -378,10 +446,32 @@ Example 1: Pinch to zoom example
     <keys>KP_Add</keys>
     <decreaseKeys>KP_Subtract</decreaseKeys>
   </action>
-    </gesture>
+</gesture>
 ```
 
-Example 2: Open Gnome application launcher
+Example 2: Switch between windows (Alt+Tab)
+
+```xml
+<gesture type="SWIPE" fingers="3" direction="LEFT">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Alt_L</modifiers>
+    <keys>Shift_L+Tab</keys>
+    <decreaseKeys>Tab</decreaseKeys>
+  </action>
+</gesture>
+
+<gesture type="SWIPE" fingers="3" direction="RIGHT">
+  <action type="SEND_KEYS">
+    <repeat>true</repeat>
+    <modifiers>Alt_L</modifiers>
+    <keys>Tab</keys>
+    <decreaseKeys>Shift_L+Tab</decreaseKeys>
+  </action>
+</gesture>
+```
+
+Example 3: Open Gnome application launcher
 
 ```xml
 <gesture type="PINCH" fingers="4" direction="IN">
@@ -392,7 +482,6 @@ Example 2: Open Gnome application launcher
     <on>begin</on>
   </action>
 </gesture>
-</application>
 ```
 
 ![Animation](.github/images/SEND_KEYS.gif)
@@ -408,7 +497,7 @@ Options:
 | repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
 | command | Command | The command to execute. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
-| decreaseCommand | Keycode | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
+| decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
 
 Example 1:
 
@@ -434,6 +523,28 @@ Example 2:
 </gesture>
 ```
 
+### Mouse click (MOUSE_CLICK)
+
+Emulate a mouse click.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| button | `1`/`2`/`3` | Left click (1), middle click (2) or right click (3) |
+| on | `begin`/`end` | If the command should be executed on the beginning or on the end of the gesture. |
+
+Example:
+
+```xml
+<gesture type="TAP" fingers="2">
+  <action type="MOUSE_CLICK">
+    <button>3</button>
+    <on>begin</on>
+  </action>
+</gesture>
+```
+
 
 ## Daemon configuration
 
@@ -444,11 +555,11 @@ Touchégg runs in two different processes, one of them is a systemd daemon confi
 
 | Option | Value | Default | Description | Example
 | - | - | - | - | - |
-| threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
-| animation_finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
+| start_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
+| finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
 
-It is recommended NOT to configure `threshold` and `animation_finish_threshold` since an optimal
-value is calculated for you. This value is printed to the terminal on application startup or when a
+It is recommended NOT to configure `start_threshold` and `finish_threshold` since an optimal value
+is calculated for you. This value is printed to the terminal on application startup or when a
 new multi-touch device is connected.
 
 Example:
@@ -471,6 +582,6 @@ Compatible device detected:
 
 # Copyright
 
-Copyright 2011 - 2020 José Expósito <<jose.exposito89@gmail.com>>
+Copyright 2011 - 2021 José Expósito <<jose.exposito89@gmail.com>>
 
 The source code is available under GPL v3 license on [GitHub](https://github.com/JoseExposito/touchegg)

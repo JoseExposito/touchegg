@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -20,25 +20,22 @@
 
 #include <string>
 
-#include "actions/action.h"
+#include "actions/repeated-action.h"
 
 /**
  * Action to emulate a shortcut.
  */
-class RunCommand : public Action {
+class RunCommand : public RepeatedAction {
  public:
-  using Action::Action;
+  using RepeatedAction::RepeatedAction;
   bool runOnSystemWindows() override { return true; }
-  void onGestureBegin(const Gesture &gesture) override;
-  void onGestureUpdate(const Gesture &gesture) override;
-  void onGestureEnd(const Gesture &gesture) override;
+  void executePrelude() override;
+  void executeAction(const Gesture &gesture) override;
+  void executeReverse(const Gesture &gesture) override;
 
  private:
   std::string command;
   std::string decreaseCommand;
-  bool repeat = false;
-  int repeatPercentage = 0;
-  bool onBegin = true;
 
   static bool runCommand(const std::string &command);
 };

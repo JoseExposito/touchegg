@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -52,8 +52,10 @@ class X11 : public WindowSystem {
   std::string getWindowClassName(const WindowT &window) const override;
   Rectangle getWindowSize(const WindowT &window) const override;
   bool isWindowMaximized(const WindowT &window) const override;
+  bool isWindowFullscreen(const WindowT &window) const override;
   bool isSystemWindow(const WindowT &window) const override;
   void maximizeOrRestoreWindow(const WindowT &window) const override;
+  void toggleFullscreenWindow(const WindowT &window) const override;
   void minimizeWindow(const WindowT &window) const override;
   Rectangle minimizeWindowIconSize(const WindowT &window) const override;
   void tileWindow(const WindowT &window, bool toTheLeft) const override;
@@ -62,6 +64,7 @@ class X11 : public WindowSystem {
 
   void sendKeys(const std::vector<std::string> &keycodes,
                 bool isPress) const override;
+  void sendMouseClick(int button) const override;
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(ActionDirection direction) const override;
@@ -69,6 +72,8 @@ class X11 : public WindowSystem {
   bool isShowingDesktop() const override;
 
   std::unique_ptr<CairoSurface> createCairoSurface() const override;
+
+  bool isNaturalScrollEnabled(DeviceType deviceType) const override;
 
  private:
   /**
@@ -81,7 +86,7 @@ class X11 : public WindowSystem {
    * https://tronche.com/gui/x/xlib/window-information/XGetWindowProperty.html
    * @param window The window to get the property from.
    * @param atomName Name of the Atom to get.
-   * @param propType XA_WINDOW, XA_CARDINAL...
+   * @param atomType XA_WINDOW, XA_CARDINAL...
    * @returns A vector with the returned properties.
    */
   template <typename T>
@@ -99,6 +104,17 @@ class X11 : public WindowSystem {
   void sendEvent(Window targetWindow, Window eventWidow,
                  const std::string &atomName,
                  const std::vector<unsigned long> &data) const;  // NOLINT
+
+  /**
+   * A developer friendly wrapper around XIGetProperty.
+   * https://www.x.org/releases/X11R7.5/doc/man/man3/XIChangeProperty.3.html
+   * @param deviceId XInput device ID.
+   * @param atomName Name of the Atom to get.
+   * @param atomType XA_INTEGER, XA_CARDINAL...
+   */
+  template <typename T>
+  std::vector<T> getDeviceProperty(int deviceId, const std::string &atomName,
+                                   Atom atomType) const;
 
   /**
    * The top-level window contains useful attributes like WM_CLASS or WM_NAME

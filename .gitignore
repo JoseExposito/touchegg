@@ -27,6 +27,19 @@ documentation/log
 *.code-workspace
 .history/
 
+# ctags
+.cpptags
+
+# Debian packaging
+debian/*.log
+debian/*.substvars
+debian/.debhelper/
+debian/tmp/
+debian/touchegg/
+debian/touchegg-dbg/
+debian/files
+obj-*-linux-gnu/
+
 # macOS
 .DS_Store
 ._*

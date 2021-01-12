@@ -1,5 +1,93 @@
 # Changelog
 
+## 2.0.5 - 2021-01-05
+
+New:
+
+  - Allow to cancel non animated gestures when configured to run on end. Thanks to @d86leader
+
+    https://github.com/JoseExposito/touchegg/issues/419
+
+  - Using unaccelerated deltas and different horizontal and vertical finish thresholds for a better
+    user experience
+
+    https://github.com/JoseExposito/touchegg/issues/412
+
+Fixed:
+
+  - Fix crashes when incorrect keys are used on `SEND_KEYS`
+
+    https://github.com/JoseExposito/touchegg/issues/392
+
+    https://github.com/JoseExposito/touchegg/issues/419
+
+  - Handle devices reporting a size of 0x0 mm
+
+    https://github.com/JoseExposito/touchegg/issues/415
+
+  - Allow to use a symlink as configuration to Dotfiles users
+
+    https://github.com/JoseExposito/touchegg/issues/409
+
+  - Handles window managers that don't set the `_NET_WORKAREA` atom
+
+    https://github.com/JoseExposito/touchegg/issues/381
+
+    https://github.com/JoseExposito/touchegg/issues/383
+
+
+## 2.0.4 - 2020-12-07
+
+New:
+
+  - New gesture available for touchscreens: `TAP`
+
+    https://github.com/JoseExposito/touchegg/issues/378
+
+  - New action added: `MOUSE_CLICK`
+
+    https://github.com/JoseExposito/touchegg/issues/378
+
+Improvements:
+
+  - Better multi-monitor support
+
+    https://github.com/JoseExposito/touchegg/issues/364
+
+    https://github.com/JoseExposito/touchegg/issues/396
+
+  - Improve config file watcher
+
+    https://github.com/JoseExposito/touchegg/issues/399
+
+
+## 2.0.3 - 2020-11-17
+
+New:
+
+  - Use `auto` with `color` and `borderColor` to use your theme's accent color
+
+    https://github.com/JoseExposito/touchegg/issues/360
+
+  - Use `auto` with `CHANGE_DESKTOP` to follow your natural scroll preferences
+
+    https://github.com/JoseExposito/touchegg/issues/382
+
+Improvements:
+
+  - You are downloading a much better Debian (.deb) package
+
+    https://github.com/JoseExposito/touchegg/issues/384
+
+  - Now Linux distributions shipping Touchégg by default can update your configuration easily
+
+    https://github.com/JoseExposito/touchegg/issues/368
+
+  - Improve protocol backward compatibility for third party integrations
+
+    https://github.com/JoseExposito/touchegg/issues/385
+
+
 ## 2.0.2 - 2020-10-28
 
 New:

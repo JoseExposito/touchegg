@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -88,18 +88,20 @@ void DaemonServer::send(GestureEventType eventType,
                         std::unique_ptr<Gesture> gesture) {
   // Copy every gesture field into the struct for serialization
   GestureEvent event{};
+  event.eventSize = sizeof(GestureEvent);
   event.eventType = eventType;
   event.type = gesture->type();
   event.direction = gesture->direction();
   event.percentage = gesture->percentage();
   event.fingers = gesture->fingers();
   event.elapsedTime = gesture->elapsedTime();
+  event.performedOnDeviceType = gesture->performedOnDeviceType();
 
   // Send the gesture event to every client
   std::vector<int> disconnectedClients{};
 
   for (auto client : this->clients) {
-    int written = write(client, &event, sizeof(event));
+    int written = ::send(client, &event, event.eventSize, MSG_NOSIGNAL);
 
     if (written < 0) {
       std::cout << "Error sending message to client with ID " << client

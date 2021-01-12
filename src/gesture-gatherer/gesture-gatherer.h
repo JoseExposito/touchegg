@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -37,23 +37,23 @@ class GestureGatherer {
    * Default contructor.
    * @param gestureController GestureController where the GestureGatherer will
    * send the gestures.
-   * @param threshold Amount of motion to be made on the touchpad before a
+   * @param startThreshold Amount of motion to be made on the touchpad before a
    * gesture is started.
    * For example: put 3 fingers on your touchpad. You will notice that the
    * action does not start until you move them a little bit. This property
    * configures how much you should move your fingers before the action starts.
-   * @param animationFinishThreshold Amount of motion to be made on the touchpad
-   * to reach the 100% of an animation.
+   * @param finishThreshold Amount of motion to be made on the touchpad to reach
+   * the 100% of an animation.
    * For example, use the MAXIMIZE_RESTORE_WINDOW action. You will notice that
    * you need to move your fingers a certain ammount until the animation fills
    * your entire screen. This property configures how much you need to move your
    * fingers
    */
   GestureGatherer(GestureControllerDelegate *gestureController,
-                  double threshold = -1, double animationFinishThreshold = -1)
+                  double startThreshold = -1, double finishThreshold = -1)
       : gestureController(gestureController),
-        threshold(threshold),
-        animationFinishThreshold(animationFinishThreshold) {}
+        startThreshold(startThreshold),
+        finishThreshold(finishThreshold) {}
 
   virtual ~GestureGatherer() = default;
 
@@ -64,8 +64,8 @@ class GestureGatherer {
 
  protected:
   GestureControllerDelegate *gestureController;
-  double threshold = -1;
-  double animationFinishThreshold = -1;
+  double startThreshold = -1;
+  double finishThreshold = -1;
 };
 
 #endif  // GESTURE_GATHERER_GESTURE_GATHERER_H_

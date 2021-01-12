@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -32,7 +32,10 @@ class ChangeDesktop : public AnimatedAction {
   void executeAction(const Gesture &gesture) override;
 
  private:
-  ActionDirection direction = ActionDirection::NEXT;
+  ActionDirection direction = ActionDirection::AUTO;
+
+  ActionDirection getAnimationAutoDirection(const Gesture &gesture) const;
+  ActionDirection getActionAutoDirection(const Gesture &gesture) const;
 };
 
 #endif  // ACTIONS_CHANGE_DESKTOP_H_

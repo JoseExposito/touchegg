@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2020 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -22,8 +22,10 @@
 #include "actions/action.h"
 #include "actions/change-desktop.h"
 #include "actions/close-window.h"
+#include "actions/fullscreen-window.h"
 #include "actions/maximize-restore-window.h"
 #include "actions/minimize-window.h"
+#include "actions/mouse-click.h"
 #include "actions/run-command.h"
 #include "actions/send-keys.h"
 #include "actions/show-desktop.h"
@@ -37,6 +39,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
     case ActionType::MAXIMIZE_RESTORE_WINDOW:
       return std::make_unique<MaximizeRestoreWindow>(
           std::move(settings), windowSystem, window, config);
+    case ActionType::FULLSCREEN_WINDOW:
+      return std::make_unique<FullscreenWindow>(std::move(settings),
+                                                windowSystem, window, config);
     case ActionType::MINIMIZE_WINDOW:
       return std::make_unique<MinimizeWindow>(std::move(settings), windowSystem,
                                               window, config);
@@ -57,6 +62,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
                                         window, config);
     case ActionType::RUN_COMMAND:
       return std::make_unique<RunCommand>(std::move(settings), windowSystem,
+                                          window, config);
+    case ActionType::MOUSE_CLICK:
+      return std::make_unique<MouseClick>(std::move(settings), windowSystem,
                                           window, config);
     default:
       return nullptr;

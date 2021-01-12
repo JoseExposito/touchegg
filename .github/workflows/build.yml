@@ -9,13 +9,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
       - name: Set up Debian Docker container for changelog patching
         # '--ignore-branch' for testing on feature branch
         run: |
           docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty pitop/gbp-dch-gen:latest sleep inf
           docker start chglog
-          docker exec chglog git config --global user.name "GitHub Build Action"
-          docker exec chglog git config --global user.email "https://github.com/${{ env.GITHUB_REPOSITORY_NAME }}"
+          docker exec chglog git config --global user.name "José Expósito"
+          docker exec chglog git config --global user.email "jose.exposito89@gmail.com"
 
       - name: Patch changelog (snapshot)
         # '--ignore-branch' for testing on feature branch
@@ -25,9 +28,6 @@ jobs:
       - name: Show updated changelog
         run: |
           cat debian/changelog
-
-      - name: GitHub Environment Variables Action
-        uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Upload patched src as artifact
         uses: "actions/upload-artifact@v2"
@@ -40,8 +40,8 @@ jobs:
     needs: [ patch-src ]
     strategy:
       matrix:
-        # target_arch: ["armhf", "arm64"]
-        target_arch: ["amd64"]  # fast debugging
+        # target_arch: ["amd64", "armhf", "arm64"]
+        target_arch: ["amd64"]
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -60,7 +60,7 @@ jobs:
             path: "${{ github.workspace }}/debian"
 
       - name: Build Debian package
-        uses: pi-top/action-debian-package@changelog-parse-logging
+        uses: pi-top/action-debian-package@v0.2.1
         with:
           source_directory: "${{ github.workspace }}"
           artifacts_directory: "${{ github.workspace }}/artifacts"

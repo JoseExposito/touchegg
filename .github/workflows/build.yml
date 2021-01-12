@@ -52,7 +52,7 @@ jobs:
         uses: "actions/download-artifact@v2"
         with:
             name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-changelog"
-            path: "${{ github.workspace }}/${{ env.GITHUB_REPOSITORY_NAME }}/debian/changelog"
+            path: "${{ github.workspace }}/debian/changelog"
 
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.0

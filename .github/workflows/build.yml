@@ -27,7 +27,7 @@ jobs:
 
       - name: Show updated changelog
         run: |
-          cat debian/changelog
+          cat ${{ github.workspace }}/debian/changelog
 
       - name: Upload patched src as artifact
         uses: "actions/upload-artifact@v2"

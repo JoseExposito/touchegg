@@ -1,7 +1,8 @@
 touchegg (2.0.5) focal; urgency=medium
 
   * Allow to cancel non animated gestures when configured to run on end
-  * Using unaccelerated deltas and different horizontal and vertical finish thresholds for a better user experience
+  * Using unaccelerated deltas and different horizontal and vertical finish
+  thresholds for a better user experience
 
   * Fix crashes when incorrect keys are used on SEND_KEYS
   * Handle devices reporting a size of 0x0 mm
@@ -26,20 +27,23 @@ touchegg (2.0.3) focal; urgency=medium
   * Use "auto" with "CHANGE_DESKTOP" to follow natural scroll preferences
 
   * Improve Debian packaging
-  * Now Linux distributions shipping Touchégg by default can update your configuration easily
+  * Now Linux distributions shipping Touchégg by default can update your
+  configuration easily
   * Improve protocol backward compatibility for third party integrations
 
  -- José Expósito <jose.exposito89@gmail.com>  Tue, 17 Nov 2020 12:00:00 +0100
 
 touchegg (2.0.2) focal; urgency=medium
 
-  * Touchscreen support. Now you can use PINCH and SWIPE gestures on your touchscreen
-  * Animations are smoother, even in devices with limited resources like the Raspberry Pi 4
-  * CHANGE_DESKTOP now allows to use up/down/left/right directions in addition to previous/next.
-    Made with love for KDE users
+  * Touchscreen support. Now you can use PINCH and SWIPE gestures on your
+  touchscreen
+  * Animations are smoother, even in devices with limited resources like the
+  Raspberry Pi 4
+  * CHANGE_DESKTOP now allows to use up/down/left/right directions in addition
+  to previous/next. Made with love for KDE users
   * Touchégg is added to startup automatically on installation
-  * In case you manually added it to startup you don't need to change anything, now you can not run
-    multiple instances in parallel by mistake
+  * In case you manually added it to startup you don't need to change anything,
+  now you can not run multiple instances in parallel by mistake
 
   * Fix crash when a screen is connected but disabled
   * Fix intermittent crash after editing the configuration file
@@ -55,15 +59,16 @@ touchegg (2.0.1) focal; urgency=medium
 
 touchegg (2.0.0) focal; urgency=medium
 
-  * The Linux desktop has changed a lot since I first released Touchégg back in 2011.
-  This release is a total rewrite of the version 1.x aiming to incorporate the new technologies that
-  are available today on the Linux desktop.
+  * The Linux desktop has changed a lot since I first released Touchégg back in
+  2011.
+  This release is a total rewrite of the version 1.x aiming to incorporate the
+  new technologies that are available today on the Linux desktop.
   * Add libinput support
   * Add 1:1 animations so your gestures doesn't feel like a "shortcut" anymore
   * Drop the Qt dependency for better compatibility
   * Available gestures: SWIPE and PINCH
-  * Available actions: MAXIMIZE_RESTORE_WINDOW, MINIMIZE_WINDOW, TILE_WINDOW, CLOSE_WINDOW,
-    CHANGE_DESKTOP, SHOW_DESKTOP, SEND_KEYS and RUN_COMMAND
+  * Available actions: MAXIMIZE_RESTORE_WINDOW, MINIMIZE_WINDOW, TILE_WINDOW,
+  CLOSE_WINDOW, CHANGE_DESKTOP, SHOW_DESKTOP, SEND_KEYS and RUN_COMMAND
 
  -- José Expósito <jose.exposito89@gmail.com>  Sun, 27 Sep 2020 12:00:00 +0100
 

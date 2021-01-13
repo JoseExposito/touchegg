@@ -4,7 +4,7 @@ Before you start coding, you will need to install some dependencies:
 
 ```bash
 # Ubuntu, Debian and derivatives:
-$ sudo apt-get install git build-essential gdb cmake debhelper dh-systemd \
+$ sudo apt-get install git build-essential gdb cmake debhelper \
   libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev \
   libgtk-3-dev # GTK is optional, see "Compilation flags"
 

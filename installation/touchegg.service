@@ -1,6 +1,6 @@
 [Unit]
-Description=Touchégg
-Documentation=https://github.com/JoseExposito/touchegg
+Description=Touchégg Daemon
+Documentation=https://github.com/JoseExposito/touchegg/tree/master/installation#readme
 
 [Service]
 Type=simple

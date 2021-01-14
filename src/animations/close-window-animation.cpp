@@ -28,7 +28,7 @@ CloseWindowAnimation::CloseWindowAnimation(const WindowSystem &windowSystem,
       color(color),
       borderColor(borderColor) {}
 
-void CloseWindowAnimation::render(int percentage) {
+void CloseWindowAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -38,18 +38,19 @@ void CloseWindowAnimation::render(int percentage) {
 
   // This animation draws a rectangle inside the window to close with color and
   // a smaller transparent rectangle inside
-  double maxAlpha = 0.6;
 
   // Full-screen colored rectangle
-  double alpha = (percentage * maxAlpha) / 100;
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
   cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_rectangle(ctx, maxSize.x, maxSize.y, maxSize.width, maxSize.height);
   cairo_fill(ctx);
 
   // Calculate the size of the transparent rectangle
-  int maxDiff = (5 * std::max(maxSize.width, maxSize.height)) / 100;
-  int width = maxSize.width - ((percentage * maxDiff) / 100);
-  int height = maxSize.height - ((percentage * maxDiff) / 100);
+  double maxDiff = (5 * std::max(maxSize.width, maxSize.height)) / 100;
+  double width =
+      Animation::value(maxSize.width, maxSize.width - maxDiff, percentage);
+  double height =
+      Animation::value(maxSize.height, maxSize.height - maxDiff, percentage);
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

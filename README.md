@@ -250,7 +250,7 @@ Example:
 ```xml
 <gesture type="SWIPE" fingers="3" direction="LEFT">
   <action type="TILE_WINDOW">
-    <direction>right</direction>
+    <direction>left</direction>
     <animate>true</animate>
     <color>3E9FED</color>
     <borderColor>3E9FED</borderColor>
@@ -259,7 +259,7 @@ Example:
 
 <gesture type="SWIPE" fingers="3" direction="RIGHT">
   <action type="TILE_WINDOW">
-    <direction>left</direction>
+    <direction>right</direction>
     <animate>true</animate>
     <color>3E9FED</color>
     <borderColor>3E9FED</borderColor>

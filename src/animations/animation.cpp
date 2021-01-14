@@ -19,7 +19,7 @@
 
 #include <chrono>  // NOLINT
 
-void Animation::onUpdate(int percentage) {
+void Animation::onUpdate(double percentage) {
   constexpr uint64_t frameRate = (1000 / 30);
 
   // Discard draws that exceed the frame rate
@@ -34,4 +34,9 @@ void Animation::onUpdate(int percentage) {
 
   // Rely on the base class for rendering the animation
   this->render(percentage);
+}
+
+double Animation::value(double initialValue, double targetValue,
+                        double percentage) {
+  return (((targetValue - initialValue) * percentage) / 100) + initialValue;
 }

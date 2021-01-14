@@ -34,7 +34,7 @@ TileWindowAnimation::TileWindowAnimation(const WindowSystem &windowSystem,
   maxSize.height = workarea.height;
 }
 
-void TileWindowAnimation::render(int percentage) {
+void TileWindowAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -43,12 +43,11 @@ void TileWindowAnimation::render(int percentage) {
   cairo_paint(ctx);
 
   // Draw the rectangle
-  double maxAlpha = 0.6;
-  int width = (percentage * maxSize.width) / 100;
-  int height = (percentage * maxSize.height) / 100;
-  int x = this->toTheLeft ? maxSize.x : maxSize.x + (maxSize.width - width);
-  int y = maxSize.y + ((maxSize.height - height) / 2);
-  double alpha = (percentage * maxAlpha) / 100;
+  double width = Animation::value(0, maxSize.width, percentage);
+  double height = Animation::value(0, maxSize.height, percentage);
+  double x = this->toTheLeft ? maxSize.x : maxSize.x + (maxSize.width - width);
+  double y = maxSize.y + ((maxSize.height - height) / 2);
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

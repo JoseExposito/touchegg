@@ -27,7 +27,7 @@ class RestoreWindowAnimation : public Animation {
   using Animation::Animation;
   RestoreWindowAnimation(const WindowSystem &windowSystem,
                          const WindowT &window, Color color, Color borderColor);
-  void render(int percentage) override;
+  void render(double percentage) override;
 
  private:
   Rectangle maxSize;

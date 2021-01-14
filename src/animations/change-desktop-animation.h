@@ -31,7 +31,7 @@ class ChangeDesktopAnimation : public Animation {
   ChangeDesktopAnimation(const WindowSystem &windowSystem,
                          const WindowT &window, Color color, Color borderColor,
                          ActionDirection animationPosition);
-  void render(int percentage) override;
+  void render(double percentage) override;
 
  private:
   Rectangle maxSize;

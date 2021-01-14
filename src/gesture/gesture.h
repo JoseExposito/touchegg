@@ -28,7 +28,7 @@
  */
 class Gesture {
  public:
-  Gesture(GestureType type, GestureDirection direction, int percentage,
+  Gesture(GestureType type, GestureDirection direction, double percentage,
           int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime)
       : gestureType(type),
         gestureDirection(direction),
@@ -53,7 +53,7 @@ class Gesture {
    * Percentage of the gesture performed, used for animations.
    * @return Value between 0 and 100.
    */
-  int percentage() const { return this->gesturePercentage; }
+  double percentage() const { return this->gesturePercentage; }
 
   /**
    * @returns The number of fingers used to perform the gesture.
@@ -74,7 +74,7 @@ class Gesture {
  protected:
   GestureType gestureType = GestureType::NOT_SUPPORTED;
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
-  int gesturePercentage = -1;
+  double gesturePercentage = -1;
   int gestureFingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;

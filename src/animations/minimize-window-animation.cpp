@@ -39,7 +39,7 @@ MinimizeWindowAnimation::MinimizeWindowAnimation(
   }
 }
 
-void MinimizeWindowAnimation::render(int percentage) {
+void MinimizeWindowAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -48,14 +48,13 @@ void MinimizeWindowAnimation::render(int percentage) {
   cairo_paint(ctx);
 
   // Draw the rectangle
-  double maxAlpha = 0.6;
-  int x = ((percentage * (finalSize.x - initialSize.x)) / 100) + initialSize.x;
-  int y = ((percentage * (finalSize.y - initialSize.y)) / 100) + initialSize.y;
-  int width = ((percentage * (finalSize.width - initialSize.width)) / 100) +
-              initialSize.width;
-  int height = ((percentage * (finalSize.height - initialSize.height)) / 100) +
-               initialSize.height;
-  double alpha = (percentage * maxAlpha) / 100;
+  double x = Animation::value(initialSize.x, finalSize.x, percentage);
+  double y = Animation::value(initialSize.y, finalSize.y, percentage);
+  double width =
+      Animation::value(initialSize.width, finalSize.width, percentage);
+  double height =
+      Animation::value(initialSize.height, finalSize.height, percentage);
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

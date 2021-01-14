@@ -81,11 +81,12 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
     double deltaX = this->state.currentX.at(slot) - this->state.startX.at(slot);
     double deltaY = this->state.currentY.at(slot) - this->state.startY.at(slot);
 
-    int percentage = (this->state.type == GestureType::SWIPE)
-                         ? LininputHandler::calculateSwipeAnimationPercentage(
-                               info, this->state.direction, deltaX, deltaY)
-                         : LininputHandler::calculatePinchAnimationPercentage(
-                               this->state.direction, this->getPinchDelta());
+    double percentage =
+        (this->state.type == GestureType::SWIPE)
+            ? LininputHandler::calculateSwipeAnimationPercentage(
+                  info, this->state.direction, deltaX, deltaY)
+            : LininputHandler::calculatePinchAnimationPercentage(
+                  this->state.direction, this->getPinchDelta());
 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
@@ -121,7 +122,7 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
       this->state.startTimestamp = LininputHandler::getTimestamp();
       this->state.type = this->getGestureType();
 
-      int percentage = 0;
+      double percentage = 0;
       if (this->state.type == GestureType::SWIPE) {
         this->state.direction =
             LininputHandler::calculateSwipeDirection(deltaX, deltaY);
@@ -140,11 +141,12 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {
-    int percentage = (this->state.type == GestureType::SWIPE)
-                         ? LininputHandler::calculateSwipeAnimationPercentage(
-                               info, this->state.direction, deltaX, deltaY)
-                         : LininputHandler::calculatePinchAnimationPercentage(
-                               this->state.direction, this->getPinchDelta());
+    double percentage =
+        (this->state.type == GestureType::SWIPE)
+            ? LininputHandler::calculateSwipeAnimationPercentage(
+                  info, this->state.direction, deltaX, deltaY)
+            : LininputHandler::calculatePinchAnimationPercentage(
+                  this->state.direction, this->getPinchDelta());
     uint64_t elapsedTime =
         LininputHandler::calculateElapsedTime(this->state.startTimestamp);
 

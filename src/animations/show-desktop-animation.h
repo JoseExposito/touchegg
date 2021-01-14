@@ -27,7 +27,7 @@ class ShowDesktopAnimation : public Animation {
   using Animation::Animation;
   ShowDesktopAnimation(const WindowSystem &windowSystem, const WindowT &window,
                        Color color, Color borderColor, bool showingDesktop);
-  void render(int percentage) override;
+  void render(double percentage) override;
 
  private:
   Rectangle maxSize;

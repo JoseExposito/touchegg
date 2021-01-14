@@ -51,7 +51,7 @@ struct GestureEvent {
   GestureEventType eventType = GestureEventType::UNKNOWN;
   GestureType type = GestureType::NOT_SUPPORTED;
   GestureDirection direction = GestureDirection::UNKNOWN;
-  int percentage = 0;
+  double percentage = 0;
   int fingers = 0;
   uint64_t elapsedTime = 0;
   DeviceType performedOnDeviceType = DeviceType::UNKNOWN;

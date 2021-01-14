@@ -57,14 +57,14 @@ class LininputHandler {
   /**
    * @returns The percentage (between 0 and 100) of the gesture animation.
    */
-  static int calculateSwipeAnimationPercentage(const LibinputDeviceInfo &info,
-                                               GestureDirection direction,
-                                               double deltaX, double deltaY);
+  static double calculateSwipeAnimationPercentage(
+      const LibinputDeviceInfo &info, GestureDirection direction, double deltaX,
+      double deltaY);
 
   /**
    * @returns The percentage (between 0 and 100) of the gesture animation.
    */
-  static int calculatePinchAnimationPercentage(GestureDirection direction,
-                                               double delta);
+  static double calculatePinchAnimationPercentage(GestureDirection direction,
+                                                  double delta);
 };
 #endif  // GESTURE_GATHERER_LIBINPUT_HANDLER_H_

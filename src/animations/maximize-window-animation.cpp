@@ -25,7 +25,7 @@ MaximizeWindowAnimation::MaximizeWindowAnimation(
       color(color),
       borderColor(borderColor) {}
 
-void MaximizeWindowAnimation::render(int percentage) {
+void MaximizeWindowAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -34,10 +34,9 @@ void MaximizeWindowAnimation::render(int percentage) {
   cairo_paint(ctx);
 
   // Draw the rectangle
-  double maxAlpha = 0.6;
-  int width = (percentage * maxSize.width) / 100;
-  int height = (percentage * maxSize.height) / 100;
-  double alpha = (percentage * maxAlpha) / 100;
+  double width = Animation::value(0, maxSize.width, percentage);
+  double height = Animation::value(0, maxSize.height, percentage);
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

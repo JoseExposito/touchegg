@@ -53,7 +53,7 @@ ChangeDesktopAnimation::ChangeDesktopAnimation(
   }
 }
 
-void ChangeDesktopAnimation::render(int percentage) {
+void ChangeDesktopAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -62,15 +62,14 @@ void ChangeDesktopAnimation::render(int percentage) {
   cairo_paint(ctx);
 
   // Draw the semi-circle background
-  double maxAlpha = 0.6;
   double xCenter = (maxSize.x + (maxSize.width / 2)) +
                    ((maxSize.width / 2) * std::cos(this->angle));
   double yCenter = (maxSize.y + (maxSize.height / 2)) +
                    ((maxSize.height / 2) * std::sin(this->angle));
-  int radius = (percentage * (maxSize.width / 2)) / 100;
+  double radius = Animation::value(0, (maxSize.width / 2), percentage);
   double angleStart = std::fmod(this->angle + 90 * (M_PI / 180), (2 * M_PI));
   double angleEnd = std::fmod(this->angle + 270 * (M_PI / 180), (2 * M_PI));
-  double alpha = (percentage * maxAlpha) / 100;
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

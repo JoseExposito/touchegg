@@ -41,19 +41,36 @@ class Animation {
    * Called every time an action request an update.
    * Decide if rendering is required or not.
    */
-  void onUpdate(int percentage);
+  void onUpdate(double percentage);
 
   /**
    * Draw the animation on screen.
    * @param percentage A number between 0 and 100 indicating the percentage of
    * the animation.
    */
-  virtual void render(int percentage) = 0;
+  virtual void render(double percentage) = 0;
 
  protected:
   const WindowSystem &windowSystem;
   const WindowT &window;
   std::unique_ptr<CairoSurface> cairoSurface;
+
+  /**
+   * Animation maximun alpha value.
+   */
+  static constexpr double MAX_ALPHA = 0.6;
+
+  /**
+   * Utility method to calculate the current animation value based on the
+   * percentage of the gesture performed.
+   * Animations are always linear, as they are 1:1 to the user's movement.
+   * @param initialValue Animation start value.
+   * @param targetValue Animation end value.
+   * @param percentage Current animation percentage.
+   * @returns The linear animation value at the specified percentage.
+   */
+  static double value(double initialValue, double targetValue,
+                      double percentage);
 
  private:
   uint64_t lastRenderTimestamp = 0;

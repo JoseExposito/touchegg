@@ -27,7 +27,7 @@ class TileWindowAnimation : public Animation {
   using Animation::Animation;
   TileWindowAnimation(const WindowSystem &windowSystem, const WindowT &window,
                       Color color, Color borderColor, bool toTheLeft);
-  void render(int percentage) override;
+  void render(double percentage) override;
 
  private:
   Rectangle maxSize;

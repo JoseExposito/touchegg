@@ -33,7 +33,7 @@ struct LibinputSwipeState {
   double deltaX = 0;
   double deltaY = 0;
   GestureDirection direction = GestureDirection::UNKNOWN;
-  int percentage = 0;
+  double percentage = 0;
   int fingers = 0;
 
   void reset() {

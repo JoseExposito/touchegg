@@ -30,7 +30,7 @@ ShowDesktopAnimation::ShowDesktopAnimation(const WindowSystem &windowSystem,
       borderColor(borderColor),
       showingDesktop(showingDesktop) {}
 
-void ShowDesktopAnimation::render(int percentage) {
+void ShowDesktopAnimation::render(double percentage) {
   cairo_t *ctx = this->cairoSurface->getContext();
 
   // Clear the background
@@ -40,22 +40,29 @@ void ShowDesktopAnimation::render(int percentage) {
 
   // This animation draws a full-screen rectangle with color and a smaller
   // transparent rectangle inside
-  double maxAlpha = 0.6;
 
   // Full-screen colored rectangle
-  double alpha = (percentage * maxAlpha) / 100;
+  double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
   cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_rectangle(ctx, maxSize.x, maxSize.y, maxSize.width, maxSize.height);
   cairo_fill(ctx);
 
   // Calculate the size of the transparent rectangle
-  int maxDiff = (5 * std::max(maxSize.width, maxSize.height)) / 100;
-  int width = this->showingDesktop
-                  ? maxSize.width - ((percentage * maxDiff) / 100)
-                  : maxSize.width - maxDiff + ((percentage * maxDiff) / 100);
-  int height = this->showingDesktop
-                   ? maxSize.height - ((percentage * maxDiff) / 100)
-                   : maxSize.height - maxDiff + ((percentage * maxDiff) / 100);
+  double maxDiff = (5 * std::max(maxSize.width, maxSize.height)) / 100;
+  double width = 0;
+  double height = 0;
+
+  if (this->showingDesktop) {
+    width =
+        Animation::value(maxSize.width, maxSize.width - maxDiff, percentage);
+    height =
+        Animation::value(maxSize.height, maxSize.height - maxDiff, percentage);
+  } else {
+    width =
+        Animation::value(maxSize.width - maxDiff, maxSize.width, percentage);
+    height =
+        Animation::value(maxSize.height - maxDiff, maxSize.height, percentage);
+  }
 
   cairo_set_line_width(ctx, 2);
   cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),

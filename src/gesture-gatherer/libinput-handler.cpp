@@ -58,7 +58,7 @@ GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
   return (deltaY > 0) ? GestureDirection::DOWN : GestureDirection::UP;
 }
 
-int LininputHandler::calculateSwipeAnimationPercentage(
+double LininputHandler::calculateSwipeAnimationPercentage(
     const LibinputDeviceInfo &info, GestureDirection direction, double deltaX,
     double deltaY) {
   double startThreshold = info.startThreshold;
@@ -87,10 +87,10 @@ int LininputHandler::calculateSwipeAnimationPercentage(
       break;
   }
 
-  return static_cast<int>(std::min((current * 100) / max, 100.0));
+  return std::min((current * 100) / max, 100.0);
 }
 
-int LininputHandler::calculatePinchAnimationPercentage(
+double LininputHandler::calculatePinchAnimationPercentage(
     GestureDirection direction, double delta) {
   // Delta starts at 1.0:
   // https://wayland.freedesktop.org/libinput/doc/latest/gestures.html#pinch-gestures
@@ -99,14 +99,14 @@ int LininputHandler::calculatePinchAnimationPercentage(
   // delta is 0.0
   if (direction == GestureDirection::IN) {
     double nDelta = std::min(1.0, delta);
-    return std::min(100, static_cast<int>(std::abs(nDelta - 1.0) * 100));
+    return std::min(100.0, std::abs(nDelta - 1.0) * 100);
   }
 
   // With direction OUT, 0% is returned when the delta is 1.0 and 100% when the
   // delta is 2.0
   if (direction == GestureDirection::OUT) {
     double nDelta = std::min(2.0, delta);
-    return std::min(100, static_cast<int>(std::max(0.0, nDelta - 1.0) * 100));
+    return std::min(100.0, std::max(0.0, nDelta - 1.0) * 100);
   }
 
   return 0;

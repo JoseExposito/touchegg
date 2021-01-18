@@ -21,10 +21,12 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> split(const std::string& string, char delimiter);
+std::vector<std::string> split(const std::string &string, char delimiter);
 
-std::string ltrim(const std::string& s);
-std::string rtrim(const std::string& s);
-std::string trim(const std::string& s);
+std::string ltrim(const std::string &s);
+std::string rtrim(const std::string &s);
+std::string trim(const std::string &s);
+
+std::string toLower(const std::string &string);
 
 #endif  // UTILS_STRING_H_

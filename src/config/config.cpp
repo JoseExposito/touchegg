@@ -20,6 +20,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "utils/string.h"
+
 Config::Config() { this->loadDefaultGlobalSettings(); }
 
 void Config::clear() {
@@ -79,6 +81,6 @@ std::string Config::getConfigKey(const std::string &application,
                                  GestureDirection gestureDirection) {
   auto gestureTypeInt = static_cast<int>(gestureType);
   auto gestureDirectionInt = static_cast<int>(gestureDirection);
-  return application + "_" + std::to_string(gestureTypeInt) + "_" + numFingers +
-         "_" + std::to_string(gestureDirectionInt);
+  return toLower(application) + "_" + std::to_string(gestureTypeInt) + "_" +
+         numFingers + "_" + std::to_string(gestureDirectionInt);
 }

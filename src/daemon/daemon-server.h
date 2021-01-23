@@ -18,10 +18,12 @@
 #ifndef DAEMON_DAEMON_SERVER_H_
 #define DAEMON_DAEMON_SERVER_H_
 
+#include <gio/gio.h>
+
 #include <memory>
+#include <string>
 #include <vector>
 
-#include "daemon/gesture-event.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 
 /**
@@ -44,10 +46,26 @@ class DaemonServer : public GestureControllerDelegate {
   void onGestureEnd(std::unique_ptr<Gesture> gesture) override;
 
  private:
-  int socket;
-  std::vector<int> clients;
+  GDBusNodeInfo *introspectionData;
+  std::vector<GDBusConnection *> connections;
 
-  void send(GestureEventType eventType, std::unique_ptr<Gesture> gesture);
+  /**
+   * Callback invoked when a new connection is established.
+   * @param server The D-Bus server.
+   * @param connection The D-Bus connection.
+   * @param self this.
+   * @returns TRUE if the connection is accepted.
+   */
+  static gboolean onNewConnection(GDBusServer *server,
+                                  GDBusConnection *connection,
+                                  DaemonServer *self);
+
+  /**
+   * Send a gesture event message to every connected client.
+   * @param signalName D-Bus signal name.
+   * @param gesture The gesture to send.
+   */
+  void send(const std::string &signalName, std::unique_ptr<Gesture> gesture);
 };
 
 #endif  // DAEMON_DAEMON_SERVER_H_

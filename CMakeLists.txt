@@ -24,6 +24,7 @@ find_package(X11 REQUIRED)
 find_package(XTest REQUIRED)
 find_package(Xrandr REQUIRED)
 find_package(XInput REQUIRED)
+find_package(GLib REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
@@ -38,6 +39,7 @@ target_include_directories(touchegg PUBLIC
   ${XTEST_INCLUDE_DIRS}
   ${XRANDR_INCLUDE_DIRS}
   ${XINPUT_INCLUDE_DIRS}
+  ${GLIB_INCLUDE_DIRS}
 )
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
@@ -50,6 +52,7 @@ target_link_libraries(touchegg
   ${XTEST_LIBRARIES}
   ${XRANDR_LIBRARIES}
   ${XINPUT_LIBRARIES}
+  ${GLIB_LIBRARIES}
 )
 
 if(NOT DEFINED AUTO_COLORS OR AUTO_COLORS)

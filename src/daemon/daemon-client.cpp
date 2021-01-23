@@ -17,99 +17,110 @@
  */
 #include "daemon/daemon-client.h"
 
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/un.h>
-#include <unistd.h>
+#include <gio/gio.h>
 
 #include <chrono>  // NOLINT
-#include <cstring>
-#include <exception>
 #include <iostream>
-#include <stdexcept>
+#include <memory>
 #include <string>
 #include <thread>  // NOLINT
 #include <utility>
 #include <vector>
 
+#include "daemon/dbus.h"
+
 void DaemonClient::run() {
+  this->connect();
+  GMainLoop *loop = g_main_loop_new(nullptr, FALSE);
+  g_main_loop_run(loop);
+}
+
+void DaemonClient::connect() {
   std::cout << "Connecting to Touchégg daemon..." << std::endl;
 
-  int socket = -1;
   bool connected = false;
 
-  // Stuct to store the received event. It is usefull to keep it to be able to
-  // finish ongoing actions in case of disconnection
-  GestureEvent event{};
+  while (!connected) {
+    GError *error = nullptr;
+    GDBusConnection *connection = g_dbus_connection_new_for_address_sync(
+        DBUS_ADDRESS, G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT, nullptr,
+        nullptr, &error);
 
-  while (true) {
-    if (!connected) {
-      socket = ::socket(AF_UNIX, SOCK_STREAM, 0);
-      if (socket == -1) {
-        throw std::runtime_error{
-            "Error connecting to Touchégg daemon: Can not create socket"};
-      }
-
-      struct sockaddr_un addr = {};
-      addr.sun_family = AF_UNIX;
-      std::memset(&addr.sun_path[0], 0, sizeof(addr.sun_path));
-      SOCKET_NAME.copy(&addr.sun_path[0], SOCKET_NAME.size(), 0);
-
-      auto socketAddr = reinterpret_cast<sockaddr *>(&addr);  // NOLINT
-      if (connect(socket, socketAddr, sizeof(addr)) == -1) {
-        connected = false;
-      } else {
-        std::cout << "Successfully connected to Touchégg daemon" << std::endl;
-        connected = true;
-      }
-    }
-
-    if (connected) {
-      int total = read(socket, &event, sizeof(event));
-      if (total <= 0) {
-        connected = false;
-      } else {
-        this->sendToGestureController(event);
-      }
-    }
+    connected = (connection != nullptr);
 
     if (!connected) {
-      std::cout << "Connection with Touchégg daemon lost. "
-                   "Reconnecting in 5 seconds..."
+      std::cout << "Error connecting to Touchégg daemon: " << error->message
                 << std::endl;
-
-      if (event.eventType != GestureEventType::UNKNOWN &&
-          event.eventType != GestureEventType::END) {
-        event.eventType = GestureEventType::END;
-        this->sendToGestureController(event);
-      }
-
-      close(socket);
+      std::cout << "Reconnecting in 5 seconds..." << std::endl;
       std::this_thread::sleep_for(std::chrono::seconds(5));
+    } else {
+      std::cout << "Connection with Touchégg established" << std::endl;
+      g_dbus_connection_signal_subscribe(
+          connection, nullptr, DBUS_INTERFACE_NAME, nullptr, DBUS_OBJECT_PATH,
+          nullptr, G_DBUS_SIGNAL_FLAGS_NONE, DaemonClient::onNewMessage, this,
+          nullptr);
+
+      g_signal_connect(
+          connection, "closed",
+          reinterpret_cast<GCallback>(DaemonClient::onDisconnected),  // NOLINT
+          this);
     }
   }
 }
 
-void DaemonClient::sendToGestureController(const struct GestureEvent &event) {
-  std::unique_ptr<Gesture> gesture = DaemonClient::makeGestureFromEvent(event);
-  switch (event.eventType) {
-    case GestureEventType::BEGIN:
-      this->gestureController->onGestureBegin(std::move(gesture));
-      break;
-    case GestureEventType::UPDATE:
-      this->gestureController->onGestureUpdate(std::move(gesture));
-      break;
-    case GestureEventType::END:
-      this->gestureController->onGestureEnd(std::move(gesture));
-      break;
-    default:
-      break;
+void DaemonClient::onNewMessage(GDBusConnection * /*connection*/,
+                                const gchar * /*senderName*/,
+                                const gchar * /*objectPath*/,
+                                const gchar * /*interfaceName*/,
+                                const gchar *signalName, GVariant *parameters,
+                                gpointer thisPointer) {
+  auto *self = reinterpret_cast<DaemonClient *>(thisPointer);  // NOLINT
+  self->sendToGestureController(signalName, parameters);
+}
+
+void DaemonClient::onDisconnected(GDBusConnection * /*connection*/,
+                                  gboolean /*remotePeerVanished*/,
+                                  GError *error, DaemonClient *self) {
+  std::cout << "Connection with Touchégg daemon lost "
+            << (error == nullptr ? "" : error->message) << std::endl;
+  self->connect();
+}
+
+void DaemonClient::sendToGestureController(const std::string &signalName,
+                                           GVariant *signalParameters) {
+  std::unique_ptr<Gesture> gesture =
+      DaemonClient::makeGestureFromSignalParams(signalParameters);
+
+  if (signalName == DBUS_ON_GESTURE_BEGIN) {
+    this->gestureController->onGestureBegin(std::move(gesture));
+  } else if (signalName == DBUS_ON_GESTURE_UPDATE) {
+    this->gestureController->onGestureUpdate(std::move(gesture));
+  } else if (signalName == DBUS_ON_GESTURE_END) {
+    this->gestureController->onGestureEnd(std::move(gesture));
   }
 }
 
-std::unique_ptr<Gesture> DaemonClient::makeGestureFromEvent(
-    const struct GestureEvent &event) {
-  return std::make_unique<Gesture>(
-      event.type, event.direction, event.percentage, event.fingers,
-      event.performedOnDeviceType, event.elapsedTime);
+std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
+    GVariant *signalParameters) {
+  GestureType gestureType = GestureType::NOT_SUPPORTED;
+  GestureDirection gestureDirection = GestureDirection::UNKNOWN;
+  double percentage = -1;
+  int fingers = -1;
+  uint64_t elapsedTime = -1;
+  DeviceType deviceType = DeviceType::UNKNOWN;
+
+  g_variant_get(signalParameters,  // NOLINT
+                "(uudiut)", &gestureType, &gestureDirection, &percentage,
+                &fingers, &deviceType, &elapsedTime);
+
+  // std::cout << "GestureType: " << gestureTypeToStr(gestureType) << std::endl;
+  // std::cout << "GestureDirection: " <<
+  // gestureDirectionToStr(gestureDirection) << std::endl;
+  // std::cout << "Percentage: " << percentage << std::endl;
+  // std::cout << "Fingers: " << fingers << std::endl;
+  // std::cout << "DeviceType: " << static_cast<int>(deviceType) << std::endl;
+  // std::cout << "Elapsed time: " << elapsedTime << std::endl;
+
+  return std::make_unique<Gesture>(gestureType, gestureDirection, percentage,
+                                   fingers, deviceType, elapsedTime);
 }

@@ -5,13 +5,13 @@ Before you start coding, you will need to install some dependencies:
 ```bash
 # Ubuntu, Debian and derivatives:
 $ sudo apt-get install git build-essential gdb cmake debhelper \
-  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev \
+  libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev libglib2.0-dev \
   libgtk-3-dev # GTK is optional, see "Compilation flags"
 
 # Red Hat, Fedora, CentOS and derivatives:
 $ sudo yum groupinstall "Development Tools"
 $ sudo yum install git gcc g++ gdb cmake \
-  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel \
+  libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel \
   gtk3-devel # GTK is optional, see "Compilation flags"
 ```
 

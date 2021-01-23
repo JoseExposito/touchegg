@@ -17,103 +17,134 @@
  */
 #include "daemon/daemon-server.h"
 
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/un.h>
-#include <unistd.h>
+#include <gio/gio.h>
 
 #include <algorithm>
-#include <cstring>
 #include <exception>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <thread>  // NOLINT
 #include <utility>
 
+#include "daemon/dbus.h"
+
 void DaemonServer::run() {
   std::cout << "Starting daemon server..." << std::endl;
+  GError *error = nullptr;
 
-  this->socket = ::socket(AF_UNIX, SOCK_STREAM, 0);
-  if (this->socket == -1) {
-    throw std::runtime_error{"Error starting server: Can not create socket"};
+  std::cout << "Generating D-Bus introspection data" << std::endl;
+  this->introspectionData =
+      g_dbus_node_info_new_for_xml(DBUS_INTROSPECTION_XML, &error);
+
+  if (introspectionData == nullptr) {
+    std::string errorMessage{"Error generating D-Bus introspection data: "};
+    errorMessage += error->message;
+    throw std::runtime_error{errorMessage};
   }
 
-  struct sockaddr_un addr = {};
-  addr.sun_family = AF_UNIX;
-  std::memset(&addr.sun_path[0], 0, sizeof(addr.sun_path));
-  SOCKET_NAME.copy(&addr.sun_path[0], SOCKET_NAME.size(), 0);
+  std::cout << "Creating D-Bus server" << std::endl;
+  gchar *guid = g_dbus_generate_guid();
 
-  auto socketAddr = reinterpret_cast<sockaddr *>(&addr);  // NOLINT
-  if (bind(this->socket, socketAddr, sizeof(addr)) == -1) {
-    throw std::runtime_error{"Error starting server: Can not bind socket"};
+  GDBusServer *server = g_dbus_server_new_sync(
+      DBUS_ADDRESS, G_DBUS_SERVER_FLAGS_NONE, guid, nullptr, nullptr, &error);
+
+  if (server == nullptr) {
+    std::string errorMessage{"Error creating D-Bus server: "};
+    errorMessage += error->message;
+    throw std::runtime_error{errorMessage};
   }
 
-  if (::listen(this->socket, 10) == -1) {
-    throw std::runtime_error{"Error starting server: Socket listen"};
-  }
+  g_dbus_server_start(server);
+  g_free(guid);
 
-  std::cout << "Server started" << std::endl;
+  std::cout << "Server started at address "
+            << g_dbus_server_get_client_address(server) << std::endl;
+
+  g_signal_connect(
+      server, "new-connection",
+      reinterpret_cast<GCallback>(DaemonServer::onNewConnection),  // NOLINT
+      this);
 
   std::thread connectThread{[this]() {
-    while (true) {
-      struct sockaddr_in clientAddr = {};
-      socklen_t clientAddrLength = sizeof(clientAddr);
-      auto socketAddrIn = reinterpret_cast<sockaddr *>(&clientAddr);  // NOLINT
-      int client = accept(this->socket, socketAddrIn, &clientAddrLength);
-
-      if (client != -1) {
-        std::cout << "New client connected with ID: " << client << std::endl;
-        this->clients.push_back(client);
-      }
-    }
+    GMainLoop *loop = g_main_loop_new(nullptr, FALSE);
+    g_main_loop_run(loop);
   }};
   connectThread.detach();
 }
 
+gboolean DaemonServer::onNewConnection(GDBusServer * /*server*/,
+                                       GDBusConnection *connection,
+                                       DaemonServer *self) {
+  std::cout << "New client connection request" << std::endl;
+
+  GDBusInterfaceVTable interfaceVTable{nullptr, nullptr, nullptr};
+  int id = g_dbus_connection_register_object(
+      connection, DBUS_OBJECT_PATH,
+      self->introspectionData->interfaces[0],  // NOLINT
+      &interfaceVTable, nullptr, nullptr, nullptr);
+
+  if (id == 0) {
+    std::cout << "Error connecting client" << std::endl;
+    return FALSE;
+  }
+
+  std::cout << "New client connected" << std::endl;
+  g_object_ref(connection);
+  self->connections.push_back(connection);
+  return TRUE;
+}
+
 void DaemonServer::onGestureBegin(std::unique_ptr<Gesture> gesture) {
-  this->send(GestureEventType::BEGIN, std::move(gesture));
+  this->send(DBUS_ON_GESTURE_BEGIN, std::move(gesture));
 }
 
 void DaemonServer::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
-  this->send(GestureEventType::UPDATE, std::move(gesture));
+  this->send(DBUS_ON_GESTURE_UPDATE, std::move(gesture));
 }
 
 void DaemonServer::onGestureEnd(std::unique_ptr<Gesture> gesture) {
-  this->send(GestureEventType::END, std::move(gesture));
+  this->send(DBUS_ON_GESTURE_END, std::move(gesture));
 }
 
-void DaemonServer::send(GestureEventType eventType,
+void DaemonServer::send(const std::string &signalName,
                         std::unique_ptr<Gesture> gesture) {
-  // Copy every gesture field into the struct for serialization
-  GestureEvent event{};
-  event.eventSize = sizeof(GestureEvent);
-  event.eventType = eventType;
-  event.type = gesture->type();
-  event.direction = gesture->direction();
-  event.percentage = gesture->percentage();
-  event.fingers = gesture->fingers();
-  event.elapsedTime = gesture->elapsedTime();
-  event.performedOnDeviceType = gesture->performedOnDeviceType();
+  std::vector<GDBusConnection *> closedConnections{};
 
-  // Send the gesture event to every client
-  std::vector<int> disconnectedClients{};
+  // Copy every gesture field into the signal parameters for serialization
+  GVariant *signalParams =
+      g_variant_new("(uudiut)",                              // NOLINT
+                    static_cast<int>(gesture->type()),       // u
+                    static_cast<int>(gesture->direction()),  // u
+                    gesture->percentage(),                   // d
+                    gesture->fingers(),                      // i
+                    static_cast<int>(gesture->performedOnDeviceType()),  // u
+                    gesture->elapsedTime());                             // t
 
-  for (auto client : this->clients) {
-    int written = ::send(client, &event, event.eventSize, MSG_NOSIGNAL);
-
-    if (written < 0) {
-      std::cout << "Error sending message to client with ID " << client
-                << ". Client disconnected" << std::endl;
-      disconnectedClients.push_back(client);
+  // Send the message to every client
+  for (auto *connection : this->connections) {
+    if (g_dbus_connection_is_closed(connection) == TRUE) {
+      closedConnections.push_back(connection);
+    } else {
+      GError *error = nullptr;
+      gboolean sent = g_dbus_connection_emit_signal(
+          connection, nullptr, DBUS_OBJECT_PATH, DBUS_INTERFACE_NAME,
+          signalName.c_str(), signalParams, &error);
+      if (sent == FALSE) {
+        std::cout << "Error sending message: " << error->message << std::endl;
+        closedConnections.push_back(connection);
+      }
     }
   }
 
-  // Disconnect dead clients
-  for (auto client : disconnectedClients) {
-    this->clients.erase(
-        std::remove(this->clients.begin(), this->clients.end(), client),
-        this->clients.end());
+  // Remove dead clients
+  for (auto *connection : closedConnections) {
+    std::cout << "Client disconnected" << std::endl;
+    this->connections.erase(std::remove(this->connections.begin(),
+                                        this->connections.end(), connection),
+                            this->connections.end());
+    g_dbus_connection_close_sync(connection, nullptr, nullptr);
+    g_object_unref(connection);
   }
 }

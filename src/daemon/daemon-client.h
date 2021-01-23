@@ -18,9 +18,11 @@
 #ifndef DAEMON_DAEMON_CLIENT_H_
 #define DAEMON_DAEMON_CLIENT_H_
 
-#include <memory>
+#include <gio/gio.h>
 
-#include "daemon/gesture-event.h"
+#include <memory>
+#include <string>
+
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture/gesture.h"
 #include "window-system/window-system.h"
@@ -39,10 +41,55 @@ class DaemonClient {
  private:
   GestureControllerDelegate *gestureController;
 
-  void sendToGestureController(const struct GestureEvent &event);
+  /**
+   * Stablish a connection with the daemon server.
+   */
+  void connect();
 
-  static std::unique_ptr<Gesture> makeGestureFromEvent(
-      const struct GestureEvent &event);
+  /**
+   * Callback invoked when a new message is received.
+   * @param connection The D-Bus connection.
+   * @param senderName Unique bus name of the sender of the signal.
+   * @param objectPath The object path that the signal was emitted on.
+   * @param interfaceName The name of the interface.
+   * @param signalName DBUS_ON_GESTURE_BEGIN, DBUS_ON_GESTURE_UPDATE or
+   * DBUS_ON_GESTURE_END.
+   * @param parameters Gesture params.
+   * @param thisPointer this.
+   */
+  static void onNewMessage(GDBusConnection *connection, const gchar *senderName,
+                           const gchar *objectPath, const gchar *interfaceName,
+                           const gchar *signalName, GVariant *parameters,
+                           gpointer thisPointer);
+
+  /**
+   * Callback invoked when the connection is closed.
+   * @param connection The D-Bus connection.
+   * @param remotePeerVanished TRUE if connection is closed because the remote
+   * peer closed its end of the connection.
+   * @param error Error reason or null.
+   * @param self this.
+   */
+  static void onDisconnected(GDBusConnection *connection,
+                             gboolean remotePeerVanished, GError *error,
+                             DaemonClient *self);
+
+  /**
+   * Transform the signal into a gesture and send it to the controller.
+   * @param signalName DBUS_ON_GESTURE_BEGIN, DBUS_ON_GESTURE_UPDATE or
+   * DBUS_ON_GESTURE_END.
+   * @param parameters Gesture params.
+   */
+  void sendToGestureController(const std::string &signalName,
+                               GVariant *signalParameters);
+
+  /**
+   * Create a gesture from the received signal message.
+   * @param signalParameters Received signal parameters.
+   * @returns The gesture.
+   */
+  static std::unique_ptr<Gesture> makeGestureFromSignalParams(
+      GVariant *signalParameters);
 };
 
 #endif  // DAEMON_DAEMON_CLIENT_H_

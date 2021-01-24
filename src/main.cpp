@@ -42,7 +42,7 @@ void printWelcomeMessage() {
             << std::endl;
 
   std::cout << "Multi-touch gesture recognizer." << std::endl;
-  std::cout << "Touchégg is an app that runs in the background and transform "
+  std::cout << "Touchégg is an app that runs in the background and transforms "
                "the gestures you make on your touchpad into visible actions in "
                "your desktop."
             << std::endl;

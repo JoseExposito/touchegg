@@ -21,62 +21,75 @@
 #include <string>
 
 // Logger::LogLevel operator<<(const LogLevel level, std::string &msg);
-class Logger {
- public:
-  enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
-};
+// class Logger {
+//  public:
+//   enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
+//   LogLevel info = LogLevel::INFO, warning = LogLevel::WARNING,
+//            error = LogLevel::ERROR, debug = LogLevel::DEBUG;
+
+//   Logger() {}
+// };
 
 /**
  * Singleton class to provide simple logging functionality.
  */
-class LoggerOptions {
+class Logger {
  public:
   /**
    * This static method controls the access to the singleton.
-   * On first run,it creates a singleton object and places it into the
-   * static member. On subsequent calls, it returns the existing obj.
    *
-   * NOTE: Not thread safe! It's OK because it's called first in main.cpp.
-   *
-   * @return ptr to the Logger singleton
+   * @return ref to the Logger singleton
    */
-  static LoggerOptions *Get(const bool verbose = false,
-                            const bool quiet = false,
-                            const bool noGesturequiet = false,
-                            const bool noUpdatequiet = false);
+  static Logger &obj(const bool verbose = false, const bool quiet = false,
+                     const bool noGestures = false,
+                     const bool noUpdates = false) {
+    static Logger singleton;
+
+    if (singleton.uninitialized) {
+      singleton.Init(verbose, quiet, noGestures, noUpdates);
+    }
+
+    return singleton;
+  }
 
   /**
    * @return true if the logger should be called for gesture msgs. Necessary
    * because the logging funcs don't know what kind of msg is being passed.
    */
-  static bool logGestures() { return gestures; }
+  bool gestures() { return logGestures; }
 
   /**
    * @return true if the logger should be called for gesture msgs. Necessary
    * because the logging funcs don't know what kind of msg is being passed.
    */
-  static bool logGestureUpdates() { return updates; }
+  bool gestureUpdates() { return logGestureUpdates; }
 
   // Should not be cloneable.
-  LoggerOptions(const LoggerOptions &) = delete;
+  Logger(Logger const &) = delete;
 
   // Should not be assignable.
-  void operator=(const LoggerOptions &) = delete;
+  void operator=(Logger const &) = delete;
 
- protected:
-  LoggerOptions(const bool verbose, const bool quiet, const bool noGestures,
-                const bool noUpdates);
-
-  static LoggerOptions *singleton_;
-
+ private:
   // These indicate if the various logging levels should be enabled.
-  static bool logInfo, logWarning, logError, logDebug;
+  bool logInfo, logWarning, logError, logDebug;
 
   // If true then gesture msgs should be logged.
-  static bool gestures;
+  bool logGestures;
 
   // If true then gesture update % msgs should be logged.
-  static bool updates;
+  bool logGestureUpdates;
+
+  /*
+   * if true then the logging levels & options will be set on first call to
+   * Logger::Obj()
+   */
+  bool uninitialized;
+
+  Logger();
+
+  void Init(const bool verbose = false, const bool quiet = false,
+            const bool noGestures = false, const bool noUpdates = false);
 };
 
 #endif  // UTILS_LOGGER_H_

@@ -18,48 +18,39 @@
 
 #include "utils/logger.h"
 
-LoggerOptions* LoggerOptions::singleton_ = nullptr;
+Logger::Logger() {
+  uninitialized = true;
 
-LoggerOptions::LoggerOptions(const bool verbose, const bool quiet,
-                             const bool noGestures, const bool noUpdates) {
   // defaults
   logInfo = true;
   logWarning = true;
   logError = true;
   logDebug = false;
-  gestures = true;
-  updates = true;
+  logGestures = true;
+  logGestureUpdates = true;
+}
+
+void Logger::Init(const bool verbose, const bool quiet, const bool noGestures,
+                  const bool noUpdates) {
+  uninitialized = false;
 
   // primary logging options
   if (quiet) {
     logInfo = false;
     logWarning = false;
     logError = false;
-    gestures = false;
-    updates = false;
+    logGestures = false;
+    logGestureUpdates = false;
   } else if (verbose) {
     logDebug = true;
   }
 
   // special case options
   if (noGestures) {
-    gestures = false;
+    logGestures = false;
   }
 
   if (noUpdates) {
-    updates = false;
+    logGestureUpdates = false;
   }
 }
-
-/**
- * Control access to the singleton
- */
-LoggerOptions* LoggerOptions::Get(const bool verbose, const bool quiet,
-                                  const bool noGesture, const bool noUpdate) {
-  if (singleton_ == nullptr) {
-    singleton_ = new LoggerOptions(verbose, quiet, noGesture, noUpdate);
-  }
-  return singleton_;
-}
-
-// usage: LoggerOptions& LoggerOptions = LoggerOptions::Get();

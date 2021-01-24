@@ -25,6 +25,7 @@
 #include "gesture-controller/gesture-controller.h"
 #include "gesture-gatherer/libinput-gesture-gatherer.h"
 #include "utils/client-lock.h"
+#include "utils/logger.h"
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
 
@@ -35,6 +36,8 @@ constexpr auto VERSION = "[Unkown version]";
 #endif
 
 void printWelcomeMessage() {
+  Logger& log = Logger::obj();
+
   std::cout << "Touchégg " << VERSION << "." << std::endl;
   std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "
                "[--client]"
@@ -61,7 +64,7 @@ void printWelcomeMessage() {
             << std::endl;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   printWelcomeMessage();
 
   // Parse the command line arguments

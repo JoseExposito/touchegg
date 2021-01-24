@@ -20,23 +20,33 @@
 
 #include <string>
 
-// Logger::LogLevel operator<<(const LogLevel level, std::string &msg);
-// class Logger {
-//  public:
-//   enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
-//   LogLevel info = LogLevel::INFO, warning = LogLevel::WARNING,
-//            error = LogLevel::ERROR, debug = LogLevel::DEBUG;
-
-//   Logger() {}
-// };
-
 /**
  * Singleton class to provide simple logging functionality.
  */
 class Logger {
  public:
+  enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
+  LogLevel info = LogLevel::INFO, warning = LogLevel::WARNING,
+           error = LogLevel::ERROR, debug = LogLevel::DEBUG;
+
+  /**
+   * USAGE: Logger::obj().LEVEL << "A very informative message!" << std::endl;
+   *
+   * LEVEL: info | warning | error | debug
+   */
+  friend LogLevel operator<<(const LogLevel &lvl, const std::string &msg);
+  friend LogLevel operator<<(const LogLevel &lvl,
+                             std::ostream &(*msg)(std::ostream &));
+
   /**
    * This static method controls the access to the singleton.
+   *
+   * The following parameters are only applied on the first call when the
+   * singleton is created.
+   * @param verbose Show all log msgs.
+   * @param quiet Suppress all msgs.
+   * @param noGestures Suppress gesture msgs.
+   * @param noUpdates Suppress gesture update msgs.
    *
    * @return ref to the Logger singleton
    */
@@ -80,16 +90,19 @@ class Logger {
   // If true then gesture update % msgs should be logged.
   bool logGestureUpdates;
 
-  /*
-   * if true then the logging levels & options will be set on first call to
+  /**
+   * If true then the logging levels & options will be set on first call to
    * Logger::Obj()
    */
   bool uninitialized;
 
   Logger();
 
-  void Init(const bool verbose = false, const bool quiet = false,
-            const bool noGestures = false, const bool noUpdates = false);
+  /**
+   * Sets the logging levels & options.
+   */
+  void Init(const bool verbose, const bool quiet, const bool noGestures,
+            const bool noUpdates);
 };
 
 #endif  // UTILS_LOGGER_H_

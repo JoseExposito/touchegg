@@ -15,8 +15,23 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "utils/logger.h"
+
+#include <iostream>
+
+Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
+                            const std::string &msg) {
+  std::cout << msg;
+
+  return lvl;
+}
+
+Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
+                            std::ostream &(*msg)(std::ostream &)) {
+  std::cout << msg;
+
+  return lvl;
+}
 
 Logger::Logger() {
   uninitialized = true;

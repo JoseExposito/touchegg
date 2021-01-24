@@ -37,6 +37,9 @@ constexpr auto VERSION = "[Unkown version]";
 
 void printWelcomeMessage() {
   Logger& log = Logger::obj();
+  log.info << "A very informative message!" << std::endl
+           << std::endl
+           << std::endl;
 
   std::cout << "Touchégg " << VERSION << "." << std::endl;
   std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "

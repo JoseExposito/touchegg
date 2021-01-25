@@ -137,8 +137,10 @@ int main(int argc, char** argv) {
   parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
             finishThreshold);
 
+  // if this convenience var is used in main() it MUST be declared after
+  // parseArgs() to that Logger options are set properly!
+  Logger& log = Logger::obj();
   // // test log options
-  // Logger& log = Logger::obj();
   // log.info << "A very informative message." << std::endl;
   // log.warning << "Warning!" << std::endl;
   // log.error << "ERROR!!!" << std::endl;
@@ -150,14 +152,14 @@ int main(int argc, char** argv) {
   printWelcomeMessage();
 
   if (!daemonMode && !clientMode) {
-    Logger::obj().error << "Invalid command line arguments" << std::endl;
+    log.error << "Invalid command line arguments" << std::endl;
     return -1;
   }
 
-  Logger::obj().info << "Starting Touchégg in "
-                     << (daemonMode ? std::string{"daemon mode"}
-                                    : std::string{"client mode"})
-                     << std::endl;
+  log.info << "Starting Touchégg in "
+           << (daemonMode ? std::string{"daemon mode"}
+                          : std::string{"client mode"})
+           << std::endl;
 
   // Execute the daemon/client bits
   if (daemonMode) {
@@ -166,9 +168,8 @@ int main(int argc, char** argv) {
     daemonServer.run();
 
     // Use libinput as gesture gatherer
-    Logger::obj().info
-        << "A list of detected compatible devices will be displayed below:"
-        << std::endl;
+    log.info << "A list of detected compatible devices will be displayed below:"
+             << std::endl;
 
     LibinputGestureGatherer gestureGatherer(&daemonServer, startThreshold,
                                             finishThreshold);
@@ -180,11 +181,11 @@ int main(int argc, char** argv) {
     ClientLock lock;
 
     // Load the configuration using the XML loader
-    Logger::obj().info << "Parsing you configuration file..." << std::endl;
+    log.info << "Parsing you configuration file..." << std::endl;
     Config config;
     XmlConfigLoader loader(&config);
     loader.load();
-    Logger::obj().info << "Configuration parsed successfully" << std::endl;
+    log.info << "Configuration parsed successfully" << std::endl;
 
     // Use X11 as window system
     X11 windowSystem;

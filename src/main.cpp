@@ -16,6 +16,8 @@
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -158,7 +160,10 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  log.info << "Starting Touchégg in "
+  std::time_t t = std::time(NULL);
+  char mbstr[100];
+  std::strftime(mbstr, 100, "[%F %T %z] ", std::localtime(&t));
+  log.info << mbstr << "Starting Touchégg in "
            << (daemonMode ? std::string{"daemon mode"}
                           : std::string{"client mode"})
            << std::endl;

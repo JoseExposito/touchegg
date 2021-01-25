@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "daemon/dbus.h"
+#include "utils/logger.h"
 
 void DaemonClient::run() {
   this->connect();
@@ -36,7 +37,8 @@ void DaemonClient::run() {
 }
 
 void DaemonClient::connect() {
-  std::cout << "Connecting to Touchégg daemon..." << std::endl;
+  Logger &log = Logger::obj();
+  log.info << "Connecting to Touchégg daemon..." << std::endl;
 
   bool connected = false;
 
@@ -49,12 +51,12 @@ void DaemonClient::connect() {
     connected = (connection != nullptr);
 
     if (!connected) {
-      std::cout << "Error connecting to Touchégg daemon: " << error->message
+      log.error << "Error connecting to Touchégg daemon: " << error->message
                 << std::endl;
-      std::cout << "Reconnecting in 5 seconds..." << std::endl;
+      log.error << "Reconnecting in 5 seconds..." << std::endl;
       std::this_thread::sleep_for(std::chrono::seconds(5));
     } else {
-      std::cout << "Connection with Touchégg established" << std::endl;
+      log.info << "Connection with Touchégg established" << std::endl;
       g_dbus_connection_signal_subscribe(
           connection, nullptr, DBUS_INTERFACE_NAME, nullptr, DBUS_OBJECT_PATH,
           nullptr, G_DBUS_SIGNAL_FLAGS_NONE, DaemonClient::onNewMessage, this,
@@ -81,8 +83,8 @@ void DaemonClient::onNewMessage(GDBusConnection * /*connection*/,
 void DaemonClient::onDisconnected(GDBusConnection * /*connection*/,
                                   gboolean /*remotePeerVanished*/,
                                   GError *error, DaemonClient *self) {
-  std::cout << "Connection with Touchégg daemon lost "
-            << (error == nullptr ? "" : error->message) << std::endl;
+  Logger::obj().error << "Connection with Touchégg daemon lost "
+                      << (error == nullptr ? "" : error->message) << std::endl;
   self->connect();
 }
 
@@ -113,8 +115,9 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
                 "(uudiut)", &gestureType, &gestureDirection, &percentage,
                 &fingers, &deviceType, &elapsedTime);
 
-  // std::cout << "GestureType: " << gestureTypeToStr(gestureType) << std::endl;
-  // std::cout << "GestureDirection: " <<
+  // TODO: Jose, update these to use the Logger if you ever decide to use them
+  // again std::cout << "GestureType: " << gestureTypeToStr(gestureType) <<
+  // std::endl; std::cout << "GestureDirection: " <<
   // gestureDirectionToStr(gestureDirection) << std::endl;
   // std::cout << "Percentage: " << percentage << std::endl;
   // std::cout << "Fingers: " << fingers << std::endl;

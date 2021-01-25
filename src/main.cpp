@@ -99,35 +99,33 @@ void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
 }
 
 void printWelcomeMessage() {
-  Logger::obj().info << "Touchégg " << VERSION << "." << std::endl;
-  Logger::obj().info << "Usage: touchegg [--verbose | -v] [--quiet | -q] "
-                        "[--no-gesture-messages] [--no-update-messages] "
-                        "[--daemon [start_threshold finish_threshold]] "
-                        "[--client]"
-                     << std::endl
-                     << std::endl;
+  Logger& log = Logger::obj();
+  log.info << "Touchégg " << VERSION << "." << std::endl;
+  log.info << "Usage: touchegg [--verbose | -v] [--quiet | -q] "
+              "[--no-gesture-messages] [--no-update-messages] "
+              "[--daemon [start_threshold finish_threshold]] "
+              "[--client]"
+           << std::endl
+           << std::endl;
 
-  Logger::obj().info << "Multi-touch gesture recognizer." << std::endl;
-  Logger::obj().info
-      << "Touchégg is an app that runs in the background and transforms "
-         "the gestures you make on your touchpad into visible actions in "
-         "your desktop."
-      << std::endl;
-  Logger::obj().info << "For more information please visit:" << std::endl;
-  Logger::obj().info << "https://github.com/JoseExposito/touchegg" << std::endl
-                     << std::endl;
+  log.info << "Multi-touch gesture recognizer." << std::endl;
+  log.info << "Touchégg is an app that runs in the background and transforms "
+              "the gestures you make on your touchpad into visible actions in "
+              "your desktop."
+           << std::endl;
+  log.info << "For more information please visit:" << std::endl;
+  log.info << "https://github.com/JoseExposito/touchegg" << std::endl
+           << std::endl;
 
-  Logger::obj().info << "Option\t\tMeaning" << std::endl;
-  Logger::obj().info
-      << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
-         "service that gathers gestures but executes no actions"
-      << std::endl;
-  Logger::obj().info << " --client\tConnect to an existing Touchégg daemon and "
-                        "execute actions in your desktop"
-                     << std::endl;
-  Logger::obj().info << "Without arguments Touchégg starts in client mode"
-                     << std::endl
-                     << std::endl;
+  log.info << "Option\t\tMeaning" << std::endl;
+  log.info << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
+              "service that gathers gestures but executes no actions"
+           << std::endl;
+  log.info << " --client\tConnect to an existing Touchégg daemon and "
+              "execute actions in your desktop"
+           << std::endl;
+  log.info << "Without arguments Touchégg starts in client mode" << std::endl
+           << std::endl;
 }
 
 int main(int argc, char** argv) {

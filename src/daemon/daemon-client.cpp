@@ -77,6 +77,15 @@ void DaemonClient::onNewMessage(GDBusConnection * /*connection*/,
                                 const gchar *signalName, GVariant *parameters,
                                 gpointer thisPointer) {
   auto *self = reinterpret_cast<DaemonClient *>(thisPointer);  // NOLINT
+
+  if (self->lastSignalParams != nullptr) {
+    g_variant_unref(self->lastSignalParams);
+  }
+
+  g_variant_ref(parameters);
+  self->lastSignalName = signalName;
+  self->lastSignalParams = parameters;
+
   self->sendToGestureController(signalName, parameters);
 }
 
@@ -85,6 +94,14 @@ void DaemonClient::onDisconnected(GDBusConnection * /*connection*/,
                                   GError *error, DaemonClient *self) {
   Logger::obj().error << "Connection with Touchégg daemon lost "
                       << (error == nullptr ? "" : error->message) << std::endl;
+
+  if (self->lastSignalName == DBUS_ON_GESTURE_BEGIN ||
+      self->lastSignalName == DBUS_ON_GESTURE_UPDATE) {
+    std::unique_ptr<Gesture> gesture =
+        DaemonClient::makeGestureFromSignalParams(self->lastSignalParams);
+    self->gestureController->onGestureEnd(std::move(gesture));
+  }
+
   self->connect();
 }
 
@@ -104,16 +121,16 @@ void DaemonClient::sendToGestureController(const std::string &signalName,
 
 std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
     GVariant *signalParameters) {
-  GestureType gestureType = GestureType::NOT_SUPPORTED;
-  GestureDirection gestureDirection = GestureDirection::UNKNOWN;
+  GestureType type = GestureType::NOT_SUPPORTED;
+  GestureDirection direction = GestureDirection::UNKNOWN;
   double percentage = -1;
   int fingers = -1;
-  uint64_t elapsedTime = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
+  uint64_t elapsedTime = -1;
 
   g_variant_get(signalParameters,  // NOLINT
-                "(uudiut)", &gestureType, &gestureDirection, &percentage,
-                &fingers, &deviceType, &elapsedTime);
+                "(uudiut)", &type, &direction, &percentage, &fingers,
+                &deviceType, &elapsedTime);
 
   // TODO: Jose, update these to use the Logger if you ever decide to use them
   // again std::cout << "GestureType: " << gestureTypeToStr(gestureType) <<
@@ -124,6 +141,6 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
   // std::cout << "DeviceType: " << static_cast<int>(deviceType) << std::endl;
   // std::cout << "Elapsed time: " << elapsedTime << std::endl;
 
-  return std::make_unique<Gesture>(gestureType, gestureDirection, percentage,
-                                   fingers, deviceType, elapsedTime);
+  return std::make_unique<Gesture>(type, direction, percentage, fingers,
+                                   deviceType, elapsedTime);
 }

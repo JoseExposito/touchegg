@@ -35,34 +35,6 @@ constexpr auto VERSION = _VERSION;
 #else
 constexpr auto VERSION = "[Unkown version]";
 #endif
-
-void printWelcomeMessage() {
-  std::cout << "Touchégg " << VERSION << "." << std::endl;
-  std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "
-               "[--client]"
-            << std::endl
-            << std::endl;
-
-  std::cout << "Multi-touch gesture recognizer." << std::endl;
-  std::cout << "Touchégg is an app that runs in the background and transforms "
-               "the gestures you make on your touchpad into visible actions in "
-               "your desktop."
-            << std::endl;
-  std::cout << "For more information please visit:" << std::endl;
-  std::cout << "https://github.com/JoseExposito/touchegg" << std::endl
-            << std::endl;
-
-  std::cout << "Option\t\tMeaning" << std::endl;
-  std::cout << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
-               "service that gathers gestures but executes no actions"
-            << std::endl;
-  std::cout << " --client\tConnect to an existing Touchégg daemon and "
-               "execute actions in your desktop"
-            << std::endl;
-  std::cout << "Without arguments Touchégg starts in client mode" << std::endl
-            << std::endl;
-}
-
 class InputParser {
  public:
   InputParser(int& argc, char** argv) {
@@ -126,6 +98,38 @@ void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
   Logger::obj(verbose, quiet, noGestures, noUpdates);
 }
 
+void printWelcomeMessage() {
+  Logger::obj().info << "Touchégg " << VERSION << "." << std::endl;
+  Logger::obj().info << "Usage: touchegg [--verbose | -v] [--quiet | -q] "
+                        "[--no-gesture-messages] [--no-update-messages] "
+                        "[--daemon [start_threshold finish_threshold]] "
+                        "[--client]"
+                     << std::endl
+                     << std::endl;
+
+  Logger::obj().info << "Multi-touch gesture recognizer." << std::endl;
+  Logger::obj().info
+      << "Touchégg is an app that runs in the background and transforms "
+         "the gestures you make on your touchpad into visible actions in "
+         "your desktop."
+      << std::endl;
+  Logger::obj().info << "For more information please visit:" << std::endl;
+  Logger::obj().info << "https://github.com/JoseExposito/touchegg" << std::endl
+                     << std::endl;
+
+  Logger::obj().info << "Option\t\tMeaning" << std::endl;
+  Logger::obj().info
+      << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
+         "service that gathers gestures but executes no actions"
+      << std::endl;
+  Logger::obj().info << " --client\tConnect to an existing Touchégg daemon and "
+                        "execute actions in your desktop"
+                     << std::endl;
+  Logger::obj().info << "Without arguments Touchégg starts in client mode"
+                     << std::endl
+                     << std::endl;
+}
+
 int main(int argc, char** argv) {
   bool daemonMode = false;
   bool clientMode = false;
@@ -135,28 +139,27 @@ int main(int argc, char** argv) {
   parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
             finishThreshold);
 
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // test log options
-  Logger& log = Logger::obj();
-  log.info << "A very informative message." << std::endl;
-  log.warning << "Warning!" << std::endl;
-  log.error << "ERROR!!!" << std::endl;
-  log.debug << "DBG: 0xdeadbeef" << std::endl;
-  log.gesture << "Nice gesture" << std::endl;
-  log.update << "G-Update" << std::endl << std::endl << std::endl;
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // // test log options
+  // Logger& log = Logger::obj();
+  // log.info << "A very informative message." << std::endl;
+  // log.warning << "Warning!" << std::endl;
+  // log.error << "ERROR!!!" << std::endl;
+  // log.debug << "DBG: 0xdeadbeef" << std::endl;
+  // log.gesture << "Nice gesture" << std::endl;
+  // log.update << "G-Update" << std::endl;
+  // log.info std::endl << std::endl << std::endl;
 
   printWelcomeMessage();
 
   if (!daemonMode && !clientMode) {
-    std::cout << "Invalid command line arguments" << std::endl;
+    Logger::obj().error << "Invalid command line arguments" << std::endl;
     return -1;
   }
 
-  std::cout << "Starting Touchégg in "
-            << (daemonMode ? std::string{"daemon mode"}
-                           : std::string{"client mode"})
-            << std::endl;
+  Logger::obj().info << "Starting Touchégg in "
+                     << (daemonMode ? std::string{"daemon mode"}
+                                    : std::string{"client mode"})
+                     << std::endl;
 
   // Execute the daemon/client bits
   if (daemonMode) {
@@ -165,7 +168,7 @@ int main(int argc, char** argv) {
     daemonServer.run();
 
     // Use libinput as gesture gatherer
-    std::cout
+    Logger::obj().info
         << "A list of detected compatible devices will be displayed below:"
         << std::endl;
 
@@ -179,11 +182,11 @@ int main(int argc, char** argv) {
     ClientLock lock;
 
     // Load the configuration using the XML loader
-    std::cout << "Parsing you configuration file..." << std::endl;
+    Logger::obj().info << "Parsing you configuration file..." << std::endl;
     Config config;
     XmlConfigLoader loader(&config);
     loader.load();
-    std::cout << "Configuration parsed successfully" << std::endl;
+    Logger::obj().info << "Configuration parsed successfully" << std::endl;
 
     // Use X11 as window system
     X11 windowSystem;

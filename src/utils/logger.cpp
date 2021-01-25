@@ -32,7 +32,7 @@ bool Logger::Enabled(const LogLevel &lvl) {
     case LogLevel::GESTURE_INFO:
       return logGestures && logInfo;
     case LogLevel::UPDATE_INFO:
-      return logGestures && logInfo;
+      return logGestureUpdates && logInfo;
 
     default:
       std::cerr << "Unknown LogLevel!" << std::endl;

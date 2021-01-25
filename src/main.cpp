@@ -15,6 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -62,23 +63,67 @@ void printWelcomeMessage() {
             << std::endl;
 }
 
-// Parse the command line arguments
-void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
-               double& startThreshold, double& finishThreshold) {
-  clientMode = (argc == 1);
-  if (argc > 1) {
-    std::string param{argv[1]};  // NOLINT
-    daemonMode = (param == "--daemon");
-    clientMode = (param == "--client");
+class InputParser {
+ public:
+  InputParser(int& argc, char** argv) {
+    for (int i = 1; i < argc; ++i) this->tokens.push_back(std::string(argv[i]));
+  }
 
-    if (daemonMode && argc == 4) {
-      startThreshold = std::stod(argv[2]);   // NOLINT
-      finishThreshold = std::stod(argv[3]);  // NOLINT
+  const std::string getCmdOption(const std::string& option) const {
+    std::vector<std::string>::const_iterator itr;
+    itr = std::find(this->tokens.begin(), this->tokens.end(), option);
+    if (itr != this->tokens.end() && ++itr != this->tokens.end()) {
+      return *itr;
+    }
+    static const std::string empty_string("");
+    return empty_string;
+  }
+
+  // special case used for daemon thresholds
+  void getCmdOption2d(const std::string& option, double& d1, double& d2) const {
+    std::vector<std::string>::const_iterator itr;
+    itr = std::find(this->tokens.begin(), this->tokens.end(), option);
+    if (itr != this->tokens.end()) {
+      if (++itr != this->tokens.end()) {
+        d1 = std::stod(*itr);
+        if (++itr != this->tokens.end()) {
+          d2 = std::stod(*itr);
+        }
+      }
     }
   }
 
+  bool cmdOptionExists(const std::string& option) const {
+    return std::find(this->tokens.begin(), this->tokens.end(), option) !=
+           this->tokens.end();
+  }
+
+ private:
+  std::vector<std::string> tokens;
+};
+
+// Parse the command line arguments
+void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
+               double& startThreshold, double& finishThreshold) {
+  bool verbose, quiet, noGestures, noUpdates;
+
+  InputParser input(argc, argv);
+
+  // daemon takes precedence over client
+  if (input.cmdOptionExists("--daemon")) {
+    daemonMode = true;
+    input.getCmdOption2d("--daemon", startThreshold, finishThreshold);
+  } else if (input.cmdOptionExists("--client") || (argc == 1)) {
+    clientMode = true;
+  }
+
+  verbose = input.cmdOptionExists("--verbose") || input.cmdOptionExists("-v");
+  quiet = input.cmdOptionExists("--quiet") || input.cmdOptionExists("-q");
+  noGestures = input.cmdOptionExists("--no-gesture-messages");
+  noUpdates = input.cmdOptionExists("--no-update-messages");
+
   // init Logger options
-  Logger::obj();  // TODO: add params!!!
+  Logger::obj(verbose, quiet, noGestures, noUpdates);
 }
 
 int main(int argc, char** argv) {
@@ -90,6 +135,8 @@ int main(int argc, char** argv) {
   parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
             finishThreshold);
 
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // test log options
   Logger& log = Logger::obj();
   log.info << "A very informative message." << std::endl;
   log.warning << "Warning!" << std::endl;
@@ -97,6 +144,7 @@ int main(int argc, char** argv) {
   log.debug << "DBG: 0xdeadbeef" << std::endl;
   log.gesture << "Nice gesture" << std::endl;
   log.update << "G-Update" << std::endl << std::endl << std::endl;
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   printWelcomeMessage();
 

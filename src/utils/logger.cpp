@@ -106,6 +106,7 @@ void Logger::Init(const bool verbose, const bool quiet, const bool noGestures,
   // special case options
   if (noGestures) {
     logGestures = false;
+    logGestureUpdates = false;
   }
 
   if (noUpdates) {

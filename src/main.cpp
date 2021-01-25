@@ -144,14 +144,14 @@ int main(int argc, char** argv) {
    * parseArgs() so that Logger options are set properly!
    */
   Logger& log = Logger::obj();
-  // // test log options
+  // test log options
   // log.info << "A very informative message." << std::endl;
   // log.warning << "Warning!" << std::endl;
   // log.error << "ERROR!!!" << std::endl;
   // log.debug << "DBG: 0xdeadbeef" << std::endl;
   // log.gesture << "Nice gesture" << std::endl;
   // log.update << "G-Update" << std::endl;
-  // log.info std::endl << std::endl << std::endl;
+  // log.info << std::endl << std::endl << std::endl;
 
   printWelcomeMessage();
 

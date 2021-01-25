@@ -19,16 +19,51 @@
 
 #include <iostream>
 
+bool Logger::Enabled(const LogLevel &lvl) {
+  switch (lvl) {
+    case LogLevel::INFO:
+      return logInfo;
+    case LogLevel::WARNING:
+      return logWarning;
+    case LogLevel::ERROR:
+      return logError;
+    case LogLevel::DEBUG:
+      return logDebug;
+    case LogLevel::GESTURE_INFO:
+      return logGestures && logInfo;
+    case LogLevel::UPDATE_INFO:
+      return logGestures && logInfo;
+
+    default:
+      std::cerr << "Unknown LogLevel!" << std::endl;
+      return false;
+  }
+}
+
+std::ostream &Logger::GetStream(const LogLevel &lvl) {
+  switch (lvl) {
+    case LogLevel::ERROR:
+      return std::cerr;
+
+    default:
+      return std::cout;
+  }
+}
+
 Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
                             const std::string &msg) {
-  std::cout << msg;
+  if (Logger::obj().Enabled(lvl)) {
+    Logger::obj().GetStream(lvl) << msg;
+  }
 
   return lvl;
 }
 
 Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
                             std::ostream &(*msg)(std::ostream &)) {
-  std::cout << msg;
+  if (Logger::obj().Enabled(lvl)) {
+    Logger::obj().GetStream(lvl) << msg;
+  }
 
   return lvl;
 }

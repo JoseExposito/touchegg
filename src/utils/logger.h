@@ -25,9 +25,17 @@
  */
 class Logger {
  public:
-  enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
+  enum class LogLevel {
+    INFO,
+    WARNING,
+    ERROR,
+    DEBUG,
+    GESTURE_INFO,
+    UPDATE_INFO
+  };
   LogLevel info = LogLevel::INFO, warning = LogLevel::WARNING,
-           error = LogLevel::ERROR, debug = LogLevel::DEBUG;
+           error = LogLevel::ERROR, debug = LogLevel::DEBUG,
+           gesture = LogLevel::GESTURE_INFO, update = LogLevel::UPDATE_INFO;
 
   /**
    * USAGE: Logger::obj().LEVEL << "A very informative message!" << std::endl;
@@ -62,18 +70,6 @@ class Logger {
     return singleton;
   }
 
-  /**
-   * @return true if the logger should be called for gesture msgs. Necessary
-   * because the logging funcs don't know what kind of msg is being passed.
-   */
-  bool gestures() { return logGestures; }
-
-  /**
-   * @return true if the logger should be called for gesture msgs. Necessary
-   * because the logging funcs don't know what kind of msg is being passed.
-   */
-  bool gestureUpdates() { return logGestureUpdates; }
-
   // Should not be cloneable.
   Logger(Logger const &) = delete;
 
@@ -103,6 +99,9 @@ class Logger {
    */
   void Init(const bool verbose, const bool quiet, const bool noGestures,
             const bool noUpdates);
+
+  bool Enabled(const LogLevel &lvl);
+  std::ostream &GetStream(const LogLevel &lvl);
 };
 
 #endif  // UTILS_LOGGER_H_

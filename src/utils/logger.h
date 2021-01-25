@@ -40,7 +40,7 @@ class Logger {
   /**
    * USAGE: Logger::obj().LEVEL << "A very informative message!" << std::endl;
    *
-   * LEVEL: info | warning | error | debug
+   * LEVEL: info | warning | error | debug | gesture | update
    */
   friend LogLevel operator<<(const LogLevel &lvl, const std::string &msg);
   friend LogLevel operator<<(const LogLevel &lvl,

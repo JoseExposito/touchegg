@@ -41,6 +41,13 @@ class DaemonClient {
  private:
   GestureControllerDelegate *gestureController;
 
+  /*
+   * Store the last received signal and signal parameters so in case of
+   * disconnection in the middle of a gesture we can finish it.
+   */
+  std::string lastSignalName = "";
+  GVariant *lastSignalParams = nullptr;
+
   /**
    * Stablish a connection with the daemon server.
    */

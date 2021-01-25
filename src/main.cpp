@@ -36,11 +36,6 @@ constexpr auto VERSION = "[Unkown version]";
 #endif
 
 void printWelcomeMessage() {
-  Logger& log = Logger::obj();
-  log.info << "A very informative message!" << std::endl
-           << std::endl
-           << std::endl;
-
   std::cout << "Touchégg " << VERSION << "." << std::endl;
   std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "
                "[--client]"
@@ -67,15 +62,10 @@ void printWelcomeMessage() {
             << std::endl;
 }
 
-int main(int argc, char** argv) {
-  printWelcomeMessage();
-
-  // Parse the command line arguments
-  bool daemonMode = false;
-  bool clientMode = (argc == 1);
-  double startThreshold = -1;
-  double finishThreshold = -1;
-
+// Parse the command line arguments
+void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
+               double& startThreshold, double& finishThreshold) {
+  clientMode = (argc == 1);
   if (argc > 1) {
     std::string param{argv[1]};  // NOLINT
     daemonMode = (param == "--daemon");
@@ -86,6 +76,29 @@ int main(int argc, char** argv) {
       finishThreshold = std::stod(argv[3]);  // NOLINT
     }
   }
+
+  // init Logger options
+  Logger::obj();  // TODO: add params!!!
+}
+
+int main(int argc, char** argv) {
+  bool daemonMode = false;
+  bool clientMode = false;
+  double startThreshold = -1;
+  double finishThreshold = -1;
+
+  parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
+            finishThreshold);
+
+  Logger& log = Logger::obj();
+  log.info << "A very informative message." << std::endl;
+  log.warning << "Warning!" << std::endl;
+  log.error << "ERROR!!!" << std::endl;
+  log.debug << "DBG: 0xdeadbeef" << std::endl;
+  log.gesture << "Nice gesture" << std::endl;
+  log.update << "G-Update" << std::endl << std::endl << std::endl;
+
+  printWelcomeMessage();
 
   if (!daemonMode && !clientMode) {
     std::cout << "Invalid command line arguments" << std::endl;

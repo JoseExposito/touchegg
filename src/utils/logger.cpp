@@ -50,6 +50,7 @@ std::ostream &Logger::GetStream(const LogLevel &lvl) {
   }
 }
 
+// I hate that the following 2 funcs aren't DRY, but…
 Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
                             const std::string &msg) {
   if (Logger::obj().Enabled(lvl)) {

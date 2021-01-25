@@ -42,10 +42,16 @@ class Logger {
    *
    * LEVEL: info | warning | error | debug | gesture | update
    */
-  friend LogLevel operator<<(const LogLevel &lvl, const std::string &msg);
-  friend LogLevel operator<<(const LogLevel &lvl, const double &msg);
   friend LogLevel operator<<(const LogLevel &lvl,
                              std::ostream &(*msg)(std::ostream &));
+  template <typename T>
+  friend LogLevel operator<<(const Logger::LogLevel &lvl, T const &msg) {
+    if (Logger::obj().Enabled(lvl)) {
+      Logger::obj().GetStream(lvl) << msg;
+    }
+
+    return lvl;
+  }
 
   /**
    * This static method controls the access to the singleton.

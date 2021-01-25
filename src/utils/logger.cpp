@@ -50,23 +50,12 @@ std::ostream &Logger::GetStream(const LogLevel &lvl) {
   }
 }
 
-// I hate that the following funcs aren't DRY, but…
-Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
-                            const std::string &msg) {
-  if (Logger::obj().Enabled(lvl)) {
-    Logger::obj().GetStream(lvl) << msg;
-  }
-
-  return lvl;
-}
-Logger::LogLevel operator<<(const Logger::LogLevel &lvl, const double &msg) {
-  if (Logger::obj().Enabled(lvl)) {
-    Logger::obj().GetStream(lvl) << msg;
-  }
-
-  return lvl;
-}
-
+/**
+ * I hate that the following func isn't DRY, (the body repeats the template in
+ * the class header), but I don't see any way around this. Just keep this in
+ * mind if/when you modify the function: it should probably be the same in both
+ * places.
+ */
 Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
                             std::ostream &(*msg)(std::ostream &)) {
   if (Logger::obj().Enabled(lvl)) {

@@ -188,7 +188,7 @@ int main(int argc, char** argv) {
     ClientLock lock;
 
     // Load the configuration using the XML loader
-    log.info << "Parsing you configuration file..." << std::endl;
+    log.info << "Parsing your configuration file..." << std::endl;
     Config config;
     XmlConfigLoader loader(&config);
     loader.load();

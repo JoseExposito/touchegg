@@ -34,6 +34,7 @@
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture/gesture-direction.h"
+#include "utils/logger.h"
 
 LibinputGestureGatherer::LibinputGestureGatherer(
     GestureControllerDelegate *gestureController, double startThreshold,

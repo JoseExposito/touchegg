@@ -59,6 +59,13 @@ Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
 
   return lvl;
 }
+Logger::LogLevel operator<<(const Logger::LogLevel &lvl, const double &msg) {
+  if (Logger::obj().Enabled(lvl)) {
+    Logger::obj().GetStream(lvl) << msg;
+  }
+
+  return lvl;
+}
 
 Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
                             std::ostream &(*msg)(std::ostream &)) {

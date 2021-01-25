@@ -37,6 +37,7 @@
 
 #include "config/config.h"
 #include "utils/filesystem.h"
+#include "utils/logger.h"
 #include "utils/paths.h"
 #include "utils/string.h"
 
@@ -68,7 +69,7 @@ std::filesystem::path XmlConfigLoader::getConfigFilePath() {
 
 void XmlConfigLoader::parseConfig() {
   std::filesystem::path configPath = XmlConfigLoader::getConfigFilePath();
-  std::cout << "Using configuration file " << configPath << std::endl;
+  Logger::obj().info << "Using configuration file " << configPath << std::endl;
 
   pugi::xml_document doc;
   pugi::xml_parse_result parsedSuccessfully = doc.load_file(configPath.c_str());
@@ -136,7 +137,7 @@ void XmlConfigLoader::watchConfig() {
 
   int fd = inotify_init();
   if (fd < 0) {
-    std::cout << warningMessage << std::endl;
+    Logger::obj().warning << warningMessage << std::endl;
     return;
   }
 
@@ -144,35 +145,37 @@ void XmlConfigLoader::watchConfig() {
                              IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE |
                                  IN_MOVE_SELF | IN_DELETE_SELF);
   if (wd < 0) {
-    std::cout << warningMessage << std::endl;
+    Logger::obj().warning << warningMessage << std::endl;
     return;
   }
 
-  std::thread watchThread{[fd, this]() {
-    std::array<char, WATCH_BUFFER_SIZE> buffer{};
-    while (true) {
-      bool reloadSettings = false;
-      bool allEventsRead = false;
+  std::thread watchThread{
+      [fd, this]() {
+        std::array<char, WATCH_BUFFER_SIZE> buffer{};
+        while (true) {
+          bool reloadSettings = false;
+          bool allEventsRead = false;
 
-      while (!allEventsRead) {
-        const std::size_t length = read(fd, buffer.data(), buffer.size());
+          while (!allEventsRead) {
+            const std::size_t length = read(fd, buffer.data(), buffer.size());
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        unsigned int available = 0;
-        ioctl(fd, FIONREAD, &available);  // NOLINT
+            unsigned int available = 0;
+            ioctl(fd, FIONREAD, &available);  // NOLINT
 
-        reloadSettings = (length > 0);
-        allEventsRead = (available <= 0);
-      }
+            reloadSettings = (length > 0);
+            allEventsRead = (available <= 0);
+          }
 
-      if (reloadSettings) {
-        std::cout << "Your configuration file changed, reloading your settings"
-                  << std::endl;
-        this->config->clear();
-        this->parseConfig();
-      }
-    }
-  }};
+          if (reloadSettings) {
+            Logger::obj().info
+                << "Your configuration file changed, reloading your settings"
+                << std::endl;
+            this->config->clear();
+            this->parseConfig();
+          }
+        }
+      }};
   watchThread.detach();
 }

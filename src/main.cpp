@@ -137,8 +137,10 @@ int main(int argc, char** argv) {
   parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
             finishThreshold);
 
-  // if this convenience var is used in main() it MUST be declared after
-  // parseArgs() to that Logger options are set properly!
+  /**
+   * if this convenience var is used in main() it MUST be declared after
+   * parseArgs() so that Logger options are set properly!
+   */
   Logger& log = Logger::obj();
   // // test log options
   // log.info << "A very informative message." << std::endl;

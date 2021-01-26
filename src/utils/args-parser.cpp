@@ -35,10 +35,8 @@ ArgsParser::ArgsParser(int& argc, char** argv) {
     clientMode = true;
   }
 
-  verbose = cmdOptionExists("--verbose") || cmdOptionExists("-v");
+  debug = cmdOptionExists("--debug") || cmdOptionExists("-d");
   quiet = cmdOptionExists("--quiet") || cmdOptionExists("-q");
-  noGestures = cmdOptionExists("--no-gesture-messages");
-  noUpdates = cmdOptionExists("--no-update-messages");
 }
 
 const std::string ArgsParser::getCmdOption(const std::string& option) {

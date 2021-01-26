@@ -27,7 +27,7 @@ class ArgsParser {
  public:
   // the option flags
   bool daemonMode, clientMode;
-  bool verbose, quiet, noGestures, noUpdates;
+  bool debug, quiet;
   double startThreshold = -1;
   double finishThreshold = -1;
 

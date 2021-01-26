@@ -24,9 +24,6 @@ LogLevel error = LogLevel::ERROR;
 LogLevel warning = LogLevel::WARNING;
 LogLevel info = LogLevel::INFO;
 LogLevel debug = LogLevel::DEBUG;
-
-LogLevel gesture = LogLevel::GESTURE_INFO;
-LogLevel update = LogLevel::UPDATE_INFO;
 }  // namespace tlg
 
 bool Logger::Enabled(const LogLevel &lvl) {
@@ -39,10 +36,6 @@ bool Logger::Enabled(const LogLevel &lvl) {
       return logError;
     case LogLevel::DEBUG:
       return logDebug;
-    case LogLevel::GESTURE_INFO:
-      return logGestures && logInfo;
-    case LogLevel::UPDATE_INFO:
-      return logGestureUpdates && logInfo;
 
     default:
       std::cerr << "Unknown LogLevel!" << std::endl;
@@ -78,36 +71,21 @@ Logger::Logger() {
   uninitialized = true;
 
   // defaults
-  logInfo = true;
-  logWarning = true;
   logError = true;
+  logWarning = true;
+  logInfo = false;
   logDebug = false;
-  logGestures = true;
-  logGestureUpdates = true;
 }
 
-void Logger::Init(const bool verbose, const bool quiet, const bool noGestures,
-                  const bool noUpdates) {
+void Logger::Init(const bool debug, const bool quiet) {
   uninitialized = false;
 
   // primary logging options
   if (quiet) {
-    logInfo = false;
-    logWarning = false;
     logError = false;
-    logGestures = false;
-    logGestureUpdates = false;
-  } else if (verbose) {
+    logWarning = false;
+  } else if (debug) {
+    logInfo = true;
     logDebug = true;
-  }
-
-  // special case options
-  if (noGestures) {
-    logGestures = false;
-    logGestureUpdates = false;
-  }
-
-  if (noUpdates) {
-    logGestureUpdates = false;
   }
 }

@@ -20,16 +20,13 @@
 
 #include <string>
 
-enum class LogLevel { INFO, WARNING, ERROR, DEBUG, GESTURE_INFO, UPDATE_INFO };
+enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
 
 namespace tlg {
 extern LogLevel error;
 extern LogLevel warning;
 extern LogLevel info;
 extern LogLevel debug;
-
-extern LogLevel gesture;
-extern LogLevel update;
 }  // namespace tlg
 
 /**
@@ -52,20 +49,16 @@ class Logger {
    *
    * The following parameters are only applied on the first call when the
    * singleton is created.
-   * @param verbose Show all log msgs.
+   * @param debug Show all log msgs.
    * @param quiet Suppress all msgs.
-   * @param noGestures Suppress gesture msgs.
-   * @param noUpdates Suppress gesture update msgs.
    *
    * @return ref to the Logger singleton
    */
-  static Logger &obj(const bool verbose = false, const bool quiet = false,
-                     const bool noGestures = false,
-                     const bool noUpdates = false) {
+  static Logger &obj(const bool debug = false, const bool quiet = false) {
     static Logger singleton;
 
     if (singleton.uninitialized) {
-      singleton.Init(verbose, quiet, noGestures, noUpdates);
+      singleton.Init(debug, quiet);
     }
 
     return singleton;
@@ -81,12 +74,6 @@ class Logger {
   // These indicate if the various logging levels should be enabled.
   bool logInfo, logWarning, logError, logDebug;
 
-  // If true then gesture msgs should be logged.
-  bool logGestures;
-
-  // If true then gesture update % msgs should be logged.
-  bool logGestureUpdates;
-
   /**
    * If true then the logging levels & options will be set on first call to
    * Logger::Obj()
@@ -98,8 +85,7 @@ class Logger {
   /**
    * Sets the logging levels & options.
    */
-  void Init(const bool verbose, const bool quiet, const bool noGestures,
-            const bool noUpdates);
+  void Init(const bool debug, const bool quiet);
 
   bool Enabled(const LogLevel &lvl);
   std::ostream &GetStream(const LogLevel &lvl);

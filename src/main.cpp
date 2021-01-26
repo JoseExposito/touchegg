@@ -68,16 +68,14 @@ int main(int argc, char** argv) {
   ArgsParser args(argc, argv);
 
   // init Logger options
-  Logger::obj(args.verbose, args.quiet, args.noGestures, args.noUpdates);
+  Logger::obj(args.debug, args.quiet);
 
   // test log options
-  tlg::info << "A very informative message." << std::endl;
-  tlg::warning << "Warning!" << std::endl;
   tlg::error << "ERROR!!!" << std::endl;
+  tlg::warning << "Warning!" << std::endl;
+  tlg::info << "A very informative message." << std::endl;
   tlg::debug << "DBG: 0xdeadbeef" << std::endl;
-  tlg::gesture << "Nice gesture" << std::endl;
-  tlg::update << "G-Update" << std::endl;
-  tlg::info << std::endl << std::endl;
+  tlg::error << std::endl << std::endl;
 
   printWelcomeMessage();
 

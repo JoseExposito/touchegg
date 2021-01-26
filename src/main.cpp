@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
   parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
             finishThreshold);
 
-  // Logger& log = Logger::obj();
+  // Logger::obj();
 
   // test log options
   tlg::info << "A very informative message." << std::endl;
@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
 
   printWelcomeMessage();
 
-  if (!daemonMode && !clientMode) {
+  if ((!daemonMode && !clientMode) || (daemonMode && clientMode)) {
     tlg::error << "Invalid command line arguments" << std::endl;
     return -1;
   }

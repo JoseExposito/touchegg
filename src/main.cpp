@@ -15,9 +15,6 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <algorithm>
-#include <ctime>
-#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -27,6 +24,7 @@
 #include "daemon/daemon-server.h"
 #include "gesture-controller/gesture-controller.h"
 #include "gesture-gatherer/libinput-gesture-gatherer.h"
+#include "utils/args-parser.h"
 #include "utils/client-lock.h"
 #include "utils/logger.h"
 #include "window-system/window-system.h"
@@ -37,68 +35,6 @@ constexpr auto VERSION = _VERSION;
 #else
 constexpr auto VERSION = "[Unkown version]";
 #endif
-class InputParser {
- public:
-  InputParser(int& argc, char** argv) {
-    for (int i = 1; i < argc; ++i) this->tokens.push_back(std::string(argv[i]));
-  }
-
-  const std::string getCmdOption(const std::string& option) const {
-    std::vector<std::string>::const_iterator itr;
-    itr = std::find(this->tokens.begin(), this->tokens.end(), option);
-    if (itr != this->tokens.end() && ++itr != this->tokens.end()) {
-      return *itr;
-    }
-    static const std::string empty_string("");
-    return empty_string;
-  }
-
-  // special case used for daemon thresholds
-  void getCmdOption2d(const std::string& option, double& d1, double& d2) const {
-    std::vector<std::string>::const_iterator itr;
-    itr = std::find(this->tokens.begin(), this->tokens.end(), option);
-    if (itr != this->tokens.end()) {
-      if (++itr != this->tokens.end()) {
-        d1 = std::stod(*itr);
-        if (++itr != this->tokens.end()) {
-          d2 = std::stod(*itr);
-        }
-      }
-    }
-  }
-
-  bool cmdOptionExists(const std::string& option) const {
-    return std::find(this->tokens.begin(), this->tokens.end(), option) !=
-           this->tokens.end();
-  }
-
- private:
-  std::vector<std::string> tokens;
-};
-
-// Parse the command line arguments
-void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
-               double& startThreshold, double& finishThreshold) {
-  bool verbose, quiet, noGestures, noUpdates;
-
-  InputParser input(argc, argv);
-
-  // daemon takes precedence over client
-  if (input.cmdOptionExists("--daemon")) {
-    daemonMode = true;
-    input.getCmdOption2d("--daemon", startThreshold, finishThreshold);
-  } else if (input.cmdOptionExists("--client") || (argc == 1)) {
-    clientMode = true;
-  }
-
-  verbose = input.cmdOptionExists("--verbose") || input.cmdOptionExists("-v");
-  quiet = input.cmdOptionExists("--quiet") || input.cmdOptionExists("-q");
-  noGestures = input.cmdOptionExists("--no-gesture-messages");
-  noUpdates = input.cmdOptionExists("--no-update-messages");
-
-  // init Logger options
-  Logger::obj(verbose, quiet, noGestures, noUpdates);
-}
 
 void printWelcomeMessage() {
   tlg::info << "Touchégg " << VERSION << "." << std::endl;
@@ -158,7 +94,7 @@ int main(int argc, char** argv) {
 
   std::time_t t = std::time(NULL);
   char mbstr[100];
-  std::strftime(mbstr, 100, "[%F %T %z] ", std::localtime(&t));
+  std::strftime(mbstr, sizeof(mbstr) - 1, "[%F-%T%z] ", std::localtime(&t));
   tlg::info << mbstr << "Starting Touchégg in "
             << (daemonMode ? std::string{"daemon mode"}
                            : std::string{"client mode"})
@@ -178,9 +114,7 @@ int main(int argc, char** argv) {
     LibinputGestureGatherer gestureGatherer(&daemonServer, startThreshold,
                                             finishThreshold);
     gestureGatherer.run();
-  }
-
-  if (clientMode) {
+  } else {  // clientMode
     // Avoid running multiple client instances in parallel
     ClientLock lock;
 

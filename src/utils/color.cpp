@@ -49,8 +49,8 @@ void Color::setFromHexString(const std::string &hexString) {
     this->blue =
         std::stoi(hexString.substr(offset + 4, 2), nullptr, 16) / 255.0;
   } catch (const std::exception & /* error */) {
-    Logger::obj().error << "Error: Invalid animation color, using default color"
-                        << std::endl;
+    tlg::error << "Error: Invalid animation color, using default color"
+               << std::endl;
   }
 }
 

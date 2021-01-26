@@ -27,8 +27,6 @@
 
 void LininputDeviceHandler::handleDeviceAdded(
     struct libinput_event *event) const {
-  Logger &log = Logger::obj();
-
   struct libinput_device *device = libinput_event_get_device(event);
 
   bool hasGestureCap =
@@ -37,10 +35,10 @@ void LininputDeviceHandler::handleDeviceAdded(
       libinput_device_has_capability(device, LIBINPUT_DEVICE_CAP_TOUCH) != 0;
 
   if (hasGestureCap || hasTouchCap) {
-    log.info << "Compatible device detected:" << std::endl;
+    tlg::info << "Compatible device detected:" << std::endl;
 
     const char *name = libinput_device_get_name(device);
-    log.info << "\tName: " << name << std::endl;
+    tlg::info << "\tName: " << name << std::endl;
 
     auto info = new LibinputDeviceInfo{};  // NOLINT
 
@@ -51,12 +49,12 @@ void LininputDeviceHandler::handleDeviceAdded(
     // Some devices are reporting a size of 0x0mm:
     // https://github.com/JoseExposito/touchegg/issues/415
     if (getSizeStatus == 0 && widthMm != 0 && heightMm != 0) {
-      log.info << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
-               << std::endl;
+      tlg::info << "\tSize: " << widthMm << "mm x " << heightMm << "mm"
+                << std::endl;
 
-      log.info << "\tCalculating start_threshold and finish_threshold. "
-                  "You can tune this values in your service file"
-               << std::endl;
+      tlg::info << "\tCalculating start_threshold and finish_threshold. "
+                   "You can tune this values in your service file"
+                << std::endl;
 
       if (hasGestureCap) {
         LininputDeviceHandler::calculateTouchpadThreshold(widthMm, heightMm,
@@ -66,7 +64,7 @@ void LininputDeviceHandler::handleDeviceAdded(
                                                              info);
       }
     } else {
-      log.warning
+      tlg::warning
           << "\tIt wasn't possible to get your device physical size, falling "
              "back to default start_threshold and finish_threshold. You can "
              "tune this values in your service file"
@@ -83,11 +81,11 @@ void LininputDeviceHandler::handleDeviceAdded(
       info->finishThresholdVertical = this->finishThreshold;
     }
 
-    log.info << "\tstart_threshold: " << info->startThreshold << std::endl;
-    log.info << "\tfinish_threshold_horizontal: "
-             << info->finishThresholdHorizontal << std::endl;
-    log.info << "\tfinish_threshold_vertical: " << info->finishThresholdVertical
-             << std::endl;
+    tlg::info << "\tstart_threshold: " << info->startThreshold << std::endl;
+    tlg::info << "\tfinish_threshold_horizontal: "
+              << info->finishThresholdHorizontal << std::endl;
+    tlg::info << "\tfinish_threshold_vertical: "
+              << info->finishThresholdVertical << std::endl;
 
     libinput_device_set_user_data(device, static_cast<void *>(info));
   }

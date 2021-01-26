@@ -27,8 +27,8 @@ int Action::readThreshold(const Config &config) {
   try {
     threshold = std::stoi(config.getGlobalSetting("action_execute_threshold"));
   } catch (std::exception &e) {
-    Logger::obj().error << "Bad action_execute_threshold value: " << e.what()
-                        << std::endl;
+    tlg::error << "Bad action_execute_threshold value: " << e.what()
+               << std::endl;
     // Leave default 20 if numeric conversion failed
   }
 

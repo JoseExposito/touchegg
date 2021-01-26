@@ -37,13 +37,13 @@ GestureController::GestureController(const Config &config,
     : config(config), windowSystem(windowSystem) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
-  Logger &log = Logger::obj();
-  log.gesture << "Gesture begin detected" << std::endl;
-  log.gesture << "\tGesture information:" << std::endl;
-  log.gesture << "\t\tFingers: " << gesture->fingers() << std::endl;
-  log.gesture << "\t\tType: " << gestureTypeToStr(gesture->type()) << std::endl;
-  log.gesture << "\t\tDirection: "
-              << gestureDirectionToStr(gesture->direction()) << std::endl;
+  tlg::gesture << "Gesture begin detected" << std::endl;
+  tlg::gesture << "\tGesture information:" << std::endl;
+  tlg::gesture << "\t\tFingers: " << gesture->fingers() << std::endl;
+  tlg::gesture << "\t\tType: " << gestureTypeToStr(gesture->type())
+               << std::endl;
+  tlg::gesture << "\t\tDirection: "
+               << gestureDirectionToStr(gesture->direction()) << std::endl;
 
   this->window = this->windowSystem.getWindowUnderCursor();
   this->action = this->getActionForGesture(*gesture, *this->window);
@@ -57,7 +57,7 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
           || (isSystemWindow && this->action->runOnSystemWindows()));
 
   if (!executeAction) {
-    log.gesture
+    tlg::gesture
         << "\tIgnoring this gesture. This could mean no action is configured, "
            "the configured action is not supported or that it was performed in "
            "a system window (panel, dock, desktop, etc)"
@@ -65,14 +65,14 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
     return;
   }
 
-  log.gesture << "\tStarting action" << std::endl;
+  tlg::gesture << "\tStarting action" << std::endl;
   this->action->onGestureBegin(*gesture);
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
-    Logger::obj().update << "Gesture update detected (" << gesture->percentage()
-                         << "%)" << std::endl;
+    tlg::update << "Gesture update detected (" << gesture->percentage() << "%)"
+                << std::endl;
 
     this->action->onGestureUpdate(*gesture);
   }
@@ -80,7 +80,7 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
-    Logger::obj().gesture << "Gesture end detected" << std::endl;
+    tlg::gesture << "Gesture end detected" << std::endl;
     this->action->onGestureEnd(*gesture);
   }
 
@@ -97,8 +97,7 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
 
   // First check if there is an specific application gesture
   application = this->windowSystem.getWindowClassName(window);
-  Logger::obj().gesture << "\tGesture performed on app: " << application
-                        << std::endl;
+  tlg::gesture << "\tGesture performed on app: " << application << std::endl;
   hasAction = this->config.hasGestureConfig(application, gestureType, fingers,
                                             direction);
 
@@ -110,12 +109,11 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
   }
 
   if (!hasAction) {
-    Logger::obj().gesture << "\tNo action configured for this gesture"
-                          << std::endl;
+    tlg::gesture << "\tNo action configured for this gesture" << std::endl;
     return nullptr;
   }
 
-  Logger::obj().gesture << "\tAction configured for this gesture" << std::endl;
+  tlg::gesture << "\tAction configured for this gesture" << std::endl;
 
   auto pair = this->config.getGestureConfig(application, gestureType, fingers,
                                             direction);

@@ -20,38 +20,32 @@
 
 #include <string>
 
+enum class LogLevel { INFO, WARNING, ERROR, DEBUG, GESTURE_INFO, UPDATE_INFO };
+
+namespace tlg {
+extern LogLevel error;
+extern LogLevel warning;
+extern LogLevel info;
+extern LogLevel debug;
+
+extern LogLevel gesture;
+extern LogLevel update;
+}  // namespace tlg
+
 /**
  * Singleton class to provide simple logging functionality.
  */
 class Logger {
  public:
-  enum class LogLevel {
-    INFO,
-    WARNING,
-    ERROR,
-    DEBUG,
-    GESTURE_INFO,
-    UPDATE_INFO
-  };
-  LogLevel info = LogLevel::INFO, warning = LogLevel::WARNING,
-           error = LogLevel::ERROR, debug = LogLevel::DEBUG,
-           gesture = LogLevel::GESTURE_INFO, update = LogLevel::UPDATE_INFO;
-
   /**
-   * USAGE: Logger::obj().LEVEL << "A very informative message!" << std::endl;
+   * USAGE: LogLevel.LEVEL << "A very informative message!" << std::endl;
    *
    * LEVEL: info | warning | error | debug | gesture | update
    */
   friend LogLevel operator<<(const LogLevel &lvl,
                              std::ostream &(*msg)(std::ostream &));
   template <typename T>
-  friend LogLevel operator<<(const Logger::LogLevel &lvl, T const &msg) {
-    if (Logger::obj().Enabled(lvl)) {
-      Logger::obj().GetStream(lvl) << msg;
-    }
-
-    return lvl;
-  }
+  friend LogLevel operator<<(const LogLevel &lvl, T const &msg);
 
   /**
    * This static method controls the access to the singleton.
@@ -110,5 +104,20 @@ class Logger {
   bool Enabled(const LogLevel &lvl);
   std::ostream &GetStream(const LogLevel &lvl);
 };
+
+/**
+ * USAGE: LogLevel.LEVEL << "A very informative message!" << std::endl;
+ *
+ * LEVEL: info | warning | error | debug | gesture | update
+ */
+LogLevel operator<<(const LogLevel &lvl, std::ostream &(*msg)(std::ostream &));
+template <typename T>
+LogLevel operator<<(const LogLevel &lvl, T const &msg) {
+  if (Logger::obj().Enabled(lvl)) {
+    Logger::obj().GetStream(lvl) << msg;
+  }
+
+  return lvl;
+}
 
 #endif  // UTILS_LOGGER_H_

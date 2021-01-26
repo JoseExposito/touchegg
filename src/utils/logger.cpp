@@ -19,6 +19,16 @@
 
 #include <iostream>
 
+namespace tlg {
+LogLevel error = LogLevel::ERROR;
+LogLevel warning = LogLevel::WARNING;
+LogLevel info = LogLevel::INFO;
+LogLevel debug = LogLevel::DEBUG;
+
+LogLevel gesture = LogLevel::GESTURE_INFO;
+LogLevel update = LogLevel::UPDATE_INFO;
+}  // namespace tlg
+
 bool Logger::Enabled(const LogLevel &lvl) {
   switch (lvl) {
     case LogLevel::INFO:
@@ -56,8 +66,7 @@ std::ostream &Logger::GetStream(const LogLevel &lvl) {
  * mind if/when you modify the function: it should probably be the same in both
  * places.
  */
-Logger::LogLevel operator<<(const Logger::LogLevel &lvl,
-                            std::ostream &(*msg)(std::ostream &)) {
+LogLevel operator<<(const LogLevel &lvl, std::ostream &(*msg)(std::ostream &)) {
   if (Logger::obj().Enabled(lvl)) {
     Logger::obj().GetStream(lvl) << msg;
   }

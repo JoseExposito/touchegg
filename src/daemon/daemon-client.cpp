@@ -37,8 +37,7 @@ void DaemonClient::run() {
 }
 
 void DaemonClient::connect() {
-  Logger &log = Logger::obj();
-  log.info << "Connecting to Touchégg daemon..." << std::endl;
+  tlg::info << "Connecting to Touchégg daemon..." << std::endl;
 
   bool connected = false;
 
@@ -51,12 +50,12 @@ void DaemonClient::connect() {
     connected = (connection != nullptr);
 
     if (!connected) {
-      log.error << "Error connecting to Touchégg daemon: " << error->message
-                << std::endl;
-      log.error << "Reconnecting in 5 seconds..." << std::endl;
+      tlg::error << "Error connecting to Touchégg daemon: " << error->message
+                 << std::endl;
+      tlg::error << "Reconnecting in 5 seconds..." << std::endl;
       std::this_thread::sleep_for(std::chrono::seconds(5));
     } else {
-      log.info << "Connection with Touchégg established" << std::endl;
+      tlg::info << "Connection with Touchégg established" << std::endl;
       g_dbus_connection_signal_subscribe(
           connection, nullptr, DBUS_INTERFACE_NAME, nullptr, DBUS_OBJECT_PATH,
           nullptr, G_DBUS_SIGNAL_FLAGS_NONE, DaemonClient::onNewMessage, this,
@@ -92,8 +91,8 @@ void DaemonClient::onNewMessage(GDBusConnection * /*connection*/,
 void DaemonClient::onDisconnected(GDBusConnection * /*connection*/,
                                   gboolean /*remotePeerVanished*/,
                                   GError *error, DaemonClient *self) {
-  Logger::obj().error << "Connection with Touchégg daemon lost "
-                      << (error == nullptr ? "" : error->message) << std::endl;
+  tlg::error << "Connection with Touchégg daemon lost "
+             << (error == nullptr ? "" : error->message) << std::endl;
 
   if (self->lastSignalName == DBUS_ON_GESTURE_BEGIN ||
       self->lastSignalName == DBUS_ON_GESTURE_UPDATE) {

@@ -20,7 +20,25 @@
 #include <algorithm>
 
 ArgsParser::ArgsParser(int& argc, char** argv) {
+  // set defaults
+  daemonMode = clientMode = false;
+  startThreshold = finishThreshold = -1;
+
+  // Parse the command line arguments
   for (int i = 1; i < argc; ++i) this->tokens.push_back(std::string(argv[i]));
+
+  // daemon takes precedence over client
+  if (cmdOptionExists("--daemon")) {
+    daemonMode = true;
+    getCmdOption2d("--daemon", startThreshold, finishThreshold);
+  } else if (cmdOptionExists("--client") || (tokens.size() == 0)) {
+    clientMode = true;
+  }
+
+  verbose = cmdOptionExists("--verbose") || cmdOptionExists("-v");
+  quiet = cmdOptionExists("--quiet") || cmdOptionExists("-q");
+  noGestures = cmdOptionExists("--no-gesture-messages");
+  noUpdates = cmdOptionExists("--no-update-messages");
 }
 
 const std::string ArgsParser::getCmdOption(const std::string& option) {
@@ -51,28 +69,4 @@ void ArgsParser::getCmdOption2d(const std::string& option, double& d1,
 bool ArgsParser::cmdOptionExists(const std::string& option) {
   return std::find(this->tokens.begin(), this->tokens.end(), option) !=
          this->tokens.end();
-}
-
-// Parse the command line arguments
-void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
-               double& startThreshold, double& finishThreshold) {
-  bool verbose, quiet, noGestures, noUpdates;
-
-  ArgsParser input(argc, argv);
-
-  // daemon takes precedence over client
-  if (input.cmdOptionExists("--daemon")) {
-    daemonMode = true;
-    input.getCmdOption2d("--daemon", startThreshold, finishThreshold);
-  } else if (input.cmdOptionExists("--client") || (argc == 1)) {
-    clientMode = true;
-  }
-
-  verbose = input.cmdOptionExists("--verbose") || input.cmdOptionExists("-v");
-  quiet = input.cmdOptionExists("--quiet") || input.cmdOptionExists("-q");
-  noGestures = input.cmdOptionExists("--no-gesture-messages");
-  noUpdates = input.cmdOptionExists("--no-update-messages");
-
-  // init Logger options
-  Logger::obj(verbose, quiet, noGestures, noUpdates);
 }

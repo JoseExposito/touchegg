@@ -25,20 +25,20 @@
 
 class ArgsParser {
  public:
+  // the option flags
+  bool daemonMode, clientMode;
+  bool verbose, quiet, noGestures, noUpdates;
+  double startThreshold = -1;
+  double finishThreshold = -1;
+
   ArgsParser(int& argc, char** argv);
-
-  const std::string getCmdOption(const std::string& option);
-
-  // special case used for daemon thresholds
-  void getCmdOption2d(const std::string& option, double& d1, double& d2);
-
-  bool cmdOptionExists(const std::string& option);
 
  private:
   std::vector<std::string> tokens;
-};
 
-void parseArgs(int argc, char** argv, bool& daemonMode, bool& clientMode,
-               double& startThreshold, double& finishThreshold);
+  const std::string getCmdOption(const std::string& option);
+  void getCmdOption2d(const std::string& option, double& d1, double& d2);
+  bool cmdOptionExists(const std::string& option);
+};
 
 #endif  // UTILS_ARGS_PARSER_H_

@@ -38,8 +38,7 @@ constexpr auto VERSION = "[Unkown version]";
 
 void printWelcomeMessage() {
   tlg::info << "Touchégg " << VERSION << "." << std::endl;
-  tlg::info << "Usage: touchegg [--verbose | -v] [--quiet | -q] "
-               "[--no-gesture-messages] [--no-update-messages] "
+  tlg::info << "Usage: touchegg [--debug | -d] [--quiet | -q] "
                "[--daemon [start_threshold finish_threshold]] "
                "[--client]"
             << std::endl
@@ -66,15 +65,10 @@ void printWelcomeMessage() {
 }
 
 int main(int argc, char** argv) {
-  bool daemonMode = false;
-  bool clientMode = false;
-  double startThreshold = -1;
-  double finishThreshold = -1;
+  ArgsParser args(argc, argv);
 
-  parseArgs(argc, argv, daemonMode, clientMode, startThreshold,
-            finishThreshold);
-
-  // Logger::obj();
+  // init Logger options
+  Logger::obj(args.verbose, args.quiet, args.noGestures, args.noUpdates);
 
   // test log options
   tlg::info << "A very informative message." << std::endl;
@@ -87,7 +81,7 @@ int main(int argc, char** argv) {
 
   printWelcomeMessage();
 
-  if ((!daemonMode && !clientMode) || (daemonMode && clientMode)) {
+  if (args.daemonMode == args.clientMode) {
     tlg::error << "Invalid command line arguments" << std::endl;
     return -1;
   }
@@ -96,12 +90,12 @@ int main(int argc, char** argv) {
   char mbstr[100];
   std::strftime(mbstr, sizeof(mbstr) - 1, "[%F-%T%z] ", std::localtime(&t));
   tlg::info << mbstr << "Starting Touchégg in "
-            << (daemonMode ? std::string{"daemon mode"}
-                           : std::string{"client mode"})
+            << (args.daemonMode ? std::string{"daemon mode"}
+                                : std::string{"client mode"})
             << std::endl;
 
   // Execute the daemon/client bits
-  if (daemonMode) {
+  if (args.daemonMode) {
     // Start the daemon server
     DaemonServer daemonServer{};
     daemonServer.run();
@@ -111,8 +105,8 @@ int main(int argc, char** argv) {
         << "A list of detected compatible devices will be displayed below:"
         << std::endl;
 
-    LibinputGestureGatherer gestureGatherer(&daemonServer, startThreshold,
-                                            finishThreshold);
+    LibinputGestureGatherer gestureGatherer(&daemonServer, args.startThreshold,
+                                            args.finishThreshold);
     gestureGatherer.run();
   } else {  // clientMode
     // Avoid running multiple client instances in parallel

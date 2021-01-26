@@ -25,12 +25,20 @@
 
 class ArgsParser {
  public:
-  // the option flags
+  /**
+   * the option flags
+   */
   bool daemonMode, clientMode;
   bool debug, quiet;
   double startThreshold = -1;
   double finishThreshold = -1;
 
+  /**
+   * When constructed the obj parses the given args and sets the option flags
+   *
+   * @param argc The standard arg count passed to main()
+   * @param argv The standard arg array passed to main()
+   */
   ArgsParser(int& argc, char** argv);
 
  private:

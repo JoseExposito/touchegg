@@ -22,6 +22,11 @@
 
 enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
 
+/**
+ * USAGE: tlg.LEVEL << "A very informative message!" << std::endl;
+ *
+ * LEVEL: error | warning | info | debug
+ */
 namespace tlg {
 extern LogLevel error;
 extern LogLevel warning;
@@ -37,7 +42,7 @@ class Logger {
   /**
    * USAGE: LogLevel.LEVEL << "A very informative message!" << std::endl;
    *
-   * LEVEL: info | warning | error | debug | gesture | update
+   * LEVEL: error | warning | info | debug
    */
   friend LogLevel operator<<(const LogLevel &lvl,
                              std::ostream &(*msg)(std::ostream &));
@@ -94,7 +99,7 @@ class Logger {
 /**
  * USAGE: LogLevel.LEVEL << "A very informative message!" << std::endl;
  *
- * LEVEL: info | warning | error | debug | gesture | update
+ * LEVEL: error | warning | info | debug
  */
 LogLevel operator<<(const LogLevel &lvl, std::ostream &(*msg)(std::ostream &));
 template <typename T>

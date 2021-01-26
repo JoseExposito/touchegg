@@ -71,12 +71,16 @@ int main(int argc, char** argv) {
   Logger::obj(args.debug, args.quiet);
 
   // test log options
-  tlg::error << "ERROR!!!" << std::endl;
-  tlg::warning << "Warning!" << std::endl;
-  tlg::info << "A very informative message." << std::endl;
-  tlg::debug << "DBG: 0xdeadbeef" << std::endl;
-  tlg::error << std::endl << std::endl;
+  // tlg::error << "ERROR!!!" << std::endl;
+  // tlg::warning << "Warning!" << std::endl;
+  // tlg::info << "A very informative message." << std::endl;
+  // tlg::debug << "DBG: 0xdeadbeef" << std::endl;
+  // tlg::warning << std::endl << std::endl;
 
+  /*
+   * NOTE: Currently only appears if --debug option specified! You might want to
+   * change the LogLevel used in this func for msgs Jose.
+   */
   printWelcomeMessage();
 
   if (args.daemonMode == args.clientMode) {

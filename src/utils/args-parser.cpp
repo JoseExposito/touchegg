@@ -27,11 +27,12 @@ ArgsParser::ArgsParser(int& argc, char** argv) {
   // Parse the command line arguments
   for (int i = 1; i < argc; ++i) this->tokens.push_back(std::string(argv[i]));
 
-  // daemon takes precedence over client
   if (cmdOptionExists("--daemon")) {
     daemonMode = true;
     getCmdOption2d("--daemon", startThreshold, finishThreshold);
-  } else if (cmdOptionExists("--client") || (tokens.size() == 0)) {
+  }
+
+  if (cmdOptionExists("--client") || (tokens.size() == 0)) {
     clientMode = true;
   }
 

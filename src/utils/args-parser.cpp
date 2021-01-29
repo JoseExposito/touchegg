@@ -15,7 +15,7 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "args-parser.h"
+#include "utils/args-parser.h"
 
 #include <algorithm>
 #include <iostream>
@@ -90,15 +90,15 @@ const std::string ArgsParser::getCmdOption(const std::string& option) {
 }
 
 // special case used for daemon thresholds
-void ArgsParser::getCmdOption2d(const std::string& option, double& d1,
-                                double& d2) {
+void ArgsParser::getCmdOption2d(const std::string& option, double pd1,
+                                double pd2) {
   std::vector<std::string>::const_iterator itr;
   itr = std::find(this->tokens.begin(), this->tokens.end(), option);
   if (itr != this->tokens.end()) {
     if (++itr != this->tokens.end()) {
-      d1 = std::stod(*itr);
+      *pd1 = std::stod(*itr);
       if (++itr != this->tokens.end()) {
-        d2 = std::stod(*itr);
+        *pd2 = std::stod(*itr);
       }
     }
   }

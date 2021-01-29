@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include "logger.h"
+#include "utils/logger.h"
 
 class ArgsParser {
  public:
@@ -39,13 +39,13 @@ class ArgsParser {
    * @param argc The standard arg count passed to main()
    * @param argv The standard arg array passed to main()
    */
-  ArgsParser(int& argc, char** argv);
+  ArgsParser(int argc, char** argv);
 
  private:
   std::vector<std::string> tokens;
 
   const std::string getCmdOption(const std::string& option);
-  void getCmdOption2d(const std::string& option, double& d1, double& d2);
+  void getCmdOption2d(const std::string& option, double* pd1, double* pd2);
   bool cmdOptionExists(const std::string& option);
 };
 

@@ -18,6 +18,41 @@
 #include "args-parser.h"
 
 #include <algorithm>
+#include <iostream>
+
+#ifdef _VERSION
+constexpr auto VERSION = _VERSION;
+#else
+constexpr auto VERSION = "[Unkown version]";
+#endif
+
+void printWelcomeMessage() {
+  std::cout << "Touchégg " << VERSION << "." << std::endl;
+  std::cout << "Usage: touchegg [--help] [--debug | -d] [--quiet | -q] "
+               "[--daemon [start_threshold finish_threshold]] "
+               "[--client]"
+            << std::endl
+            << std::endl;
+
+  std::cout << "Multi-touch gesture recognizer." << std::endl;
+  std::cout << "Touchégg is an app that runs in the background and transforms "
+               "the gestures you make on your touchpad into visible actions in "
+               "your desktop."
+            << std::endl;
+  std::cout << "For more information please visit:" << std::endl;
+  std::cout << "https://github.com/JoseExposito/touchegg" << std::endl
+            << std::endl;
+
+  std::cout << "Option\t\tMeaning" << std::endl;
+  std::cout << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
+               "service that gathers gestures but executes no actions"
+            << std::endl;
+  std::cout << " --client\tConnect to an existing Touchégg daemon and "
+               "execute actions in your desktop"
+            << std::endl;
+  std::cout << "Without arguments Touchégg starts in client mode" << std::endl
+            << std::endl;
+}
 
 ArgsParser::ArgsParser(int& argc, char** argv) {
   // set defaults
@@ -38,6 +73,10 @@ ArgsParser::ArgsParser(int& argc, char** argv) {
 
   debug = cmdOptionExists("--debug") || cmdOptionExists("-d");
   quiet = cmdOptionExists("--quiet") || cmdOptionExists("-q");
+
+  if (cmdOptionExists("--help")) {
+    printWelcomeMessage();
+  }
 }
 
 const std::string ArgsParser::getCmdOption(const std::string& option) {

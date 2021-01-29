@@ -131,15 +131,6 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
                 "(uudiut)", &type, &direction, &percentage, &fingers,
                 &deviceType, &elapsedTime);
 
-  // TODO: Jose, update these to use the Logger if you ever decide to use them
-  // again std::cout << "GestureType: " << gestureTypeToStr(gestureType) <<
-  // std::endl; std::cout << "GestureDirection: " <<
-  // gestureDirectionToStr(gestureDirection) << std::endl;
-  // std::cout << "Percentage: " << percentage << std::endl;
-  // std::cout << "Fingers: " << fingers << std::endl;
-  // std::cout << "DeviceType: " << static_cast<int>(deviceType) << std::endl;
-  // std::cout << "Elapsed time: " << elapsedTime << std::endl;
-
   return std::make_unique<Gesture>(type, direction, percentage, fingers,
                                    deviceType, elapsedTime);
 }

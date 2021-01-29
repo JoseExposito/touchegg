@@ -30,40 +30,6 @@
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
 
-#ifdef _VERSION
-constexpr auto VERSION = _VERSION;
-#else
-constexpr auto VERSION = "[Unkown version]";
-#endif
-
-void printWelcomeMessage() {
-  tlg::info << "Touchégg " << VERSION << "." << std::endl;
-  tlg::info << "Usage: touchegg [--debug | -d] [--quiet | -q] "
-               "[--daemon [start_threshold finish_threshold]] "
-               "[--client]"
-            << std::endl
-            << std::endl;
-
-  tlg::info << "Multi-touch gesture recognizer." << std::endl;
-  tlg::info << "Touchégg is an app that runs in the background and transforms "
-               "the gestures you make on your touchpad into visible actions in "
-               "your desktop."
-            << std::endl;
-  tlg::info << "For more information please visit:" << std::endl;
-  tlg::info << "https://github.com/JoseExposito/touchegg" << std::endl
-            << std::endl;
-
-  tlg::info << "Option\t\tMeaning" << std::endl;
-  tlg::info << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
-               "service that gathers gestures but executes no actions"
-            << std::endl;
-  tlg::info << " --client\tConnect to an existing Touchégg daemon and "
-               "execute actions in your desktop"
-            << std::endl;
-  tlg::info << "Without arguments Touchégg starts in client mode" << std::endl
-            << std::endl;
-}
-
 int main(int argc, char** argv) {
   ArgsParser args(argc, argv);
 
@@ -77,21 +43,12 @@ int main(int argc, char** argv) {
   // tlg::debug << "DBG: 0xdeadbeef" << std::endl;
   // tlg::warning << std::endl << std::endl;
 
-  /*
-   * NOTE: Currently only appears if --debug option specified! You might want to
-   * change the LogLevel used in this func for msgs Jose.
-   */
-  printWelcomeMessage();
-
   if (args.daemonMode == args.clientMode) {
     tlg::error << "Invalid command line arguments" << std::endl;
     return -1;
   }
 
-  std::time_t t = std::time(NULL);
-  char mbstr[100];
-  std::strftime(mbstr, sizeof(mbstr) - 1, "[%F-%T%z] ", std::localtime(&t));
-  tlg::info << mbstr << "Starting Touchégg in "
+  tlg::info << "Starting Touchégg in "
             << (args.daemonMode ? std::string{"daemon mode"}
                                 : std::string{"client mode"})
             << std::endl;

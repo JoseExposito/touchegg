@@ -54,7 +54,7 @@ void printWelcomeMessage() {
             << std::endl;
 }
 
-ArgsParser::ArgsParser(int& argc, char** argv) {
+ArgsParser::ArgsParser(int argc, char** argv) {
   // set defaults
   daemonMode = clientMode = false;
   startThreshold = finishThreshold = -1;
@@ -64,7 +64,7 @@ ArgsParser::ArgsParser(int& argc, char** argv) {
 
   if (cmdOptionExists("--daemon")) {
     daemonMode = true;
-    getCmdOption2d("--daemon", startThreshold, finishThreshold);
+    getCmdOption2d("--daemon", &startThreshold, &finishThreshold);
   }
 
   if (cmdOptionExists("--client") || (tokens.size() == 0)) {
@@ -90,8 +90,8 @@ const std::string ArgsParser::getCmdOption(const std::string& option) {
 }
 
 // special case used for daemon thresholds
-void ArgsParser::getCmdOption2d(const std::string& option, double pd1,
-                                double pd2) {
+void ArgsParser::getCmdOption2d(const std::string& option, double* pd1,
+                                double* pd2) {
   std::vector<std::string>::const_iterator itr;
   itr = std::find(this->tokens.begin(), this->tokens.end(), option);
   if (itr != this->tokens.end()) {

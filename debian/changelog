@@ -1,3 +1,13 @@
+touchegg (2.0.6) focal; urgency=medium
+
+  * New action added: "FULLSCREEN_WINDOW"
+  * Use D-Bus for daemon-client communication, making easier to write
+  clients different languages
+  * Animations are pixel-precise at low speeds
+  * Make application name case insensitive in config file
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 01 Feb 2021 12:00:00 +0100
+
 touchegg (2.0.5) focal; urgency=medium
 
   * Allow to cancel non animated gestures when configured to run on end

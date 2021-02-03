@@ -24,99 +24,59 @@
 #include "daemon/daemon-server.h"
 #include "gesture-controller/gesture-controller.h"
 #include "gesture-gatherer/libinput-gesture-gatherer.h"
+#include "utils/args-parser.h"
 #include "utils/client-lock.h"
+#include "utils/logger.h"
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
 
-#ifdef _VERSION
-constexpr auto VERSION = _VERSION;
-#else
-constexpr auto VERSION = "[Unkown version]";
-#endif
+int main(int argc, char** argv) {
+  ArgsParser args(argc, argv);
 
-void printWelcomeMessage() {
-  std::cout << "Touchégg " << VERSION << "." << std::endl;
-  std::cout << "Usage: touchegg [--daemon [start_threshold finish_threshold]] "
-               "[--client]"
-            << std::endl
-            << std::endl;
+  // init Logger options
+  Logger::obj(args.debug, args.quiet);
 
-  std::cout << "Multi-touch gesture recognizer." << std::endl;
-  std::cout << "Touchégg is an app that runs in the background and transform "
-               "the gestures you make on your touchpad into visible actions in "
-               "your desktop."
-            << std::endl;
-  std::cout << "For more information please visit:" << std::endl;
-  std::cout << "https://github.com/JoseExposito/touchegg" << std::endl
-            << std::endl;
+  // test log options
+  // tlg::error << "ERROR!!!" << std::endl;
+  // tlg::warning << "Warning!" << std::endl;
+  // tlg::info << "A very informative message." << std::endl;
+  // tlg::debug << "DBG: 0xdeadbeef" << std::endl;
+  // tlg::warning << std::endl << std::endl;
 
-  std::cout << "Option\t\tMeaning" << std::endl;
-  std::cout << " --daemon\tRun Touchégg in daemon mode. This mode starts a "
-               "service that gathers gestures but executes no actions"
-            << std::endl;
-  std::cout << " --client\tConnect to an existing Touchégg daemon and "
-               "execute actions in your desktop"
-            << std::endl;
-  std::cout << "Without arguments Touchégg starts in client mode" << std::endl
-            << std::endl;
-}
-
-int main(int argc, char **argv) {
-  printWelcomeMessage();
-
-  // Parse the command line arguments
-  bool daemonMode = false;
-  bool clientMode = (argc == 1);
-  double startThreshold = -1;
-  double finishThreshold = -1;
-
-  if (argc > 1) {
-    std::string param{argv[1]};  // NOLINT
-    daemonMode = (param == "--daemon");
-    clientMode = (param == "--client");
-
-    if (daemonMode && argc == 4) {
-      startThreshold = std::stod(argv[2]);   // NOLINT
-      finishThreshold = std::stod(argv[3]);  // NOLINT
-    }
-  }
-
-  if (!daemonMode && !clientMode) {
-    std::cout << "Invalid command line arguments" << std::endl;
+  if (args.daemonMode == args.clientMode) {
+    tlg::error << "Invalid command line arguments" << std::endl;
     return -1;
   }
 
-  std::cout << "Starting Touchégg in "
-            << (daemonMode ? std::string{"daemon mode"}
-                           : std::string{"client mode"})
+  tlg::info << "Starting Touchégg in "
+            << (args.daemonMode ? std::string{"daemon mode"}
+                                : std::string{"client mode"})
             << std::endl;
 
   // Execute the daemon/client bits
-  if (daemonMode) {
+  if (args.daemonMode) {
     // Start the daemon server
     DaemonServer daemonServer{};
     daemonServer.run();
 
     // Use libinput as gesture gatherer
-    std::cout
+    tlg::info
         << "A list of detected compatible devices will be displayed below:"
         << std::endl;
 
-    LibinputGestureGatherer gestureGatherer(&daemonServer, startThreshold,
-                                            finishThreshold);
+    LibinputGestureGatherer gestureGatherer(&daemonServer, args.startThreshold,
+                                            args.finishThreshold);
     gestureGatherer.run();
-  }
-
-  if (clientMode) {
+  } else {  // clientMode
     // Avoid running multiple client instances in parallel
     ClientLock lock;
 
     // Load the configuration using the XML loader
-    std::cout << "Parsing you configuration file..." << std::endl;
+    tlg::info << "Parsing your configuration file..." << std::endl;
     Config config;
     XmlConfigLoader loader(&config);
     loader.load();
-    std::cout << "Configuration parsed successfully" << std::endl;
+    tlg::info << "Configuration parsed successfully" << std::endl;
 
     // Use X11 as window system
     X11 windowSystem;

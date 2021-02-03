@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+#include "utils/logger.h"
+
 #ifdef AUTO_COLORS
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -47,8 +49,8 @@ void Color::setFromHexString(const std::string &hexString) {
     this->blue =
         std::stoi(hexString.substr(offset + 4, 2), nullptr, 16) / 255.0;
   } catch (const std::exception & /* error */) {
-    std::cout << "Error: Invalid animation color, using default color"
-              << std::endl;
+    tlg::error << "Error: Invalid animation color, using default color"
+               << std::endl;
   }
 }
 

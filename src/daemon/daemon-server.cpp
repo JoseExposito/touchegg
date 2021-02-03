@@ -29,12 +29,13 @@
 #include <utility>
 
 #include "daemon/dbus.h"
+#include "utils/logger.h"
 
 void DaemonServer::run() {
-  std::cout << "Starting daemon server..." << std::endl;
+  tlg::info << "Starting daemon server..." << std::endl;
   GError *error = nullptr;
 
-  std::cout << "Generating D-Bus introspection data" << std::endl;
+  tlg::info << "Generating D-Bus introspection data" << std::endl;
   this->introspectionData =
       g_dbus_node_info_new_for_xml(DBUS_INTROSPECTION_XML, &error);
 
@@ -44,7 +45,7 @@ void DaemonServer::run() {
     throw std::runtime_error{errorMessage};
   }
 
-  std::cout << "Creating D-Bus server" << std::endl;
+  tlg::info << "Creating D-Bus server" << std::endl;
   gchar *guid = g_dbus_generate_guid();
 
   GDBusServer *server = g_dbus_server_new_sync(
@@ -59,7 +60,7 @@ void DaemonServer::run() {
   g_dbus_server_start(server);
   g_free(guid);
 
-  std::cout << "Server started at address "
+  tlg::info << "Server started at address "
             << g_dbus_server_get_client_address(server) << std::endl;
 
   g_signal_connect(
@@ -77,7 +78,8 @@ void DaemonServer::run() {
 gboolean DaemonServer::onNewConnection(GDBusServer * /*server*/,
                                        GDBusConnection *connection,
                                        DaemonServer *self) {
-  std::cout << "New client connection request" << std::endl;
+  Logger &log = Logger::obj();
+  tlg::info << "New client connection request" << std::endl;
 
   GDBusInterfaceVTable interfaceVTable{nullptr, nullptr, nullptr};
   int id = g_dbus_connection_register_object(
@@ -86,11 +88,11 @@ gboolean DaemonServer::onNewConnection(GDBusServer * /*server*/,
       &interfaceVTable, nullptr, nullptr, nullptr);
 
   if (id == 0) {
-    std::cout << "Error connecting client" << std::endl;
+    tlg::error << "Error connecting client" << std::endl;
     return FALSE;
   }
 
-  std::cout << "New client connected" << std::endl;
+  tlg::info << "New client connected" << std::endl;
   g_object_ref(connection);
   self->connections.push_back(connection);
   return TRUE;
@@ -132,7 +134,7 @@ void DaemonServer::send(const std::string &signalName,
           connection, nullptr, DBUS_OBJECT_PATH, DBUS_INTERFACE_NAME,
           signalName.c_str(), signalParams, &error);
       if (sent == FALSE) {
-        std::cout << "Error sending message: " << error->message << std::endl;
+        tlg::error << "Error sending message: " << error->message << std::endl;
         closedConnections.push_back(connection);
       }
     }
@@ -140,7 +142,7 @@ void DaemonServer::send(const std::string &signalName,
 
   // Remove dead clients
   for (auto *connection : closedConnections) {
-    std::cout << "Client disconnected" << std::endl;
+    tlg::info << "Client disconnected" << std::endl;
     this->connections.erase(std::remove(this->connections.begin(),
                                         this->connections.end(), connection),
                             this->connections.end());

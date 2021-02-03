@@ -1,5 +1,6 @@
 /**
  * Copyright 2021 John Mifsud <imabuddha@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -28,6 +29,8 @@ enum class LogLevel { INFO, WARNING, ERROR, DEBUG };
  * LEVEL: error | warning | info | debug
  */
 namespace tlg {
+void configure(bool debug = false, bool quiet = false);
+
 extern LogLevel error;
 extern LogLevel warning;
 extern LogLevel info;
@@ -63,7 +66,7 @@ class Logger {
     static Logger singleton;
 
     if (singleton.uninitialized) {
-      singleton.Init(debug, quiet);
+      singleton.init(debug, quiet);
     }
 
     return singleton;
@@ -90,10 +93,10 @@ class Logger {
   /**
    * Sets the logging levels & options.
    */
-  void Init(const bool debug, const bool quiet);
+  void init(const bool debug, const bool quiet);
 
-  bool Enabled(const LogLevel &lvl);
-  std::ostream &GetStream(const LogLevel &lvl);
+  bool enabled(const LogLevel &lvl) const;
+  static std::ostream &getStream(const LogLevel &lvl);
 };
 
 /**
@@ -104,8 +107,8 @@ class Logger {
 LogLevel operator<<(const LogLevel &lvl, std::ostream &(*msg)(std::ostream &));
 template <typename T>
 LogLevel operator<<(const LogLevel &lvl, T const &msg) {
-  if (Logger::obj().Enabled(lvl)) {
-    Logger::obj().GetStream(lvl) << msg;
+  if (Logger::obj().enabled(lvl)) {
+    Logger::obj().getStream(lvl) << msg;
   }
 
   return lvl;

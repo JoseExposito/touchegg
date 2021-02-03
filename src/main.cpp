@@ -31,17 +31,16 @@
 #include "window-system/x11.h"
 
 int main(int argc, char** argv) {
+  // Parse the command line arguments
   ArgsParser args(argc, argv);
+  ArgsParser::printVersion();
 
-  // init Logger options
-  Logger::obj(args.debug, args.quiet);
+  if (args.exit) {
+    return 0;
+  }
 
-  // test log options
-  // tlg::error << "ERROR!!!" << std::endl;
-  // tlg::warning << "Warning!" << std::endl;
-  // tlg::info << "A very informative message." << std::endl;
-  // tlg::debug << "DBG: 0xdeadbeef" << std::endl;
-  // tlg::warning << std::endl << std::endl;
+  // Configure the logger
+  tlg::configure(args.debug, args.quiet);
 
   if (args.daemonMode == args.clientMode) {
     tlg::error << "Invalid command line arguments" << std::endl;

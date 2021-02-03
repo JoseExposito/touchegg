@@ -1,5 +1,6 @@
 /**
  * Copyright 2021 John Mifsud <imabuddha@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -26,10 +27,61 @@ constexpr auto VERSION = _VERSION;
 constexpr auto VERSION = "[Unkown version]";
 #endif
 
-void printWelcomeMessage() {
+ArgsParser::ArgsParser(int argc, char **argv)
+    : tokens(argv + 1, argv + argc) {  // NOLINT
+  this->daemonMode = cmdOptionExists("--daemon");
+  this->clientMode = cmdOptionExists("--client") || !this->daemonMode;
+  this->debug = cmdOptionExists("--debug") || cmdOptionExists("-d");
+  this->quiet = cmdOptionExists("--quiet") || cmdOptionExists("-q");
+
+  if (this->daemonMode) {
+    this->getDaemonThresholds();
+  }
+
+  if (cmdOptionExists("--version") || cmdOptionExists("-v")) {
+    ArgsParser::printVersion();
+    this->exit = true;
+  }
+
+  if (cmdOptionExists("--help") || cmdOptionExists("-h")) {
+    ArgsParser::printHelp();
+    this->exit = true;
+  }
+}
+
+bool ArgsParser::cmdOptionExists(const std::string &option) {
+  return std::find(this->tokens.begin(), this->tokens.end(), option) !=
+         this->tokens.end();
+}
+
+void ArgsParser::getDaemonThresholds() {
+  try {
+    auto itr = std::find(this->tokens.begin(), this->tokens.end(), "--daemon");
+    if (itr != this->tokens.end()) {
+      if (++itr != this->tokens.end()) {
+        this->startThreshold = std::stod(*itr);
+        if (++itr != this->tokens.end()) {
+          this->finishThreshold = std::stod(*itr);
+        } else {
+          this->startThreshold = -1;
+          this->finishThreshold = -1;
+        }
+      }
+    }
+  } catch (std::exception &e) {
+    this->startThreshold = -1;
+    this->finishThreshold = -1;
+  }
+}
+
+void ArgsParser::printVersion() {
   std::cout << "Touchégg " << VERSION << "." << std::endl;
-  std::cout << "Usage: touchegg [--help] [--debug | -d] [--quiet | -q] "
-               "[--daemon [start_threshold finish_threshold]] "
+}
+
+void ArgsParser::printHelp() {
+  ArgsParser::printVersion();
+  std::cout << "Usage: touchegg [--help | -h] [--version | -v] [--debug | -d] "
+               "[--quiet | -q] [--daemon [start_threshold finish_threshold]] "
                "[--client]"
             << std::endl
             << std::endl;
@@ -50,61 +102,11 @@ void printWelcomeMessage() {
   std::cout << " --client\tConnect to an existing Touchégg daemon and "
                "execute actions in your desktop"
             << std::endl;
+  std::cout << " --quiet\tDo not print to the log" << std::endl;
+  std::cout << " --debug\tPrint every message to the log" << std::endl;
+  std::cout << " --version\tPrint the version number and exit" << std::endl;
+  std::cout << " --help \tPrint this message and exit" << std::endl;
+
   std::cout << "Without arguments Touchégg starts in client mode" << std::endl
             << std::endl;
-}
-
-ArgsParser::ArgsParser(int argc, char** argv) {
-  // set defaults
-  daemonMode = clientMode = false;
-  startThreshold = finishThreshold = -1;
-
-  // Parse the command line arguments
-  for (int i = 1; i < argc; ++i) this->tokens.push_back(std::string(argv[i]));
-
-  if (cmdOptionExists("--daemon")) {
-    daemonMode = true;
-    getCmdOption2d("--daemon", &startThreshold, &finishThreshold);
-  }
-
-  if (cmdOptionExists("--client") || (tokens.size() == 0)) {
-    clientMode = true;
-  }
-
-  debug = cmdOptionExists("--debug") || cmdOptionExists("-d");
-  quiet = cmdOptionExists("--quiet") || cmdOptionExists("-q");
-
-  if (cmdOptionExists("--help")) {
-    printWelcomeMessage();
-  }
-}
-
-const std::string ArgsParser::getCmdOption(const std::string& option) {
-  std::vector<std::string>::const_iterator itr;
-  itr = std::find(this->tokens.begin(), this->tokens.end(), option);
-  if (itr != this->tokens.end() && ++itr != this->tokens.end()) {
-    return *itr;
-  }
-  static const std::string empty_string("");
-  return empty_string;
-}
-
-// special case used for daemon thresholds
-void ArgsParser::getCmdOption2d(const std::string& option, double* pd1,
-                                double* pd2) {
-  std::vector<std::string>::const_iterator itr;
-  itr = std::find(this->tokens.begin(), this->tokens.end(), option);
-  if (itr != this->tokens.end()) {
-    if (++itr != this->tokens.end()) {
-      *pd1 = std::stod(*itr);
-      if (++itr != this->tokens.end()) {
-        *pd2 = std::stod(*itr);
-      }
-    }
-  }
-}
-
-bool ArgsParser::cmdOptionExists(const std::string& option) {
-  return std::find(this->tokens.begin(), this->tokens.end(), option) !=
-         this->tokens.end();
 }

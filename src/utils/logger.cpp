@@ -1,6 +1,6 @@
 /**
  * Copyright 2021 John Mifsud <imabuddha@gmail.com>
- *
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  * This file is part of Touchégg.
  *
  * Touchégg is free software: you can redistribute it and/or modify it under the
@@ -24,9 +24,12 @@ LogLevel error = LogLevel::ERROR;
 LogLevel warning = LogLevel::WARNING;
 LogLevel info = LogLevel::INFO;
 LogLevel debug = LogLevel::DEBUG;
+
+void configure(bool debug, bool quiet) { Logger::obj(debug, quiet); }
+
 }  // namespace tlg
 
-bool Logger::Enabled(const LogLevel &lvl) {
+bool Logger::enabled(const LogLevel &lvl) const {
   switch (lvl) {
     case LogLevel::INFO:
       return logInfo;
@@ -43,7 +46,7 @@ bool Logger::Enabled(const LogLevel &lvl) {
   }
 }
 
-std::ostream &Logger::GetStream(const LogLevel &lvl) {
+std::ostream &Logger::getStream(const LogLevel &lvl) {
   switch (lvl) {
     case LogLevel::ERROR:
       return std::cerr;
@@ -60,8 +63,8 @@ std::ostream &Logger::GetStream(const LogLevel &lvl) {
  * places.
  */
 LogLevel operator<<(const LogLevel &lvl, std::ostream &(*msg)(std::ostream &)) {
-  if (Logger::obj().Enabled(lvl)) {
-    Logger::obj().GetStream(lvl) << msg;
+  if (Logger::obj().enabled(lvl)) {
+    Logger::obj().getStream(lvl) << msg;
   }
 
   return lvl;
@@ -73,19 +76,19 @@ Logger::Logger() {
   // defaults
   logError = true;
   logWarning = true;
-  logInfo = false;
+  logInfo = true;
   logDebug = false;
 }
 
-void Logger::Init(const bool debug, const bool quiet) {
+void Logger::init(const bool debug, const bool quiet) {
   uninitialized = false;
 
   // primary logging options
   if (quiet) {
     logError = false;
     logWarning = false;
+    logInfo = false;
   } else if (debug) {
-    logInfo = true;
     logDebug = true;
   }
 }

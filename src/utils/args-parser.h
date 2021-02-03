@@ -1,5 +1,6 @@
 /**
  * Copyright 2021 John Mifsud <imabuddha@gmail.com>
+ * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -21,32 +22,72 @@
 #include <string>
 #include <vector>
 
-#include "utils/logger.h"
-
 class ArgsParser {
  public:
-  /**
-   * the option flags
-   */
-  bool daemonMode, clientMode;
-  bool debug, quiet;
-  double startThreshold = -1;
-  double finishThreshold = -1;
-
   /**
    * When constructed the obj parses the given args and sets the option flags
    *
    * @param argc The standard arg count passed to main()
    * @param argv The standard arg array passed to main()
    */
-  ArgsParser(int argc, char** argv);
+  ArgsParser(int argc, char **argv);
+
+  /**
+   * Print version number.
+   */
+  static void printVersion();
+
+  /**
+   * If should run in daemon mode.
+   */
+  bool daemonMode = false;
+
+  /**
+   * If should run in client mode.
+   */
+  bool clientMode = false;
+
+  /**
+   * If should show every log message.
+   */
+  bool debug = false;
+
+  /**
+   * If should not show any log message.
+   */
+  bool quiet = false;
+
+  /**
+   * Amount of motion to be made on the touchpad before a gesture is started.
+   */
+  double startThreshold = -1;
+
+  /**
+   * Amount of motion to be made on the touchpad to reach the end of the
+   * gesture.
+   */
+  double finishThreshold = -1;
+
+  /**
+   * Flag indicating if the process should exit (--help, --version, etc).
+   */
+  bool exit = false;
 
  private:
   std::vector<std::string> tokens;
 
-  const std::string getCmdOption(const std::string& option);
-  void getCmdOption2d(const std::string& option, double* pd1, double* pd2);
-  bool cmdOptionExists(const std::string& option);
+  bool cmdOptionExists(const std::string &option);
+
+  /**
+   * When 2 number are set after --daemon, use them as start and finish
+   * thresholds.
+   */
+  void getDaemonThresholds();
+
+  /**
+   * Print help.
+   */
+  static void printHelp();
 };
 
 #endif  // UTILS_ARGS_PARSER_H_

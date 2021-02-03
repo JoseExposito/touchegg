@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.0.6 - 2021-02-01
+
+New:
+
+  - New action added: `FULLSCREEN_WINDOW`. Thanks to @MarioJim
+
+    https://github.com/JoseExposito/touchegg/issues/440
+
+Improvements:
+
+  - Use D-Bus for daemon-client communication, making easier to write clients different languages
+
+    https://github.com/JoseExposito/touchegg/issues/436
+
+  - Animations are pixel-precise at low speeds
+
+    https://github.com/JoseExposito/touchegg/issues/434
+
+  - Make application name case insensitive in config file
+
+    https://github.com/JoseExposito/touchegg/issues/432
+
 ## 2.0.5 - 2021-01-05
 
 New:

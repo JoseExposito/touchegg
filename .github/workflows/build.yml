@@ -1,0 +1,79 @@
+name: Build
+
+on: push
+
+jobs:
+  patch-src:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
+      - name: Set up Debian Docker container for changelog patching
+        # '--ignore-branch' for testing on feature branch
+        run: |
+          docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty pitop/gbp-dch-gen:latest sleep inf
+          docker start chglog
+          docker exec chglog git config --global user.name "José Expósito"
+          docker exec chglog git config --global user.email "jose.exposito89@gmail.com"
+
+      - name: Patch changelog (snapshot)
+        # '--ignore-branch' for testing on feature branch
+        run: |
+          docker exec chglog gbp dch --verbose --auto --git-author --ignore-branch --snapshot
+
+      - name: Show updated changelog
+        run: |
+          cat ${{ github.workspace }}/debian/changelog
+
+      - name: Upload patched src as artifact
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-changelog"
+          path: ${{ github.workspace }}/debian/changelog
+
+  debian:
+    runs-on: ubuntu-20.04
+    needs: [ patch-src ]
+    strategy:
+      matrix:
+        target_arch: ["amd64", "armhf", "arm64"]
+    steps:
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Delete unpatched changelog
+        run: |
+          rm ${{ github.workspace }}/debian/changelog
+
+      - name: Download patched changelog
+        uses: "actions/download-artifact@v2"
+        with:
+            name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-changelog"
+            path: "${{ github.workspace }}/debian"
+
+      - name: Build Debian package
+        uses: pi-top/action-debian-package@v0.2.1
+        with:
+          source_directory: "${{ github.workspace }}"
+          artifacts_directory: "${{ github.workspace }}/artifacts"
+
+          docker_image: "pitop/deb-build:latest"
+          distribution: "buster-backports"
+          target_architecture: ${{ matrix.target_arch }}
+
+          lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
+          # Package uses latest packaging syntax and Lintian opts/tags
+          dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
+
+      - name: Upload Debian package artifacts
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-${{matrix.target_arch}}-deb"
+          path: "${{ github.workspace }}/artifacts"

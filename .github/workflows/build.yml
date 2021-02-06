@@ -13,6 +13,9 @@ jobs:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Patch target distribution in Debian changelog
         # touchegg (x.y.z) DISTRO; urgency=medium
         # -z to replace only the first occurrence

@@ -13,16 +13,6 @@ jobs:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Get changelog
-        id: changelog1
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ${{ github.workspace }}/debian/changelog
-      - name: Echo changelog
-        run: echo ${{ steps.changelog1.outputs.content }}
-
       - name: Patch target distribution in Debian changelog
         # touchegg (x.y.z) DISTRO; urgency=medium
         # -z to replace only the first occurrence
@@ -30,9 +20,7 @@ jobs:
         # (\w+)  - Group 1, find a word (DISTRO)
         # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
         run: |
-          sed -zr "s/([)] )(\w+)/\1bionic/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
-        
-        # sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
+          sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
 
       - name: Get changelog
         id: changelog

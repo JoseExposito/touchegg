@@ -2,8 +2,8 @@ Source: touchegg
 Section: misc
 Priority: optional
 Maintainer: José Expósito <jose.exposito89@gmail.com>
-Build-Depends: cmake,
-               debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 12),
+               cmake,
                libc6-dev (>= 2.14),
                libcairo2-dev (>= 1.2.4),
                libgtk-3-dev,

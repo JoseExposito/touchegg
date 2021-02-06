@@ -14,8 +14,9 @@ jobs:
 
       - name: Set up Debian Docker container for changelog patching
         # '--ignore-branch' for testing on feature branch
+        # docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty pitop/gbp-dch-gen:latest sleep inf
         run: |
-          docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty pitop/gbp-dch-gen:latest sleep inf
+          docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty debian:buster-slim sleep inf
           docker start chglog
           docker exec chglog git config --global user.name "José Expósito"
           docker exec chglog git config --global user.email "jose.exposito89@gmail.com"
@@ -64,8 +65,9 @@ jobs:
           source_directory: "${{ github.workspace }}"
           artifacts_directory: "${{ github.workspace }}/artifacts"
 
-          docker_image: "pitop/deb-build:latest"
-          distribution: "buster-backports"
+          # docker_image: "pitop/deb-build:latest"
+          # distribution: "buster-backports"
+          docker_image: "debian:buster-backports"
           target_architecture: ${{ matrix.target_arch }}
 
           lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"

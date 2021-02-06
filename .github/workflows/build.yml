@@ -36,10 +36,6 @@ jobs:
         run: echo ${{ steps.changelog.outputs.content }}
 
 
-        run: echo ::set-output name=changelog::$(cat ${{ github.workspace }}/debian/changelog)
-      - name: Test output
-        run: echo ${{ steps.vars.outputs.changelog }}
-
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.1
         with:

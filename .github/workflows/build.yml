@@ -24,7 +24,7 @@ jobs:
 
           # docker_image: "pitop/deb-build:latest"
           # distribution: "buster-backports"
-          docker_image: "ubuntu:18.04"
+          docker_image: "ubuntu:20.04"
           target_architecture: ${{ matrix.target_arch }}
 
           lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"

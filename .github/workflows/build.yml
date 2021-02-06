@@ -3,42 +3,9 @@ name: Build
 on: push
 
 jobs:
-  patch-src:
+
+  deb-packages:
     runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: GitHub Environment Variables Action
-        uses: FranzDiebold/github-env-vars-action@v1.2.1
-
-      - name: Set up Debian Docker container for changelog patching
-        # '--ignore-branch' for testing on feature branch
-        # docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty pitop/gbp-dch-gen:latest sleep inf
-        run: |
-          docker create --name chglog --volume ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}/ --tty debian:buster-slim sleep inf
-          docker start chglog
-          docker exec chglog git config --global user.name "José Expósito"
-          docker exec chglog git config --global user.email "jose.exposito89@gmail.com"
-
-      - name: Patch changelog (snapshot)
-        # '--ignore-branch' for testing on feature branch
-        run: |
-          docker exec chglog gbp dch --verbose --auto --git-author --ignore-branch --snapshot
-
-      - name: Show updated changelog
-        run: |
-          cat ${{ github.workspace }}/debian/changelog
-
-      - name: Upload patched src as artifact
-        uses: "actions/upload-artifact@v2"
-        with:
-          name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-changelog"
-          path: ${{ github.workspace }}/debian/changelog
-
-  debian:
-    runs-on: ubuntu-20.04
-    needs: [ patch-src ]
     strategy:
       matrix:
         target_arch: ["amd64", "armhf", "arm64"]
@@ -48,16 +15,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Delete unpatched changelog
-        run: |
-          rm ${{ github.workspace }}/debian/changelog
-
-      - name: Download patched changelog
-        uses: "actions/download-artifact@v2"
-        with:
-            name: "${{ env.GITHUB_REPOSITORY_NAME }}-#${{ env.GITHUB_SHA_SHORT }}-changelog"
-            path: "${{ github.workspace }}/debian"
 
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.1

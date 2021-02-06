@@ -25,6 +25,10 @@ jobs:
         run: |
           sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
 
+      - name: Show updated changelog
+        run: |
+          cat ${{ github.workspace }}/debian/changelog
+
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.1
         with:

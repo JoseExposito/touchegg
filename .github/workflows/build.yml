@@ -16,18 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Patch target distribution in Debian changelog
-        # touchegg (x.y.z) DISTRO; urgency=medium
-        # -z to replace only the first occurrence
-        # ([)] ) - Group 0, find the first ") "
-        # (\w+)  - Group 1, find a word (DISTRO)
-        # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
-        run: |
-          sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
-
-      - name: Show updated changelog
-        run: |
-          cat ${{ github.workspace }}/debian/changelog
+      # - name: Patch target distribution in Debian changelog
+      #   # touchegg (x.y.z) DISTRO; urgency=medium
+      #   # -z to replace only the first occurrence
+      #   # ([)] ) - Group 0, find the first ") "
+      #   # (\w+)  - Group 1, find a word (DISTRO)
+      #   # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
+      #   run: |
+      #     sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
 
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.1

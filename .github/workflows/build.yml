@@ -27,7 +27,14 @@ jobs:
         # sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
 
       - name: Get changelog
-        id: vars
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ${{ github.workspace }}/debian/changelog
+      - name: Echo changelog
+        run: echo ${{ steps.changelog.outputs.content }}
+
+
         run: echo ::set-output name=changelog::$(cat ${{ github.workspace }}/debian/changelog)
       - name: Test output
         run: echo ${{ steps.vars.outputs.changelog }}

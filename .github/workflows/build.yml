@@ -23,7 +23,8 @@ jobs:
         # (\w+)  - Group 1, find a word (DISTRO)
         # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
         run: |
-          sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
+          sed -zr "s/([)] )(\w+)/\1bionic/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
+        # sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog
 
       - name: Get changelog
         id: vars

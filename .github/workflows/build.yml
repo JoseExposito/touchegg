@@ -15,6 +15,13 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Get changelog
+        id: changelog1
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ${{ github.workspace }}/debian/changelog
+      - name: Echo changelog
+        run: echo ${{ steps.changelog1.outputs.content }}
 
       - name: Patch target distribution in Debian changelog
         # touchegg (x.y.z) DISTRO; urgency=medium

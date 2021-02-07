@@ -1,4 +1,4 @@
-touchegg (2.0.6) focal; urgency=medium
+touchegg (2.0.6) bionic; urgency=medium
 
   * New action added: "FULLSCREEN_WINDOW"
   * Use D-Bus for daemon-client communication, making easier to write

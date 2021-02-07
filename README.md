@@ -25,6 +25,8 @@ Many more actions and gestures are available and everything is easily configurab
 
   * [Installation](#installation)
   * [Configuration](#configuration)
+    * [Using Touché](#using-touché)
+    * [Manual configuration](#manual-configuration)
     * [Global settings](#global-settings)
     * [Available gestures](#available-gestures)
       * [Swipe](#swipe)
@@ -42,6 +44,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Execute a command](#execute-a-command-run_command)
       * [Mouse click](#mouse-click-mouse_click)
     * [Daemon configuration](#daemon-configuration)
+  * [FAQ](#faq)
   * [Copyright](#copyright)
 
 
@@ -87,6 +90,24 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 After [installing](#installation) Touchégg you'll notice that you can start using multi-touch
 gestures. However, you are not forced to use the gestures and actions that come out of the box, you
 can configure the gestures you'd like to use and the actions they'll trigger.
+
+## Using Touché
+
+[Touché](https://github.com/JoseExposito/touche) is a desktop application to easily configure your
+touchpad and touchscreen multi-touch gestures.
+
+<div align="center">
+
+  ![Touché on elementary OS](https://raw.githubusercontent.com/JoseExposito/touche/master/.github/images/elementary.png)
+
+</div>
+
+Follow the instructions on [the project page](https://github.com/JoseExposito/touche) to install it.
+
+## Manual configuration
+
+[Touché](https://github.com/JoseExposito/touche) is the recommended way of configuring your
+gestures. However, you can also manually configure Touchégg by editing an XML file.
 
 Start by copying the default configuration from `/usr/share/touchegg/touchegg.conf` to
 `~/.config/touchegg/touchegg.conf`. You can do it using your file manager or by running this command
@@ -569,6 +590,23 @@ Compatible device detected:
   threshold: 100
   animation_finish_threshold: 500
 ```
+
+
+# FAQ
+
+#### Does Touchégg work on Wayland?
+
+No, Touchégg only work on X11.
+
+#### What hardware is supported?
+
+Under the hood, Touchégg relies on [libinput](https://wayland.freedesktop.org/libinput/doc/latest/index.html).
+
+All hardware supported by libinput is supported by Touchégg.
+
+#### Is there a GUI to configure Touchégg?
+
+Yes, [Touché](#https://github.com/JoseExposito/touche) is the official desktop application.
 
 
 # Copyright

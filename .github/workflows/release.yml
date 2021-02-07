@@ -67,7 +67,8 @@ jobs:
       - name: Download packages
         uses: "actions/download-artifact@v2"
         with:
-            path: ./
+          name: ${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_amd64.deb
+          path: ./
 
       - name: Create Release
         id: create_release

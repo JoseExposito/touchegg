@@ -1,4 +1,12 @@
-touchegg (2.0.6) bionic; urgency=medium
+touchegg (2.0.7) focal; urgency=medium
+
+  * Improve the logs
+  * Fix intermittent affecting some users
+  * Release Touché, the GUI to configure Touchégg
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 01 Feb 2021 12:00:00 +0100
+
+touchegg (2.0.6) focal; urgency=medium
 
   * New action added: "FULLSCREEN_WINDOW"
   * Use D-Bus for daemon-client communication, making easier to write

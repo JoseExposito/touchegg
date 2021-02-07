@@ -52,8 +52,8 @@ jobs:
       - name: Upload Debian package artifacts
         uses: "actions/upload-artifact@v2"
         with:
-          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ github.ref }}-${{matrix.target_arch}}-deb"
-          path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_${{matrix.target_arch}}.deb"
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-${{matrix.target_arch}}-deb"
+          path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
 
 
   create-release:
@@ -74,9 +74,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
+          tag_name: ${{ env.GITHUB_REF_NAME }}
+          release_name: ${{ env.GITHUB_REF_NAME }}
+          draft: true
           prerelease: false
 
       - name: Upload Debian package (amd64)
@@ -85,8 +85,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_amd64.deb"
-          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_amd64.deb"
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_amd64.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_amd64.deb"
           asset_content_type: application/vnd.debian.binary-package
 
       - name: Upload Debian package (armhf)
@@ -95,8 +95,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_armhf.deb"
-          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_armhf.deb"
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_armhf.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_armhf.deb"
           asset_content_type: application/vnd.debian.binary-package
 
       - name: Upload Debian package (arm64)
@@ -105,6 +105,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_arm64.deb"
-          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_arm64.deb"
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb"
           asset_content_type: application/vnd.debian.binary-package

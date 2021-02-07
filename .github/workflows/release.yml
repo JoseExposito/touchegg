@@ -17,7 +17,7 @@ jobs:
       target_distribution: buster
     strategy:
       matrix:
-        target_arch: ["amd64"]
+        target_arch: ["amd64", "armhf", "arm64"]
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -52,14 +52,22 @@ jobs:
       - name: Upload Debian package artifacts
         uses: "actions/upload-artifact@v2"
         with:
-          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-${{matrix.target_arch}}-deb"
-          path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ github.ref }}-${{matrix.target_arch}}-deb"
+          path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_${{matrix.target_arch}}.deb"
 
 
   create-release:
     runs-on: ubuntu-20.04
     needs: [ deb-package ]
     steps:
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
+      - name: Download packages
+        uses: "actions/download-artifact@v2"
+        with:
+            path: "${{ github.workspace }}/artifacts"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -71,13 +79,35 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
+      - name: Upload Debian package (amd64)
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
-          asset_content_type: application/zip
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_amd64.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_amd64.deb"
+          asset_content_type: application/vnd.debian.binary-package
+
+      - name: Upload Debian package (armhf)
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_armhf.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_armhf.deb"
+          asset_content_type: application/vnd.debian.binary-package
+
+      - name: Upload Debian package (arm64)
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_arm64.deb"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ github.ref }}_arm64.deb"
+          asset_content_type: application/vnd.debian.binary-package

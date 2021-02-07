@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.7 - 2021-02-07
+
+New:
+
+  - Release Touché, a configuration GUI
+
+    https://github.com/JoseExposito/touche
+
+    https://github.com/JoseExposito/touchegg/issues/340
+
+  - Include different log levels, thanks to @imabuddha
+
+    https://github.com/JoseExposito/touchegg/issues/431
+
+Improvements:
+
+  - Improvements in documentation
+
+Fixed:
+
+  - Fix intermittent crash
+
+    https://github.com/JoseExposito/touchegg/issues/443
+
 ## 2.0.6 - 2021-02-01
 
 New:

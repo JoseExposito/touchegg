@@ -15,8 +15,8 @@ jobs:
       matrix:
         target_arch: ["amd64", "armhf", "arm64"]
     steps:
-      - name: GitHub Environment Variables Action
-        uses: FranzDiebold/github-env-vars-action@v1.2.1
+      # - name: GitHub Environment Variables Action
+      #   uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,17 +27,9 @@ jobs:
         # -i to update the file
         # ([)] ) - Group 0, find the first ") "
         # (\w+)  - Group 1, find a word (DISTRO)
-        # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
+        # \1${{ env.target_distribution }} - Replace group 1 with the target distribution name
         run: |
           sed -zri "s/([)] )(\w+)/\1${{ env.target_distribution }}/" ${{ github.workspace }}/debian/changelog
-
-#      - name: Get changelog
-#        id: changelog
-#        uses: juliangruber/read-file-action@v1
-#        with:
-#          path: ${{ github.workspace }}/debian/changelog
-#      - name: Echo changelog
-#        run: echo ${{ steps.changelog.outputs.content }}
 
       - name: Build Debian package
         uses: pi-top/action-debian-package@v0.2.2

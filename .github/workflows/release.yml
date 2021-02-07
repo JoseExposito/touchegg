@@ -67,7 +67,7 @@ jobs:
       - name: Download packages
         uses: "actions/download-artifact@v2"
         with:
-            path: .
+            path: ./
 
       - name: Create Release
         id: create_release

@@ -6,6 +6,8 @@ jobs:
 
   deb-package:
     runs-on: ubuntu-20.04
+    env:
+      target_distribution: bionic
     strategy:
       matrix:
         target_arch: ["amd64", "armhf", "arm64"]
@@ -23,7 +25,7 @@ jobs:
         # (\w+)  - Group 1, find a word (DISTRO)
         # \1$(lsb_release -c -s) - Replace group 1 with the target distribution name
         run: |
-          sed -zr "s/([)] )(\w+)/\1$(lsb_release -c -s)/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog2
+          sed -zr "s/([)] )(\w+)/\1${{ env.target_distribution }}/" ${{ github.workspace }}/debian/changelog > ${{ github.workspace }}/debian/changelog2
 
       - name: Get changelog
         id: changelog
@@ -40,7 +42,7 @@ jobs:
           artifacts_directory: "${{ github.workspace }}/artifacts"
 
           docker_image: "ubuntu:18.04"
-          distribution: "bionic"
+          distribution: ${{ env.target_distribution }}
           target_architecture: ${{ matrix.target_arch }}
 
           lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"

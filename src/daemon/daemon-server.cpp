@@ -123,6 +123,7 @@ void DaemonServer::send(const std::string &signalName,
                     gesture->fingers(),                      // i
                     static_cast<int>(gesture->performedOnDeviceType()),  // u
                     gesture->elapsedTime());                             // t
+  g_variant_ref_sink(signalParams);
 
   // Send the message to every client
   for (auto *connection : this->connections) {
@@ -139,6 +140,8 @@ void DaemonServer::send(const std::string &signalName,
       }
     }
   }
+
+  g_variant_unref(signalParams);
 
   // Remove dead clients
   for (auto *connection : closedConnections) {

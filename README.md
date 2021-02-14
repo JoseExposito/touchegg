@@ -58,8 +58,9 @@ Otherwise you can compile the source code yourself by following the instructions
 
 ## Ubuntu, Debian and derivatives
 
-On Ubuntu, it is recommended to use the [official PPA](sudo add-apt-repository ppa:touchegg/stable)
-to install Touchégg and receive updates:
+On Ubuntu, it is recommended to use the
+[official PPA](https://launchpad.net/~touchegg/+archive/ubuntu/stable) to install Touchégg and
+receive updates:
 
 ```bash
 $ sudo add-apt-repository ppa:touchegg/stable

@@ -1,0 +1,24 @@
+# Workflow to update the "ppa" branch once a release is created
+# This will trigger a build in the stable PPA:
+# https://launchpad.net/~touchegg
+
+name: Release PPA
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-ppa-branch:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Merge master branch into ppa branch
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          from_branch: master
+          target_branch: ppa
+          github_token: ${{ github.token }}

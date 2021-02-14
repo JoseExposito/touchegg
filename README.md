@@ -4,7 +4,7 @@
 # Touchégg
 
 Touchégg is an app that runs in the background and transform the gestures you make on your touchpad
-into visible actions in your desktop.
+or touchscreen into visible actions in your desktop.
 
 For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to
 switch to the next desktop.
@@ -58,19 +58,30 @@ Otherwise you can compile the source code yourself by following the instructions
 
 ## Ubuntu, Debian and derivatives
 
-Download the `.deb` package and install it. Double click on the package may work, otherwise install
-it from the terminal:
+On Ubuntu, it is recommended to use the [official PPA](sudo add-apt-repository ppa:touchegg/stable)
+to install Touchégg and receive updates:
+
+```bash
+$ sudo add-apt-repository ppa:touchegg/stable
+$ sudo apt update
+$ sudo apt install touchegg
+```
+
+If PPAs are not available on your operating system,
+[download](https://github.com/JoseExposito/touchegg/releases) the `.deb` package and install it.
+Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
 $ sudo apt install ./touchegg_*.deb # Install the package
 ```
+
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
 ## Red Hat, Fedora, CentOS and derivatives
 
-Download the `.rpm` package and install it. Double click on the package may work, otherwise install
-it from the terminal:
+[Download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
+Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the rpm package is placed at

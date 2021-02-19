@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=io.github.joseexposito.Touchegg
+Exec=/usr/bin/touchegg --daemon
+User=root
+SystemdService=touchegg.service

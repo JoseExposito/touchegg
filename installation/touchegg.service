@@ -3,11 +3,9 @@ Description=Touchégg Daemon
 Documentation=https://github.com/JoseExposito/touchegg/tree/master/installation#readme
 
 [Service]
-Type=simple
+Type=dbus
+BusName=io.github.joseexposito.Touchegg
 Group=input
 ExecStart=/usr/bin/touchegg --daemon
 Restart=on-failure
 RestartSec=5s
-
-[Install]
-WantedBy=multi-user.target

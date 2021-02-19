@@ -72,8 +72,10 @@ endif()
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_PREFIX "/usr")
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
+install(FILES ${PROJECT_SOURCE_DIR}/installation/io.github.joseexposito.Touchegg.service DESTINATION /usr/share/dbus-1/system-services)
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION /lib/systemd/system)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
+# TODO Disabled to test D-Bus activation, re-enable this:
+# install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
 
 set(CPACK_PACKAGE_NAME touchegg)

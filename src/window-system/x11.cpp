@@ -495,8 +495,8 @@ Rectangle X11::getDesktopWorkarea() const {
         // NOLINTNEXTLINE
         XRRGetCrtcInfo(this->display, resources, resources->crtcs[currentCrtc]);
 
-    if (pointerX >= crtc->x && pointerX <= (crtc->x + crtc->width) &&
-        pointerY >= crtc->y && pointerY <= (crtc->y + crtc->height)) {
+    if (pointerX >= crtc->x && pointerX < (crtc->x + crtc->width) &&
+        pointerY >= crtc->y && pointerY < (crtc->y + crtc->height)) {
       screenFound = true;
       screen.x = crtc->x;
       screen.y = crtc->y;
@@ -554,8 +554,8 @@ Rectangle X11::getDesktopWorkarea() const {
         int y = gtkWorkareas[1 + offset];
         int width = gtkWorkareas[2 + offset];
         int height = gtkWorkareas[3 + offset];
-        if (x >= screen.x && x <= (screen.x + screen.width) && y >= screen.y &&
-            y <= (screen.y + screen.height)) {
+        if (x >= screen.x && x < (screen.x + screen.width) && y >= screen.y &&
+            y < (screen.y + screen.height)) {
           workarea.x = x;
           workarea.y = y;
           workarea.width = width;

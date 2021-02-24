@@ -128,6 +128,7 @@ void LibinputGestureGatherer::handleEvent(struct libinput_event *event) {
       this->touchHandler.handleTouchDown(event);
       break;
     case LIBINPUT_EVENT_TOUCH_UP:
+    case LIBINPUT_EVENT_TOUCH_CANCEL:
       this->touchHandler.handleTouchUp(event);
       break;
     case LIBINPUT_EVENT_TOUCH_MOTION:

@@ -1,3 +1,13 @@
+touchegg (2.0.8) focal; urgency=medium
+
+  * Added daily and stable PPA builds
+
+  * Fix animation when screens ot the same size are arranged vertically
+  * Fix crash caused by a g_variant not being referenced
+  * Handle the TOUCH_CANCEL event to avoid bugs
+
+ -- José Expósito <jose.exposito89@gmail.com>  Wed, 24 Feb 2021 12:00:00 +0100
+
 touchegg (2.0.7) focal; urgency=medium
 
   * Improve the logs

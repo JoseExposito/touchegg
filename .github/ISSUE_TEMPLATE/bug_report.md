@@ -19,8 +19,18 @@ Tell us what should happen.
 
 Tell us what happens instead.
 
+### Logs
+
+If required, include logs of the bug:
+
+
+```
+$ touchegg --debug
+
+```
+
 ### Your environment
 
- * Version of Touchégg: Run `touchegg` in the terminal to check the version
+ * Version of Touchégg: Run `touchegg --version` in the terminal to check the version
  * Operating System: Ubuntu, Fedora, Arch Linux...
  * Desktop Environment: Gnome, KDE, Xfce...

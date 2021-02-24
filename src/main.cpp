@@ -33,11 +33,10 @@
 int main(int argc, char** argv) {
   // Parse the command line arguments
   ArgsParser args(argc, argv);
-  ArgsParser::printVersion();
-
   if (args.exit) {
     return 0;
   }
+  ArgsParser::printVersion();
 
   // Configure the logger
   tlg::configure(args.debug, args.quiet);

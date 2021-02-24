@@ -107,6 +107,5 @@ void ArgsParser::printHelp() {
   std::cout << " --version\tPrint the version number and exit" << std::endl;
   std::cout << " --help \tPrint this message and exit" << std::endl;
 
-  std::cout << "Without arguments Touchégg starts in client mode" << std::endl
-            << std::endl;
+  std::cout << "Without arguments Touchégg starts in client mode" << std::endl;
 }

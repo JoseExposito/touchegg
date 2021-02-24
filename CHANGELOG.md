@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.0.8 - 2021-02-23
+
+New:
+
+  - Added daily and stable PPA builds
+
+    https://launchpad.net/~touchegg/+archive/ubuntu/stable
+
+Fixed:
+
+  - Fix animation when screens ot the same size are arranged vertically
+
+    https://github.com/JoseExposito/touchegg/issues/447
+
+  - Fix crash caused by a g_variant not being referenced
+
+    https://github.com/JoseExposito/touchegg/issues/449
+
+  - Handle the TOUCH_CANCEL event to avoid bugs
+
+    https://github.com/JoseExposito/touchegg/issues/458
+
+
 ## 2.0.7 - 2021-02-07
 
 New:

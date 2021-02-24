@@ -16,47 +16,47 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 find_package(Threads REQUIRED) # Required to use std threads
-find_package(Libudev REQUIRED)
-find_package(Libinput REQUIRED)
-find_package(PugiXML REQUIRED)
-find_package(Cairo REQUIRED)
+find_package(LIBUDEV REQUIRED)
+find_package(LIBINPUT REQUIRED)
+find_package(PUGIXML REQUIRED)
+find_package(CAIRO REQUIRED)
 find_package(X11 REQUIRED)
-find_package(XTest REQUIRED)
-find_package(Xrandr REQUIRED)
-find_package(XInput REQUIRED)
-find_package(GLib REQUIRED)
+find_package(XTEST REQUIRED)
+find_package(XRANDR REQUIRED)
+find_package(XINPUT REQUIRED)
+find_package(GLIB REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 
 add_executable(touchegg ${SOURCE_FILES})
 target_include_directories(touchegg PUBLIC
-  ${Libudev_INCLUDE_DIRS}
-  ${Libinput_INCLUDE_DIRS}
-  ${PugiXML_INCLUDE_DIRS}
-  ${Cairo_INCLUDE_DIRS}
+  ${LIBUDEV_INCLUDE_DIRS}
+  ${LIBINPUT_INCLUDE_DIRS}
+  ${PUGIXML_INCLUDE_DIRS}
+  ${CAIRO_INCLUDE_DIRS}
   ${X11_INCLUDE_DIRS}
-  ${XTest_INCLUDE_DIRS}
-  ${Xrandr_INCLUDE_DIRS}
-  ${XInput_INCLUDE_DIRS}
-  ${GLib_INCLUDE_DIRS}
+  ${XTEST_INCLUDE_DIRS}
+  ${XRANDR_INCLUDE_DIRS}
+  ${XINPUT_INCLUDE_DIRS}
+  ${GLIB_INCLUDE_DIRS}
 )
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
   Threads::Threads # std::thread
-  ${Libudev_LIBRARIES}
-  ${Libinput_LIBRARIES}
-  ${PugiXML_LIBRARIES}
-  ${Cairo_LIBRARIES}
+  ${LIBUDEV_LIBRARIES}
+  ${LIBINPUT_LIBRARIES}
+  ${PUGIXML_LIBRARIES}
+  ${CAIRO_LIBRARIES}
   ${X11_LIBRARIES}
-  ${XTest_LIBRARIES}
-  ${Xrandr_LIBRARIES}
-  ${XInput_LIBRARIES}
-  ${GLib_LIBRARIES}
+  ${XTEST_LIBRARIES}
+  ${XRANDR_LIBRARIES}
+  ${XINPUT_LIBRARIES}
+  ${GLIB_LIBRARIES}
 )
 
 if(NOT DEFINED AUTO_COLORS OR AUTO_COLORS)
-  find_package(Gtk3 REQUIRED)
+  find_package(GTK3 REQUIRED)
   target_include_directories(touchegg PUBLIC ${GTK3_INCLUDE_DIRS})
   target_link_libraries(touchegg ${GTK3_LIBRARIES})
   add_definitions(-DAUTO_COLORS=ON)

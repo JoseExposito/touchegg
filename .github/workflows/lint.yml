@@ -5,7 +5,7 @@ name: Lint
 on: [push, pull_request]
 
 jobs:
-  cmake:
+  lint:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code

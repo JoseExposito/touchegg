@@ -24,6 +24,10 @@ Many more actions and gestures are available and everything is easily configurab
 # Table of contents
 
   * [Installation](#installation)
+    * [Ubuntu, Debian and derivatives](#ubuntu-debian-and-derivatives)
+    * [Red Hat, Fedora and derivatives](#red-hat-fedora-and-derivatives)
+    * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
+    * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
     * [Manual configuration](#manual-configuration)
@@ -79,7 +83,7 @@ $ sudo apt install ./touchegg_*.deb # Install the package
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
-## Red Hat, Fedora, CentOS and derivatives
+## Red Hat, Fedora and derivatives
 
 [Download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
 Double click on the package may work, otherwise install it from the terminal:
@@ -96,6 +100,16 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 Install the `touchegg` package from [AUR](https://aur.archlinux.org/packages/touchegg/).
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
+
+## GNOME
+
+If you are using the GNOME Desktop Environment it is recommended to also install this extension:
+
+https://github.com/JoseExposito/gnome-shell-extension-x11gestures
+
+Both Touchégg and the extension need to installed, so don't forget to follow the install
+instructions for your distro!
+
 
 # Configuration
 

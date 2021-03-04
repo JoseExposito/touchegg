@@ -10,10 +10,12 @@ This file contains a combination of meta information resources and a shortcut to
 
 This file is installed into the system-wide XDG Autostart directory (`/etc/xdg/autostart`), which allows autostarting ordinary desktop entries on desktop environment startup.
 
-## touchegg.service - _Touchégg systemd service_
+## touchegg.service.in - _Touchégg systemd service_
 
 This service runs Touchégg in daemon mode (`touchegg --daemon`) as part of the "input" group.
 The daemon will open a Unix domain socket so any service (usually `touchegg --client`) can have access to libinput's multi-touch gestures.
+
+CMake configures the path for ExecStart and saves the result in `touchegg.service`.
 
 ### Learn more about systemd
 https://wiki.archlinux.org/index.php/Systemd#Basic_systemctl_usage

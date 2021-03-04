@@ -70,10 +70,16 @@ endif()
 # https://cmake.org/cmake/help/v3.12/module/CPack.html
 # https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
 include(GNUInstallDirs)
-set(CMAKE_INSTALL_PREFIX "/usr")
+
+set(SHARED_CONFIG_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
+target_compile_definitions(touchegg PUBLIC SHARED_CONFIG_PATH=\"${SHARED_CONFIG_PATH}\")
+
+# configure systemd service unit to use the right path, e.g. ${CMAKE_INSTALL_BINDIR}/touchegg
+configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service)
+
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION /lib/systemd/system)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${CMAKE_INSTALL_LIBDIR}/systemd/system)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
 
 set(CPACK_PACKAGE_NAME touchegg)

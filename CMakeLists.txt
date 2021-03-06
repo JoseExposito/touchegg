@@ -74,8 +74,8 @@ include(GNUInstallDirs)
 set(SHARED_CONFIG_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
 target_compile_definitions(touchegg PUBLIC SHARED_CONFIG_PATH=\"${SHARED_CONFIG_PATH}\")
 
-# configure systemd service unit to use the right path, e.g. ${CMAKE_INSTALL_BINDIR}/touchegg
-configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service)
+# configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
+configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
 
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${CMAKE_INSTALL_LIBDIR}/systemd/system)

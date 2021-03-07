@@ -76,9 +76,10 @@ target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CO
 
 # configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
 configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
+pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
 
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${CMAKE_INSTALL_LIBDIR}/systemd/system)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
 
@@ -106,11 +107,17 @@ set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${PROJECT_SOURCE_DIR}/installation/rpm/p
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_PREFIX}")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_BINDIR}")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_DATAROOTDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd/system")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg/autostart")
+
+# Exclude the systemd service dir (usually /lib/systemd/system). Split the path and exclude each subpath.
+# Equivalent to exclude /lib, /lib/systemd and /lib/systemd/system:
+string(REPLACE "/" ";" SYSTEMD_SERVICE_DIRS ${SYSTEMD_SERVICE_DIR})
+set(EXCLUDE_DIR "")
+foreach(DIR ${SYSTEMD_SERVICE_DIRS})
+  set(EXCLUDE_DIR "${EXCLUDE_DIR}/${DIR}")
+  list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${EXCLUDE_DIR})
+endforeach()
 
 include(CPack)

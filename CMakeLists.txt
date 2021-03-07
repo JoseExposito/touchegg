@@ -71,8 +71,8 @@ endif()
 # https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
 include(GNUInstallDirs)
 
-set(SHARED_CONFIG_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
-target_compile_definitions(touchegg PUBLIC SHARED_CONFIG_PATH=\"${SHARED_CONFIG_PATH}\")
+set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
+target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CONFIG_FILE_PATH}\")
 
 # configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
 configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)

@@ -68,7 +68,7 @@ std::filesystem::path Paths::getUserLockFilePath() {
 }
 
 std::filesystem::path Paths::getSystemConfigFilePath() {
-  return std::filesystem::path{SHARED_CONFIG_PATH};
+  return std::filesystem::path{SYSTEM_CONFIG_FILE_PATH};
 }
 
 void Paths::createUserConfigDir() {

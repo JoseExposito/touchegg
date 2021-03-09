@@ -69,6 +69,10 @@ endif()
 # https://cmake.org/cmake/help/v3.4/module/GNUInstallDirs.html
 # https://cmake.org/cmake/help/v3.12/module/CPack.html
 # https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+  set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
+
 include(GNUInstallDirs)
 
 set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")

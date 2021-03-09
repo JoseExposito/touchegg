@@ -5,7 +5,7 @@ Documentation=https://github.com/JoseExposito/touchegg/tree/master/installation#
 [Service]
 Type=simple
 Group=input
-ExecStart=/usr/bin/touchegg --daemon
+ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/touchegg --daemon
 Restart=on-failure
 RestartSec=5s
 

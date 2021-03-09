@@ -70,10 +70,17 @@ endif()
 # https://cmake.org/cmake/help/v3.12/module/CPack.html
 # https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
 include(GNUInstallDirs)
-set(CMAKE_INSTALL_PREFIX "/usr")
+
+set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
+target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CONFIG_FILE_PATH}\")
+
+# configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
+configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
+pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
+
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION /lib/systemd/system)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
 
 set(CPACK_PACKAGE_NAME touchegg)
@@ -100,11 +107,17 @@ set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${PROJECT_SOURCE_DIR}/installation/rpm/p
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_PREFIX}")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_BINDIR}")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_DATAROOTDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd/system")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg/autostart")
+
+# Exclude the systemd service dir (usually /lib/systemd/system). Split the path and exclude each subpath.
+# Equivalent to exclude /lib, /lib/systemd and /lib/systemd/system:
+string(REPLACE "/" ";" SYSTEMD_SERVICE_DIRS ${SYSTEMD_SERVICE_DIR})
+set(EXCLUDE_DIR "")
+foreach(DIR ${SYSTEMD_SERVICE_DIRS})
+  set(EXCLUDE_DIR "${EXCLUDE_DIR}/${DIR}")
+  list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${EXCLUDE_DIR})
+endforeach()
 
 include(CPack)

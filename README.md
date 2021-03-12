@@ -99,7 +99,14 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 
 Install the `touchegg` package from [AUR](https://aur.archlinux.org/packages/touchegg/).
 
-Run Touchégg manually by running the command `touchegg` or reboot to get started.
+Notice that on Arch services are not enabled or started by default, so you'll have to do it manually:
+
+```bash
+$ sudo systemctl enable touchegg.service
+$ sudo systemctl start touchegg
+```
+
+Once the service is enabled, run Touchégg manually by running the command `touchegg` or reboot to get started.
 
 ## GNOME
 

@@ -748,7 +748,7 @@ bool X11::isNaturalScrollEnabled(DeviceType deviceType) const {
 
     if (info.use == XIMasterPointer || info.use == XISlavePointer) {
       // Only touchpads have this property. I wasn't able to find a better way
-      // to differentiate between mouses and touchpads. Without this check,
+      // to differentiate between mice and touchpads. Without this check,
       // enabilling natural scroll on the mouse but not on the touchpad will
       // make this method return true.
       // It seems like the same flag is used by GTK:

@@ -74,6 +74,9 @@ class X11 : public WindowSystem {
   std::unique_ptr<CairoSurface> createCairoSurface() const override;
 
   bool isNaturalScrollEnabled(DeviceType deviceType) const override;
+  GestureDirection calculateRotation(GestureType gestureType,
+                                     DeviceType deviceType,
+                                     GestureDirection direction) const override;
 
  private:
   /**

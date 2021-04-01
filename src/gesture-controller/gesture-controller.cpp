@@ -43,6 +43,14 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   tlg::debug << "\t\tDirection: " << gestureDirectionToStr(gesture->direction())
              << std::endl;
 
+  this->rotatedDirection = this->windowSystem.calculateRotation(
+      gesture->type(), gesture->performedOnDeviceType(), gesture->direction());
+  if (this->rotatedDirection != gesture->direction()) {
+    tlg::debug << "\t\tDirection after rotation: "
+               << gestureDirectionToStr(this->rotatedDirection) << std::endl;
+    gesture->setDirection(this->rotatedDirection);
+  }
+
   this->window = this->windowSystem.getWindowUnderCursor();
   this->action = this->getActionForGesture(*gesture, *this->window);
 
@@ -71,7 +79,7 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
     tlg::debug << "Gesture update detected (" << gesture->percentage() << "%)"
                << std::endl;
-
+    gesture->setDirection(this->rotatedDirection);
     this->action->onGestureUpdate(*gesture);
   }
 }
@@ -79,10 +87,12 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
     tlg::debug << "Gesture end detected" << std::endl;
+    gesture->setDirection(this->rotatedDirection);
     this->action->onGestureEnd(*gesture);
   }
 
   this->action.reset();
+  this->rotatedDirection = GestureDirection::UNKNOWN;
 }
 
 std::unique_ptr<Action> GestureController::getActionForGesture(

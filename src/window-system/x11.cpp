@@ -774,6 +774,97 @@ bool X11::isNaturalScrollEnabled(DeviceType deviceType) const {
   return enabled;
 }
 
+GestureDirection X11::calculateRotation(GestureType gestureType,
+                                        DeviceType deviceType,
+                                        GestureDirection direction) const {
+  if (gestureType != GestureType::SWIPE ||
+      deviceType != DeviceType::TOUCHSCREEN) {
+    return direction;
+  }
+
+  // Use Xrandr to get the screen rotation of the physical screen the mouse
+  // pointer is placed on
+  Window rootWindow = None;
+  Window childWindow = None;
+  int pointerX = 0;
+  int pointerY = 0;
+  int childX = 0;
+  int childY = 0;
+  unsigned int mask = 0;
+  XQueryPointer(this->display, XDefaultRootWindow(this->display), &rootWindow,
+                &childWindow, &pointerX, &pointerY, &childX, &childY, &mask);
+
+  // Get the physical screen size the mouse pointer is placed on
+  bool screenFound = false;
+  Rotation rotation = 0;
+  int currentCrtc = 0;
+  XRRScreenResources *resources =
+      XRRGetScreenResources(this->display, rootWindow);
+
+  while (!screenFound && currentCrtc < resources->ncrtc) {
+    XRRCrtcInfo *crtc =
+        // NOLINTNEXTLINE
+        XRRGetCrtcInfo(this->display, resources, resources->crtcs[currentCrtc]);
+
+    if (pointerX >= crtc->x && pointerX < (crtc->x + crtc->width) &&
+        pointerY >= crtc->y && pointerY < (crtc->y + crtc->height)) {
+      screenFound = true;
+      rotation = crtc->rotation;
+    }
+
+    XRRFreeCrtcInfo(crtc);
+    currentCrtc++;
+  }
+
+  XRRFreeScreenResources(resources);
+
+  if (!screenFound) {
+    return direction;
+  }
+
+  GestureDirection rotatedDirection = direction;
+  switch (rotation) {
+    case RR_Rotate_90:
+      if (direction == GestureDirection::UP) {
+        rotatedDirection = GestureDirection::RIGHT;
+      } else if (direction == GestureDirection::DOWN) {
+        rotatedDirection = GestureDirection::LEFT;
+      } else if (direction == GestureDirection::LEFT) {
+        rotatedDirection = GestureDirection::UP;
+      } else if (direction == GestureDirection::RIGHT) {
+        rotatedDirection = GestureDirection::DOWN;
+      }
+      break;
+    case RR_Rotate_180:
+      if (direction == GestureDirection::UP) {
+        rotatedDirection = GestureDirection::DOWN;
+      } else if (direction == GestureDirection::DOWN) {
+        rotatedDirection = GestureDirection::UP;
+      } else if (direction == GestureDirection::LEFT) {
+        rotatedDirection = GestureDirection::RIGHT;
+      } else if (direction == GestureDirection::RIGHT) {
+        rotatedDirection = GestureDirection::LEFT;
+      }
+      break;
+    case RR_Rotate_270:
+      if (direction == GestureDirection::UP) {
+        rotatedDirection = GestureDirection::LEFT;
+      } else if (direction == GestureDirection::DOWN) {
+        rotatedDirection = GestureDirection::RIGHT;
+      } else if (direction == GestureDirection::LEFT) {
+        rotatedDirection = GestureDirection::DOWN;
+      } else if (direction == GestureDirection::RIGHT) {
+        rotatedDirection = GestureDirection::UP;
+      }
+      break;
+    case RR_Rotate_0:
+    default:
+      break;
+  }
+
+  return rotatedDirection;
+}
+
 template <typename T>
 std::vector<T> X11::getDeviceProperty(int deviceId, const std::string &atomName,
                                       Atom atomType) const {

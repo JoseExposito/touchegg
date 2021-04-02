@@ -36,6 +36,10 @@ enum class GestureDirection {
 
   // Adding a new GestureDirection? Don't forget to add it in
   // gestureDirectionToStr and gestureDirectionFromStr as well
+  UP_LEFT = 7,
+  UP_RIGHT = 8,
+  DOWN_LEFT = 9,
+  DOWN_RIGHT = 10
 };
 
 inline std::string gestureDirectionToStr(GestureDirection gestureDirection) {
@@ -52,6 +56,14 @@ inline std::string gestureDirectionToStr(GestureDirection gestureDirection) {
       return "IN";
     case GestureDirection::OUT:
       return "OUT";
+    case GestureDirection::UP_LEFT:
+      return "UP_LEFT";
+    case GestureDirection::UP_RIGHT:
+      return "UP_RIGHT";
+    case GestureDirection::DOWN_LEFT:
+      return "DOWN_LEFT";
+    case GestureDirection::DOWN_RIGHT:
+      return "DOWN_RIGHT";
     default:
       return "UNKNOWN";
   }

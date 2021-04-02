@@ -17,6 +17,7 @@
  */
 #include "gesture-gatherer/libinput-handler.h"
 
+#include <iostream>
 #include <algorithm>
 #include <chrono>  // NOLINT
 
@@ -51,6 +52,13 @@ uint64_t LininputHandler::calculateElapsedTime(uint64_t startTimestamp) {
 
 GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
                                                           double deltaY) {
+
+  if (std::abs(std::abs(deltaX) - std::abs(deltaY)) < 50.0) {
+    if (deltaY > 0) {
+      return (deltaX > 0) ? GestureDirection::DOWN_RIGHT : GestureDirection::DOWN_LEFT;
+    }
+    return (deltaX > 0) ? GestureDirection::UP_RIGHT : GestureDirection::UP_LEFT;
+  }
   if (std::abs(deltaX) > std::abs(deltaY)) {
     return (deltaX > 0) ? GestureDirection::RIGHT : GestureDirection::LEFT;
   }

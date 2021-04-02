@@ -2,6 +2,7 @@
 build/
 .cache/
 installation/touchegg.service
+touchegg
 
 # CMake
 CMakeLists.txt.user

@@ -51,13 +51,14 @@ uint64_t LininputHandler::calculateElapsedTime(uint64_t startTimestamp) {
 
 GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
                                                           double deltaY) {
-
   const double MAGIC = 50.0;
   if (std::abs(std::abs(deltaX) - std::abs(deltaY)) < MAGIC) {
     if (deltaY > 0) {
-      return (deltaX > 0) ? GestureDirection::DOWN_RIGHT : GestureDirection::DOWN_LEFT;
+      return (deltaX > 0) ? GestureDirection::DOWN_RIGHT
+                          : GestureDirection::DOWN_LEFT;
     }
-    return (deltaX > 0) ? GestureDirection::UP_RIGHT : GestureDirection::UP_LEFT;
+    return (deltaX > 0) ? GestureDirection::UP_RIGHT
+                        : GestureDirection::UP_LEFT;
   }
 
   if (std::abs(deltaX) > std::abs(deltaY)) {

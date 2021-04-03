@@ -1,14 +1,10 @@
 # Build folder
 build/
-.cache/
 installation/touchegg.service
-touchegg
 
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
-CPackConfig.cmake
-CPackSourceConfig.cmake
 CMakeFiles
 CMakeScripts
 Testing

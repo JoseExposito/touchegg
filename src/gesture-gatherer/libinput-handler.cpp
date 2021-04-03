@@ -17,7 +17,6 @@
  */
 #include "gesture-gatherer/libinput-handler.h"
 
-#include <iostream>
 #include <algorithm>
 #include <chrono>  // NOLINT
 

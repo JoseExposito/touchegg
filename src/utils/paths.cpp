@@ -23,11 +23,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <cstring>
 #include <stdexcept>
 
 std::filesystem::path Paths::getHomePath() {
   // $HOME should be checked first
-  const char *homeEnvVar = getenv("HOME");
+  const char *homeEnvVar = getenv("XDG_CONFIG_HOME");
+
   if (homeEnvVar != nullptr) {
     return std::filesystem::path{homeEnvVar};
   }
@@ -41,20 +43,20 @@ std::filesystem::path Paths::getHomePath() {
         "https://github.com/JoseExposito/touchegg/issues"};
   }
 
-  const char *workingDir = userInfo->pw_dir;
-  if (workingDir == nullptr) {
+  std::filesystem::path workingDir = std::filesystem::path{userInfo->pw_dir};
+  if (!std::filesystem::exists(workingDir)) {
     throw std::runtime_error{
         "Error getting your home directory path (pw_dir).\n"
         "Please file a bug report at "
         "https://github.com/JoseExposito/touchegg/issues"};
   }
 
-  return std::filesystem::path{workingDir};
+  return std::filesystem::path{workingDir / ".config"};
 }
 
 std::filesystem::path Paths::getUserConfigDirPath() {
   std::filesystem::path homePath = Paths::getHomePath();
-  return std::filesystem::path{homePath / ".config" / "touchegg"};
+  return std::filesystem::path{homePath / "touchegg"};
 }
 
 std::filesystem::path Paths::getUserConfigFilePath() {
@@ -68,6 +70,23 @@ std::filesystem::path Paths::getUserLockFilePath() {
 }
 
 std::filesystem::path Paths::getSystemConfigFilePath() {
+  char *xdgConfigDirs = getenv("XDG_CONFIG_DIRS");
+
+  if (xdgConfigDirs != nullptr) {
+    char *rest = nullptr;
+    char *configDir = strtok_r(xdgConfigDirs, ":", &rest);
+
+    while (configDir != nullptr) {
+      std::filesystem::path configPath = std::filesystem::path{configDir};
+      configPath =
+          std::filesystem::path{configPath / "touchegg" / "touchegg.conf"};
+
+      if (std::filesystem::exists(configPath)) {
+        return configPath;
+      }
+      configDir = strtok_r(nullptr, ":", &rest);
+    }
+  }
   return std::filesystem::path{SYSTEM_CONFIG_FILE_PATH};
 }
 

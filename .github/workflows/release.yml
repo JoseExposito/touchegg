@@ -84,7 +84,7 @@ jobs:
 
       - name: Build RPM package
         run: |
-          rpmbuild -ba ${{ github.workspace }}/${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
+          rpmbuild -ba ${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
 
       - name: Upload RPM package
         uses: "actions/upload-artifact@v2"

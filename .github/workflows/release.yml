@@ -73,11 +73,11 @@ jobs:
 
       - name: Create rpmbuild directories
         run: |
-          mkdir -p /github/home/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
       - name: Generate tarball
         run: |
-          tar -czvf /github/home/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
+          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
 
       - name: Build RPM package
         run: |
@@ -87,7 +87,7 @@ jobs:
         uses: "actions/upload-artifact@v2"
         with:
           name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-          path: "/github/home/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   create-release:
     runs-on: ubuntu-20.04

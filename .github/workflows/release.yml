@@ -58,7 +58,7 @@ jobs:
   rpm-package:
     runs-on: ubuntu-20.04
     container:
-      image: fedora:33
+      image: fedora:29
     steps:
       - name: Install dependencies
         run: |

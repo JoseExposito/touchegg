@@ -23,11 +23,13 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 %build
 %cmake
-%cmake_build
+# cmake_build is not available in old versions of Fedora
+%make_build
 
 
 %install
-%cmake_install
+# cmake_install is not available in old versions of Fedora
+%make_install
 
 
 %check

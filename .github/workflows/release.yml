@@ -57,6 +57,8 @@ jobs:
 
   rpm-package:
     runs-on: ubuntu-20.04
+    container:
+      image: fedora:28
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -68,8 +70,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt build-dep -y ${{ github.workspace }}/${{ env.GITHUB_REPOSITORY_NAME }}
+          sudo dnf groupinstall "Development Tools"
+          sudo dnf install gcc cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
 
       - name: Create rpmbuild directories
         run: |

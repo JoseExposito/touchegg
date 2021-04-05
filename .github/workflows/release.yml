@@ -69,7 +69,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt build-dep -y .
+          sudo apt build-dep -y ${{ github.workspace }}/${{ env.GITHUB_REPOSITORY_NAME }}
 
       - name: Create rpmbuild directories
         run: |

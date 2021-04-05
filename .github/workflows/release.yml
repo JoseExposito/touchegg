@@ -63,8 +63,8 @@ jobs:
       - name: Install dependencies
         run: |
           su
-          dnf groupinstall "Development Tools"
-          dnf install gcc cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
+          dnf groupinstall -y "Development Tools"
+          dnf install -y gcc cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
 
       # - name: GitHub Environment Variables Action
       #   uses: FranzDiebold/github-env-vars-action@v1.2.1

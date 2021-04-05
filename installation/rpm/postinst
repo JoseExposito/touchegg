@@ -1,6 +1,0 @@
-if [ "$1" -ge 1 ]; then
-  systemctl daemon-reload
-  systemctl reenable touchegg
-  systemctl stop touchegg
-  systemctl start touchegg
-fi

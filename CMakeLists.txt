@@ -67,8 +67,6 @@ endif()
 
 # Installation
 # https://cmake.org/cmake/help/v3.4/module/GNUInstallDirs.html
-# https://cmake.org/cmake/help/v3.12/module/CPack.html
-# https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   set(CMAKE_INSTALL_PREFIX "/usr")
 endif()
@@ -86,42 +84,3 @@ install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMA
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
-
-set(CPACK_PACKAGE_NAME touchegg)
-set(CPACK_PACKAGE_VERSION_MAJOR "${MAJOR_VERSION}")
-set(CPACK_PACKAGE_VERSION_MINOR "${MINOR_VERSION}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PATCH_VERSION}")
-set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/JoseExposito/touchegg")
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
-set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Multi-touch gesture recognizer")
-set(CPACK_PACKAGE_DESCRIPTION "Multi-touch gesture recognizer.
- Touchégg is an app that runs in the background and transform the gestures you make in your touchpad into visible actions in your desktop.
- For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to switch to the next desktop.")
-
-# RPM package
-# Run: $ cpack -G RPM
-set(CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_HOMEPAGE_URL}")
-set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
-set(CPACK_RPM_PACKAGE_LICENSE GPLv3+)
-set(CPACK_RPM_PACKAGE_AUTOREQ 1)
-set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
-set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${PROJECT_SOURCE_DIR}/installation/rpm/postinst")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_PREFIX}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_BINDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_DATAROOTDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg/autostart")
-
-# Exclude the systemd service dir (usually /lib/systemd/system). Split the path and exclude each subpath.
-# Equivalent to exclude /lib, /lib/systemd and /lib/systemd/system:
-string(REPLACE "/" ";" SYSTEMD_SERVICE_DIRS ${SYSTEMD_SERVICE_DIR})
-set(EXCLUDE_DIR "")
-foreach(DIR ${SYSTEMD_SERVICE_DIRS})
-  set(EXCLUDE_DIR "${EXCLUDE_DIR}/${DIR}")
-  list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${EXCLUDE_DIR})
-endforeach()
-
-include(CPack)

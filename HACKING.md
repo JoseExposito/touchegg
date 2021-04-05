@@ -9,8 +9,8 @@ $ sudo apt-get install git build-essential gdb cmake debhelper \
   libgtk-3-dev # GTK is optional, see "Compilation flags"
 
 # Red Hat, Fedora, CentOS and derivatives:
-$ sudo yum groupinstall "Development Tools"
-$ sudo yum install git gcc g++ gdb cmake \
+$ sudo dnf groupinstall "Development Tools"
+$ sudo dnf install git gcc g++ gdb cmake rpm-build \
   libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel \
   gtk3-devel # GTK is optional, see "Compilation flags"
 ```
@@ -37,7 +37,7 @@ $ sudo systemctl daemon-reload && sudo systemctl restart touchegg # Start the da
 $ touchegg # Run Touchégg
 ```
 
-In addition, you can generate a Debian package and install it:
+In addition, you can generate a Debian package and install it: (from the cloned `touchegg` folder)
 
 ```bash
 $ dpkg-buildpackage -rfakeroot -us -uc -tc
@@ -45,13 +45,13 @@ $ sudo apt install ../touchegg_*.deb # Install the package
 $ touchegg # Run Touchégg
 ```
 
-Or a rpm package:
+Or a rpm package: (from the cloned `touchegg` folder)
 
 ```bash
-$ cd build
-$ cpack -G RPM
-$ sudo yum localinstall touchegg-*.rpm # Install the package
-$ touchegg # Run Touchégg
+$ mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+$ tar -czvf ~/rpmbuild/SOURCES/touchegg.tar.gz -C .. touchegg
+$ rpmbuild -ba rpm/touchegg.spec
+$ sudo dnf install ~/rpmbuild/RPMS/x86_64/touchegg-?.?.?-?.x86_64.rpm
 ```
 
 # Compilation flags

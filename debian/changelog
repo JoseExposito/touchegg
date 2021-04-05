@@ -1,3 +1,9 @@
+touchegg (2.0.9) focal; urgency=medium
+
+  * Use screen rotation to calculate touchscreen gestures direction
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 05 Apr 2021 12:00:00 +0100
+
 touchegg (2.0.8) focal; urgency=medium
 
   * Added daily and stable PPA builds

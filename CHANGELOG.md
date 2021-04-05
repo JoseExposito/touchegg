@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.9 - 2021-04-05
+
+New:
+
+  - Use screen rotation to calculate touchscreen gestures direction
+
+    https://github.com/JoseExposito/touchegg/issues/459
+
+
 ## 2.0.8 - 2021-02-24
 
 New:

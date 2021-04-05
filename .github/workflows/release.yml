@@ -60,13 +60,13 @@ jobs:
     container:
       image: fedora:28
     steps:
-      - name: GitHub Environment Variables Action
-        uses: FranzDiebold/github-env-vars-action@v1.2.1
+      # - name: GitHub Environment Variables Action
+      #   uses: FranzDiebold/github-env-vars-action@v1.2.1
 
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
-      #   with:
-      #     path: ${{ env.GITHUB_REPOSITORY_NAME }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: ${{ env.GITHUB_REPOSITORY_NAME }}
 
       - name: Install dependencies
         run: |

@@ -55,10 +55,43 @@ jobs:
           name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
           path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
 
+  rpm-package:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: ${{ env.GITHUB_REPOSITORY_NAME }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt build-dep -y .
+
+      - name: Create rpmbuild directories
+        run: |
+          mkdir -p /github/home/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+
+      - name: Generate tarball
+        run: |
+          tar -czvf /github/home/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
+
+      - name: Build RPM package
+        run: |
+          rpmbuild -ba ${{ github.workspace }}/${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
+
+      - name: Upload RPM package
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          path: "/github/home/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   create-release:
     runs-on: ubuntu-20.04
-    needs: [ deb-package ]
+    needs: [ deb-package, rpm-package ]
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -108,3 +141,13 @@ jobs:
           asset_path: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb"
           asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb"
           asset_content_type: application/vnd.debian.binary-package
+
+      - name: Upload RPM package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_content_type: application/octet-stream

@@ -90,7 +90,7 @@ Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the rpm package is placed at
-$ sudo yum localinstall touchegg-*.rpm # Install the package
+$ sudo dnf install touchegg-*.rpm # Install the package
 ```
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.

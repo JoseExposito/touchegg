@@ -26,6 +26,8 @@
 
 #include "actions/action-direction.h"
 #include "gesture/device-type.h"
+#include "gesture/gesture-direction.h"
+#include "gesture/gesture-type.h"
 #include "utils/rectangle.h"
 #include "window-system/cairo-surface.h"
 
@@ -169,6 +171,20 @@ class WindowSystem {
    * @returns If natural scroll is enabled in the current window system.
    */
   virtual bool isNaturalScrollEnabled(DeviceType deviceType) const = 0;
+
+  /**
+   * When a touchscreen is rotated, the gesture direction sent by the daemon
+   * doesn't apply the rotation because it doesn't know which backend is used
+   * and also because libinput only stores rotation information for trackpoints:
+   *
+   * "This is currently only available on trackpoints [...]"
+   * https://wayland.freedesktop.org/libinput/doc/latest/configuration.html#rotation
+   *
+   * @returns The direction after applying touchscreen rotation.
+   */
+  virtual GestureDirection calculateRotation(
+      GestureType gestureType, DeviceType deviceType,
+      GestureDirection direction) const = 0;
 };
 
 #endif  // WINDOW_SYSTEM_WINDOW_SYSTEM_H_

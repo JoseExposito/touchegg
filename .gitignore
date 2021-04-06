@@ -1,5 +1,6 @@
 # Build folder
 build/
+installation/touchegg.service
 
 # CMake
 CMakeLists.txt.user

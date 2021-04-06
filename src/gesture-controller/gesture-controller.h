@@ -60,6 +60,12 @@ class GestureController : public GestureControllerDelegate {
   bool executeAction = false;
 
   /**
+   * If the screen is rotated, this values is set on gesture begin to match the
+   * screen rotation.
+   */
+  GestureDirection rotatedDirection = GestureDirection::UNKNOWN;
+
+  /**
    * @returns The action associated to a gesture or nullptr.
    */
   std::unique_ptr<Action> getActionForGesture(const Gesture &gesture,

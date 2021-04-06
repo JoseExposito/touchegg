@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(touchegg)
 set(MAJOR_VERSION "2")
 set(MINOR_VERSION "0")
-set(PATCH_VERSION "8")
+set(PATCH_VERSION "9")
 add_definitions(-D_VERSION="v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -67,44 +67,20 @@ endif()
 
 # Installation
 # https://cmake.org/cmake/help/v3.4/module/GNUInstallDirs.html
-# https://cmake.org/cmake/help/v3.12/module/CPack.html
-# https://cmake.org/cmake/help/v3.7/module/CPackRPM.html
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+  set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
+
 include(GNUInstallDirs)
-set(CMAKE_INSTALL_PREFIX "/usr")
+
+set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
+target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CONFIG_FILE_PATH}\")
+
+# configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
+configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
+pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
+
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION /lib/systemd/system)
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION /etc/xdg/autostart)
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
+install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
-
-set(CPACK_PACKAGE_NAME touchegg)
-set(CPACK_PACKAGE_VERSION_MAJOR "${MAJOR_VERSION}")
-set(CPACK_PACKAGE_VERSION_MINOR "${MINOR_VERSION}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PATCH_VERSION}")
-set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/JoseExposito/touchegg")
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
-set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Multi-touch gesture recognizer")
-set(CPACK_PACKAGE_DESCRIPTION "Multi-touch gesture recognizer.
- Touchégg is an app that runs in the background and transform the gestures you make in your touchpad into visible actions in your desktop.
- For example, you can swipe up with 3 fingers to maximize a window or swipe left with 4 finger to switch to the next desktop.")
-
-# RPM package
-# Run: $ cpack -G RPM
-set(CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_HOMEPAGE_URL}")
-set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
-set(CPACK_RPM_PACKAGE_LICENSE GPLv3+)
-set(CPACK_RPM_PACKAGE_AUTOREQ 1)
-set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
-set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${PROJECT_SOURCE_DIR}/installation/rpm/postinst")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_PREFIX}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_BINDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CMAKE_INSTALL_DATAROOTDIR}")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/lib/systemd/system")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/etc/xdg/autostart")
-
-include(CPack)

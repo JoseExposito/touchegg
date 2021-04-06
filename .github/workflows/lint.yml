@@ -1,0 +1,25 @@
+# Compile and run clang-format, clang-tidy and cpplint.py on every commit
+
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt build-dep -y .
+          sudo apt install -y clang clang-format clang-tidy python2
+
+      - name: Compile
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Debug ..
+          make

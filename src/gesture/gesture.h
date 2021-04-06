@@ -71,6 +71,14 @@ class Gesture {
    */
   uint64_t elapsedTime() const { return this->gestureElapsedTime; }
 
+  /**
+   * Set the gesture direction.
+   * @see GestureDirection
+   */
+  void setDirection(GestureDirection direction) {
+    this->gestureDirection = direction;
+  }
+
  protected:
   GestureType gestureType = GestureType::NOT_SUPPORTED;
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;

@@ -57,7 +57,7 @@ jobs:
 
   rpm-package:
     runs-on: ubuntu-20.04
-    container: registry.redhat.io/rhel8/gcc-toolset-10-toolchain
+    container: almalinux:8
     steps:
       - name: Install dependencies
         run: |

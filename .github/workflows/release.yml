@@ -95,43 +95,6 @@ jobs:
           name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
-  # rpm-package:
-  #   runs-on: ubuntu-20.04
-  #   container:
-  #     image: fedora:32
-  #   steps:
-  #     - name: Install dependencies
-  #       run: |
-  #         su
-  #         dnf groupinstall -y "Development Tools"
-  #         dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
-
-  #     - name: GitHub Environment Variables Action
-  #       uses: FranzDiebold/github-env-vars-action@v1.2.1
-
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #       with:
-  #         path: ${{ env.GITHUB_REPOSITORY_NAME }}
-
-  #     - name: Create rpmbuild directories
-  #       run: |
-  #         mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-
-  #     - name: Generate tarball
-  #       run: |
-  #         tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
-
-  #     - name: Build RPM package
-  #       run: |
-  #         rpmbuild -ba ${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
-
-  #     - name: Upload RPM package
-  #       uses: "actions/upload-artifact@v2"
-  #       with:
-  #         name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-  #         path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-
   create-release:
     runs-on: ubuntu-20.04
     needs: [ deb-package, rpm-package ]

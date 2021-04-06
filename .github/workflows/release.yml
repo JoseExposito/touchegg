@@ -57,7 +57,8 @@ jobs:
 
   rpm-package:
     runs-on: ubuntu-20.04
-    container: almalinux:8
+    container:
+      image: almalinux:8
     steps:
       - name: Install dependencies
         run: |

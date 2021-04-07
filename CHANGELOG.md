@@ -8,6 +8,12 @@ New:
 
     https://github.com/JoseExposito/touchegg/issues/459
 
+Improvements:
+
+  - Build the RPM package as part of the CI process improving its compatibility
+
+    https://github.com/JoseExposito/touchegg/issues/475
+
 
 ## 2.0.8 - 2021-02-24
 

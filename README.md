@@ -39,7 +39,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Available actions](#available-actions)
       * [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window)
       * [Minimize a window](#minimize-a-window-minimize_window)
-      * [Tile/snap a widow](#tilesnap-a-widow-tile_window)
+      * [Tile/snap a window](#tilesnap-a-window-tile_window)
       * [Fullscreen a window](#fullscreen-a-window-fullscreen_window)
       * [Close a window](#close-a-window-close_window)
       * [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop)
@@ -286,7 +286,7 @@ Example:
 
 ![Animation](.github/images/MINIMIZE_WINDOW.gif)
 
-### Tile/snap a widow (TILE_WINDOW)
+### Tile/snap a window (TILE_WINDOW)
 
 Resize and move the window under the pointer to use half of the screen.
 

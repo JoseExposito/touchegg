@@ -76,11 +76,16 @@ include(GNUInstallDirs)
 set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
 target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CONFIG_FILE_PATH}\")
 
-# configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
-configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
-pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
-
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
+
+if(NOT DEFINED USE_SYSTEMD OR USE_SYSTEMD)
+  # configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
+  configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
+  pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
+
+  install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
+else()
+  message(WARNING "USE_SYSTEMD OFF: Systemd related file will NOT be installed")
+endif()

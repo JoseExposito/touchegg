@@ -108,6 +108,8 @@ $ sudo systemctl start touchegg
 
 Once the service is enabled, run Touchégg manually by running the command `touchegg` or reboot to get started.
 
+A version for Arch based distributions without systemd support, like Artix, is also available on [AUR](https://aur.archlinux.org/packages/touchegg-nosystemd/)
+
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:

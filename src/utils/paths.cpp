@@ -57,12 +57,12 @@ std::filesystem::path Paths::getUserConfigDirPath() {
   // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
   const char *xdgConfigHomeEnvVar = getenv("XDG_CONFIG_HOME");
 
-  if (xdgConfigHomeEnvVar != nullptr) {
-    return std::filesystem::path{xdgConfigHomeEnvVar} / "touchegg";
-  }
+  std::filesystem::path configPath =
+      (xdgConfigHomeEnvVar != nullptr)
+          ? std::filesystem::path{xdgConfigHomeEnvVar}
+          : Paths::getHomePath() / ".config";
 
-  std::filesystem::path homePath = Paths::getHomePath();
-  return std::filesystem::path{homePath / ".config" / "touchegg"};
+  return configPath / "touchegg";
 }
 
 std::filesystem::path Paths::getUserConfigFilePath() {

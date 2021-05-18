@@ -26,28 +26,29 @@ ChangeDesktopAnimation::ChangeDesktopAnimation(
     Color borderColor, ActionDirection animationPosition)
     : Animation(windowSystem, window), color(color), borderColor(borderColor) {
   Rectangle workarea = this->windowSystem.getDesktopWorkarea();
-  maxSize.height = (workarea.height / 7);
-  maxSize.width = maxSize.height;
+
+  maxSize.height = workarea.height;
+  maxSize.width = workarea.width;
 
   switch (animationPosition) {
     case ActionDirection::UP:
-      maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
+      maxSize.x = workarea.x;
       maxSize.y = workarea.y;
       this->angle = M_PI + (M_PI / 2);
       break;
     case ActionDirection::DOWN:
-      maxSize.x = workarea.x + (workarea.width / 2) - (maxSize.width / 2);
-      maxSize.y = workarea.y + workarea.height - maxSize.height;
+      maxSize.x = workarea.x;
+      maxSize.y = workarea.y;
       this->angle = M_PI / 2;
       break;
     case ActionDirection::LEFT:
       maxSize.x = workarea.x;
-      maxSize.y = workarea.y + (maxSize.height * 3);
+      maxSize.y = workarea.y;
       this->angle = M_PI;
       break;
     default:
-      maxSize.x = (workarea.x + workarea.width - maxSize.width);
-      maxSize.y = workarea.y + (maxSize.height * 3);
+      maxSize.x = workarea.x;
+      maxSize.y = workarea.y;
       this->angle = 0;
       break;
   }
@@ -61,51 +62,17 @@ void ChangeDesktopAnimation::render(double percentage) {
   cairo_set_operator(ctx, CAIRO_OPERATOR_SOURCE);
   cairo_paint(ctx);
 
-  // Draw the semi-circle background
-  double xCenter = (maxSize.x + (maxSize.width / 2)) +
-                   ((maxSize.width / 2) * std::cos(this->angle));
-  double yCenter = (maxSize.y + (maxSize.height / 2)) +
-                   ((maxSize.height / 2) * std::sin(this->angle));
-  double radius = Animation::value(0, (maxSize.width / 2), percentage);
-  double angleStart = std::fmod(this->angle + 90 * (M_PI / 180), (2 * M_PI));
-  double angleEnd = std::fmod(this->angle + 270 * (M_PI / 180), (2 * M_PI));
   double alpha = Animation::value(0, Animation::MAX_ALPHA, percentage);
+  double width = Animation::value(maxSize.width, 0, percentage);
 
-  cairo_set_line_width(ctx, 2);
-  cairo_set_source_rgba(ctx, borderColor.r(), borderColor.g(), borderColor.b(),
-                        alpha);
-  cairo_arc(ctx, xCenter, yCenter, radius, angleStart, angleEnd);
+  // Draw the desktop indicator
+  cairo_rectangle(ctx, maxSize.x + width - width * std::cos(this->angle) * -1,
+                  maxSize.y, maxSize.width - width, maxSize.height);
+
   cairo_stroke_preserve(ctx);
 
   cairo_set_source_rgba(ctx, color.r(), color.g(), color.b(), alpha);
   cairo_fill(ctx);
-
-  // Draw the arrow
-  double arrowHeadAngle = (M_PI / 4);
-  double arrowLength = (radius / 2);
-  double arrowHeadLength = (radius / 3);
-
-  double x1 = (maxSize.x + (maxSize.width / 2)) +
-              ((arrowLength / 2) * std::cos(this->angle));
-  double y1 = (maxSize.y + (maxSize.height / 2)) +
-              ((arrowLength / 2) * std::sin(this->angle));
-  double x2 = arrowLength * std::cos(this->angle);
-  double y2 = arrowLength * std::sin(this->angle);
-  double x3 = -arrowHeadLength * std::cos(this->angle - arrowHeadAngle);
-  double y3 = -arrowHeadLength * std::sin(this->angle - arrowHeadAngle);
-  double x4 = arrowHeadLength * std::cos(this->angle - arrowHeadAngle);
-  double y4 = arrowHeadLength * std::sin(this->angle - arrowHeadAngle);
-  double x5 = -arrowHeadLength * std::cos(this->angle + arrowHeadAngle);
-  double y5 = -arrowHeadLength * std::sin(this->angle + arrowHeadAngle);
-
-  cairo_set_line_width(ctx, (radius / 10));
-  cairo_set_source_rgba(ctx, 0, 0, 0, 0);
-  cairo_move_to(ctx, x1, y1);
-  cairo_rel_line_to(ctx, x2, y2);
-  cairo_rel_move_to(ctx, x3, y3);
-  cairo_rel_line_to(ctx, x4, y4);
-  cairo_rel_line_to(ctx, x5, y5);
-  cairo_stroke(ctx);
 
   this->cairoSurface->flush();
 }

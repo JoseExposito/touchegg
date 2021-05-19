@@ -34,14 +34,20 @@ Script::Script(const std::string& path) : lib(dlopen(path.c_str(), RTLD_NOW)) {
 }
 
 void Script::gesture_start(std::unordered_map<std::string, std::string> settings, const Config &config) {
-  this->gesture_start_fn(std::move(settings), config);
+  if (this->gesture_start_fn != nullptr) {
+    this->gesture_start_fn(std::move(settings), config);
+  }
 }
 
 void Script::animate(double percentage) {
-  this->animate_fn(percentage);
+  if (this->animate_fn != nullptr) {
+    this->animate_fn(percentage);
+  }
 }
 
 void Script::gesture_end(ActionDirection direction) {
-  this->gesture_end_fn(direction);
+  if (this->gesture_end_fn != nullptr) {
+    this->gesture_end_fn(direction);
+  }
   dlclose(this->lib);
 }

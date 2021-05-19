@@ -6,6 +6,8 @@ extension interfaces with the Touchégg core through three main functions, of wh
 
 ## API
 
+All functions below must be wrapped in an `extern "C"` clause, otherwise Touchégg won't find the correct functions.
+
 ### `void gesture_start()`
 
 Once the user initiates the gesture, this function will be called. It indicates the beginning of the gesture, and can be

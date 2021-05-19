@@ -21,9 +21,14 @@
 
 #include <config/config.h>
 
+#include <functional>
 #include <string>
 
 #include "action-direction.h"
+
+using GestureStart = void (*)(std::unordered_map<std::string, std::string>, const Config &);
+using Animate = void (*)(double);
+using GestureEnd = void (*)(ActionDirection);
 
 class Script {
  public:
@@ -33,12 +38,22 @@ class Script {
    */
   explicit Script(const std::string& path);
   virtual ~Script() = default;
-  void CallGestureStartFn(std::unordered_map<std::string, std::string> settings,
-                          const Config &config);
-  void CallAnimateFn(double percentage);
-  void CallGestureEndFn(ActionDirection direction);
 
-  static Script loadScript(const std::string& path);
+  void gesture_start(std::unordered_map<std::string, std::string>, const Config &);
+  void animate(double percentage);
+  void gesture_end(ActionDirection);
+
+ private:
+  void* lib;
+
+  GestureStart gesture_start_fn;
+  Animate animate_fn;
+  GestureEnd gesture_end_fn;
+
+//    void gesture_start(std::unordered_map<std::string, std::string> settings,
+//                            const Config &config);
+//    void animate(double percentage);
+//    void gesture_end(ActionDirection direction);
 };
 
 #endif  // ACTIONS_SCRIPT_H

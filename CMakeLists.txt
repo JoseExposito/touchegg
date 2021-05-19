@@ -44,6 +44,7 @@ target_include_directories(touchegg PUBLIC
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
   Threads::Threads # std::thread
+  dl
   ${LIBUDEV_LIBRARIES}
   ${LIBINPUT_LIBRARIES}
   ${PUGIXML_LIBRARIES}

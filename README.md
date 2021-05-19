@@ -593,6 +593,31 @@ Example:
 ```
 
 
+### Custom (CUSTOM)
+
+Offload gesture handle to an external script.
+
+Options:
+
+| Option | Value | Description |
+| - | - | - |
+| animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
+| script | Path to a lib*.so | Points to the extension file |
+
+> See the [extensions guide](./extensions.md) on writing your own.
+
+Example:
+
+```xml
+<gesture type="TAP" fingers="2">
+  <action type="CUSTOM">
+    <animate>true</animate>
+    <script>~/.config/touchegg/libexample.so</script>
+  </action>
+</gesture>
+```
+
+
 ## Daemon configuration
 
 This is an advanced topic and my recommendation is to ignore it.

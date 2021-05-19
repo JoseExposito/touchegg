@@ -29,7 +29,9 @@ void CustomAction::onGestureBegin(const Gesture& gesture) {
   }
 
   if (this->settings.count("script") == 1) {
-    this->script = Script::loadScript(this->settings.at("script"));
+    Script src(this->settings.at("script"));
+//    Script src("/usr/lib/x86_64-linux-gnu/libm.so.6");
+    this->script = src;
   }
 
   if (this->animate) {
@@ -67,7 +69,7 @@ void CustomAction::onGestureBegin(const Gesture& gesture) {
         animationPosition);
 
     if (this->script) {
-      this->script->CallGestureStartFn(this->settings, this->config);
+      this->script->gesture_start(this->settings, this->config);
     }
   }
 }
@@ -77,7 +79,7 @@ void CustomAction::executeAction(const Gesture& gesture) {
                                         ? this->getActionAutoDirection(gesture)
                                         : this->direction;
 
-  this->script->CallGestureEndFn(actionDirection);
+  this->script->gesture_end(actionDirection);
 }
 
 ActionDirection CustomAction::getAnimationAutoDirection(

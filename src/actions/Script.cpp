@@ -18,30 +18,30 @@
 
 #include "Script.h"
 
+#include <dlfcn.h>
+
 #include <iostream>
 #include <utility>
 
-Script::Script(const std::string& path) {
-  std::cout << "Initialising script from " << path << std::endl;
+Script::Script(const std::string& path) : lib(dlopen(path.c_str(), RTLD_NOW)) {
+  if (lib == nullptr) {
+    throw std::invalid_argument("Unable to locate script.");
+  }
+
+  this->gesture_start_fn = *(GestureStart)(dlsym(lib, "gesture_start"));
+  this->animate_fn = *(Animate)(dlsym(lib, "animate"));
+  this->gesture_end_fn = *(GestureEnd)(dlsym(lib, "gesture_end"));
 }
 
-void Script::CallGestureStartFn(
-    std::unordered_map<std::string, std::string> settings,
-    const Config &config) {
-
-  std::cout << "Calling Script" << std::endl;
+void Script::gesture_start(std::unordered_map<std::string, std::string> settings, const Config &config) {
+  this->gesture_start_fn(std::move(settings), config);
 }
 
-void Script::CallAnimateFn(double percentage) {
-  std::cout << "Animating - " << percentage * 100 << "%" << std::endl;
+void Script::animate(double percentage) {
+  this->animate_fn(percentage);
 }
 
-void Script::CallGestureEndFn(ActionDirection direction) {
-  std::cout << "End Gesture" << std::endl;
-}
-
-Script Script::loadScript(const std::string& path) {
-  Script src(path);
-
-  return src;
+void Script::gesture_end(ActionDirection direction) {
+  this->gesture_end_fn(direction);
+  dlclose(this->lib);
 }

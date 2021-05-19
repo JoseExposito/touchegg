@@ -30,7 +30,6 @@ void CustomAction::onGestureBegin(const Gesture& gesture) {
 
   if (this->settings.count("script") == 1) {
     Script src(this->settings.at("script"));
-//    Script src("/usr/lib/x86_64-linux-gnu/libm.so.6");
     this->script = src;
   }
 
@@ -66,7 +65,7 @@ void CustomAction::onGestureBegin(const Gesture& gesture) {
 
     this->animation = std::make_unique<CustomActionAnimation>(
         this->windowSystem, this->window, this->color, this->borderColor,
-        animationPosition);
+        animationPosition, this->script);
 
     if (this->script) {
       this->script->gesture_start(this->settings, this->config);

@@ -32,8 +32,9 @@ class CustomActionAnimation : public Animation {
   using Animation::Animation;
   CustomActionAnimation(const WindowSystem &windowSystem,
                          const WindowT &window, Color color, Color borderColor,
-                         ActionDirection animationPosition);
+                         ActionDirection animationPosition, std::optional<Script> script);
   void render(double percentage) override;
+  std::optional<Script> script = script;
 
  private:
   Rectangle maxSize;

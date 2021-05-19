@@ -24,9 +24,12 @@
 CustomActionAnimation::CustomActionAnimation(const WindowSystem &windowSystem,
                                              const WindowT &window, Color color,
                                              Color borderColor,
-                                             ActionDirection animationPosition)
+                                             ActionDirection animationPosition,
+                                             std::optional<Script> script)
     : Animation(windowSystem, window), color(color), borderColor(borderColor) {
   Rectangle workarea = this->windowSystem.getDesktopWorkarea();
+
+  this->script = std::move(script);
 
   maxSize.height = workarea.height;
   maxSize.width = workarea.width;
@@ -57,6 +60,10 @@ void CustomActionAnimation::render(double percentage) {
   cairo_set_source_rgba(ctx, 0, 0, 0, 0);
   cairo_set_operator(ctx, CAIRO_OPERATOR_SOURCE);
   cairo_paint(ctx);
+
+    if (this->script) {
+      this->script->animate(percentage);
+    }
 
   this->cairoSurface->flush();
 }

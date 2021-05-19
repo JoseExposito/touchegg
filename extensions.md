@@ -18,7 +18,7 @@ used to initiate or launch certain tasks or activities.
 This function is called when ever the user updates the gesture, for instance in a swiping gesture, the fingers have been
 moved, but not yet lifted.
 
-`double percentage` A 0-1 value representing the level of completion of the gesture. Calculated as an offset from the
+`double percentage` A 0-100 value representing the level of completion of the gesture. Calculated as an offset from the
 origin.
 
 ### void `gesture_end()`

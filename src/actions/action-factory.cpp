@@ -30,6 +30,7 @@
 #include "actions/send-keys.h"
 #include "actions/show-desktop.h"
 #include "actions/tile-window.h"
+#include "actions/custom-action.h"
 
 std::unique_ptr<Action> ActionFactory::buildAction(
     ActionType type, std::unordered_map<std::string, std::string> settings,
@@ -65,6 +66,9 @@ std::unique_ptr<Action> ActionFactory::buildAction(
                                           window, config);
     case ActionType::MOUSE_CLICK:
       return std::make_unique<MouseClick>(std::move(settings), windowSystem,
+                                          window, config);
+    case ActionType::CUSTOM:
+      return std::make_unique<CustomAction>(std::move(settings), windowSystem,
                                           window, config);
     default:
       return nullptr;

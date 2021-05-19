@@ -29,7 +29,7 @@ find_package(GLIB REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 
-add_executable(touchegg ${SOURCE_FILES})
+add_executable(touchegg ${SOURCE_FILES} src/actions/Script.h src/actions/Script.cpp src/actions/Script.h)
 target_include_directories(touchegg PUBLIC
   ${LIBUDEV_INCLUDE_DIRS}
   ${LIBINPUT_INCLUDE_DIRS}

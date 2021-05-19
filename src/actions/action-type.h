@@ -32,6 +32,8 @@ enum class ActionType {
   SEND_KEYS,
   RUN_COMMAND,
   MOUSE_CLICK,
+
+  CUSTOM
   // Adding a new action? Don't forget to add it in actionTypeToStr,
   // actionTypeFromStr and ActionFactory::buildAction
 };
@@ -58,6 +60,8 @@ inline std::string actionTypeToStr(ActionType actionType) {
       return "RUN_COMMAND";
     case ActionType::MOUSE_CLICK:
       return "MOUSE_CLICK";
+    case ActionType::CUSTOM:
+      return "CUSTOM";
     default:
       return "NOT_SUPPORTED";
   }
@@ -93,6 +97,9 @@ inline ActionType actionTypeFromStr(const std::string &str) {
   }
   if (str == "MOUSE_CLICK") {
     return ActionType::MOUSE_CLICK;
+  }
+  if (str == "CUSTOM") {
+    return ActionType::CUSTOM;
   }
   return ActionType::NOT_SUPPORTED;
 }

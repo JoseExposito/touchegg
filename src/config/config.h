@@ -29,7 +29,7 @@
 /**
  * Class to save and access the configuration.
  * It only provides a simple interface to get/set the configuration, delegating
- * the responsability of saving the configuration to a third party, usually
+ * the responsibility of saving the configuration to a third party, usually
  * `XmlConfigLoader`.
  */
 class Config {

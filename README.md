@@ -110,6 +110,15 @@ Once the service is enabled, run Touchégg manually by running the command `touc
 
 A version for Arch based distributions without systemd support, like Artix, is also available on [AUR](https://aur.archlinux.org/packages/touchegg-nosystemd/)
 
+## Void Linux
+
+Touchégg is available from the main repository. To use it, you have to enable its service after installing.
+
+```bash
+$ sudo xbps-install touchegg
+$ sudo ln -s /etc/sv/touchegg /var/service
+```
+
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:

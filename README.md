@@ -83,6 +83,19 @@ $ sudo apt install ./touchegg_*.deb # Install the package
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
+### elementary OS
+
+On elementary Hera you cannot install Touchégg through the PPA (even if you have enabled them) because the PPA does not contain packages for that version.
+
+Before installing it using the manual installation you need to install a required dependency:
+
+```
+$ sudo apt install libpugixml1v5
+```
+
+You can then proceed downloading the `deb` file and installing it.
+
+
 ## Red Hat, Fedora and derivatives
 
 [Download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.

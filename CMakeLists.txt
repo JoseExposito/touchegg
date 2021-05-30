@@ -26,6 +26,12 @@ find_package(XRANDR REQUIRED)
 find_package(XINPUT REQUIRED)
 find_package(GLIB REQUIRED)
 
+# libinput 1.18 filters unaccelerated deltas for gestures and we need to adjust our thresholds:
+# https://gitlab.freedesktop.org/libinput/libinput/-/commit/60d5172e15728cc25db889a7a6bcf37a06a15a3a
+if(LIBINPUT_VERSION VERSION_GREATER_EQUAL "1.18")
+  add_definitions(-DLIBINPUT_FILTER_DELTAS=ON)
+endif()
+
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 

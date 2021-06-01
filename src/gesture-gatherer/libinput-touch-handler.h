@@ -71,6 +71,11 @@ class LibinputTouchHandler : public LininputHandler {
   LibinputTouchState state;
 
   /**
+   * @return Average <delta X, delta Y> for the current active fingers.
+   */
+  std::pair<double, double> getAverageDelta() const;
+
+  /**
    * @returns When the gestures starts, uses "this->state" to differentiate
    * between SWIPE and PINCH gestures.
    */

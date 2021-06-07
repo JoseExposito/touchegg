@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(touchegg)
 set(MAJOR_VERSION "2")
 set(MINOR_VERSION "0")
-set(PATCH_VERSION "9")
+set(PATCH_VERSION "10")
 add_definitions(-D_VERSION="v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -25,6 +25,13 @@ find_package(XTEST REQUIRED)
 find_package(XRANDR REQUIRED)
 find_package(XINPUT REQUIRED)
 find_package(GLIB REQUIRED)
+
+# libinput 1.18 filters unaccelerated deltas for gestures and we need to adjust our thresholds:
+# https://gitlab.freedesktop.org/libinput/libinput/-/commit/60d5172e15728cc25db889a7a6bcf37a06a15a3a
+if(LIBINPUT_VERSION VERSION_GREATER_EQUAL "1.18")
+  message(STATUS "Found libinput >= 1.18: LIBINPUT_FILTER_DELTAS=ON")
+  add_definitions(-DLIBINPUT_FILTER_DELTAS=ON)
+endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
@@ -76,11 +83,16 @@ include(GNUInstallDirs)
 set(SYSTEM_CONFIG_FILE_PATH "${CMAKE_INSTALL_FULL_DATAROOTDIR}/touchegg/touchegg.conf")
 target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CONFIG_FILE_PATH}\")
 
-# configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
-configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
-pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
-
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
-install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
+
+if(NOT DEFINED USE_SYSTEMD OR USE_SYSTEMD)
+  # configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
+  configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg.service.in ${PROJECT_SOURCE_DIR}/installation/touchegg.service @ONLY)
+  pkg_get_variable(SYSTEMD_SERVICE_DIR systemd systemdsystemunitdir)
+
+  install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.service DESTINATION ${SYSTEMD_SERVICE_DIR})
+else()
+  message(WARNING "USE_SYSTEMD OFF: Systemd related file will NOT be installed")
+endif()

@@ -110,10 +110,15 @@ void LininputDeviceHandler::calculateTouchpadThreshold(
 
   // Size is expressed in mm, but gesture deltaX/Y is normalized to
   // 1000dpi, thus, calculate how the maximum deltaX/Y and set:
-  //  - start_threshold -> 5% of the maximum deltaX/Y
-  //  - finish_threshold -> 40% of the maximum deltaX/Y
+  //  - start_threshold -> 1% or 5% of the maximum deltaX/Y
+  //  - finish_threshold -> 9% or 40% of the maximum deltaX/Y
+#ifdef LIBINPUT_FILTER_DELTAS
+  constexpr int START_PERCENTAGE = 1;
+  constexpr int FINISH_PERCENTAGE = 9;
+#else
   constexpr int START_PERCENTAGE = 5;
   constexpr int FINISH_PERCENTAGE = 40;
+#endif
 
   double minSize = std::min(widthMm, heightMm);
   outInfo->startThreshold =

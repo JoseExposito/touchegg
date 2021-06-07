@@ -74,6 +74,14 @@ By default this flag is set to `ON`, i.e., `auto` is available for `color` and `
 Set it to `OFF` if you don't want to install GTK in your system. Have in mind that `auto` will
 **not** be available for `color` and `borderColor` and you will have to manually set them up.
 
+## cmake -DUSE_SYSTEMD=[ON|OFF]
+
+Install or not systemd related files.
+
+By default this flag is set to `ON`, i.e., systemd will be used.
+
+Set it to `OFF` if your distribution doesn't use systemd.
+
 # Code Style
 
 This project follows Google C++ Style Guide:

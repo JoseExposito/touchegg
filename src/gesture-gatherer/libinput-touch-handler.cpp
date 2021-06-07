@@ -78,8 +78,10 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
   // SWIPE and PINCH
   if (this->state.started && this->state.currentFingers == 1) {
     LibinputDeviceInfo info = LininputHandler::getDeviceInfo(event);
-    double deltaX = this->state.currentX.at(slot) - this->state.startX.at(slot);
-    double deltaY = this->state.currentY.at(slot) - this->state.startY.at(slot);
+
+    std::pair<double, double> deltaPair = this->getAverageDelta();
+    double deltaX = deltaPair.first;
+    double deltaY = deltaPair.second;
 
     double percentage =
         (this->state.type == GestureType::SWIPE)
@@ -110,8 +112,9 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
   this->state.currentX[slot] = libinput_event_touch_get_x(tEvent);
   this->state.currentY[slot] = libinput_event_touch_get_y(tEvent);
 
-  double deltaX = this->state.currentX.at(slot) - this->state.startX.at(slot);
-  double deltaY = this->state.currentY.at(slot) - this->state.startY.at(slot);
+  std::pair<double, double> deltaPair = this->getAverageDelta();
+  double deltaX = deltaPair.first;
+  double deltaY = deltaPair.second;
 
   if (!this->state.started) {
     if (this->state.currentFingers >= 2 &&
@@ -155,6 +158,26 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
         this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime);
     this->gestureController->onGestureUpdate(std::move(gesture));
   }
+}
+
+std::pair<double, double> LibinputTouchHandler::getAverageDelta() const {
+  if (this->state.startX.empty() || this->state.startY.empty()) {
+    return std::make_pair(0, 0);
+  }
+
+  double deltaX = 0;
+  double deltaY = 0;
+
+  for (const auto &pair : this->state.startX) {
+    int32_t slot = pair.first;
+    deltaX += this->state.currentX.at(slot) - this->state.startX.at(slot);
+    deltaY += this->state.currentY.at(slot) - this->state.startY.at(slot);
+  }
+
+  deltaX /= this->state.startX.size();
+  deltaY /= this->state.startY.size();
+
+  return std::make_pair(deltaX, deltaY);
 }
 
 GestureType LibinputTouchHandler::getGestureType() const {

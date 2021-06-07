@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.9
+Version:        2.0.10
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -23,13 +23,20 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 %build
 %cmake
-# cmake_build is available on Fedora but not in RHEL 8
-%make_build
+%if 0%{?fedora}
+  %cmake_build
+%else
+  %make_build
+%endif
+
 
 
 %install
-# cmake_install is available on Fedora but not in RHEL 8
-%make_install
+%if 0%{?fedora}
+  %cmake_install
+%else
+  %make_install
+%endif
 
 
 %check
@@ -72,6 +79,11 @@ fi
 
 
 %changelog
+
+* Mon Jun 07 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.10-1
+- Touchscreen: Use touch average to calculate deltas
+- Simplify the build process in distros that don't support systemd
+- libinput 1.18 support: Different deltas depending on libinput version
 
 * Mon Apr 05 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.9-1
 - Use screen rotation to calculate touchscreen gestures direction

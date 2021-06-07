@@ -53,8 +53,16 @@ std::filesystem::path Paths::getHomePath() {
 }
 
 std::filesystem::path Paths::getUserConfigDirPath() {
-  std::filesystem::path homePath = Paths::getHomePath();
-  return std::filesystem::path{homePath / ".config" / "touchegg"};
+  // If $XDG_CONFIG_HOME is set, use it. Otherwise fallback to $HOME/.config:
+  // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+  const char *xdgConfigHomeEnvVar = getenv("XDG_CONFIG_HOME");
+
+  std::filesystem::path configPath =
+      (xdgConfigHomeEnvVar != nullptr)
+          ? std::filesystem::path{xdgConfigHomeEnvVar}
+          : Paths::getHomePath() / ".config";
+
+  return configPath / "touchegg";
 }
 
 std::filesystem::path Paths::getUserConfigFilePath() {

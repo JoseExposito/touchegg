@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.10 - 2021-06-07
+
+New:
+
+  - Add Void Linux install instructions
+  - Add Artix Linux install instructions
+
+Improvements:
+
+  - Touchscreen: Use touch average to calculate deltas
+
+    https://github.com/JoseExposito/touchegg/issues/499
+
+  - Simplify the build process in distros that don't support systemd
+
+    https://github.com/JoseExposito/touchegg/issues/481
+
+Fix:
+
+  - libinput 1.18 support: Different deltas depending on libinput version
+
+    https://github.com/JoseExposito/touchegg/issues/489
+
+
 ## 2.0.9 - 2021-04-05
 
 New:
@@ -7,6 +31,12 @@ New:
   - Use screen rotation to calculate touchscreen gestures direction
 
     https://github.com/JoseExposito/touchegg/issues/459
+
+Improvements:
+
+  - Build the RPM package as part of the CI process improving its compatibility
+
+    https://github.com/JoseExposito/touchegg/issues/475
 
 
 ## 2.0.8 - 2021-02-24

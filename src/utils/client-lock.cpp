@@ -17,6 +17,7 @@
  */
 #include "utils/client-lock.h"
 
+#include <fcntl.h>
 #include <sys/file.h>
 #include <unistd.h>
 

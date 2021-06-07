@@ -63,7 +63,7 @@ jobs:
       - name: Install dependencies
         run: |
           su
-          dnf upgrade
+          dnf upgrade -y
           dnf install -y dnf-plugins-core
           dnf config-manager --set-enabled powertools
           dnf install -y epel-release
@@ -99,12 +99,12 @@ jobs:
   rpm-package-fedora:
     runs-on: ubuntu-20.04
     container:
-      image: fedora/fedora:34
+      image: fedora:34
     steps:
       - name: Install dependencies
         run: |
           su
-          dnf upgrade
+          dnf upgrade -y
           dnf install -y dnf-plugins-core
           dnf config-manager --set-enabled powertools
           dnf install -y epel-release

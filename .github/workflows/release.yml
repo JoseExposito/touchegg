@@ -105,8 +105,6 @@ jobs:
         run: |
           su
           dnf upgrade -y
-          dnf install -y dnf-plugins-core
-          dnf config-manager --set-enabled powertools
           dnf install -y epel-release
           dnf groupinstall -y "Development Tools"
           dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel

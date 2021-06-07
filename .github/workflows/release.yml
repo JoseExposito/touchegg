@@ -55,7 +55,7 @@ jobs:
           name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
           path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
 
-  rpm-package:
+  rpm-package-rhel:
     runs-on: ubuntu-20.04
     container:
       image: almalinux/almalinux:8
@@ -63,6 +63,7 @@ jobs:
       - name: Install dependencies
         run: |
           su
+          dnf upgrade
           dnf install -y dnf-plugins-core
           dnf config-manager --set-enabled powertools
           dnf install -y epel-release
@@ -92,12 +93,53 @@ jobs:
       - name: Upload RPM package
         uses: "actions/upload-artifact@v2"
         with:
-          name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+
+  rpm-package-fedora:
+    runs-on: ubuntu-20.04
+    container:
+      image: fedora/fedora:34
+    steps:
+      - name: Install dependencies
+        run: |
+          su
+          dnf upgrade
+          dnf install -y dnf-plugins-core
+          dnf config-manager --set-enabled powertools
+          dnf install -y epel-release
+          dnf groupinstall -y "Development Tools"
+          dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
+
+      - name: GitHub Environment Variables Action
+        uses: FranzDiebold/github-env-vars-action@v1.2.1
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: ${{ env.GITHUB_REPOSITORY_NAME }}
+
+      - name: Create rpmbuild directories
+        run: |
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+
+      - name: Generate tarball
+        run: |
+          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
+
+      - name: Build RPM package
+        run: |
+          rpmbuild -ba ${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
+
+      - name: Upload RPM package
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: "fedora34_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   create-release:
     runs-on: ubuntu-20.04
-    needs: [ deb-package, rpm-package ]
+    needs: [ deb-package, rpm-package-rhel, rpm-package-fedora ]
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1
@@ -148,12 +190,22 @@ jobs:
           asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_arm64.deb"
           asset_content_type: application/vnd.debian.binary-package
 
-      - name: Upload RPM package
+      - name: Upload RPM package (RHEL)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-          asset_name: "${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_path: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_content_type: application/octet-stream
+
+      - name: Upload RPM package (Fedora)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "fedora34_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/fedora34_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_name: "fedora34_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           asset_content_type: application/octet-stream

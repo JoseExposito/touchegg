@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.9
+Version:        2.0.10
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -72,6 +72,11 @@ fi
 
 
 %changelog
+
+* Mon Jun 07 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.10-1
+- Touchscreen: Use touch average to calculate deltas
+- Simplify the build process in distros that don't support systemd
+- libinput 1.18 support: Different deltas depending on libinput version
 
 * Mon Apr 05 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.9-1
 - Use screen rotation to calculate touchscreen gestures direction

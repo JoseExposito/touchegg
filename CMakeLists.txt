@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(touchegg)
 set(MAJOR_VERSION "2")
 set(MINOR_VERSION "0")
-set(PATCH_VERSION "9")
+set(PATCH_VERSION "10")
 add_definitions(-D_VERSION="v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -29,6 +29,7 @@ find_package(GLIB REQUIRED)
 # libinput 1.18 filters unaccelerated deltas for gestures and we need to adjust our thresholds:
 # https://gitlab.freedesktop.org/libinput/libinput/-/commit/60d5172e15728cc25db889a7a6bcf37a06a15a3a
 if(LIBINPUT_VERSION VERSION_GREATER_EQUAL "1.18")
+  message(STATUS "Found libinput >= 1.18: LIBINPUT_FILTER_DELTAS=ON")
   add_definitions(-DLIBINPUT_FILTER_DELTAS=ON)
 endif()
 

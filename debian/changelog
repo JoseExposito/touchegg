@@ -1,3 +1,11 @@
+touchegg (2.0.10) focal; urgency=medium
+
+  * Touchscreen: Use touch average to calculate deltas
+  * Simplify the build process in distros that don't support systemd
+  * libinput 1.18 support: Different deltas depending on libinput version
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 07 Jun 2021 12:00:00 +0100
+
 touchegg (2.0.9) focal; urgency=medium
 
   * Use screen rotation to calculate touchscreen gestures direction

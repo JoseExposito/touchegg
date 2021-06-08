@@ -650,7 +650,7 @@ All hardware supported by libinput is supported by Touchégg.
 
 #### Is there a GUI to configure Touchégg?
 
-Yes, [Touché](#https://github.com/JoseExposito/touche) is the official desktop application.
+Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop application.
 
 
 # Copyright

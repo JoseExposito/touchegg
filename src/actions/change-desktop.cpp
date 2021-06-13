@@ -27,6 +27,10 @@ void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
     this->direction = actionDirectionFromStr(this->settings.at("direction"));
   }
 
+  if (this->settings.count("cyclic") == 1) {
+    this->cyclic = (this->settings.at("cyclic") == "true");
+  }
+
   if (this->animate) {
     ActionDirection animationPosition = ActionDirection::UNKNOWN;
 
@@ -67,7 +71,7 @@ void ChangeDesktop::executeAction(const Gesture& gesture) {
   ActionDirection actionDirection = (this->direction == ActionDirection::AUTO)
                                         ? this->getActionAutoDirection(gesture)
                                         : this->direction;
-  this->windowSystem.changeDesktop(actionDirection);
+  this->windowSystem.changeDesktop(actionDirection, this->cyclic);
 }
 
 ActionDirection ChangeDesktop::getAnimationAutoDirection(

@@ -584,7 +584,7 @@ Rectangle X11::getDesktopWorkarea() const {
   return workarea;
 }
 
-void X11::changeDesktop(ActionDirection direction) const {
+void X11::changeDesktop(ActionDirection direction, bool cyclic) const {
   Window rootWindow = XDefaultRootWindow(this->display);
 
   // NOLINTNEXTLINE
@@ -611,11 +611,15 @@ void X11::changeDesktop(ActionDirection direction) const {
           this->destinationDesktop(currentDesktop, totalDesktops, direction);
       break;
     case ActionDirection::NEXT:
-      toDesktop = std::min(totalDesktops - 1, currentDesktop + 1);
+      toDesktop = cyclic ? (currentDesktop + 1) % totalDesktops
+                         : std::min(totalDesktops - 1, currentDesktop + 1);
       break;
     case ActionDirection::PREVIOUS:
     default:
-      toDesktop = std::max(0, currentDesktop - 1);
+      int prev = currentDesktop - 1;
+      toDesktop = cyclic
+                      ? (prev % totalDesktops + totalDesktops) % totalDesktops
+                      : std::max(0, prev);
       break;
   }
 

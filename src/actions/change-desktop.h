@@ -33,6 +33,7 @@ class ChangeDesktop : public AnimatedAction {
 
  private:
   ActionDirection direction = ActionDirection::AUTO;
+  bool cyclic = false;
 
   ActionDirection getAnimationAutoDirection(const Gesture &gesture) const;
   ActionDirection getActionAutoDirection(const Gesture &gesture) const;

@@ -19,6 +19,7 @@
 #define CONFIG_CONFIG_H_
 
 #include <string>
+#include <vector>
 #include <unordered_map>
 #include <utility>
 
@@ -77,9 +78,9 @@ class Config {
                         GestureDirection gestureDirection) const;
 
   /**
-   * @returns The action configured for the gesture.
+   * @returns The actions configured for the gesture.
    */
-  std::pair<ActionType, std::unordered_map<std::string, std::string>>
+  std::vector<std::pair<ActionType, std::unordered_map<std::string, std::string>>>
   getGestureConfig(const std::string &application, GestureType gestureType,
                    int numFingers, GestureDirection gestureDirection) const;
 
@@ -98,7 +99,7 @@ class Config {
    */
   std::unordered_map<
       std::string,
-      std::pair<ActionType, std::unordered_map<std::string, std::string>>>
+      std::vector<std::pair<ActionType, std::unordered_map<std::string, std::string>>>>
       config;
 
   /**

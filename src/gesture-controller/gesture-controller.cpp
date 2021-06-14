@@ -52,15 +52,17 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   }
 
   this->window = this->windowSystem.getWindowUnderCursor();
-  this->action = this->getActionForGesture(*gesture, *this->window);
+  this->actions = this->getActionsForGesture(*gesture, *this->window);
 
   // Check if we should run the action
   bool isSystemWindow = this->windowSystem.isSystemWindow(*this->window);
-  this->executeAction =
-      (this->action != nullptr)  // Not nullptr action
-      && (!isSystemWindow        // Not system window
-                                 // The action can run on system windows:
-          || (isSystemWindow && this->action->runOnSystemWindows()));
+  for (const auto &action : this->actions) {
+    this->executeAction |=
+        (action != nullptr)  // Not nullptr action
+        && (!isSystemWindow  // Not system window
+                             // The action can run on system windows:
+            || action->runOnSystemWindows());
+  }
 
   if (!executeAction) {
     tlg::debug
@@ -72,7 +74,9 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   }
 
   tlg::debug << "\tStarting action" << std::endl;
-  this->action->onGestureBegin(*gesture);
+  for (auto &action : this->actions) {
+    action->onGestureBegin(*gesture);
+  }
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
@@ -80,7 +84,9 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
     tlg::debug << "Gesture update detected (" << gesture->percentage() << "%)"
                << std::endl;
     gesture->setDirection(this->rotatedDirection);
-    this->action->onGestureUpdate(*gesture);
+    for (auto &action : this->actions) {
+      action->onGestureUpdate(*gesture);
+    }
   }
 }
 
@@ -88,14 +94,15 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   if (this->executeAction) {
     tlg::debug << "Gesture end detected" << std::endl;
     gesture->setDirection(this->rotatedDirection);
-    this->action->onGestureEnd(*gesture);
   }
-
-  this->action.reset();
+  for (auto &action : this->actions) {
+    action->onGestureEnd(*gesture);
+  }
+  this->actions.clear();
   this->rotatedDirection = GestureDirection::UNKNOWN;
 }
 
-std::unique_ptr<Action> GestureController::getActionForGesture(
+std::vector<std::unique_ptr<Action>> GestureController::getActionsForGesture(
     const Gesture &gesture, const WindowT &window) const {
   bool hasAction = false;
   std::string application;
@@ -118,17 +125,22 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
 
   if (!hasAction) {
     tlg::debug << "\tNo action configured for this gesture" << std::endl;
-    return nullptr;
+    return {};
   }
 
   tlg::debug << "\tAction configured for this gesture" << std::endl;
 
-  auto pair = this->config.getGestureConfig(application, gestureType, fingers,
-                                            direction);
-  ActionType actionType = pair.first;
-  std::unordered_map<std::string, std::string> actionSettings = pair.second;
+  auto actionPairs = this->config.getGestureConfig(application, gestureType,
+                                                   fingers, direction);
+  std::vector<std::unique_ptr<Action>> actions;
+  for (const auto &actionPair : actionPairs) {
+    ActionType actionType = actionPair.first;
+    std::unordered_map<std::string, std::string> actionSettings =
+        actionPair.second;
 
-  return ActionFactory::buildAction(actionType, std::move(actionSettings),
-                                    this->windowSystem, *this->window,
-                                    this->config);
+    actions.emplace_back(ActionFactory::buildAction(
+        actionType, actionSettings, this->windowSystem,
+        *this->window, this->config));
+  }
+  return actions;
 }

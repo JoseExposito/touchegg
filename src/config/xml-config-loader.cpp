@@ -102,22 +102,21 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
       const std::string fingers = gestureNode.attribute("fingers").value();
       const std::string direction = gestureNode.attribute("direction").value();
 
-      pugi::xml_node actionNode = gestureNode.child("action");
-      const std::string actionType = actionNode.attribute("type").value();
-
-      std::unordered_map<std::string, std::string> actionSettings;
-      for (pugi::xml_node settingNode : actionNode.children()) {
-        const std::string settingName = settingNode.name();
-        const std::string settingValue = settingNode.child_value();
-        actionSettings[settingName] = settingValue;
-      }
-
-      // Save the gesture config for each application
-      for (const std::string &application : applications) {
-        this->config->saveGestureConfig(
-            trim(application), gestureTypeFromStr(gestureType), fingers,
-            gestureDirectionFromStr(direction), actionTypeFromStr(actionType),
-            actionSettings);
+      for (pugi::xml_node actionNode : gestureNode.children("action")) {
+        const std::string actionType = actionNode.attribute("type").value();
+        std::unordered_map<std::string, std::string> actionSettings;
+        for (pugi::xml_node settingNode : actionNode.children()) {
+          const std::string settingName = settingNode.name();
+          const std::string settingValue = settingNode.child_value();
+          actionSettings[settingName] = settingValue;
+        }
+        // Save the gesture config for each application
+        for (const std::string &application : applications) {
+          this->config->saveGestureConfig(
+              trim(application), gestureTypeFromStr(gestureType), fingers,
+              gestureDirectionFromStr(direction), actionTypeFromStr(actionType),
+              actionSettings);
+        }
       }
     }
   }

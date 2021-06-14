@@ -45,9 +45,9 @@ class GestureController : public GestureControllerDelegate {
   const WindowSystem &windowSystem;
 
   /**
-   * The action to perform.
+   * The actions to perform.
    */
-  std::unique_ptr<Action> action = nullptr;
+  std::vector<std::unique_ptr<Action>> actions;
 
   /**
    * The window the action is performed on.
@@ -55,7 +55,7 @@ class GestureController : public GestureControllerDelegate {
   std::unique_ptr<WindowT> window;
 
   /**
-   * A flag indicating if we should run the action.
+   * A flag indicating if we should run the action(s).
    */
   bool executeAction = false;
 
@@ -66,10 +66,10 @@ class GestureController : public GestureControllerDelegate {
   GestureDirection rotatedDirection = GestureDirection::UNKNOWN;
 
   /**
-   * @returns The action associated to a gesture or nullptr.
+   * @returns The actions associated to a gesture or nullptr.
    */
-  std::unique_ptr<Action> getActionForGesture(const Gesture &gesture,
-                                              const WindowT &window) const;
+  std::vector<std::unique_ptr<Action>> getActionsForGesture(
+      const Gesture &gesture, const WindowT &window) const;
 };
 
 #endif  // GESTURE_CONTROLLER_GESTURE_CONTROLLER_H_

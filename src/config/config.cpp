@@ -50,7 +50,7 @@ void Config::saveGestureConfig(
     const std::unordered_map<std::string, std::string> &actionSettings) {
   std::string key = Config::getConfigKey(application, gestureType, numFingers,
                                          gestureDirection);
-  this->config[key] = std::make_pair(actionType, actionSettings);
+  this->config[key].emplace_back(actionType, actionSettings);
 }
 
 bool Config::hasGestureConfig(const std::string &application,
@@ -61,7 +61,7 @@ bool Config::hasGestureConfig(const std::string &application,
   return (this->config.count(key) == 1);
 }
 
-std::pair<ActionType, std::unordered_map<std::string, std::string>>
+std::vector<std::pair<ActionType, std::unordered_map<std::string, std::string>>>
 Config::getGestureConfig(const std::string &application,
                          GestureType gestureType, int numFingers,
                          GestureDirection gestureDirection) const {

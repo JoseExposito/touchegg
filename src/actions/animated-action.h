@@ -69,6 +69,11 @@ class AnimatedAction : public Action {
   bool animate = true;
 
   /**
+   * If we should skip the final execution in onGestureEnd
+   */
+  bool noExecute = false;
+
+  /**
    * Animation color.
    */
   Color color;

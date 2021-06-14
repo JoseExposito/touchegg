@@ -31,6 +31,10 @@ AnimatedAction::AnimatedAction(
     this->animate = this->settings.at("animate") == "true";
   }
 
+  if (this->settings.count("noExecute") == 1) {
+    this->noExecute = this->settings.at("noExecute") == "true";
+  }
+
   if (this->animate) {
     std::string color;
     std::string borderColor;
@@ -68,7 +72,8 @@ void AnimatedAction::onGestureUpdate(const Gesture &gesture) {
 }
 
 void AnimatedAction::onGestureEnd(const Gesture &gesture) {
-  if (!this->animate || gesture.percentage() >= this->threshold) {
+  if (!this->noExecute &&
+      (!this->animate || gesture.percentage() >= this->threshold)) {
     this->executeAction(gesture);
   }
 }

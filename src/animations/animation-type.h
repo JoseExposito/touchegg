@@ -22,21 +22,32 @@
 
 enum class AnimationType {
   NONE,
-  CHANGE_DESKTOP,
+  CHANGE_DESKTOP_UP,
+  CHANGE_DESKTOP_DOWN,
+  CHANGE_DESKTOP_LEFT,
+  CHANGE_DESKTOP_RIGHT,
   CLOSE_WINDOW,
   MAXIMIZE_WINDOW,
   MINIMIZE_WINDOW,
   RESTORE_WINDOW,
   SHOW_DESKTOP,
-  TILE_WINDOW,
+  EXIST_SHOW_DESKTOP,
+  TILE_WINDOW_LEFT,
+  TILE_WINDOW_RIGHT,
   // Adding a new animation? Don't forget to add it in animationTypeToStr,
   // animationTypeFromStr and AnimationFactory::buildAnimation
 };
 
 inline std::string animationTypeToStr(AnimationType animationType) {
   switch (animationType) {
-    case AnimationType::CHANGE_DESKTOP:
-      return "CHANGE_DESKTOP";
+    case AnimationType::CHANGE_DESKTOP_UP:
+      return "CHANGE_DESKTOP_UP";
+    case AnimationType::CHANGE_DESKTOP_DOWN:
+      return "CHANGE_DESKTOP_DOWN";
+    case AnimationType::CHANGE_DESKTOP_LEFT:
+      return "CHANGE_DESKTOP_LEFT";
+    case AnimationType::CHANGE_DESKTOP_RIGHT:
+      return "CHANGE_DESKTOP_RIGHT";
     case AnimationType::CLOSE_WINDOW:
       return "CLOSE_WINDOW";
     case AnimationType::MAXIMIZE_WINDOW:
@@ -47,16 +58,29 @@ inline std::string animationTypeToStr(AnimationType animationType) {
       return "RESTORE_WINDOW";
     case AnimationType::SHOW_DESKTOP:
       return "SHOW_DESKTOP";
-    case AnimationType::TILE_WINDOW:
-      return "TILE_WINDOW";
+    case AnimationType::EXIST_SHOW_DESKTOP:
+      return "EXIST_SHOW_DESKTOP";
+    case AnimationType::TILE_WINDOW_LEFT:
+      return "TILE_WINDOW_LEFT";
+    case AnimationType::TILE_WINDOW_RIGHT:
+      return "TILE_WINDOW_RIGHT";
     default:
       return "NONE";
   }
 }
 
 inline AnimationType animationTypeFromStr(const std::string &str) {
-  if (str == "CHANGE_DESKTOP") {
-    return AnimationType::CHANGE_DESKTOP;
+  if (str == "CHANGE_DESKTOP_UP") {
+    return AnimationType::CHANGE_DESKTOP_UP;
+  }
+  if (str == "CHANGE_DESKTOP_DOWN") {
+    return AnimationType::CHANGE_DESKTOP_DOWN;
+  }
+  if (str == "CHANGE_DESKTOP_LEFT") {
+    return AnimationType::CHANGE_DESKTOP_LEFT;
+  }
+  if (str == "CHANGE_DESKTOP_RIGHT") {
+    return AnimationType::CHANGE_DESKTOP_RIGHT;
   }
   if (str == "CLOSE_WINDOW") {
     return AnimationType::CLOSE_WINDOW;
@@ -73,8 +97,14 @@ inline AnimationType animationTypeFromStr(const std::string &str) {
   if (str == "SHOW_DESKTOP") {
     return AnimationType::SHOW_DESKTOP;
   }
-  if (str == "TILE_WINDOW") {
-    return AnimationType::TILE_WINDOW;
+  if (str == "EXIST_SHOW_DESKTOP") {
+    return AnimationType::EXIST_SHOW_DESKTOP;
+  }
+  if (str == "TILE_WINDOW_LEFT") {
+    return AnimationType::TILE_WINDOW_LEFT;
+  }
+  if (str == "TILE_WINDOW_RIGHT") {
+    return AnimationType::TILE_WINDOW_RIGHT;
   }
   return AnimationType::NONE;
 }

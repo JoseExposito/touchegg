@@ -19,18 +19,18 @@
 
 #include <memory>
 
-#include "animations/maximize-window-animation.h"
-#include "animations/restore-window-animation.h"
+#include "animations/animation-factory.h"
 
 void FullscreenWindow::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->animate) {
-    if (this->windowSystem.isWindowFullscreen(this->window)) {
-      this->animation = std::make_unique<RestoreWindowAnimation>(
-          this->windowSystem, this->window, this->color, this->borderColor);
-    } else {
-      this->animation = std::make_unique<MaximizeWindowAnimation>(
-          this->windowSystem, this->window, this->color, this->borderColor);
-    }
+    AnimationType animationType =
+        this->windowSystem.isWindowFullscreen(this->window)
+            ? AnimationType::RESTORE_WINDOW
+            : AnimationType::MAXIMIZE_WINDOW;
+
+    this->animation = AnimationFactory::buildAnimation(
+        animationType, this->windowSystem, this->window, this->color,
+        this->borderColor);
   }
 }
 

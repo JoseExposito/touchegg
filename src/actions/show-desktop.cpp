@@ -19,15 +19,19 @@
 
 #include <memory>
 
-#include "animations/show-desktop-animation.h"
+#include "animations/animation-factory.h"
 
 void ShowDesktop::onGestureBegin(const Gesture& /*gesture*/) {
   this->showingDesktop = this->windowSystem.isShowingDesktop();
 
   if (this->animate) {
-    this->animation = std::make_unique<ShowDesktopAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor,
-        this->showingDesktop);
+    AnimationType animationType = this->showingDesktop
+                                      ? AnimationType::EXIST_SHOW_DESKTOP
+                                      : AnimationType::SHOW_DESKTOP;
+
+    this->animation = AnimationFactory::buildAnimation(
+        animationType, this->windowSystem, this->window, this->color,
+        this->borderColor);
   }
 }
 

@@ -19,12 +19,13 @@
 
 #include <memory>
 
-#include "animations/close-window-animation.h"
+#include "animations/animation-factory.h"
 
 void CloseWindow::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->animate) {
-    this->animation = std::make_unique<CloseWindowAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor);
+    this->animation = AnimationFactory::buildAnimation(
+        AnimationType::CLOSE_WINDOW, this->windowSystem, this->window,
+        this->color, this->borderColor);
   }
 }
 

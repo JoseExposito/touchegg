@@ -17,7 +17,7 @@
  */
 #include "actions/tile-window.h"
 
-#include "animations/tile-window-animation.h"
+#include "animations/animation-factory.h"
 
 void TileWindow::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->settings.count("direction") == 1) {
@@ -25,9 +25,13 @@ void TileWindow::onGestureBegin(const Gesture& /*gesture*/) {
   }
 
   if (this->animate) {
-    this->animation = std::make_unique<TileWindowAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor,
-        this->toTheLeft);
+    AnimationType animationType = this->toTheLeft
+                                      ? AnimationType::TILE_WINDOW_LEFT
+                                      : AnimationType::TILE_WINDOW_RIGHT;
+
+    this->animation = AnimationFactory::buildAnimation(
+        animationType, this->windowSystem, this->window, this->color,
+        this->borderColor);
   }
 }
 

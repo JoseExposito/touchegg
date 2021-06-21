@@ -20,7 +20,7 @@
 #include <memory>
 #include <string>
 
-#include "animations/change-desktop-animation.h"
+#include "animations/animation-factory.h"
 
 void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
   if (this->settings.count("direction") == 1) {
@@ -61,9 +61,9 @@ void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
                             ? this->getAnimationAutoDirection(gesture)
                             : animationPosition;
 
-    this->animation = std::make_unique<ChangeDesktopAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor,
-        animationPosition);
+    this->animation = AnimationFactory::buildAnimation(
+        ChangeDesktop::directionToAnimation(animationPosition),
+        this->windowSystem, this->window, this->color, this->borderColor);
   }
 }
 
@@ -103,5 +103,19 @@ ActionDirection ChangeDesktop::getActionAutoDirection(
       return natural ? ActionDirection::NEXT : ActionDirection::PREVIOUS;
     default:
       return natural ? ActionDirection::PREVIOUS : ActionDirection::NEXT;
+  }
+}
+
+AnimationType ChangeDesktop::directionToAnimation(ActionDirection direction) {
+  switch (direction) {
+    case ActionDirection::UP:
+      return AnimationType::CHANGE_DESKTOP_UP;
+    case ActionDirection::DOWN:
+      return AnimationType::CHANGE_DESKTOP_DOWN;
+    case ActionDirection::RIGHT:
+      return AnimationType::CHANGE_DESKTOP_RIGHT;
+    case ActionDirection::LEFT:
+    default:
+      return AnimationType::CHANGE_DESKTOP_LEFT;
   }
 }

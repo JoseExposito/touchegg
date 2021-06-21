@@ -20,6 +20,7 @@
 
 #include "actions/action-direction.h"
 #include "actions/animated-action.h"
+#include "animations/animation-type.h"
 
 /**
  * Action to change to the next or previous desktop.
@@ -37,6 +38,7 @@ class ChangeDesktop : public AnimatedAction {
 
   ActionDirection getAnimationAutoDirection(const Gesture &gesture) const;
   ActionDirection getActionAutoDirection(const Gesture &gesture) const;
+  static AnimationType directionToAnimation(ActionDirection direction);
 };
 
 #endif  // ACTIONS_CHANGE_DESKTOP_H_

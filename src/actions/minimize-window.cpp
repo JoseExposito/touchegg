@@ -19,12 +19,13 @@
 
 #include <memory>
 
-#include "animations/minimize-window-animation.h"
+#include "animations/animation-factory.h"
 
 void MinimizeWindow::onGestureBegin(const Gesture& /*gesture*/) {
   if (this->animate) {
-    this->animation = std::make_unique<MinimizeWindowAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor);
+    this->animation = AnimationFactory::buildAnimation(
+        AnimationType::MINIMIZE_WINDOW, this->windowSystem, this->window,
+        this->color, this->borderColor);
   }
 }
 

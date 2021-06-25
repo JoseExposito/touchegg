@@ -18,11 +18,11 @@
 #ifndef ACTIONS_REPEATED_ACTION_H_
 #define ACTIONS_REPEATED_ACTION_H_
 
-#include "actions/action.h"
+#include "actions/animated-action.h"
 
-class RepeatedAction : public Action {
+class RepeatedAction : public AnimatedAction {
  public:
-  using Action::Action;
+  using AnimatedAction::AnimatedAction;
   virtual ~RepeatedAction() = default;
 
   /**

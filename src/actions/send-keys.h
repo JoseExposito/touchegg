@@ -29,6 +29,7 @@
 class SendKeys : public RepeatedAction {
  public:
   using RepeatedAction::RepeatedAction;
+  void onGestureBegin(const Gesture &gesture) override;
   bool runOnSystemWindows() override { return true; }
   void executePrelude() override;
   void executePostlude() override;

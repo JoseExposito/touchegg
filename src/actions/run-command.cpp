@@ -19,6 +19,25 @@
 
 #include <cstdlib>
 
+#include "animations/animation-factory.h"
+
+void RunCommand::onGestureBegin(const Gesture& gesture) {
+  RepeatedAction::onGestureBegin(gesture);
+
+  if (!this->animate) {
+    return;
+  }
+
+  if (this->settings.count("animation") == 1) {
+    std::string animationTypeStr = this->settings.at("animation");
+    AnimationType animationType = animationTypeFromStr(animationTypeStr);
+
+    this->animation = AnimationFactory::buildAnimation(
+        animationType, this->windowSystem, this->window, this->color,
+        this->borderColor);
+  }
+}
+
 void RunCommand::executePrelude() {
   if (this->settings.count("command") == 1) {
     this->command = this->settings.at("command");

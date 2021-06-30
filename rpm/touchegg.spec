@@ -8,6 +8,11 @@ Group:          Applications/Productivity
 Vendor:         José Expósito <jose.exposito89@gmail.com>
 Packager:       José Expósito <jose.exposito89@gmail.com>
 
+BuildRequires: git gcc gcc-c++ gdb cmake rpm-build
+BuildRequires: libudev-devel libinput-devel pugixml-devel cairo-devel
+BuildRequires: libX11-devel libXtst-devel libXrandr-devel libXi-devel
+BuildRequires: glib2-devel gtk3-devel
+
 Autoreq:        1
 Prefix:         %{_prefix}
 Source0:        touchegg.tar.gz

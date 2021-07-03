@@ -85,7 +85,7 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 
 ## Red Hat, Fedora and derivatives
 
-On Fedora, it is recommended to use the
+On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the
 [official COPR](https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/) to install Touchégg and
 receive updates.
 

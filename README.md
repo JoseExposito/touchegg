@@ -86,11 +86,11 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 ## Red Hat, Fedora and derivatives
 
 On Fedora, it is recommended to use the
-[for now unofficial COPR](https://copr.fedorainfracloud.org/coprs/jborque/touchegg/) to install Touchégg and
-receive updates until José creates his own :-)
+[official COPR](https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/) to install Touchégg and
+receive updates.
 
 ```bash
-$ sudo dnf copr enable jborque/touchegg
+$ sudo dnf copr enable jose_exposito/touchegg
 $ sudo dnf install touchegg
 ```
 

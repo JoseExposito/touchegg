@@ -84,7 +84,7 @@ jobs:
 
       - name: Generate tarball
         run: |
-          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
+          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }} --transform s/^touchegg/touchegg-${{ env.GITHUB_REPOSITORY_NAME }}
 
       - name: Build RPM package
         run: |
@@ -122,7 +122,7 @@ jobs:
 
       - name: Generate tarball
         run: |
-          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }}
+          tar -czvf ~/rpmbuild/SOURCES/${{ env.GITHUB_REPOSITORY_NAME }}.tar.gz ${{ env.GITHUB_REPOSITORY_NAME }} --transform s/^touchegg/touchegg-${{ env.GITHUB_REPOSITORY_NAME }}/
 
       - name: Build RPM package
         run: |

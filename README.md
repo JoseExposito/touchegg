@@ -95,7 +95,7 @@ $ sudo dnf install touchegg
 ```
 
 On other RPM based operating systems,
-[Download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
+[download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
 Double click on the package may work, otherwise install it from the terminal:
 
 ```bash

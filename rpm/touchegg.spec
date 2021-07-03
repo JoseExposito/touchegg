@@ -28,7 +28,7 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 %build
 %cmake
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?suse_version}
   %cmake_build
 %else
   %make_build
@@ -37,7 +37,7 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 
 %install
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?suse_version}
   %cmake_install
 %else
   %make_install

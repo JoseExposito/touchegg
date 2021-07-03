@@ -23,7 +23,7 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 
 %prep
-%setup -n touchegg
+%setup
 
 
 %build

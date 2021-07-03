@@ -60,8 +60,6 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
 }
 
 void RepeatedAction::onGestureEnd(const Gesture &gesture) {
-  AnimatedAction::onGestureEnd(gesture);
-
   if (!this->repeat && !this->onBegin) {
     if (gesture.percentage() >= this->threshold) {
       this->executeAction(gesture);

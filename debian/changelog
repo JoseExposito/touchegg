@@ -1,3 +1,11 @@
+touchegg (2.0.11) focal; urgency=medium
+
+  * Allow to display any animation on SEND_KEYS/RUN_COMMAND
+  * Add cyclic option to CHANGE_DESKTOP
+  * Packages for CentOS (EPEL), Fedora and openSUSE available on COPR
+
+ -- José Expósito <jose.exposito89@gmail.com>  Mon, 05 Jul 2021 12:00:00 +0100
+
 touchegg (2.0.10) focal; urgency=medium
 
   * Touchscreen: Use touch average to calculate deltas

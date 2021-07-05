@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.10
+Version:        2.0.11
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,6 +84,11 @@ fi
 
 
 %changelog
+
+* Mon Jul 05 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.11-1
+- Allow to display any animation on SEND_KEYS/RUN_COMMAND
+- Add cyclic option to CHANGE_DESKTOP
+- Packages for CentOS (EPEL), Fedora and openSUSE available on COPR
 
 * Mon Jun 07 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.10-1
 - Touchscreen: Use touch average to calculate deltas

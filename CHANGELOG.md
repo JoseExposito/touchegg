@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.11 - 2021-07-05
+
+New:
+
+  - Allow to display any animation on SEND_KEYS/RUN_COMMAND
+
+    https://github.com/JoseExposito/touchegg/issues/505
+
+  - Add cyclic option to CHANGE_DESKTOP
+
+    https://github.com/JoseExposito/touchegg/issues/502
+
+  - Packages for CentOS (EPEL), Fedora and openSUSE available on COPR
+
+    https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/
+
+
 ## 2.0.10 - 2021-06-07
 
 New:

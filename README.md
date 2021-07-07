@@ -27,6 +27,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Ubuntu, Debian and derivatives](#ubuntu-debian-and-derivatives)
     * [Red Hat, Fedora and derivatives](#red-hat-fedora-and-derivatives)
     * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
+    * [Alpine Linux](#alpine-linux)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -129,7 +130,26 @@ Touchégg is available from the main repository. To use it, you have to enable i
 $ sudo xbps-install touchegg
 $ sudo ln -s /etc/sv/touchegg /var/service
 ```
+## Alpine Linux
 
+Uncomment the url for the testing repository in /etc/apk/repositories, then install:
+
+```bash
+$ sudo apk update
+$ sudo apk add touchegg
+```
+
+The Touchégg package includes an Openrc init script for starting the Touchégg daemon at boot. To enable:
+
+```bash
+$ sudo rc-update add touchegg
+```
+The init script can also be used to manually start and stop the Touchégg daemon as required:
+
+```bash
+$ sudo rc-service touchegg start
+$ sudo rc-service touchegg stop
+```
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:

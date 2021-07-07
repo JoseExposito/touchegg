@@ -139,12 +139,12 @@ $ sudo apk update
 $ sudo apk add touchegg
 ```
 
-The touchégg package includes an openrc init script for starting the touchégg daemon at boot. To enable:
+The Touchégg package includes an Openrc init script for starting the Touchégg daemon at boot. To enable:
 
 ```bash
-$ sudo rc-update add touchegg`
+$ sudo rc-update add touchegg
 ```
-The init script can also be used to manually start and stop the touchégg daemon as required:
+The init script can also be used to manually start and stop the Touchégg daemon as required:
 
 ```bash
 $ sudo rc-service touchegg start

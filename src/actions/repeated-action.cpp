@@ -40,6 +40,8 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
 }
 
 void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
+  AnimatedAction::onGestureUpdate(gesture);
+
   if (this->repeat) {
     constexpr int step = 10;
     bool increased = (gesture.percentage() >= (this->repeatPercentage + step));

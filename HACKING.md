@@ -49,7 +49,7 @@ Or a rpm package: (from the cloned `touchegg` folder)
 
 ```bash
 $ mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-$ tar -czvf ~/rpmbuild/SOURCES/touchegg.tar.gz -C .. touchegg
+$ tar -czvf ~/rpmbuild/SOURCES/touchegg.tar.gz -C .. touchegg --transform s/^touchegg/touchegg-$(git describe --tags --abbrev=0)/
 $ rpmbuild -ba rpm/touchegg.spec
 $ sudo dnf install ~/rpmbuild/RPMS/x86_64/touchegg-?.?.?-?.x86_64.rpm
 ```

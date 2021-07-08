@@ -145,7 +145,7 @@ class WindowSystem {
   /**
    * Changes to the next/previous desktop.
    */
-  virtual void changeDesktop(ActionDirection direction) const = 0;
+  virtual void changeDesktop(ActionDirection direction, bool cyclic) const = 0;
 
   /**
    * Show the desktop.

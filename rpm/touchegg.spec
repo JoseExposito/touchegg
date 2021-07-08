@@ -1,12 +1,17 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.10
+Version:        2.0.11
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
 Vendor:         José Expósito <jose.exposito89@gmail.com>
 Packager:       José Expósito <jose.exposito89@gmail.com>
+
+BuildRequires: git gcc gcc-c++ cmake rpm-build
+BuildRequires: libudev-devel libinput-devel pugixml-devel cairo-devel
+BuildRequires: libX11-devel libXtst-devel libXrandr-devel libXi-devel
+BuildRequires: glib2-devel gtk3-devel
 
 Autoreq:        1
 Prefix:         %{_prefix}
@@ -18,12 +23,12 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 
 %prep
-%setup -n touchegg
+%setup
 
 
 %build
 %cmake
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?suse_version}
   %cmake_build
 %else
   %make_build
@@ -32,7 +37,7 @@ For example, you can swipe up with 3 fingers to maximize a window or swipe left 
 
 
 %install
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?suse_version}
   %cmake_install
 %else
   %make_install
@@ -79,6 +84,11 @@ fi
 
 
 %changelog
+
+* Mon Jul 05 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.11-1
+- Allow to display any animation on SEND_KEYS/RUN_COMMAND
+- Add cyclic option to CHANGE_DESKTOP
+- Packages for CentOS (EPEL), Fedora and openSUSE available on COPR
 
 * Mon Jun 07 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.10-1
 - Touchscreen: Use touch average to calculate deltas

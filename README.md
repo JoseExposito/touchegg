@@ -27,6 +27,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Ubuntu, Debian and derivatives](#ubuntu-debian-and-derivatives)
     * [Red Hat, Fedora and derivatives](#red-hat-fedora-and-derivatives)
     * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
+    * [Alpine Linux](#alpine-linux)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -47,6 +48,7 @@ Many more actions and gestures are available and everything is easily configurab
       * [Keyboard shortcut](#keyboard-shortcut-send_keys)
       * [Execute a command](#execute-a-command-run_command)
       * [Mouse click](#mouse-click-mouse_click)
+    * [Custom animations](#custom-animations)
     * [Daemon configuration](#daemon-configuration)
   * [FAQ](#faq)
   * [Copyright](#copyright)
@@ -85,7 +87,17 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 
 ## Red Hat, Fedora and derivatives
 
-[Download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
+On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the
+[official COPR](https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/) to install Touchégg and
+receive updates.
+
+```bash
+$ sudo dnf copr enable jose_exposito/touchegg
+$ sudo dnf install touchegg
+```
+
+On other RPM based operating systems,
+[download](https://github.com/JoseExposito/touchegg/releases) the `.rpm` package and install it.
 Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
@@ -118,7 +130,26 @@ Touchégg is available from the main repository. To use it, you have to enable i
 $ sudo xbps-install touchegg
 $ sudo ln -s /etc/sv/touchegg /var/service
 ```
+## Alpine Linux
 
+Uncomment the url for the testing repository in /etc/apk/repositories, then install:
+
+```bash
+$ sudo apk update
+$ sudo apk add touchegg
+```
+
+The Touchégg package includes an Openrc init script for starting the Touchégg daemon at boot. To enable:
+
+```bash
+$ sudo rc-update add touchegg
+```
+The init script can also be used to manually start and stop the Touchégg daemon as required:
+
+```bash
+$ sudo rc-service touchegg start
+$ sudo rc-service touchegg stop
+```
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:
@@ -393,6 +424,7 @@ Options:
 | Option | Value | Description |
 | - | - | - |
 | direction | `previous`/`next`/`up`/`down`/`left`/`right`/`auto` | The desktop/workspace to switch to. It is recommended to use `previous`/`next` for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and `up`/`down`/`left`/`right` come in handy. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the direction. |
+| cyclic | `true`/`false` | Set it to `true` when using `previous`/`next` directions to navigate from last desktop to first desktop or from first to last. |
 | animate | `true`/`false` | Set it to `true` to display the animation. `false` otherwise. |
 | animationPosition | `up`/`down`/`left`/`right`/`auto` | Edge of the screen where the animation will be displayed. With `SWIPE` gestures, `auto` will use your natural scroll preferences to figure out the animation position. |
 | color | Hex color | Color of the animation. For example: `909090` |
@@ -463,6 +495,10 @@ Options:
 | keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
 | decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+| animation | Animation | See [custom animations](#custom-animations) |
 
 Keysyms:
 
@@ -554,6 +590,10 @@ Options:
 | command | Command | The command to execute. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
 | decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
+| animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
+| color | Hex color | Color of the animation. For example: `909090` |
+| borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
+| animation | Animation | See [custom animations](#custom-animations) |
 
 Example 1:
 
@@ -600,6 +640,27 @@ Example:
   </action>
 </gesture>
 ```
+
+
+## Custom animations
+
+The [keyboard shortcut action](#keyboard-shortcut-send_keys) and the [execute a command action](#execute-a-command-run_command)
+allow to set a custom animation. These are the available values:
+
+| Animation | Example |
+| - | - |
+| CHANGE_DESKTOP_UP | [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop) |
+| CHANGE_DESKTOP_DOWN | [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop) |
+| CHANGE_DESKTOP_LEFT | [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop) |
+| CHANGE_DESKTOP_RIGHT | [Switch desktops/workspaces](#switch-desktopsworkspaces-change_desktop) |
+| CLOSE_WINDOW | [Close a window](#close-a-window-close_window) |
+| MAXIMIZE_WINDOW | [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window) |
+| RESTORE_WINDOW | [Maximize or restore a window](#maximize-or-restore-a-window-maximize_restore_window) |
+| MINIMIZE_WINDOW | [Minimize a window](#minimize-a-window-minimize_window) |
+| SHOW_DESKTOP | [Show desktop](#show-desktop-show_desktop) |
+| EXIST_SHOW_DESKTOP | [Show desktop](#show-desktop-show_desktop) |
+| TILE_WINDOW_LEFT | [Tile/snap a window](#tilesnap-a-window-tile_window) |
+| TILE_WINDOW_RIGHT | [Tile/snap a window](#tilesnap-a-window-tile_window) |
 
 
 ## Daemon configuration
@@ -650,7 +711,7 @@ All hardware supported by libinput is supported by Touchégg.
 
 #### Is there a GUI to configure Touchégg?
 
-Yes, [Touché](#https://github.com/JoseExposito/touche) is the official desktop application.
+Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop application.
 
 
 # Copyright

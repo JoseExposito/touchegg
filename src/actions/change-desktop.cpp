@@ -20,11 +20,15 @@
 #include <memory>
 #include <string>
 
-#include "animations/change-desktop-animation.h"
+#include "animations/animation-factory.h"
 
 void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
   if (this->settings.count("direction") == 1) {
     this->direction = actionDirectionFromStr(this->settings.at("direction"));
+  }
+
+  if (this->settings.count("cyclic") == 1) {
+    this->cyclic = (this->settings.at("cyclic") == "true");
   }
 
   if (this->animate) {
@@ -57,9 +61,9 @@ void ChangeDesktop::onGestureBegin(const Gesture& gesture) {
                             ? this->getAnimationAutoDirection(gesture)
                             : animationPosition;
 
-    this->animation = std::make_unique<ChangeDesktopAnimation>(
-        this->windowSystem, this->window, this->color, this->borderColor,
-        animationPosition);
+    this->animation = AnimationFactory::buildAnimation(
+        ChangeDesktop::directionToAnimation(animationPosition),
+        this->windowSystem, this->window, this->color, this->borderColor);
   }
 }
 
@@ -67,7 +71,7 @@ void ChangeDesktop::executeAction(const Gesture& gesture) {
   ActionDirection actionDirection = (this->direction == ActionDirection::AUTO)
                                         ? this->getActionAutoDirection(gesture)
                                         : this->direction;
-  this->windowSystem.changeDesktop(actionDirection);
+  this->windowSystem.changeDesktop(actionDirection, this->cyclic);
 }
 
 ActionDirection ChangeDesktop::getAnimationAutoDirection(
@@ -99,5 +103,19 @@ ActionDirection ChangeDesktop::getActionAutoDirection(
       return natural ? ActionDirection::NEXT : ActionDirection::PREVIOUS;
     default:
       return natural ? ActionDirection::PREVIOUS : ActionDirection::NEXT;
+  }
+}
+
+AnimationType ChangeDesktop::directionToAnimation(ActionDirection direction) {
+  switch (direction) {
+    case ActionDirection::UP:
+      return AnimationType::CHANGE_DESKTOP_UP;
+    case ActionDirection::DOWN:
+      return AnimationType::CHANGE_DESKTOP_DOWN;
+    case ActionDirection::RIGHT:
+      return AnimationType::CHANGE_DESKTOP_RIGHT;
+    case ActionDirection::LEFT:
+    default:
+      return AnimationType::CHANGE_DESKTOP_LEFT;
   }
 }

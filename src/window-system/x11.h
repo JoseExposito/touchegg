@@ -67,7 +67,7 @@ class X11 : public WindowSystem {
   void sendMouseClick(int button) const override;
 
   Rectangle getDesktopWorkarea() const override;
-  void changeDesktop(ActionDirection direction) const override;
+  void changeDesktop(ActionDirection direction, bool cyclic) const override;
   void showDesktop(bool show) const override;
   bool isShowingDesktop() const override;
 

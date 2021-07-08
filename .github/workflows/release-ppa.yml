@@ -1,6 +1,9 @@
 # Workflow to update the "ppa" branch once a release is created
 # This will trigger a build in the stable PPA:
 # https://launchpad.net/~touchegg
+#
+# And also the COPR RPM repo:
+# https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/
 
 name: Release PPA
 

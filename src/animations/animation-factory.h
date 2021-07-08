@@ -15,30 +15,22 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACTIONS_RUN_COMMAND_H_
-#define ACTIONS_RUN_COMMAND_H_
+#ifndef ANIMATIONS_ANIMATION_FACTORY_H_
+#define ANIMATIONS_ANIMATION_FACTORY_H_
 
+#include <memory>
 #include <string>
+#include <unordered_map>
 
-#include "actions/repeated-action.h"
+#include "animations/animation-type.h"
+#include "animations/animation.h"
+#include "utils/color.h"
 
-/**
- * Action to emulate a shortcut.
- */
-class RunCommand : public RepeatedAction {
+class AnimationFactory {
  public:
-  using RepeatedAction::RepeatedAction;
-  void onGestureBegin(const Gesture &gesture) override;
-  bool runOnSystemWindows() override { return true; }
-  void executePrelude() override;
-  void executeAction(const Gesture &gesture) override;
-  void executeReverse(const Gesture &gesture) override;
-
- private:
-  std::string command;
-  std::string decreaseCommand;
-
-  static bool runCommand(const std::string &command);
+  static std::unique_ptr<Animation> buildAnimation(
+      AnimationType type, const WindowSystem &windowSystem,
+      const WindowT &window, Color color, Color borderColor);
 };
 
-#endif  // ACTIONS_RUN_COMMAND_H_
+#endif  // ANIMATIONS_ANIMATION_FACTORY_H_

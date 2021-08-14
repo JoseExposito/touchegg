@@ -25,6 +25,7 @@ find_package(XTEST REQUIRED)
 find_package(XRANDR REQUIRED)
 find_package(XINPUT REQUIRED)
 find_package(GLIB REQUIRED)
+find_package(GIO REQUIRED)
 
 # libinput 1.18 filters unaccelerated deltas for gestures and we need to adjust our thresholds:
 # https://gitlab.freedesktop.org/libinput/libinput/-/commit/60d5172e15728cc25db889a7a6bcf37a06a15a3a
@@ -47,6 +48,7 @@ target_include_directories(touchegg PUBLIC
   ${XRANDR_INCLUDE_DIRS}
   ${XINPUT_INCLUDE_DIRS}
   ${GLIB_INCLUDE_DIRS}
+  ${GIO_INCLUDE_DIRS}
 )
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
@@ -60,6 +62,7 @@ target_link_libraries(touchegg
   ${XRANDR_LIBRARIES}
   ${XINPUT_LIBRARIES}
   ${GLIB_LIBRARIES}
+  ${GIO_LIBRARIES}
 )
 
 if(NOT DEFINED AUTO_COLORS OR AUTO_COLORS)

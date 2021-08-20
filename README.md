@@ -85,6 +85,8 @@ $ sudo apt install ./touchegg_*.deb # Install the package
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
+Included by default on elementary OS 6 and Zorin OS 16.
+
 ## Red Hat, Fedora and derivatives
 
 On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the

@@ -138,10 +138,10 @@ double LininputDeviceHandler::mmToDpi(double mm) {
 
 void LininputDeviceHandler::calculateTouchscreenThreshold(
     double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {
-  // start_threshold -> 5% of the width/height
-  // finish_threshold -> 25% of the width/height
-  constexpr int START_PERCENTAGE = 5;
-  constexpr int FINISH_PERCENTAGE = 25;
+  // start_threshold -> 2% of the width/height
+  // finish_threshold -> 16% of the width/height
+  constexpr int START_PERCENTAGE = 2;
+  constexpr int FINISH_PERCENTAGE = 16;
 
   double minSize = std::min(widthMm, heightMm);
   outInfo->startThreshold = ((minSize * START_PERCENTAGE) / 100);

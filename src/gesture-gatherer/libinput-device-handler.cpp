@@ -67,7 +67,8 @@ void LininputDeviceHandler::handleDeviceAdded(
       tlg::warning
           << "\tIt wasn't possible to get your device physical size, falling "
              "back to default start_threshold and finish_threshold. You can "
-             "tune this values in your service file"
+             "tune this values in your service file: "
+             "https://github.com/JoseExposito/touchegg#daemon-configuration"
           << std::endl;
     }
 

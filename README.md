@@ -667,8 +667,6 @@ allow to set a custom animation. These are the available values:
 
 ## Daemon configuration
 
-This is an advanced topic and my recommendation is to ignore it.
-
 Touchégg runs in two different processes, one of them is a systemd daemon configured in
 `/lib/systemd/system/touchegg.service`. In addition to the `--daemon` argument, you can pass two optional arguments:
 
@@ -678,24 +676,40 @@ Touchégg runs in two different processes, one of them is a systemd daemon confi
 | finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
 
 It is recommended NOT to configure `start_threshold` and `finish_threshold` since an optimal value
-is calculated for you. This value is printed to the terminal on application startup or when a
-new multi-touch device is connected.
+is calculated for you.
 
-Example:
+However, if your device size is unknown, you will need to set their values manually:
+
+```
+$ journalctl -u touchegg -b
+[...]
+It wasn't possible to get your device physical size, falling back to default start_threshold and finish_threshold. You can tune this values in your service file:
+https://github.com/JoseExposito/touchegg#daemon-configuration
+```
+
+The recommended values are:
+
+- start_threshold: The 3% of the height of your screen in mm
+- finish_threshold: The 15% of the height of your screen in mm
+
+For example, if your screen height is 100mm, edit `/lib/systemd/system/touchegg.service`
+and set the right values:
 
 ```bash
-$ cat /lib/systemd/system/touchegg.service | grep ExecStart
-ExecStart=/usr/bin/touchegg --daemon 100 500
+ExecStart=/usr/bin/touchegg --daemon 3 15
+```
 
+Finally, restart the daemon and make sure the right values are printed:
+
+```bash
 $ sudo systemctl daemon-reload && sudo systemctl restart touchegg
 
 $ journalctl -u touchegg -b -f
 Compatible device detected:
-  Name: Apple Inc. Magic Trackpad 2
-  Size: 161.957mm x 115.114mm
+  [...]
   Calculating threshold and animation_finish_threshold. You can tune this values in your service file
-  threshold: 100
-  animation_finish_threshold: 500
+  threshold: 3
+  animation_finish_threshold: 15
 ```
 
 

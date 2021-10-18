@@ -175,7 +175,7 @@ touchpad and touchscreen multi-touch gestures.
 
 <div align="center">
 
-  ![Touché on elementary OS](https://raw.githubusercontent.com/JoseExposito/touche/master/.github/images/elementary.png)
+  ![Touché on GNOME](https://raw.githubusercontent.com/JoseExposito/touche/master/.github/images/adwaita.png)
 
 </div>
 

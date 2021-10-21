@@ -1,3 +1,10 @@
+touchegg (2.0.12) focal; urgency=medium
+
+  * Improve pinch gesture detection on touchscreens
+  * Honor the XDG basedir specification
+
+ -- José Expósito <jose.exposito89@gmail.com>  Thu, 21 Oct 2021 12:00:00 +0100
+
 touchegg (2.0.11) focal; urgency=medium
 
   * Allow to display any animation on SEND_KEYS/RUN_COMMAND

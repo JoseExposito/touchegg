@@ -124,19 +124,16 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
       this->state.startFingers = this->state.currentFingers;
       this->state.startTimestamp = LininputHandler::getTimestamp();
       this->state.type = this->getGestureType();
+      this->state.direction =
+          (this->state.type == GestureType::SWIPE)
+              ? LininputHandler::calculateSwipeDirection(deltaX, deltaY)
+              : this->calculatePinchDirection();
 
+      // Once the direction is calculated, save the currentX/Y as startX/Y so
+      // the startThreshold is not included in the percentage calculations
       double percentage = 0;
-      if (this->state.type == GestureType::SWIPE) {
-        this->state.direction =
-            LininputHandler::calculateSwipeDirection(deltaX, deltaY);
-        percentage = LininputHandler::calculateSwipeAnimationPercentage(
-            info, this->state.direction, deltaX, deltaY);
-      } else {
-        this->state.direction = this->calculatePinchDirection();
-        double pinchDelta = this->getPinchDelta();
-        percentage = LininputHandler::calculatePinchAnimationPercentage(
-            this->state.direction, pinchDelta);
-      }
+      this->state.startX = this->state.currentX;
+      this->state.startY = this->state.currentY;
 
       auto gesture = std::make_unique<Gesture>(
           this->state.type, this->state.direction, percentage,
@@ -187,21 +184,21 @@ GestureType LibinputTouchHandler::getGestureType() const {
 
   for (const auto &pair : this->state.startX) {
     int32_t slot = pair.first;
-    deltaX.push_back(this->state.currentX.at(slot) -
-                     this->state.startX.at(slot));
-    deltaY.push_back(this->state.currentY.at(slot) -
-                     this->state.startY.at(slot));
+    double diffX = this->state.currentX.at(slot) - this->state.startX.at(slot);
+    double diffY = this->state.currentY.at(slot) - this->state.startY.at(slot);
+    deltaX.push_back(diffX);
+    deltaY.push_back(diffY);
   }
 
   // In a SWIPE gestures, every finger has a positive or negative deltaX or Y
   bool isSwipe = std::all_of(deltaX.cbegin(), deltaX.cend(),
-                             [](double i) { return i >= 0; }) ||
+                             [](double i) { return i > 0; }) ||
                  std::all_of(deltaX.cbegin(), deltaX.cend(),
-                             [](double i) { return i <= 0; }) ||
+                             [](double i) { return i < 0; }) ||
                  std::all_of(deltaY.cbegin(), deltaY.cend(),
-                             [](double i) { return i >= 0; }) ||
+                             [](double i) { return i > 0; }) ||
                  std::all_of(deltaY.cbegin(), deltaY.cend(),
-                             [](double i) { return i <= 0; });
+                             [](double i) { return i < 0; });
 
   return isSwipe ? GestureType::SWIPE : GestureType::PINCH;
 }

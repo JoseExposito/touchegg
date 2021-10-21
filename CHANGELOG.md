@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.12 - 2021-10-21
+
+  - Improve pinch gesture detection on touchscreens
+
+    https://github.com/JoseExposito/touchegg/issues/524
+
+  - Honor the XDG basedir specification
+
+    https://github.com/JoseExposito/touchegg/issues/525
+
+
 ## 2.0.11 - 2021-07-05
 
 New:

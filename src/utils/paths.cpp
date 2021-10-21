@@ -24,6 +24,10 @@
 #include <unistd.h>
 
 #include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "utils/string.h"
 
 std::filesystem::path Paths::getHomePath() {
   // $HOME should be checked first
@@ -76,6 +80,24 @@ std::filesystem::path Paths::getUserLockFilePath() {
 }
 
 std::filesystem::path Paths::getSystemConfigFilePath() {
+  // If $XDG_CONFIG_DIRS is set, check if the config is present in one of those
+  // directories. Otherwise, fallback to /etc/xdg, as in the spec:
+  // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+  // Finally, fallback to SYSTEM_CONFIG_FILE_PATH for backwards compatibility.
+  const char *xdgConfigDirsEnvVar = getenv("XDG_CONFIG_DIRS");
+  std::vector<std::string> xdgPaths = (xdgConfigDirsEnvVar != nullptr)
+                                          ? split(xdgConfigDirsEnvVar, ':')
+                                          : std::vector<std::string>();
+  xdgPaths.emplace_back("/etc/xdg");
+
+  for (const std::string &path : xdgPaths) {
+    std::filesystem::path configPath = std::filesystem::path{path};
+    configPath = configPath / "touchegg" / "touchegg.conf";
+    if (std::filesystem::exists(configPath)) {
+      return configPath;
+    }
+  }
+
   return std::filesystem::path{SYSTEM_CONFIG_FILE_PATH};
 }
 

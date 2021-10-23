@@ -66,8 +66,11 @@ int main(int argc, char** argv) {
                                             args.finishThreshold);
     gestureGatherer.run();
   } else {  // clientMode
+    // Use X11 as window system
+    X11 windowSystem;
+
     // Avoid running multiple client instances in parallel
-    ClientLock lock;
+    ClientLock lock(windowSystem.getConnectionName());
 
     // Load the configuration using the XML loader
     tlg::info << "Parsing your configuration file..." << std::endl;
@@ -75,9 +78,6 @@ int main(int argc, char** argv) {
     XmlConfigLoader loader(&config);
     loader.load();
     tlg::info << "Configuration parsed successfully" << std::endl;
-
-    // Use X11 as window system
-    X11 windowSystem;
 
     // Initialize the gesture controller
     GestureController gestureController(config, windowSystem);

@@ -47,6 +47,8 @@ class X11 : public WindowSystem {
   X11();
   ~X11();
 
+  std::string getConnectionName() const override;
+
   std::unique_ptr<WindowT> getWindowUnderCursor() const override;
 
   std::string getWindowClassName(const WindowT &window) const override;

@@ -51,6 +51,11 @@ class WindowSystem {
   virtual ~WindowSystem() = default;
 
   /**
+   * @return The name of the connection to the windowing system.
+   */
+  virtual std::string getConnectionName() const = 0;
+
+  /**
    * @return Return the window under the cursor/pointer.
    */
   virtual std::unique_ptr<WindowT> getWindowUnderCursor() const = 0;

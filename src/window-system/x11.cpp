@@ -49,6 +49,10 @@ X11::~X11() {
   }
 }
 
+std::string X11::getConnectionName() const {
+  return XDisplayString(this->display);
+}
+
 std::unique_ptr<WindowT> X11::getWindowUnderCursor() const {
   Window rootWindow = None;
   Window childWindow = None;

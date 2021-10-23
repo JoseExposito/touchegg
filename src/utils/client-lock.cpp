@@ -27,10 +27,10 @@
 
 #include "utils/paths.h"
 
-ClientLock::ClientLock() {
+ClientLock::ClientLock(const std::string &lockInstance) {
   Paths::createUserConfigDir();
 
-  std::filesystem::path lockPath = Paths::getUserLockFilePath();
+  std::filesystem::path lockPath = Paths::getUserLockFilePath(lockInstance);
   this->fd = open(lockPath.c_str(), O_CREAT | O_RDWR, 0640);  // NOLINT
 
   std::string errorMessage{

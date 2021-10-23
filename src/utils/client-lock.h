@@ -18,12 +18,14 @@
 #ifndef UTILS_CLIENT_LOCK_H_
 #define UTILS_CLIENT_LOCK_H_
 
+#include <string>
+
 /**
  * Creates a lock file to avoid multiple client instances to run in parallel.
  */
 class ClientLock {
  public:
-  ClientLock();
+  explicit ClientLock(const std::string &lockInstance);
   ~ClientLock();
 
  private:

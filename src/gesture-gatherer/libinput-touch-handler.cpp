@@ -178,29 +178,41 @@ std::pair<double, double> LibinputTouchHandler::getAverageDelta() const {
 }
 
 GestureType LibinputTouchHandler::getGestureType() const {
-  // Store every finger deltaX/Y
-  std::vector<double> deltaX;
-  std::vector<double> deltaY;
+  // Store every finger dominant axis (X = 1; Y = -1) and delta
+  std::vector<int> axis;
+  std::vector<double> delta;
 
   for (const auto &pair : this->state.startX) {
     int32_t slot = pair.first;
     double diffX = this->state.currentX.at(slot) - this->state.startX.at(slot);
     double diffY = this->state.currentY.at(slot) - this->state.startY.at(slot);
-    deltaX.push_back(diffX);
-    deltaY.push_back(diffY);
+
+    if (std::abs(diffX) > std::abs(diffY)) {
+      axis.push_back(1);
+      delta.push_back(diffX);
+    } else {
+      axis.push_back(-1);
+      delta.push_back(diffY);
+    }
   }
 
-  // In a SWIPE gestures, every finger has a positive or negative deltaX or Y
-  bool isSwipe = std::all_of(deltaX.cbegin(), deltaX.cend(),
-                             [](double i) { return i > 0; }) ||
-                 std::all_of(deltaX.cbegin(), deltaX.cend(),
-                             [](double i) { return i < 0; }) ||
-                 std::all_of(deltaY.cbegin(), deltaY.cend(),
-                             [](double i) { return i > 0; }) ||
-                 std::all_of(deltaY.cbegin(), deltaY.cend(),
-                             [](double i) { return i < 0; });
+  // In a SWIPE gesture, every finger has the same dominant axis and a positive
+  // or negative dominant delta
+  bool sameAxis =
+      std::all_of(axis.cbegin(), axis.cend(), [](int i) { return i > 0; }) ||
+      std::all_of(axis.cbegin(), axis.cend(), [](int i) { return i < 0; });
+  if (!sameAxis) {
+    return GestureType::PINCH;
+  }
 
-  return isSwipe ? GestureType::SWIPE : GestureType::PINCH;
+  bool sameDir =
+      std::all_of(delta.cbegin(), delta.cend(), [](int i) { return i > 0; }) ||
+      std::all_of(delta.cbegin(), delta.cend(), [](int i) { return i < 0; });
+  if (!sameDir) {
+    return GestureType::PINCH;
+  }
+
+  return GestureType::SWIPE;
 }
 
 GestureDirection LibinputTouchHandler::calculatePinchDirection() const {

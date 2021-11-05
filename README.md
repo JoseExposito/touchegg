@@ -729,6 +729,10 @@ All hardware supported by libinput is supported by Touchégg.
 
 Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop application.
 
+#### Can I use 2 finger swipes for web browser navigation?
+
+No, at least not with Touchégg. It is up to the web browser to implement that feature.
+You can request this feature in your favourite`s web browser bug tracker.
 
 # Copyright
 

@@ -717,7 +717,7 @@ Compatible device detected:
 
 #### Does Touchégg work on Wayland?
 
-No, Touchégg only work on X11.
+No, Touchégg only works on X11.
 
 #### What hardware is supported?
 
@@ -732,7 +732,7 @@ Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop a
 #### Can I use 2 finger swipes for web browser navigation?
 
 No, at least not with Touchégg. It is up to the web browser to implement that feature.
-You can request this feature in your favourite`s web browser bug tracker.
+You can request this feature in your favourite's web browser bug tracker.
 
 # Copyright
 

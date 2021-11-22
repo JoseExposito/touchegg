@@ -22,3 +22,8 @@ A clear and concise description of any alternative solutions or features you've 
 ### Additional context
 
 Add any other context or screenshots about the feature request here.
+
+<!--
+Please, make sure to search for similar feature requests before creating one and to read the FAQ:
+https://github.com/JoseExposito/touchegg#faq
+-->

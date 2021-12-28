@@ -65,8 +65,19 @@ class RepeatedAction : public AnimatedAction {
   virtual void executeReverse(const Gesture &gesture) = 0;
 
  protected:
+  /**
+   * Whether the action should be repeated or not.
+   */
   bool repeat = false;
+
+  /**
+   * If "repeat" is true, the total gesture percentage accumulated.
+   */
   int repeatPercentage = 0;
+
+  /**
+   * Whether the action should be executed on gesture begin or end.
+   */
   bool onBegin = true;
 };
 

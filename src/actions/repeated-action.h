@@ -73,7 +73,7 @@ class RepeatedAction : public AnimatedAction {
   /**
    * If "repeat" is true, the total gesture percentage accumulated.
    */
-  int repeatPercentage = 0;
+  double repeatPercentage = 0;
 
   /**
    * Whether the action should be executed on gesture begin or end.

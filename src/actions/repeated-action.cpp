@@ -43,18 +43,19 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
   AnimatedAction::onGestureUpdate(gesture);
 
   if (this->repeat) {
-    constexpr int step = 10;
-    bool increased = (gesture.percentage() >= (this->repeatPercentage + step));
-    bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
+    bool increased = (gesture.percentage() >=
+                      (this->repeatPercentage + this->repeatPercentageStep));
+    bool decreased = (gesture.percentage() <=
+                      (this->repeatPercentage - this->repeatPercentageStep));
 
     if (increased) {
       this->executeAction(gesture);
-      this->repeatPercentage += step;
+      this->repeatPercentage += this->repeatPercentageStep;
     }
 
     if (decreased) {
       this->executeReverse(gesture);
-      this->repeatPercentage -= step;
+      this->repeatPercentage -= this->repeatPercentageStep;
     }
   }
 }

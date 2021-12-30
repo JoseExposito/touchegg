@@ -17,6 +17,8 @@
  */
 #include "actions/repeated-action.h"
 
+#include <algorithm>
+
 void RepeatedAction::executePrelude() {}
 void RepeatedAction::executePostlude() {}
 
@@ -24,6 +26,11 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   // read repeated action settings
   if (this->settings.count("repeat") == 1) {
     this->repeat = (this->settings.at("repeat") == "true");
+  }
+
+  if (this->settings.count("times") == 1) {
+    int times = std::clamp(std::stoi(this->settings.at("times")), 2, 15);
+    this->repeatPercentageStep = (100 / times);
   }
 
   if (this->settings.count("on") == 1) {

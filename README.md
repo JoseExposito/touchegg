@@ -497,6 +497,7 @@ Options:
 | keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
 | decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
+| times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |
@@ -592,6 +593,7 @@ Options:
 | command | Command | The command to execute. |
 | on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
 | decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
+| times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
 | color | Hex color | Color of the animation. For example: `909090` |
 | borderColor | Hex color | Border color of the animation. For example: `#FFFFFF` |

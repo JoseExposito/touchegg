@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *

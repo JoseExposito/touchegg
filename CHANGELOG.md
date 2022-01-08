@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.13 - 2022-01-08
+
+  - Improve pinch detection when the fingers are placed horizontally or vertically
+
+    https://github.com/JoseExposito/touchegg/issues/541
+
+  - Allow to run in multiple X displays
+
+    https://github.com/JoseExposito/touchegg/issues/538
+
+  - Allow to configure the number of times a repeated action is executed
+
+    https://github.com/JoseExposito/touchegg/issues/553
+
+
 ## 2.0.12 - 2021-10-21
 
   - Improve pinch gesture detection on touchscreens

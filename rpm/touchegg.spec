@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.12
+Version:        2.0.13
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,6 +84,11 @@ fi
 
 
 %changelog
+
+* Sat Jan 08 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.13-1
+- Improve pinch detection when the fingers are placed horizontally or vertically
+- Allow to run in multiple X displays
+- Allow to configure the number of times a repeated action is executed
 
 * Thu Oct 21 2021 José Expósito <jose.exposito89@gmail.com> - 2.0.12-1
 - Improve pinch gesture detection on touchscreens

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -46,6 +46,8 @@ class X11 : public WindowSystem {
  public:
   X11();
   ~X11();
+
+  std::string getConnectionName() const override;
 
   std::unique_ptr<WindowT> getWindowUnderCursor() const override;
 

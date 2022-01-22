@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -17,6 +17,8 @@
  */
 #ifndef UTILS_PATHS_H_
 #define UTILS_PATHS_H_
+
+#include <string>
 
 #include "utils/filesystem.h"
 
@@ -41,9 +43,11 @@ class Paths {
   static std::filesystem::path getUserConfigFilePath();
 
   /**
-   * @return User's lock file path (~/.config/touchegg/.touchegg.lock).
+   * @return User's lock file path
+   * (~/.config/touchegg/.touchegg{lockInstance}.lock).
    */
-  static std::filesystem::path getUserLockFilePath();
+  static std::filesystem::path getUserLockFilePath(
+      const std::string &lockInstance);
 
   /**
    * @return System config file path (/usr/share/touchegg/touchegg.conf).

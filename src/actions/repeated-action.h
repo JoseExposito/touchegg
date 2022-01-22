@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -65,8 +65,25 @@ class RepeatedAction : public AnimatedAction {
   virtual void executeReverse(const Gesture &gesture) = 0;
 
  protected:
+  /**
+   * Whether the action should be repeated or not.
+   */
   bool repeat = false;
-  int repeatPercentage = 0;
+
+  /**
+   * If "repeat" is true, the total gesture percentage accumulated.
+   */
+  double repeatPercentage = 0;
+
+  /**
+   * If "repeat" is true, the percentage that should be accumulated to execute
+   * the action.
+   */
+  double repeatPercentageStep = 10;
+
+  /**
+   * Whether the action should be executed on gesture begin or end.
+   */
   bool onBegin = true;
 };
 

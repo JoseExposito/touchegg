@@ -1,6 +1,6 @@
 /**
  * Copyright 2021 John Mifsud <imabuddha@gmail.com>
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  * This file is part of Touchégg.
  *
  * Touchégg is free software: you can redistribute it and/or modify it under the

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -74,9 +74,11 @@ std::filesystem::path Paths::getUserConfigFilePath() {
   return std::filesystem::path{configPath / "touchegg.conf"};
 }
 
-std::filesystem::path Paths::getUserLockFilePath() {
+std::filesystem::path Paths::getUserLockFilePath(
+    const std::string &lockInstance) {
   std::filesystem::path configPath = Paths::getUserConfigDirPath();
-  return std::filesystem::path{configPath / ".touchegg.lock"};
+  const std::string fileName = ".touchegg" + lockInstance + ".lock";
+  return std::filesystem::path{configPath / fileName};
 }
 
 std::filesystem::path Paths::getSystemConfigFilePath() {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -47,6 +47,10 @@ X11::~X11() {
   if (this->display != nullptr) {
     XCloseDisplay(this->display);
   }
+}
+
+std::string X11::getConnectionName() const {
+  return XDisplayString(this->display);
 }
 
 std::unique_ptr<WindowT> X11::getWindowUnderCursor() const {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -18,12 +18,14 @@
 #ifndef UTILS_CLIENT_LOCK_H_
 #define UTILS_CLIENT_LOCK_H_
 
+#include <string>
+
 /**
  * Creates a lock file to avoid multiple client instances to run in parallel.
  */
 class ClientLock {
  public:
-  ClientLock();
+  explicit ClientLock(const std::string &lockInstance);
   ~ClientLock();
 
  private:

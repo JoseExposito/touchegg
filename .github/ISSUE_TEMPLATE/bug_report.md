@@ -34,3 +34,8 @@ $ touchegg --debug
  * Version of Touchégg: Run `touchegg --version` in the terminal to check the version
  * Operating System: Ubuntu, Fedora, Arch Linux...
  * Desktop Environment: Gnome, KDE, Xfce...
+
+<!--
+Please, make sure to search for similar bug reports before creating one and to read the FAQ:
+https://github.com/JoseExposito/touchegg#faq
+-->

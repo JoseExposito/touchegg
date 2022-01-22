@@ -1,3 +1,11 @@
+touchegg (2.0.13) focal; urgency=medium
+
+  * Improve pinch detection when the fingers are placed horizontally or vertically
+  * Allow to run in multiple X displays
+  * Allow to configure the number of times a repeated action is executed
+
+ -- José Expósito <jose.exposito89@gmail.com>  Sat, 08 Jan 2022 12:00:00 +0100
+
 touchegg (2.0.12) focal; urgency=medium
 
   * Improve pinch gesture detection on touchscreens

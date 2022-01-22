@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -17,6 +17,8 @@
  */
 #include "actions/repeated-action.h"
 
+#include <algorithm>
+
 void RepeatedAction::executePrelude() {}
 void RepeatedAction::executePostlude() {}
 
@@ -24,6 +26,11 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   // read repeated action settings
   if (this->settings.count("repeat") == 1) {
     this->repeat = (this->settings.at("repeat") == "true");
+  }
+
+  if (this->settings.count("times") == 1) {
+    int times = std::clamp(std::stoi(this->settings.at("times")), 2, 15);
+    this->repeatPercentageStep = (100 / times);
   }
 
   if (this->settings.count("on") == 1) {
@@ -43,18 +50,19 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
   AnimatedAction::onGestureUpdate(gesture);
 
   if (this->repeat) {
-    constexpr int step = 10;
-    bool increased = (gesture.percentage() >= (this->repeatPercentage + step));
-    bool decreased = (gesture.percentage() <= (this->repeatPercentage - step));
+    bool increased = (gesture.percentage() >=
+                      (this->repeatPercentage + this->repeatPercentageStep));
+    bool decreased = (gesture.percentage() <=
+                      (this->repeatPercentage - this->repeatPercentageStep));
 
     if (increased) {
       this->executeAction(gesture);
-      this->repeatPercentage += step;
+      this->repeatPercentage += this->repeatPercentageStep;
     }
 
     if (decreased) {
       this->executeReverse(gesture);
-      this->repeatPercentage -= step;
+      this->repeatPercentage -= this->repeatPercentageStep;
     }
   }
 }

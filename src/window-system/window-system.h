@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - 2021 José Expósito <jose.exposito89@gmail.com>
+ * Copyright 2011 - 2022 José Expósito <jose.exposito89@gmail.com>
  *
  * This file is part of Touchégg.
  *
@@ -49,6 +49,11 @@ class WindowT {
 class WindowSystem {
  public:
   virtual ~WindowSystem() = default;
+
+  /**
+   * @return The name of the connection to the windowing system.
+   */
+  virtual std::string getConnectionName() const = 0;
 
   /**
    * @return Return the window under the cursor/pointer.

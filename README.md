@@ -90,11 +90,11 @@ Included by default on elementary OS 6 and Zorin OS 16.
 ## Fedora, CentOS, RHEL and derivatives
 
 On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the
-[official COPR](https://copr.fedorainfracloud.org/coprs/jose_exposito/touchegg/) to install Touchégg and
+[official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
 receive updates.
 
 ```bash
-$ sudo dnf copr enable jose_exposito/touchegg
+$ sudo dnf copr enable joseexposito/touchegg
 $ sudo dnf install touchegg
 ```
 

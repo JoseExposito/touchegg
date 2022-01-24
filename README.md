@@ -675,7 +675,7 @@ Touchégg runs in two different processes, one of them is a systemd daemon confi
 | Option | Value | Default | Description | Example
 | - | - | - | - | - |
 | start_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
-| finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
+| finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain amount until the animation fills your entire screen. This property configures how much you need to move your fingers |
 
 It is recommended NOT to configure `start_threshold` and `finish_threshold` since an optimal value
 is calculated for you.

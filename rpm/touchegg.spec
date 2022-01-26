@@ -15,7 +15,7 @@ BuildRequires: glib2-devel gtk3-devel
 
 Autoreq:        1
 Prefix:         %{_prefix}
-Source0:        touchegg-2.0.13.tar.gz
+Source0:        touchegg.tar.gz
 
 %description
 Touchégg is an app that runs in the background and transform the gestures you make in your touchpad into visible actions in your desktop.

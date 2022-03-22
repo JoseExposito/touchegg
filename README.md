@@ -27,6 +27,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Ubuntu, Debian and derivatives](#ubuntu-debian-and-derivatives)
     * [Fedora, CentOS, RHEL and derivatives](#fedora-centos-rhel-and-derivatives)
     * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
+    * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
@@ -89,7 +90,7 @@ Included by default on elementary OS 6, Zorin OS 16 and Pop!\_OS 21.04+
 
 ## Fedora, CentOS, RHEL and derivatives
 
-On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the
+On Fedora and CentOS (EPEL) it is recommended to use the
 [official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
 receive updates.
 
@@ -123,6 +124,21 @@ $ sudo systemctl start touchegg
 Once the service is enabled, run Touchégg manually by running the command `touchegg` or reboot to get started.
 
 A version for Arch based distributions without systemd support, like Artix, is also available on [AUR](https://aur.archlinux.org/packages/touchegg-nosystemd/)
+
+## openSUSE
+
+Touchégg is available in the [official repositories](https://software.opensuse.org/package/touchegg).
+
+```bash
+$ sudo zypper install touchegg
+$ sudo systemctl enable touchegg.service
+$ sudo systemctl start touchegg
+```
+
+If the version of Touchégg included for your distro is too old (v1.x)
+it is recommended to use the
+[official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
+receive updates.
 
 ## Void Linux
 

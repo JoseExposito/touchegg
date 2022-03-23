@@ -29,6 +29,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
     * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
+    * [Void Linux](#void-linux)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -140,14 +141,6 @@ it is recommended to use the
 [official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
 receive updates.
 
-## Void Linux
-
-Touchégg is available from the main repository. To use it, you have to enable its service after installing.
-
-```bash
-$ sudo xbps-install touchegg
-$ sudo ln -s /etc/sv/touchegg /var/service
-```
 ## Alpine Linux
 
 Uncomment the url for the testing repository in /etc/apk/repositories, then install:
@@ -168,6 +161,16 @@ The init script can also be used to manually start and stop the Touchégg daemon
 $ sudo rc-service touchegg start
 $ sudo rc-service touchegg stop
 ```
+
+## Void Linux
+
+Touchégg is available from the main repository. To use it, you have to enable its service after installing.
+
+```bash
+$ sudo xbps-install touchegg
+$ sudo ln -s /etc/sv/touchegg /var/service
+```
+
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:

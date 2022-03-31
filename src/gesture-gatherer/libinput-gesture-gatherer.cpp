@@ -30,6 +30,7 @@
 #include <exception>
 #include <memory>
 #include <stdexcept>
+#include <string>
 
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"

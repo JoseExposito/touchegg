@@ -28,9 +28,9 @@
 #include <array>
 #include <cmath>
 #include <exception>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <string>
 
 #include "config/config.h"
 #include "gesture-controller/gesture-controller-delegate.h"
@@ -147,19 +147,8 @@ int LibinputGestureGatherer::openRestricted(const char *path, int flags,
                                             void * /*userData*/) {
   int fd = open(path, flags);  // NOLINT
   if (fd < 0) {
-    std::string errorMessage{"Error initialising Touchégg: libinput open."};
-    errorMessage += "\nPath: ";
-    errorMessage += path;
-    errorMessage += "\nFlags: ";
-    errorMessage += flags;
-    errorMessage +=
-        "\nTouchégg should be run in daemon mode by systemd in order to be "
-        "part of the 'input' group and have access to your touchpad.\n"
-        "If you prefer to run Touchégg without using systemd, please execute "
-        "the following command:\n"
-        "$ sudo usermod -a -G input $USER\n"
-        "And reboot to solve this issue";
-    throw std::runtime_error{errorMessage};
+    tlg::warning << "Warning: Error opening device " << path << std::endl;
+    return -errno;
   }
   return fd;
 }

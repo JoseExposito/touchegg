@@ -492,7 +492,7 @@ Rectangle X11::getDesktopWorkarea() const {
   Rectangle screen;
   int currentCrtc = 0;
   XRRScreenResources *resources =
-      XRRGetScreenResources(this->display, rootWindow);
+      XRRGetScreenResourcesCurrent(this->display, rootWindow);
 
   while (!screenFound && currentCrtc < resources->ncrtc) {
     XRRCrtcInfo *crtc =
@@ -807,7 +807,7 @@ GestureDirection X11::calculateRotation(GestureType gestureType,
   Rotation rotation = 0;
   int currentCrtc = 0;
   XRRScreenResources *resources =
-      XRRGetScreenResources(this->display, rootWindow);
+      XRRGetScreenResourcesCurrent(this->display, rootWindow);
 
   while (!screenFound && currentCrtc < resources->ncrtc) {
     XRRCrtcInfo *crtc =

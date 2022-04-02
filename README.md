@@ -27,7 +27,9 @@ Many more actions and gestures are available and everything is easily configurab
     * [Ubuntu, Debian and derivatives](#ubuntu-debian-and-derivatives)
     * [Fedora, CentOS, RHEL and derivatives](#fedora-centos-rhel-and-derivatives)
     * [Arch Linux, Manjaro and derivatives](#arch-linux-manjaro-and-derivatives)
+    * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
+    * [Void Linux](#void-linux)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -85,11 +87,11 @@ $ sudo apt install ./touchegg_*.deb # Install the package
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
-Included by default on elementary OS 6 and Zorin OS 16.
+Included by default on elementary OS 6, Zorin OS 16 and Pop!\_OS 21.04+
 
 ## Fedora, CentOS, RHEL and derivatives
 
-On Fedora, openSUSE and CentOS (EPEL) it is recommended to use the
+On Fedora and CentOS (EPEL) it is recommended to use the
 [official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
 receive updates.
 
@@ -124,14 +126,21 @@ Once the service is enabled, run Touchégg manually by running the command `touc
 
 A version for Arch based distributions without systemd support, like Artix, is also available on [AUR](https://aur.archlinux.org/packages/touchegg-nosystemd/)
 
-## Void Linux
+## openSUSE
 
-Touchégg is available from the main repository. To use it, you have to enable its service after installing.
+Touchégg is available in the [official repositories](https://software.opensuse.org/package/touchegg).
 
 ```bash
-$ sudo xbps-install touchegg
-$ sudo ln -s /etc/sv/touchegg /var/service
+$ sudo zypper install touchegg
+$ sudo systemctl enable touchegg.service
+$ sudo systemctl start touchegg
 ```
+
+If the version of Touchégg included for your distro is too old (v1.x)
+it is recommended to use the
+[official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
+receive updates.
+
 ## Alpine Linux
 
 Uncomment the url for the testing repository in /etc/apk/repositories, then install:
@@ -152,6 +161,16 @@ The init script can also be used to manually start and stop the Touchégg daemon
 $ sudo rc-service touchegg start
 $ sudo rc-service touchegg stop
 ```
+
+## Void Linux
+
+Touchégg is available from the main repository. To use it, you have to enable its service after installing.
+
+```bash
+$ sudo xbps-install touchegg
+$ sudo ln -s /etc/sv/touchegg /var/service
+```
+
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:
@@ -675,7 +694,7 @@ Touchégg runs in two different processes, one of them is a systemd daemon confi
 | Option | Value | Default | Description | Example
 | - | - | - | - | - |
 | start_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad before a gesture is started | Put 3 fingers on your touchpad. You will notice that the action does not start until you move them a little bit. This property configures how much you should move your fingers before the action starts |
-| finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain ammount until the animation fills your entire screen. This property configures how much you need to move your fingers |
+| finish_threshold | Number | Calculated automatically according to your device characteristics | Amount of motion to be made on the touchpad to reach the 100% of an animation | Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that you need to move your fingers a certain amount until the animation fills your entire screen. This property configures how much you need to move your fingers |
 
 It is recommended NOT to configure `start_threshold` and `finish_threshold` since an optimal value
 is calculated for you.

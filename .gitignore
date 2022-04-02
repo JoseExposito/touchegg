@@ -41,6 +41,9 @@ debian/touchegg-dbg/
 debian/files
 obj-*-linux-gnu/
 
+# COPR
+!.copr/Makefile
+
 # macOS
 .DS_Store
 ._*

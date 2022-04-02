@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.14 - 2022-04-02
+
+  - New COPR URL:
+
+    https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/
+
+  - Performance improvements calculating the size of the animations
+
+    https://github.com/JoseExposito/touchegg/pull/564
+
+  - Fix crash that might happen when multiple input devices are added and removed
+
+    https://github.com/JoseExposito/touchegg/issues/566
+
 ## 2.0.13 - 2022-01-08
 
   - Improve pinch detection when the fingers are placed horizontally or vertically

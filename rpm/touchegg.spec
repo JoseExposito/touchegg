@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.13
+Version:        2.0.14
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,6 +84,11 @@ fi
 
 
 %changelog
+
+* Sat Apr 02 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.14-1
+- New COPR URL: https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/
+- Performance improvements calculating the size of the animations
+- Fix crash that might happen when multiple input devices are added and removed
 
 * Sat Jan 08 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.13-1
 - Improve pinch detection when the fingers are placed horizontally or vertically

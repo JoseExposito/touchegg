@@ -91,7 +91,13 @@ Included by default on elementary OS 6, Zorin OS 16 and Pop!\_OS 21.04+
 
 ## Fedora, CentOS, RHEL and derivatives
 
-On Fedora and CentOS (EPEL) it is recommended to use the
+On Fedora, Touchegg is available in the [official repository](https://src.fedoraproject.org/rpms/touchegg):
+
+```
+$ dnf install touchegg
+```
+
+On CentOS (EPEL) it is recommended to use the
 [official COPR](https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/) to install Touchégg and
 receive updates.
 

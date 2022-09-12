@@ -48,15 +48,19 @@ void RunCommand::executePrelude() {
   }
 }
 
-void RunCommand::executeAction(const Gesture& /*gesture*/) {
-  RunCommand::runCommand(this->command);
+void RunCommand::executeAction(const Gesture& gesture) {
+  RunCommand::runCommand(this->command, gesture);
 }
 
-void RunCommand::executeReverse(const Gesture& /*gesture*/) {
-  RunCommand::runCommand(this->decreaseCommand);
+void RunCommand::executeReverse(const Gesture& gesture) {
+  RunCommand::runCommand(this->decreaseCommand, gesture);
 }
 
-bool RunCommand::runCommand(const std::string& command) {
+bool RunCommand::runCommand(const std::string& command,
+                            const Gesture& gesture) {
+  setenv("TOUCHEGG_DEVICE_TYPE",
+         deviceTypeToStr(gesture.performedOnDeviceType()).c_str(), 1);
   int ret = system(command.c_str());
+  unsetenv("TOUCHEGG_DEVICE_TYPE");
   return (ret == 0);
 }

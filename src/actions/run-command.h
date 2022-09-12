@@ -38,7 +38,7 @@ class RunCommand : public RepeatedAction {
   std::string command;
   std::string decreaseCommand;
 
-  static bool runCommand(const std::string &command);
+  static bool runCommand(const std::string &command, const Gesture &gesture);
 };
 
 #endif  // ACTIONS_RUN_COMMAND_H_

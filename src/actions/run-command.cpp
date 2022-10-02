@@ -21,7 +21,7 @@
 
 #include "animations/animation-factory.h"
 
-void RunCommand::onGestureBegin(const Gesture& gesture) {
+void RunCommand::onGestureBegin(const Gesture &gesture) {
   RepeatedAction::onGestureBegin(gesture);
 
   if (!this->animate) {
@@ -48,16 +48,16 @@ void RunCommand::executePrelude() {
   }
 }
 
-void RunCommand::executeAction(const Gesture& gesture) {
+void RunCommand::executeAction(const Gesture &gesture) {
   RunCommand::runCommand(this->command, gesture);
 }
 
-void RunCommand::executeReverse(const Gesture& gesture) {
+void RunCommand::executeReverse(const Gesture &gesture) {
   RunCommand::runCommand(this->decreaseCommand, gesture);
 }
 
-bool RunCommand::runCommand(const std::string& command,
-                            const Gesture& gesture) {
+bool RunCommand::runCommand(const std::string &command,
+                            const Gesture &gesture) {
   setenv("TOUCHEGG_DEVICE_TYPE",
          deviceTypeToStr(gesture.performedOnDeviceType()).c_str(), 1);
   int ret = system(command.c_str());

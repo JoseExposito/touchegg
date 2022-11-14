@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.15 - 2022-11-14
+
+  - Add TOUCHEGG_DEVICE_TYPE environment variable to RUN_COMMAND
+
+    https://github.com/JoseExposito/touchegg/pull/598
+
+  - Remove Firefox from the default config, it supports native gestures
+
+    https://github.com/JoseExposito/touchegg/pull/603
+
 ## 2.0.14 - 2022-04-02
 
   - New COPR URL:

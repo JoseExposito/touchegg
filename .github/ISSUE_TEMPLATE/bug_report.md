@@ -34,6 +34,7 @@ $ touchegg --debug
  * Version of Touchégg: Run `touchegg --version` in the terminal to check the version
  * Operating System: Ubuntu, Fedora, Arch Linux...
  * Desktop Environment: Gnome, KDE, Xfce...
+ * Are you using Wayland? If the anwser is yes, please have in mind that [Touchégg is a X11 only tool](https://github.com/JoseExposito/touchegg#does-touch%C3%A9gg-work-on-wayland)
 
 <!--
 Please, make sure to search for similar bug reports before creating one and to read the FAQ:

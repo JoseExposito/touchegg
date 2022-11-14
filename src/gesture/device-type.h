@@ -24,6 +24,30 @@ enum class DeviceType {
   UNKNOWN = 0,
   TOUCHPAD = 1,
   TOUCHSCREEN = 2,
+
+  // Adding a new device type? Don't forget to add it in deviceTypeToStr and
+  // deviceTypeFromStr
 };
+
+inline std::string deviceTypeToStr(DeviceType deviceType) {
+  switch (deviceType) {
+    case DeviceType::TOUCHPAD:
+      return "TOUCHPAD";
+    case DeviceType::TOUCHSCREEN:
+      return "TOUCHSCREEN";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+inline DeviceType deviceTypeFromStr(const std::string &str) {
+  if (str == "TOUCHPAD") {
+    return DeviceType::TOUCHPAD;
+  }
+  if (str == "TOUCHSCREEN") {
+    return DeviceType::TOUCHSCREEN;
+  }
+  return DeviceType::UNKNOWN;
+}
 
 #endif  // GESTURE_DEVICE_TYPE_H_

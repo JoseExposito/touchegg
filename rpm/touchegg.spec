@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.14
+Version:        2.0.15
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,6 +84,10 @@ fi
 
 
 %changelog
+
+* Mon Nov 14 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.15-1
+- Add TOUCHEGG_DEVICE_TYPE environment variable to RUN_COMMAND
+- Remove Firefox from the default config, it supports native gestures
 
 * Sat Apr 02 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.14-1
 - New COPR URL: https://copr.fedorainfracloud.org/coprs/joseexposito/touchegg/

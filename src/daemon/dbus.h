@@ -18,7 +18,11 @@
 #ifndef DAEMON_DBUS_H_
 #define DAEMON_DBUS_H_
 
+#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+constexpr auto DBUS_ADDRESS = "unix:path=/tmp/touchegg#0";
+#else
 constexpr auto DBUS_ADDRESS = "unix:abstract=touchegg";
+#endif
 
 constexpr auto DBUS_OBJECT_PATH = "/io/github/joseexposito/Touchegg";
 

@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.15
+Version:        2.0.16
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,6 +84,10 @@ fi
 
 
 %changelog
+
+* Mon Feb 06 2023 José Expósito <jose.exposito89@gmail.com> - 2.0.16-1
+- Do not use abstract socket on BSD
+- Fix compilation error on GCC 13
 
 * Mon Nov 14 2022 José Expósito <jose.exposito89@gmail.com> - 2.0.15-1
 - Add TOUCHEGG_DEVICE_TYPE environment variable to RUN_COMMAND

@@ -18,6 +18,8 @@
 #ifndef GESTURE_GESTURE_H_
 #define GESTURE_GESTURE_H_
 
+#include <cstdint>
+
 #include "gesture/device-type.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.16 - 2023-02-06
+
+  - Do not use abstract socket on BSD
+
+    https://github.com/JoseExposito/touchegg/issues/611
+
+  - Fix compilation error on GCC 13
+
+    https://github.com/JoseExposito/touchegg/pull/616
+
 ## 2.0.15 - 2022-11-14
 
   - Add TOUCHEGG_DEVICE_TYPE environment variable to RUN_COMMAND

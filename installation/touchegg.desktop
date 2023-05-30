@@ -7,3 +7,4 @@ Terminal=false
 Categories=Utility;
 NoDisplay=true
 StartupNotify=true
+NotShowIn=X-Cinnamon

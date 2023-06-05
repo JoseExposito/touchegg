@@ -76,6 +76,8 @@ $ sudo apt update
 $ sudo apt install touchegg
 ```
 
+The PPA is signed with key
+[7EA12677D47B593CE22727D4C0FCE32AF6B96252](https://keyserver.ubuntu.com/pks/lookup?search=7EA12677D47B593CE22727D4C0FCE32AF6B96252&hash=on&exact=on&op=index).
 If PPAs are not available on your operating system,
 [download](https://github.com/JoseExposito/touchegg/releases) the `.deb` package and install it.
 Double click on the package may work, otherwise install it from the terminal:

@@ -38,7 +38,7 @@ class AnimatedAction : public Action {
   AnimatedAction(std::unordered_map<std::string, std::string> settings,
                  const WindowSystem &windowSystem, const WindowT &window,
                  const Config &config);
-  virtual ~AnimatedAction() = default;
+  ~AnimatedAction() override = default;
 
   /**
    * Override this method to configure the animation.

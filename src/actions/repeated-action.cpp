@@ -29,7 +29,7 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   }
 
   if (this->settings.count("times") == 1) {
-    int times = std::clamp(std::stoi(this->settings.at("times")), 2, 15);
+    const int times = std::clamp(std::stoi(this->settings.at("times")), 2, 15);
     this->repeatPercentageStep = (100 / times);
   }
 
@@ -50,10 +50,12 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
   AnimatedAction::onGestureUpdate(gesture);
 
   if (this->repeat) {
-    bool increased = (gesture.percentage() >=
-                      (this->repeatPercentage + this->repeatPercentageStep));
-    bool decreased = (gesture.percentage() <=
-                      (this->repeatPercentage - this->repeatPercentageStep));
+    const bool increased =
+        (gesture.percentage() >=
+         (this->repeatPercentage + this->repeatPercentageStep));
+    const bool decreased =
+        (gesture.percentage() <=
+         (this->repeatPercentage - this->repeatPercentageStep));
 
     if (increased) {
       this->executeAction(gesture);

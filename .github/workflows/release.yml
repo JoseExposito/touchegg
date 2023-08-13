@@ -45,7 +45,7 @@ jobs:
           distribution: ${{ env.target_distribution }}
           target_architecture: ${{ matrix.target_arch }}
 
-          lintian_opts: "--profile debian --dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
+          lintian_opts: "--profile debian --dont-check-part nmu --tag-display-limit 0 --display-info --show-overrides --suppress-tags bad-distribution-in-changes-file"
           # Package uses latest packaging syntax and Lintian opts/tags
           dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
 
@@ -93,7 +93,7 @@ jobs:
       - name: Upload RPM package
         uses: "actions/upload-artifact@v2"
         with:
-          name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          name: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   rpm-package-fedora:
@@ -192,8 +192,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-          asset_name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_path: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_name: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           asset_content_type: application/octet-stream
 
       - name: Upload RPM package (Fedora)

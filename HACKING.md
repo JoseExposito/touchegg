@@ -94,10 +94,10 @@ In order to take advantage of those tools, install the following dependencies:
 
 ```bash
 # Ubuntu, Debian and derivatives:
-$ sudo apt-get install clang clang-format clang-tidy python2
+$ sudo apt-get install clang clang-format clang-tidy python3
 
 # Red Hat, Fedora, CentOS and derivatives:
-$ sudo yum install clang clang-tools-extra python2
+$ sudo yum install clang clang-tools-extra python3
 ```
 
 More information about `cpplint.py`:

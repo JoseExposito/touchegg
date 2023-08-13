@@ -69,9 +69,13 @@ int main(int argc, char** argv) {
     // Use X11 as window system
     X11 windowSystem;
 
-    // Avoid running multiple client instances in parallel
-    ClientLock lock(windowSystem.getConnectionName());
-
+    try {
+      // Avoid running multiple client instances in parallel
+      ClientLock lock(windowSystem.getConnectionName());
+    } catch (const std::runtime_error& error) {
+      tlg::error << error.what() << std::endl;
+      return -1;
+    }
     // Load the configuration using the XML loader
     tlg::info << "Parsing your configuration file..." << std::endl;
     Config config;

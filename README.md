@@ -87,7 +87,7 @@ $ sudo apt install ./touchegg_*.deb # Install the package
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
 
-Included by default on elementary OS 6, Zorin OS 16 and Pop!\_OS 21.04+
+Included by default on elementary OS 6, Zorin OS 16, Pop!\_OS 21.04+ and Linux Mint 21.2
 
 ## Fedora, CentOS, RHEL and derivatives
 
@@ -122,7 +122,7 @@ Run Touchégg manually by running the command `touchegg` or reboot to get starte
 
 ## Arch Linux, Manjaro and derivatives
 
-Install the `touchegg` package from [AUR](https://aur.archlinux.org/packages/touchegg/).
+Install the `touchegg` package from [Arch Linux Packages Registry](https://archlinux.org/packages/extra/x86_64/touchegg/).
 
 Notice that on Arch services are not enabled or started by default, so you'll have to do it manually:
 

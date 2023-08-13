@@ -27,13 +27,13 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
-#include <pugixml.hpp>  // NOLINT
-#include <stdexcept>
-#include <string>
-#include <thread>  // NOLINT
-#include <unordered_map>
-#include <utility>
-#include <vector>
+#include <pugixml.hpp>
+#include <stdexcept>      // NOLINT
+#include <string>         // NOLINT
+#include <thread>         // NOLINT
+#include <unordered_map>  // NOLINT
+#include <utility>        // NOLINT
+#include <vector>         // NOLINT
 
 #include "config/config.h"
 #include "utils/filesystem.h"

@@ -11,10 +11,10 @@ on:
 jobs:
 
   deb-package:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
-      target_docker_image: debian:buster-backports
-      target_distribution: buster
+      target_docker_image: debian:bookworm-backports
+      target_distribution: bookworm
     strategy:
       matrix:
         target_arch: ["amd64", "armhf", "arm64"]
@@ -23,7 +23,7 @@ jobs:
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Patch target distribution in Debian changelog
         # touchegg (x.y.z) DISTRO; urgency=medium
@@ -56,9 +56,9 @@ jobs:
           path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
 
   rpm-package-rhel:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container:
-      image: almalinux/almalinux:8
+      image: almalinux/almalinux:9
     steps:
       - name: Install dependencies
         run: |
@@ -74,7 +74,7 @@ jobs:
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ${{ env.GITHUB_REPOSITORY_NAME }}
 
@@ -97,9 +97,9 @@ jobs:
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   rpm-package-fedora:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container:
-      image: fedora:34
+      image: fedora:38
     steps:
       - name: Install dependencies
         run: |
@@ -112,7 +112,7 @@ jobs:
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ${{ env.GITHUB_REPOSITORY_NAME }}
 
@@ -135,7 +135,7 @@ jobs:
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   create-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [ deb-package, rpm-package-rhel, rpm-package-fedora ]
     steps:
       - name: GitHub Environment Variables Action

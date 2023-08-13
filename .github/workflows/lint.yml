@@ -6,16 +6,16 @@ on: [push, pull_request]
 
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt build-dep -y .
-          sudo apt install -y clang clang-format clang-tidy python2
+          sudo apt install -y clang clang-format clang-tidy python3
 
       - name: Compile
         run: |

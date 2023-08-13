@@ -13,10 +13,10 @@ on:
 
 jobs:
   update-ppa-branch:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Merge master branch into ppa branch
         uses: devmasx/merge-branch@v1.3.1

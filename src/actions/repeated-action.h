@@ -56,7 +56,7 @@ class RepeatedAction : public AnimatedAction {
    * Override this method to configure what is executed for succesful gesture
    * @param gesture The gesture that triggered the action
    */
-  virtual void executeAction(const Gesture &gesture) = 0;
+  void executeAction(const Gesture &gesture) override = 0;
 
   /**
    * Override this method to configure what is executed for reversed gesture

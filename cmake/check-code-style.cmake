@@ -23,11 +23,11 @@ else()
   endif()
 endif()
 
-find_program(PYTHON_EXEC NAMES "python2")
+find_program(PYTHON_EXEC NAMES "python3")
 if(NOT PYTHON_EXEC)
-  message(WARNING "Check for python2: Not found, cpplint.py will not be executed")
+  message(WARNING "Check for python3: Not found, cpplint.py will not be executed")
 else()
-  message(STATUS "Check for python2: Found")
+  message(STATUS "Check for python3: Found")
   execute_process(
     COMMAND ./cmake/run-cpplint-py.sh
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}

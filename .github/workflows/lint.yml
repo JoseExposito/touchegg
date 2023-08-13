@@ -15,7 +15,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt build-dep -y .
-          sudo apt install -y clang clang-format clang-tidy python2
+          sudo apt install -y clang clang-format clang-tidy python3
 
       - name: Compile
         run: |

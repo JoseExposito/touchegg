@@ -58,14 +58,14 @@ jobs:
   rpm-package-rhel:
     runs-on: ubuntu-22.04
     container:
-      image: almalinux:9
+      image: almalinux:8
     steps:
       - name: Install dependencies
         run: |
           su
           dnf upgrade -y
           dnf install -y dnf-plugins-core
-          dnf config-manager --set-enabled crb
+          dnf config-manager --set-enabled powertools
           dnf install -y epel-release
           dnf groupinstall -y "Development Tools"
           dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
@@ -93,7 +93,7 @@ jobs:
       - name: Upload RPM package
         uses: "actions/upload-artifact@v2"
         with:
-          name: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
 
   rpm-package-fedora:
@@ -192,8 +192,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
-          asset_name: "rhel9_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_path: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
+          asset_name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           asset_content_type: application/octet-stream
 
       - name: Upload RPM package (Fedora)

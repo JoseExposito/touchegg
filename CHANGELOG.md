@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.17 - 2023-08-13
+
+This version does not include any new features, but the deb and rpm packages
+have been updated to target more recent distro versions.
+
 ## 2.0.16 - 2023-02-06
 
   - Do not use abstract socket on BSD

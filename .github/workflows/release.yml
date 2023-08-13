@@ -45,7 +45,7 @@ jobs:
           distribution: ${{ env.target_distribution }}
           target_architecture: ${{ matrix.target_arch }}
 
-          lintian_opts: "-profile debian --dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
+          lintian_opts: "--profile debian --dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
           # Package uses latest packaging syntax and Lintian opts/tags
           dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
 

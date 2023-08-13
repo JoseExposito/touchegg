@@ -45,7 +45,7 @@ jobs:
           distribution: ${{ env.target_distribution }}
           target_architecture: ${{ matrix.target_arch }}
 
-          lintian_opts: "--dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
+          lintian_opts: "-profile debian --dont-check-part nmu --no-tag-display-limit --display-info --show-overrides"
           # Package uses latest packaging syntax and Lintian opts/tags
           dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
 
@@ -58,7 +58,7 @@ jobs:
   rpm-package-rhel:
     runs-on: ubuntu-22.04
     container:
-      image: almalinux/almalinux:9
+      image: almalinux:9
     steps:
       - name: Install dependencies
         run: |
@@ -103,7 +103,6 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          su
           dnf upgrade -y
           dnf groupinstall -y "Development Tools"
           dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel

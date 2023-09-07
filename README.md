@@ -766,8 +766,11 @@ Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop a
 
 #### Can I use 2 finger swipes for web browser navigation?
 
-No, at least not with Touchégg. It is up to the web browser to implement that feature.
-You can request this feature in your favourite's web browser bug tracker.
+No, at least not with Touchégg. However, you can use following alternatives methods.
+
+If you are using a Firefox-based browser, you can use Wayland instead of X11 for this functionality as standard; if you want to stay in X11 or cannot use Wayland, you can also use [this extension](https://addons.mozilla.org/firefox/addon/two-finger-history-jump/) instead.
+
+If you are using a Chromium-based browser, simply run it with the `--enable-features=TouchpadOverscrollHistoryNavigation` command line option.If you want this to permanent, edit the shortcut on the Start menu.
 
 # Copyright
 

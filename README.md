@@ -664,7 +664,7 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
-| button | `1`/`2`/`3` | Left click (1), middle click (2) or right click (3) |
+| button | `1`/`2`/`3`/`8`/`9` | Left click (1), middle click (2), right click (3), back button (8) or forward button (9) |
 | on | `begin`/`end` | If the command should be executed on the beginning or on the end of the gesture. |
 
 Example:

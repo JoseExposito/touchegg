@@ -185,6 +185,21 @@ $ sudo xbps-install touchegg
 $ sudo ln -s /etc/sv/touchegg /var/service
 ```
 
+## NixOS
+
+Add the `touchegg` package in your `configuration.nix` file and enable the services.
+
+```
+# configuration.nix
+...
+environment.systemPackages = with pkgs; [
+  touchegg
+];
+
+services.touchegg.enable = true;
+...
+```
+
 ## GNOME
 
 If you are using the GNOME Desktop Environment it is recommended to also install this extension:

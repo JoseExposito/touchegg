@@ -30,6 +30,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
     * [Void Linux](#void-linux)
+    * [NixOS](#nixos)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)

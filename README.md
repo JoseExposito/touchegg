@@ -30,6 +30,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
     * [Void Linux](#void-linux)
+    * [NixOS](#nixos)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -183,6 +184,21 @@ Touchégg is available from the main repository. To use it, you have to enable i
 ```bash
 $ sudo xbps-install touchegg
 $ sudo ln -s /etc/sv/touchegg /var/service
+```
+
+## NixOS
+
+Add the `touchegg` package in your `configuration.nix` file and enable the services.
+
+```
+# configuration.nix
+...
+environment.systemPackages = with pkgs; [
+  touchegg
+];
+
+services.touchegg.enable = true;
+...
 ```
 
 ## GNOME

@@ -88,7 +88,7 @@ Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
-$ sudo apt install ./touchegg_*.deb # Install the package
+$ sudo apt-get install ./touchegg_*.deb # Install the package
 ```
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.

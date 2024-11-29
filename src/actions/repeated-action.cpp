@@ -34,14 +34,15 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   }
 
   if (this->settings.count("on") == 1) {
-    this->onBegin = (this->settings.at("on") == "begin");
+    this->executeActionOn = executeActionOnFromStr(this->settings.at("on"));
   }
 
   // execute supplied prelude
   this->executePrelude();
 
   // run action on begin
-  if (!this->repeat && this->onBegin) {
+  if (!this->repeat &&
+      shouldExecuteAction(ExecuteActionOn::BEGIN, this->executeActionOn)) {
     this->executeAction(gesture);
   }
 }
@@ -70,7 +71,8 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
 }
 
 void RepeatedAction::onGestureEnd(const Gesture &gesture) {
-  if (!this->repeat && !this->onBegin) {
+  if (!this->repeat &&
+      shouldExecuteAction(ExecuteActionOn::END, this->executeActionOn)) {
     if (gesture.percentage() >= this->threshold) {
       this->executeAction(gesture);
     }

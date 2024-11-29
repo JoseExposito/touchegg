@@ -21,6 +21,7 @@
 #include <string>
 
 #include "actions/action.h"
+#include "actions/execute-action-on.h"
 
 /**
  * Action to emulate a shortcut.
@@ -35,7 +36,7 @@ class MouseClick : public Action {
 
  private:
   int button = 1;
-  bool onBegin = true;
+  ExecuteActionOn executeActionOn = ExecuteActionOn::BEGIN;
 };
 
 #endif  // ACTIONS_MOUSE_CLICK_H_

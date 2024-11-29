@@ -19,6 +19,7 @@
 #define ACTIONS_REPEATED_ACTION_H_
 
 #include "actions/animated-action.h"
+#include "actions/execute-action-on.h"
 
 class RepeatedAction : public AnimatedAction {
  public:
@@ -84,7 +85,7 @@ class RepeatedAction : public AnimatedAction {
   /**
    * Whether the action should be executed on gesture begin or end.
    */
-  bool onBegin = true;
+  ExecuteActionOn executeActionOn = ExecuteActionOn::BEGIN;
 };
 
 #endif  // ACTIONS_REPEATED_ACTION_H_

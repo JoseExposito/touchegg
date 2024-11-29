@@ -73,7 +73,10 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
 void RepeatedAction::onGestureEnd(const Gesture &gesture) {
   if (!this->repeat &&
       shouldExecuteAction(ExecuteActionOn::END, this->executeActionOn)) {
-    if (gesture.percentage() >= this->threshold) {
+    // Do not take into account the threshold is the action is executed on begin
+    // and end. Otherwise, we could miss could execute only the on begin part.
+    if (this->executeActionOn == ExecuteActionOn::BEGIN_AND_END ||
+        gesture.percentage() >= this->threshold) {
       this->executeAction(gesture);
     }
   }

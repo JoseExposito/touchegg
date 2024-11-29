@@ -544,7 +544,7 @@ Options:
 | repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
 | modifiers | Keysym | Typical values are: `Shift_L`, `Control_L`, `Alt_L`, `Alt_R`, `Meta_L`, `Super_L`, `Hyper_L`. You can use multiple keysyms: `Control_L+Alt_L`.See "Keysyms" below for more information. |
 | keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
-| on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
+| on | `begin`/`end`/`begin-and-end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning and/or at the end of the gesture. |
 | decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 | times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
@@ -640,7 +640,7 @@ Options:
 | - | - | - |
 | repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
 | command | Command | The command to execute. |
-| on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
+| on | `begin`/`end`/`begin-and-end` | Only used when `repeat` is `false`. If the command should be executed and/on the beginning or on the end of the gesture. |
 | decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
 | times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
@@ -681,7 +681,7 @@ Options:
 | Option | Value | Description |
 | - | - | - |
 | button | `1`/`2`/`3`/`8`/`9` | Left click (1), middle click (2), right click (3), back button (8) or forward button (9) |
-| on | `begin`/`end` | If the command should be executed on the beginning or on the end of the gesture. |
+| on | `begin`/`end`/`begin-and-end` | If the mouse click should be executed on the beginning and/or on the end of the gesture. |
 
 Example:
 

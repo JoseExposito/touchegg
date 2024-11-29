@@ -24,6 +24,7 @@ enum class ExecuteActionOn {
   NOT_SUPPORTED,
   BEGIN,
   END,
+  BEGIN_AND_END,
   // Adding a new value? Don't forget to add it in executeActionOnFromStr and
   // shouldExecuteAction
 };
@@ -35,6 +36,9 @@ inline ExecuteActionOn executeActionOnFromStr(const std::string &str) {
   if (str == "end") {
     return ExecuteActionOn::END;
   }
+  if (str == "begin-and-end") {
+    return ExecuteActionOn::BEGIN_AND_END;
+  }
   return ExecuteActionOn::NOT_SUPPORTED;
 }
 
@@ -44,6 +48,8 @@ inline bool shouldExecuteAction(ExecuteActionOn phase, ExecuteActionOn config) {
       return phase == ExecuteActionOn::BEGIN;
     case ExecuteActionOn::END:
       return phase == ExecuteActionOn::END;
+    case ExecuteActionOn::BEGIN_AND_END:
+      return true;
     default:
       return false;
   }

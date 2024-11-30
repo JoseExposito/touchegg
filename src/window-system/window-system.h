@@ -133,13 +133,22 @@ class WindowSystem {
                         bool isPress) const = 0;
 
   /**
-   * Simulates a mouse click.
+   * Simulates a mouse down event.
    * @param button One of this values:
    * 1 – Left button click
    * 2 – Middle button click
    * 3 – Right button click
    */
-  virtual void sendMouseClick(int button) const = 0;
+  virtual void sendMouseDown(int button) const = 0;
+
+  /**
+   * Simulates a mouse up event.
+   * @param button One of this values:
+   * 1 – Left button click
+   * 2 – Middle button click
+   * 3 – Right button click
+   */
+  virtual void sendMouseUp(int button) const = 0;
 
   /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not

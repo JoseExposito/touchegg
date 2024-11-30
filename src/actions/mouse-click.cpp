@@ -27,7 +27,8 @@ void MouseClick::onGestureBegin(const Gesture& /*gesture*/) {
   }
 
   if (shouldExecuteAction(ExecuteActionOn::BEGIN, this->executeActionOn)) {
-    this->windowSystem.sendMouseClick(this->button);
+    this->windowSystem.sendMouseDown(this->button);
+    this->windowSystem.sendMouseUp(this->button);
   }
 }
 
@@ -35,6 +36,7 @@ void MouseClick::onGestureUpdate(const Gesture& /*gesture*/) {}
 
 void MouseClick::onGestureEnd(const Gesture& /*gesture*/) {
   if (shouldExecuteAction(ExecuteActionOn::END, this->executeActionOn)) {
-    this->windowSystem.sendMouseClick(this->button);
+    this->windowSystem.sendMouseDown(this->button);
+    this->windowSystem.sendMouseUp(this->button);
   }
 }

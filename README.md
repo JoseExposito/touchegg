@@ -683,6 +683,8 @@ Options:
 | button | `1`/`2`/`3`/`8`/`9` | Left click (1), middle click (2), right click (3), back button (8) or forward button (9) |
 | on | `begin`/`end`/`begin-and-end` | If the mouse click should be executed on the beginning and/or on the end of the gesture. |
 
+When the `begin-and-end` option is used, the mouse button is down when the gesture begins and up when the gesture ends.
+
 Example:
 
 ```xml

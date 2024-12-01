@@ -654,7 +654,7 @@ Example 1:
 <gesture type="SWIPE" fingers="4" direction="DOWN">
   <action type="RUN_COMMAND">
     <repeat>false</repeat>
-    <command>notify-send 'Hello World' "Swipe down, DEVICE_TYPE=$TOUCHEGG_DEVICE_TYPE"</command>
+    <command>notify-send 'Hello World' "Swipe down, DEVICE_TYPE=$TOUCHEGG_DEVICE_TYPE TOUCHEGG_GESTURE_ON=$TOUCHEGG_GESTURE_ON"</command>
     <on>begin</on>
   </action>
 </gesture>

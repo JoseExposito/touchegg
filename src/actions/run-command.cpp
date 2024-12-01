@@ -22,6 +22,7 @@
 #include "animations/animation-factory.h"
 
 void RunCommand::onGestureBegin(const Gesture &gesture) {
+  setenv("TOUCHEGG_GESTURE_ON", "begin", 1);
   RepeatedAction::onGestureBegin(gesture);
 
   if (!this->animate) {
@@ -36,6 +37,16 @@ void RunCommand::onGestureBegin(const Gesture &gesture) {
         animationType, this->windowSystem, this->window, this->color,
         this->borderColor);
   }
+}
+
+void RunCommand::onGestureUpdate(const Gesture &gesture) {
+  setenv("TOUCHEGG_GESTURE_ON", "update", 1);
+  RepeatedAction::onGestureUpdate(gesture);
+}
+
+void RunCommand::onGestureEnd(const Gesture &gesture) {
+  setenv("TOUCHEGG_GESTURE_ON", "end", 1);
+  RepeatedAction::onGestureEnd(gesture);
 }
 
 void RunCommand::executePrelude() {

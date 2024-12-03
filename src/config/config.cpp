@@ -60,6 +60,12 @@ bool Config::hasGestureConfig(const std::string &application,
   std::string key = Config::getConfigKey(application,
                            gestureType, std::to_string(numFingers),
                            gestureDirection, gestureAxis);
+  if (this->config.count(key) == 1) return true;
+
+  // Check for definitions with no axis specified
+  key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, GestureAxis::UNKNOWN);
   return (this->config.count(key) == 1);
 }
 
@@ -71,6 +77,12 @@ Config::getGestureConfig(const std::string &application,
   std::string key = Config::getConfigKey(application,
                            gestureType, std::to_string(numFingers),
                            gestureDirection, gestureAxis);
+  auto match = this->config.find(key);
+  if (match != this->config.end()) return match->second;
+
+  key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, GestureAxis::UNKNOWN);
   return this->config.at(key);
 }
 

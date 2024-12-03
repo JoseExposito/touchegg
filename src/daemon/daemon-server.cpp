@@ -116,9 +116,10 @@ void DaemonServer::send(const std::string &signalName,
 
   // Copy every gesture field into the signal parameters for serialization
   GVariant *signalParams =
-      g_variant_new("(uudiut)",                              // NOLINT
+      g_variant_new("(uuudiut)",                              // NOLINT
                     static_cast<int>(gesture->type()),       // u
                     static_cast<int>(gesture->direction()),  // u
+                    static_cast<int>(gesture->axis()),       // u
                     gesture->percentage(),                   // d
                     gesture->fingers(),                      // i
                     static_cast<int>(gesture->performedOnDeviceType()),  // u

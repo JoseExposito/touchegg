@@ -32,6 +32,7 @@ struct LibinputPinchState {
   uint64_t startTimestamp = 0;
   double delta = 1;
   GestureDirection direction = GestureDirection::UNKNOWN;
+  GestureAxis axis = GestureAxis::UNKNOWN;
   double percentage = 0;
   int fingers = 0;
 
@@ -40,6 +41,7 @@ struct LibinputPinchState {
     startTimestamp = 0;
     delta = 1;
     direction = GestureDirection::UNKNOWN;
+    axis = GestureAxis::UNKNOWN;
     percentage = 0;
     fingers = 0;
   }

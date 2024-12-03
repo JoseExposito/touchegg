@@ -122,15 +122,16 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
     GVariant *signalParameters) {
   GestureType type = GestureType::NOT_SUPPORTED;
   GestureDirection direction = GestureDirection::UNKNOWN;
+  GestureAxis axis = GestureAxis::UNKNOWN;
   double percentage = -1;
   int fingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t elapsedTime = -1;
 
   g_variant_get(signalParameters,  // NOLINT
-                "(uudiut)", &type, &direction, &percentage, &fingers,
+                "(uuudiut)", &type, &direction, &axis, &percentage, &fingers,
                 &deviceType, &elapsedTime);
 
-  return std::make_unique<Gesture>(type, direction, percentage, fingers,
+  return std::make_unique<Gesture>(type, direction, axis, percentage, fingers,
                                    deviceType, elapsedTime);
 }

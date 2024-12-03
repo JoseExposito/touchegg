@@ -21,6 +21,7 @@
 #include <cstdint>
 
 #include "gesture/device-type.h"
+#include "gesture/gesture-axis.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -34,6 +35,17 @@ class Gesture {
           int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime)
       : gestureType(type),
         gestureDirection(direction),
+        gestureAxis(gestureAxisFromDirection(direction)),
+        gesturePercentage(percentage),
+        gestureFingers(fingers),
+        deviceType(performedOnDeviceType),
+        gestureElapsedTime(elapsedTime) {}
+  Gesture(GestureType type, GestureDirection direction, GestureAxis axis,
+          double percentage, int fingers, DeviceType performedOnDeviceType,
+          uint64_t elapsedTime)
+      : gestureType(type),
+        gestureDirection(direction),
+        gestureAxis(axis),
         gesturePercentage(percentage),
         gestureFingers(fingers),
         deviceType(performedOnDeviceType),
@@ -50,6 +62,12 @@ class Gesture {
    * @see GestureDirection
    */
   GestureDirection direction() const { return this->gestureDirection; }
+
+  /**
+   * @returns The gesture axis.
+   * @see GestureAxis
+   */
+  GestureAxis axis() const { return this->gestureAxis; }
 
   /**
    * Percentage of the gesture performed, used for animations.
@@ -81,9 +99,16 @@ class Gesture {
     this->gestureDirection = direction;
   }
 
+  /**
+   * Set the gesture axis.
+   * @see GestureAxis
+   */
+  void setAxis(GestureAxis axis) { this->gestureAxis = axis; }
+
  protected:
   GestureType gestureType = GestureType::NOT_SUPPORTED;
   GestureDirection gestureDirection = GestureDirection::UNKNOWN;
+  GestureAxis gestureAxis = GestureAxis::UNKNOWN;
   double gesturePercentage = -1;
   int gestureFingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;

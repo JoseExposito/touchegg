@@ -25,6 +25,7 @@
 #include "actions/action-type.h"
 #include "actions/action.h"
 #include "config/config.h"
+#include "gesture/gesture-axis.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 #include "gesture/gesture.h"
@@ -36,12 +37,18 @@ GestureController::GestureController(const Config &config,
     : config(config), windowSystem(windowSystem) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
+  // Deduce axis from direction when possible
+  if (gesture->axis() == GestureAxis::UNKNOWN) {
+	  gesture->setAxis(gestureAxisFromDirection(gesture->direction()));
+  }
+
   tlg::debug << "Gesture begin detected" << std::endl;
   tlg::debug << "\tGesture information:" << std::endl;
   tlg::debug << "\t\tFingers: " << gesture->fingers() << std::endl;
   tlg::debug << "\t\tType: " << gestureTypeToStr(gesture->type()) << std::endl;
   tlg::debug << "\t\tDirection: " << gestureDirectionToStr(gesture->direction())
              << std::endl;
+  tlg::debug << "\t\tAxis: " << gestureAxisToStr(gesture->axis()) << std::endl;
 
   this->rotatedDirection = this->windowSystem.calculateRotation(
       gesture->type(), gesture->performedOnDeviceType(), gesture->direction());
@@ -49,6 +56,7 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
     tlg::debug << "\t\tDirection after rotation: "
                << gestureDirectionToStr(this->rotatedDirection) << std::endl;
     gesture->setDirection(this->rotatedDirection);
+    gesture->setAxis(gestureAxisFromDirection(this->rotatedDirection));
   }
 
   this->window = this->windowSystem.getWindowUnderCursor();
@@ -102,18 +110,19 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
   const GestureType gestureType = gesture.type();
   int fingers = gesture.fingers();
   const GestureDirection direction = gesture.direction();
+  const GestureAxis axis = gesture.axis();
 
   // First check if there is an specific application gesture
   application = this->windowSystem.getWindowClassName(window);
   tlg::debug << "\tGesture performed on app: " << application << std::endl;
   hasAction = this->config.hasGestureConfig(application, gestureType, fingers,
-                                            direction);
+                                            direction, axis);
 
   // If no gesture was configured, check the global gestures
   if (!hasAction) {
     application = "All";
     hasAction = this->config.hasGestureConfig(application, gestureType, fingers,
-                                              direction);
+                                              direction, axis);
   }
 
   if (!hasAction) {
@@ -124,7 +133,7 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
   tlg::debug << "\tAction configured for this gesture" << std::endl;
 
   auto pair = this->config.getGestureConfig(application, gestureType, fingers,
-                                            direction);
+                                            direction, axis);
   ActionType actionType = pair.first;
   std::unordered_map<std::string, std::string> actionSettings = pair.second;
 

@@ -24,17 +24,56 @@ constexpr auto DBUS_ADDRESS = "unix:path=/tmp/touchegg#0";
 constexpr auto DBUS_ADDRESS = "unix:abstract=touchegg";
 #endif
 
+// Singular is legacy
 constexpr auto DBUS_OBJECT_PATH = "/io/github/joseexposito/Touchegg";
+// New versions should be appended to the bottom of the list
+constexpr const char* DBUS_OBJECT_PATHS[] = {
+	"/io/github/joseexposito/Touchegg",	// 0 for legacy
+	"/io/github/joseexposito/Touchegg1"
+};
 
+// Singular is legacy
 constexpr auto DBUS_INTERFACE_NAME = "io.github.joseexposito.Touchegg";
+// New versions should be appended to the bottom of the list
+constexpr const char* DBUS_INTERFACE_NAMES[] = {
+	"io.github.joseexposito.Touchegg",	// 0 for legacy
+	"io.github.joseexposito.Touchegg1"
+};
 
 constexpr auto DBUS_ON_GESTURE_BEGIN = "OnGestureBegin";
 constexpr auto DBUS_ON_GESTURE_UPDATE = "OnGestureUpdate";
 constexpr auto DBUS_ON_GESTURE_END = "OnGestureEnd";
 
+// Versions should be in order from oldest to newest
 constexpr auto DBUS_INTROSPECTION_XML =
     "<node>"
     "  <interface name='io.github.joseexposito.Touchegg'>"
+    "    <signal name='OnGestureBegin'>"
+    "      <arg name='gesture_type' type='u' />"
+    "      <arg name='gesture_direction' type='u' />"
+    "      <arg name='percentage' type='d' />"
+    "      <arg name='fingers' type='i' />"
+    "      <arg name='performed_on_device_type' type='u' />"
+    "      <arg name='elapsed_time' type='t' />"
+    "    </signal>"
+    "    <signal name='OnGestureUpdate'>"
+    "      <arg name='gesture_type' type='u' />"
+    "      <arg name='gesture_direction' type='u' />"
+    "      <arg name='percentage' type='d' />"
+    "      <arg name='fingers' type='i' />"
+    "      <arg name='performed_on_device_type' type='u' />"
+    "      <arg name='elapsed_time' type='t' />"
+    "    </signal>"
+    "    <signal name='OnGestureEnd'>"
+    "      <arg name='gesture_type' type='u' />"
+    "      <arg name='gesture_direction' type='u' />"
+    "      <arg name='percentage' type='d' />"
+    "      <arg name='fingers' type='i' />"
+    "      <arg name='performed_on_device_type' type='u' />"
+    "      <arg name='elapsed_time' type='t' />"
+    "    </signal>"
+    "  </interface>"
+    "  <interface name='io.github.joseexposito.Touchegg1'>"
     "    <signal name='OnGestureBegin'>"
     "      <arg name='gesture_type' type='u' />"
     "      <arg name='gesture_direction' type='u' />"

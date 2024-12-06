@@ -56,10 +56,12 @@ void DaemonClient::connect() {
       std::this_thread::sleep_for(std::chrono::seconds(5));
     } else {
       tlg::info << "Connection with Touchégg established" << std::endl;
+      auto interfaceVersion = (sizeof(DBUS_INTERFACE_NAMES)/sizeof(DBUS_INTERFACE_NAMES[0])) - 1;
+      auto objectPathVersion = (sizeof(DBUS_OBJECT_PATHS)/sizeof(DBUS_OBJECT_PATHS[0])) - 1;
       g_dbus_connection_signal_subscribe(
-          connection, nullptr, DBUS_INTERFACE_NAME, nullptr, DBUS_OBJECT_PATH,
-          nullptr, G_DBUS_SIGNAL_FLAGS_NONE, DaemonClient::onNewMessage, this,
-          nullptr);
+          connection, nullptr, DBUS_INTERFACE_NAMES[interfaceVersion], nullptr,
+          DBUS_OBJECT_PATHS[objectPathVersion], nullptr, G_DBUS_SIGNAL_FLAGS_NONE,
+          DaemonClient::onNewMessage, this, nullptr);
 
       g_signal_connect(
           connection, "closed",

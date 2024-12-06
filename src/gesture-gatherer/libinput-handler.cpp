@@ -58,6 +58,12 @@ GestureDirection LininputHandler::calculateSwipeDirection(double deltaX,
   return (deltaY > 0) ? GestureDirection::DOWN : GestureDirection::UP;
 }
 
+GestureAxis LininputHandler::calculatePinchAxis(double deltaX,
+                                                double deltaY) {
+  return (std::abs(deltaX) > std::abs(deltaY)) ?
+    GestureAxis::HORIZONTAL : GestureAxis::VERTICAL;
+}
+
 double LininputHandler::calculateSwipeAnimationPercentage(
     const LibinputDeviceInfo &info, GestureDirection direction, double deltaX,
     double deltaY) {

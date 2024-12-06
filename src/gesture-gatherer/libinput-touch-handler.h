@@ -22,6 +22,7 @@
 #include <utility>
 
 #include "gesture-gatherer/libinput-handler.h"
+#include "gesture/gesture-axis.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -32,6 +33,7 @@ struct LibinputTouchState {
   bool started = false;
   GestureType type = GestureType::NOT_SUPPORTED;
   GestureDirection direction = GestureDirection::UNKNOWN;
+  GestureAxis axis = GestureAxis::UNKNOWN;
   uint64_t startTimestamp = 0;
   int startFingers = 0;
   std::unordered_map<int32_t, double> startX;
@@ -45,6 +47,7 @@ struct LibinputTouchState {
     started = false;
     type = GestureType::NOT_SUPPORTED;
     direction = GestureDirection::UNKNOWN;
+    axis = GestureAxis::UNKNOWN;
     startTimestamp = 0;
     startFingers = 0;
     tapFingers = 0;

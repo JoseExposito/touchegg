@@ -55,6 +55,11 @@ class LininputHandler {
   static GestureDirection calculateSwipeDirection(double deltaX, double deltaY);
 
   /**
+   * @returns The primary axis of a pinch gesture.
+   */
+  static GestureAxis calculatePinchAxis(double deltaX, double deltaY);
+
+  /**
    * @returns The percentage (between 0 and 100) of the gesture animation.
    */
   static double calculateSwipeAnimationPercentage(

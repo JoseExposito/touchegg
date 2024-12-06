@@ -46,27 +46,43 @@ std::string Config::getGlobalSetting(const std::string &name) const {
 void Config::saveGestureConfig(
     const std::string &application, GestureType gestureType,
     const std::string &numFingers, GestureDirection gestureDirection,
-    ActionType actionType,
+    GestureAxis gestureAxis, ActionType actionType,
     const std::unordered_map<std::string, std::string> &actionSettings) {
   std::string key = Config::getConfigKey(application, gestureType, numFingers,
-                                         gestureDirection);
+                                         gestureDirection, gestureAxis);
   this->config[key] = std::make_pair(actionType, actionSettings);
 }
 
 bool Config::hasGestureConfig(const std::string &application,
                               GestureType gestureType, int numFingers,
-                              GestureDirection gestureDirection) const {
-  std::string key = Config::getConfigKey(
-      application, gestureType, std::to_string(numFingers), gestureDirection);
+                              GestureDirection gestureDirection,
+                              GestureAxis gestureAxis) const {
+  std::string key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, gestureAxis);
+  if (this->config.count(key) == 1) return true;
+
+  // Check for definitions with no axis specified
+  key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, GestureAxis::UNKNOWN);
   return (this->config.count(key) == 1);
 }
 
 std::pair<ActionType, std::unordered_map<std::string, std::string>>
 Config::getGestureConfig(const std::string &application,
                          GestureType gestureType, int numFingers,
-                         GestureDirection gestureDirection) const {
-  std::string key = Config::getConfigKey(
-      application, gestureType, std::to_string(numFingers), gestureDirection);
+                         GestureDirection gestureDirection,
+                         GestureAxis gestureAxis) const {
+  std::string key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, gestureAxis);
+  auto match = this->config.find(key);
+  if (match != this->config.end()) return match->second;
+
+  key = Config::getConfigKey(application,
+                           gestureType, std::to_string(numFingers),
+                           gestureDirection, GestureAxis::UNKNOWN);
   return this->config.at(key);
 }
 
@@ -78,9 +94,12 @@ void Config::loadDefaultGlobalSettings() {
 std::string Config::getConfigKey(const std::string &application,
                                  GestureType gestureType,
                                  const std::string &numFingers,
-                                 GestureDirection gestureDirection) {
+                                 GestureDirection gestureDirection,
+                                 GestureAxis gestureAxis) {
   auto gestureTypeInt = static_cast<int>(gestureType);
   auto gestureDirectionInt = static_cast<int>(gestureDirection);
+  auto gestureAxisInt = static_cast<int>(gestureAxis);
   return toLower(application) + "_" + std::to_string(gestureTypeInt) + "_" +
-         numFingers + "_" + std::to_string(gestureDirectionInt);
+         numFingers + "_" + std::to_string(gestureDirectionInt) + "_" +
+         std::to_string(gestureAxisInt);
 }

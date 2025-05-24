@@ -17,7 +17,7 @@ jobs:
       target_distribution: bookworm
     strategy:
       matrix:
-        target_arch: ["amd64", "armhf", "arm64"]
+        target_arch: ["amd64"]
     steps:
       - name: GitHub Environment Variables Action
         uses: FranzDiebold/github-env-vars-action@v1.2.1

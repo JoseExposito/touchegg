@@ -105,7 +105,7 @@ jobs:
       - name: Install dependencies
         run: |
           dnf upgrade -y
-          dnf group install "development-tools"
+          dnf group install -y "development-tools"
           dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
 
       - name: GitHub Environment Variables Action

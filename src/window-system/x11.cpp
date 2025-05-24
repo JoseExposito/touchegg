@@ -466,8 +466,12 @@ void X11::sendKeys(const std::vector<std::string> &keycodes,
   XFlush(this->display);
 }
 
-void X11::sendMouseClick(int button) const {
+void X11::sendMouseDown(int button) const {
   XTestFakeButtonEvent(this->display, button, True, 0);
+  XFlush(this->display);
+}
+
+void X11::sendMouseUp(int button) const {
   XTestFakeButtonEvent(this->display, button, False, 0);
   XFlush(this->display);
 }

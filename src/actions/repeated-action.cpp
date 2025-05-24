@@ -34,14 +34,15 @@ void RepeatedAction::onGestureBegin(const Gesture &gesture) {
   }
 
   if (this->settings.count("on") == 1) {
-    this->onBegin = (this->settings.at("on") == "begin");
+    this->executeActionOn = executeActionOnFromStr(this->settings.at("on"));
   }
 
   // execute supplied prelude
   this->executePrelude();
 
   // run action on begin
-  if (!this->repeat && this->onBegin) {
+  if (!this->repeat &&
+      shouldExecuteAction(ExecuteActionOn::BEGIN, this->executeActionOn)) {
     this->executeAction(gesture);
   }
 }
@@ -70,8 +71,12 @@ void RepeatedAction::onGestureUpdate(const Gesture &gesture) {
 }
 
 void RepeatedAction::onGestureEnd(const Gesture &gesture) {
-  if (!this->repeat && !this->onBegin) {
-    if (gesture.percentage() >= this->threshold) {
+  if (!this->repeat &&
+      shouldExecuteAction(ExecuteActionOn::END, this->executeActionOn)) {
+    // Do not take into account the threshold is the action is executed on begin
+    // and end. Otherwise, we could miss could execute only the on begin part.
+    if (this->executeActionOn == ExecuteActionOn::BEGIN_AND_END ||
+        gesture.percentage() >= this->threshold) {
       this->executeAction(gesture);
     }
   }

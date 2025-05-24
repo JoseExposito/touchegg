@@ -30,6 +30,7 @@ Many more actions and gestures are available and everything is easily configurab
     * [openSUSE](#opensuse)
     * [Alpine Linux](#alpine-linux)
     * [Void Linux](#void-linux)
+    * [NixOS](#nixos)
     * [GNOME](#gnome)
   * [Configuration](#configuration)
     * [Using Touché](#using-touché)
@@ -76,13 +77,18 @@ $ sudo apt update
 $ sudo apt install touchegg
 ```
 
+Running `add-apt-repository` may fail because of temporary server issues; try again a few times, it should work.
+The PPA is signed with key
+[7EA12677D47B593CE22727D4C0FCE32AF6B96252](https://keyserver.ubuntu.com/pks/lookup?search=7EA12677D47B593CE22727D4C0FCE32AF6B96252&hash=on&exact=on&op=index)
+in case you want to install it manually.
+
 If PPAs are not available on your operating system,
 [download](https://github.com/JoseExposito/touchegg/releases) the `.deb` package and install it.
 Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
 $ cd ~/Downloads # Or to the path where the deb package is placed at
-$ sudo apt install ./touchegg_*.deb # Install the package
+$ sudo apt-get install ./touchegg_*.deb # Install the package
 ```
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
@@ -178,6 +184,21 @@ Touchégg is available from the main repository. To use it, you have to enable i
 ```bash
 $ sudo xbps-install touchegg
 $ sudo ln -s /etc/sv/touchegg /var/service
+```
+
+## NixOS
+
+Add the `touchegg` package in your `configuration.nix` file and enable the services.
+
+```
+# configuration.nix
+...
+environment.systemPackages = with pkgs; [
+  touchegg
+];
+
+services.touchegg.enable = true;
+...
 ```
 
 ## GNOME
@@ -523,7 +544,7 @@ Options:
 | repeat | `true`/`false` | Whether to execute the keyboard shortcut multiple times (default: `false`). This is useful to perform actions like pinch to zoom. |
 | modifiers | Keysym | Typical values are: `Shift_L`, `Control_L`, `Alt_L`, `Alt_R`, `Meta_L`, `Super_L`, `Hyper_L`. You can use multiple keysyms: `Control_L+Alt_L`.See "Keysyms" below for more information. |
 | keys | Keysym | Shortcut keys. You can use multiple keysyms: `A+B+C`. See "Keysyms" below for more information. |
-| on | `begin`/`end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning or at the end of the gesture. |
+| on | `begin`/`end`/`begin-and-end` | Only used when `repeat` is `false`. Whether to execute the shortcut at the beginning and/or at the end of the gesture. |
 | decreaseKeys | Keysym | Only used when `repeat` is `true`. Keys to press when you change the gesture direction to the opposite. You can use multiple keysyms: `A+B+C`. This is useful to perform actions like pinch to zoom, check `Example 2` below. |
 | times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
@@ -619,7 +640,7 @@ Options:
 | - | - | - |
 | repeat | `true`/`false` | `true` if the command should be executed multiple times. `false` otherwise. |
 | command | Command | The command to execute. |
-| on | `begin`/`end` | Only used when `repeat` is `false`. If the command should be executed on the beginning or on the end of the gesture. |
+| on | `begin`/`end`/`begin-and-end` | Only used when `repeat` is `false`. If the command should be executed and/on the beginning or on the end of the gesture. |
 | decreaseCommand | Command | Only used when `repeat` is `true`. Command to run when you change the gesture direction to the opposite. Check `Example 2` below. |
 | times | 2...15 | Only used when `repeat` is `true`. Number of times to repeat the action. |
 | animate | `true`/`false` | Set it to `true` to display the animation set in `animation`. `false` otherwise. |
@@ -633,7 +654,7 @@ Example 1:
 <gesture type="SWIPE" fingers="4" direction="DOWN">
   <action type="RUN_COMMAND">
     <repeat>false</repeat>
-    <command>notify-send 'Hello World' "Swipe down, DEVICE_TYPE=$TOUCHEGG_DEVICE_TYPE"</command>
+    <command>notify-send 'Hello World' "Swipe down, DEVICE_TYPE=$TOUCHEGG_DEVICE_TYPE TOUCHEGG_GESTURE_ON=$TOUCHEGG_GESTURE_ON"</command>
     <on>begin</on>
   </action>
 </gesture>
@@ -659,8 +680,10 @@ Options:
 
 | Option | Value | Description |
 | - | - | - |
-| button | `1`/`2`/`3` | Left click (1), middle click (2) or right click (3) |
-| on | `begin`/`end` | If the command should be executed on the beginning or on the end of the gesture. |
+| button | `1`/`2`/`3`/`8`/`9` | Left click (1), middle click (2), right click (3), back button (8) or forward button (9) |
+| on | `begin`/`end`/`begin-and-end` | If the mouse click should be executed on the beginning and/or on the end of the gesture. |
+
+When the `begin-and-end` option is used, the mouse button is down when the gesture begins and up when the gesture ends.
 
 Example:
 
@@ -761,8 +784,11 @@ Yes, [Touché](https://github.com/JoseExposito/touche) is the official desktop a
 
 #### Can I use 2 finger swipes for web browser navigation?
 
-No, at least not with Touchégg. It is up to the web browser to implement that feature.
-You can request this feature in your favourite's web browser bug tracker.
+No, at least not with Touchégg. However, you can use following alternatives methods.
+
+If you are using a Firefox-based browser, you can use Wayland instead of X11 for this functionality as standard; if you want to stay in X11 or cannot use Wayland, you can also use [this extension](https://addons.mozilla.org/firefox/addon/two-finger-history-jump/) instead.
+
+If you are using a Chromium-based browser, simply run it with the `--enable-features=TouchpadOverscrollHistoryNavigation` command line option.If you want this to permanent, edit the shortcut on the Start menu.
 
 # Copyright
 

@@ -1,7 +1,7 @@
 Name:           touchegg
 Summary:        Multi-touch gesture recognizer
 Url:            https://github.com/JoseExposito/touchegg
-Version:        2.0.17
+Version:        2.0.18
 Release:        1
 License:        GPLv3+
 Group:          Applications/Productivity
@@ -84,8 +84,10 @@ fi
 
 
 %changelog
+* Sat May 24 2025 José Expósito <jose.exposito89@gmail.com> - 2.0.18-1
+- Allow to execute actions on gesture begin and end
 
-* Sun Aug 13 2023 José Expósito <jose.exposito89@gmail.com> - 2.0.16-1
+* Sun Aug 13 2023 José Expósito <jose.exposito89@gmail.com> - 2.0.17-1
 - Upgrade the target Fedora and RHEL version on CI
 
 * Mon Feb 06 2023 José Expósito <jose.exposito89@gmail.com> - 2.0.16-1

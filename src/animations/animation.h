@@ -20,6 +20,7 @@
 
 #include <cairo.h>
 
+#include <cstdint>
 #include <memory>
 
 #include "window-system/cairo-surface.h"

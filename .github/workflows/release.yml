@@ -100,12 +100,12 @@ jobs:
   rpm-package-fedora:
     runs-on: ubuntu-24.04
     container:
-      image: fedora:41
+      image: fedora:42
     steps:
       - name: Install dependencies
         run: |
           dnf upgrade -y
-          dnf groupinstall -y "Development Tools"
+          dnf group install "development-tools"
           dnf install -y gcc gcc-c++ cmake rpm-build libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel gtk3-devel
 
       - name: GitHub Environment Variables Action

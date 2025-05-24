@@ -9,7 +9,7 @@ $ sudo apt-get install git build-essential gdb cmake debhelper \
   libgtk-3-dev # GTK is optional, see "Compilation flags"
 
 # Red Hat, Fedora, CentOS and derivatives:
-$ sudo dnf groupinstall "Development Tools"
+$ sudo dnf group install "development-tools"
 $ sudo dnf install git gcc gcc-c++ gdb cmake rpm-build \
   libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel \
   gtk3-devel # GTK is optional, see "Compilation flags"

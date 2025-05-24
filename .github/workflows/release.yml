@@ -99,7 +99,7 @@ jobs:
   rpm-package-fedora:
     runs-on: ubuntu-24.04
     container:
-      image: fedora:38
+      image: fedora:42
     steps:
       - name: Install dependencies
         run: |

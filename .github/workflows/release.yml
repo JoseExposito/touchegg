@@ -50,7 +50,7 @@ jobs:
           dpkg_buildpackage_opts: "--no-sign --no-check-builddeps --post-clean"
 
       - name: Upload Debian package artifacts
-        uses: "actions/upload-artifact@v2"
+        uses: "actions/upload-artifact@v4"
         with:
           name: "${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
           path: "${{ github.workspace }}/artifacts/${{ env.GITHUB_REPOSITORY_NAME }}_${{ env.GITHUB_REF_NAME }}_${{matrix.target_arch}}.deb"
@@ -91,7 +91,7 @@ jobs:
           rpmbuild -ba ${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
 
       - name: Upload RPM package
-        uses: "actions/upload-artifact@v2"
+        uses: "actions/upload-artifact@v4"
         with:
           name: "rhel8_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
@@ -128,7 +128,7 @@ jobs:
           rpmbuild -ba ${{ env.GITHUB_REPOSITORY_NAME }}/rpm/${{ env.GITHUB_REPOSITORY_NAME }}.spec
 
       - name: Upload RPM package
-        uses: "actions/upload-artifact@v2"
+        uses: "actions/upload-artifact@v4"
         with:
           name: "fedora34_${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
           path: "~/rpmbuild/RPMS/x86_64/${{ env.GITHUB_REPOSITORY_NAME }}-${{ env.GITHUB_REF_NAME }}-1.x86_64.rpm"
@@ -141,7 +141,7 @@ jobs:
         uses: FranzDiebold/github-env-vars-action@v1.2.1
 
       - name: Download packages
-        uses: "actions/download-artifact@v2"
+        uses: "actions/download-artifact@v4"
         with:
           path: ./
 

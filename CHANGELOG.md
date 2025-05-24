@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.18 - 2025-05-24
+
+ - Allow to execute actions on gesture begin and end
+
+    Until now, it was only possible to execute the MOUSE_CLICK, SEND_KEYS an
+    RUN_COMMAND actions when the gesture started or when the gesture ended.
+
+    Include a third option, <on>begin-and-end</on> allowing to run the actions
+    both when the gesture starts and ends.
+
+    When this new setting is used, MOUSE_CLICK starts presses the mouse button
+    when the gesture starts and releases it when the gesture ends.
+
+    In the case of RUN_COMMAND, a environment variable is set
+    (TOUCHEGG_GESTURE_ON) allowing the executed script to take different actions
+    at the beginning and the end of the gesture.
+
+    https://github.com/JoseExposito/touchegg/pull/670
+
 ## 2.0.17 - 2023-08-13
 
 This version does not include any new features, but the deb and rpm packages

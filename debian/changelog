@@ -1,3 +1,9 @@
+touchegg (2.0.18) focal; urgency=medium
+
+  * Allow to execute actions on gesture begin and end
+
+ -- José Expósito <jose.exposito89@gmail.com>  Sat, 24 May 2025 12:00:00 +0100
+
 touchegg (2.0.17) focal; urgency=medium
 
   * Upgrade the target Debian version on CI

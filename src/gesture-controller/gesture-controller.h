@@ -60,10 +60,11 @@ class GestureController : public GestureControllerDelegate {
   bool executeAction = false;
 
   /**
-   * If the screen is rotated, this values is set on gesture begin to match the
-   * screen rotation.
+   * If the screen is rotated, these values are set on gesture begin to match
+   * the screen rotation.
    */
   GestureDirection rotatedDirection = GestureDirection::UNKNOWN;
+  GestureAxis rotatedAxis = GestureAxis::UNKNOWN;
 
   /**
    * @returns The action associated to a gesture or nullptr.

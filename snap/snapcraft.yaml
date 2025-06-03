@@ -1,0 +1,86 @@
+name: touchegg
+base: core18
+adopt-info: touchegg
+summary: Touchégg
+description: |
+  Touchégg is an app that runs in the background and transform
+  the gestures you make on your touchpad into visible actions
+  in your desktop.
+
+grade: stable
+confinement: strict
+
+parts:
+  touchegg:
+    plugin: cmake
+    source: .
+    # cmake-parameters: ["-DCMAKE_BUILD_TYPE=Release"] # if using core20
+    configflags: ["-DCMAKE_BUILD_TYPE=Release"] # if using core18
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$(git describe --tags)"
+    build-packages:
+      - build-essential
+      - gdb
+      - cmake
+      - debhelper
+      - libudev-dev
+      - libinput-dev
+      - libpugixml-dev
+      - libcairo2-dev
+      - libx11-dev
+      - libxtst-dev
+      - libxrandr-dev
+      - libxi-dev
+      - libgtk-3-dev
+    stage-packages: # if not using the GNOME extension
+      - libatk-bridge2.0-0                                                                                                                                                                     
+      - libatk1.0-0                                                                                                                                                                            
+      - libatspi2.0-0                                                                             
+      - libcairo-gobject2                                                                         
+      - libcairo2                                                                                 
+      - libdatrie1                                                                                
+      - libepoxy0                                                                                 
+      - libevdev2                                                                                                                                                                              
+      - libfontconfig1                                                                            
+      - libfreetype6                        
+      - libgdk-pixbuf2.0-0        
+      - libgraphite2-3                
+      - libgtk-3-0                
+      - libgudev-1.0-0      
+      - libharfbuzz0b                    
+      - libinput10                                                                                
+      - libmtdev1                                                                                 
+      - libpango-1.0-0                                                                            
+      - libpangocairo-1.0-0                                                                       
+      - libpangoft2-1.0-0 
+      - libpixman-1-0  
+      - libpng16-16                                                                                                                                                                            
+      - libpugixml1v5
+      - libthai0          
+      - libwacom2    
+      - libwayland-client0
+      - libwayland-cursor0
+      - libwayland-egl1
+      - libx11-6                                                                                                                                                                               
+      - libxau6                                   
+      - libxcb-render0
+      - libxcb-shm0                                             
+      - libxcb1                                                 
+      - libxcomposite1                                          
+      - libxcursor1                                             
+      - libxdamage1                                             
+      - libxdmcp6                                               
+      - libxext6                                                
+      - libxfixes3                                                                                                                                                                                                                            
+      - libxi6                                                  
+      - libxinerama1                                            
+      - libxkbcommon0                                                   
+      - libxrandr2                                                      
+      - libxrender1                                                     
+      - libxtst6 
+apps:
+  touchegg:
+    daemon: simple
+    #extensions: [gnome-3-34] # causes build failures in harfbuzz
+    command: usr/bin/touchegg

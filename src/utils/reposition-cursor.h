@@ -1,12 +1,24 @@
 #ifndef UTILS_REPOSITION_CURSOR_H_
 #define UTILS_REPOSITION_CURSOR_H_
 
+#include "gesture/gesture-type.h"
+
 // Bitmask representing options for when cursor should be repositioned.
 enum RepositionCursorOpt {
   NEVER				= 0b00,	// 0
   GESTURE_END			= 0b01,	// 1
   GESTURE_UPDATE		= 0b10	// 2
   //GESTURE_UPDATE_AND_END	= 0b11	// 3
+};
+
+inline bool gestureTypeSupportsCursorReposition(GestureType gestureType) {
+  switch (gestureType) {
+    case GestureType::SWIPE:
+    case GestureType::TAP:
+      return true;
+    default:
+      return false;
+  }
 };
 
 //bool operator!(RepositionCursorOpt e) {

@@ -103,7 +103,7 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
   XYPosition curPos = gesture->cursorPosition();
   if (
     (repositionCursor & RepositionCursorOpt::GESTURE_UPDATE)
-    && (curPos.x >= 0 && curPos.y >= 0)
+    && gestureTypeSupportsCursorReposition(gesture->type())
   ) {
     tlg::debug << "cursorPosition (GestureUpdate): {"
                << curPos.x << ", " << curPos.y
@@ -124,7 +124,7 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   XYPosition curPos = gesture->cursorPosition();
   if (
     (repositionCursor & RepositionCursorOpt::GESTURE_END)
-    && (curPos.x >= 0 && curPos.y >= 0)
+    && gestureTypeSupportsCursorReposition(gesture->type())
   ) {
     tlg::debug << "cursorPosition (GestureEnd): {"
                << curPos.x << ", " << curPos.y

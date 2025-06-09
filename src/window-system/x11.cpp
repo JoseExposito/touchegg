@@ -486,24 +486,29 @@ void X11::positionCursor(double xMm, double yMm) const {
   double dhMM = DisplayHeightMM(this->display, screen);
   double dwPixels = DisplayWidth(this->display, screen);
   double dhPixels = DisplayHeight(this->display, screen);
-  std::cout
-	<< "  Gesture offset X (mm): " << xMm << '\n'
-	<< "  Gesture offset Y (mm): " << yMm << '\n'
-  	<< "     Display width (mm): " << dwMM << '\n'
-  	<< "    Display height (mm): " << dhMM << '\n'
-  	<< " Display width (pixels): " << dwPixels << '\n'
-  	<< "Display height (pixels): " << dhPixels << '\n'
-  << std::endl;
+  std::cout << "  Gesture offset X (mm): " << xMm << '\n'
+            << "  Gesture offset Y (mm): " << yMm << '\n'
+            << "     Display width (mm): " << dwMM << '\n'
+            << "    Display height (mm): " << dhMM << '\n'
+            << " Display width (pixels): " << dwPixels << '\n'
+            << "Display height (pixels): " << dhPixels << '\n'
+            << std::endl;
   //
   // These need the screen structure, not I.D. integer.
-  //if (dwMM != WidthMMOfScreen(screen)) std::cout << "Width (mm) of screen and display do not match. Screen claims: " << WidthMMOfScreen(screen) << std::endl;
-  //if (dhMM != HeightMMOfScreen(screen)) std::cout << "Height (mm) of screen and display do not match. Screen claims: " << HeightMMOfScreen(screen) << std::endl;
-  //if (dwMM != WidthOfScreen(screen)) std::cout << "Width (pixels) of screen and display do not match. Screen claims: " << WidthOfScreen(screen) << std::endl;
-  //if (dhMM != HeightOfScreen(screen)) std::cout << "Height (pixels) of screen and display do not match. Screen claims: " << HeightOfScreen(screen) << std::endl;
+  // if (dwMM != WidthMMOfScreen(screen)) std::cout << "Width (mm) of screen and
+  // display do not match. Screen claims: " << WidthMMOfScreen(screen) <<
+  // std::endl; if (dhMM != HeightMMOfScreen(screen)) std::cout << "Height (mm)
+  // of screen and display do not match. Screen claims: " <<
+  // HeightMMOfScreen(screen) << std::endl; if (dwMM != WidthOfScreen(screen))
+  // std::cout << "Width (pixels) of screen and display do not match. Screen
+  // claims: " << WidthOfScreen(screen) << std::endl; if (dhMM !=
+  // HeightOfScreen(screen)) std::cout << "Height (pixels) of screen and display
+  // do not match. Screen claims: " << HeightOfScreen(screen) << std::endl;
 
   int targetX = (xMm / dwMM) * dwPixels;
   int targetY = (yMm / dhMM) * dhPixels;
-  std::cout << "          Cursor target: " << targetX << ", " << targetY << std::endl;
+  std::cout << "          Cursor target: " << targetX << ", " << targetY
+            << std::endl;
 
   // Get current cursor position.
   Window rootWindow = None;
@@ -513,20 +518,30 @@ void X11::positionCursor(double xMm, double yMm) const {
   int childX = 0;
   int childY = 0;
   unsigned int mask = 0;
-  int success = XQueryPointer(this->display, XDefaultRootWindow(this->display), &rootWindow,
-                &childWindow, &pointerX, &pointerY, &childX, &childY, &mask);
+  int success = XQueryPointer(this->display, XDefaultRootWindow(this->display),
+                              &rootWindow, &childWindow, &pointerX, &pointerY,
+                              &childX, &childY, &mask);
   if (!success) {
-    std::cout << "Failed to query pointer. Cursor will not be repositioned." << std::endl;
+    std::cout << "Failed to query pointer. Cursor will not be repositioned."
+              << std::endl;
     return;
   }
-  std::cout << "Current cursor position: " << pointerX << ", " << pointerY << std::endl;
+  std::cout << "Current cursor position: " << pointerX << ", " << pointerY
+            << std::endl;
 
   // Not sure if useful.
-  // Move cursor to origin (0, 0). This is necessary because we are warping with relative positioning, irrespective of windows.
-  //XWarpPointer(this->display, None, None, 0, 0, 0, 0, -pointerX, -pointerY);
-  //XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
+  // Move cursor to origin (0, 0). This is necessary because we are warping with
+  // relative positioning, irrespective of windows.
+  // XWarpPointer(this->display, None, None, 0, 0, 0, 0, -pointerX, -pointerY);
+  // XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
 
-  XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX - pointerX, targetY - pointerY);
+  //targetX = targetX > pointerX ? targetX - pointerX : pointerX - targetX;
+  //targetY = targetY > pointerY ? targetY - pointerY : pointerY - targetY;
+  targetX = targetX - pointerX;
+  targetY = targetY - pointerY;
+  std::cout << "          Relative distance: " << targetX << ", " << targetY
+            << std::endl;
+  XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
   XFlush(this->display);
 }
 

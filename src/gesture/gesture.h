@@ -24,15 +24,15 @@
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
-//struct XYPosition {
-//  int x;
-//  int y;
-//};
+// struct XYPosition {
+//   int x;
+//   int y;
+// };
 struct XYPosition {
   double x;
   double y;
 };
-//#include "utils/rectangle.h"
+// #include "utils/rectangle.h"
 
 /**
  * Gestures implementations change depending on the driver/backend. This is the
@@ -50,26 +50,14 @@ class Gesture {
         gestureElapsedTime(elapsedTime) {}
   Gesture(GestureType type, GestureDirection direction, double percentage,
           int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime,
-	  XYPosition cursorEndPosition)
+          XYPosition cursorEndPosition)
       : gestureType(type),
         gestureDirection(direction),
-        gestureAxis(gestureAxisFromDirection(direction)),
         gesturePercentage(percentage),
         gestureFingers(fingers),
         deviceType(performedOnDeviceType),
         gestureElapsedTime(elapsedTime),
-	gestureEndPosition(cursorEndPosition) {}
-  Gesture(GestureType type, GestureDirection direction, GestureAxis axis,
-          double percentage, int fingers, DeviceType performedOnDeviceType,
-          uint64_t elapsedTime, XYPosition cursorEndPosition)
-      : gestureType(type),
-        gestureDirection(direction),
-        gestureAxis(axis),
-        gesturePercentage(percentage),
-        gestureFingers(fingers),
-        deviceType(performedOnDeviceType),
-        gestureElapsedTime(elapsedTime),
-	gestureEndPosition(cursorEndPosition) {}
+        gestureEndPosition(cursorEndPosition) {}
 
   /**
    * @returns The gesture type.
@@ -126,8 +114,8 @@ class Gesture {
   int gestureFingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;
-  XYPosition gestureEndPosition {-1, -1};
-  //Rectangle cursorPosition {0, 0, 0, 0};
+  XYPosition gestureEndPosition{-1, -1};
+  // Rectangle cursorPosition {0, 0, 0, 0};
 };
 
 #endif  // GESTURE_GESTURE_H_

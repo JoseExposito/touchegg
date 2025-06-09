@@ -85,6 +85,12 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
+  XYPosition curPos = gesture->endPosition();
+  std::cout << "cursorEndPosition: {" << curPos.x << ", " << curPos.y << "}" << std::endl;
+  if (curPos.x >= 0 && curPos.y >= 0) {
+    this->windowSystem.positionCursor(curPos.x, curPos.y);
+  }
+
   if (this->executeAction) {
     tlg::debug << "Gesture end detected" << std::endl;
     gesture->setDirection(this->rotatedDirection);
@@ -94,6 +100,23 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   this->action.reset();
   this->rotatedDirection = GestureDirection::UNKNOWN;
 }
+//void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture, int cur_x, int cur_y) {
+//  if (this->executeAction) {
+//    tlg::debug << "Gesture end detected" << std::endl;
+//    gesture->setDirection(this->rotatedDirection);
+//    this->action->onGestureEnd(*gesture);
+//  }
+//
+//  this->action.reset();
+//  this->rotatedDirection = GestureDirection::UNKNOWN;
+//
+//  switch (gesture->type()) {
+//    case GestureType::SWIPE :
+//    case GestureType::TAP :
+//      this->windowSystem.positionCursor(cur_x, cur_y);
+//      break;
+//  }
+//}
 
 std::unique_ptr<Action> GestureController::getActionForGesture(
     const Gesture &gesture, const WindowT &window) const {
@@ -127,6 +150,13 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
                                             direction);
   ActionType actionType = pair.first;
   std::unordered_map<std::string, std::string> actionSettings = pair.second;
+
+  //switch (gesture.type()) {
+  //  case GestureType::SWIPE :
+  //  case GestureType::TAP :
+  //    this.windowSystem.positionCursor();
+  //    break;
+  //}
 
   return ActionFactory::buildAction(actionType, std::move(actionSettings),
                                     this->windowSystem, *this->window,

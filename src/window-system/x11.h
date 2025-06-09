@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "window-system/window-system.h"
+#include "utils/pixel-conversions.h"
 
 /**
  * X11 WindowT implementation, just a Window as defined in <X11/X.h>.
@@ -68,6 +69,8 @@ class X11 : public WindowSystem {
                 bool isPress) const override;
   void sendMouseDown(int button) const override;
   void sendMouseUp(int button) const override;
+  void positionCursor(double x, double y) const override;
+
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(ActionDirection direction, bool cyclic) const override;

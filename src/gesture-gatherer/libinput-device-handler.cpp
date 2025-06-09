@@ -123,19 +123,19 @@ void LininputDeviceHandler::calculateTouchpadThreshold(
 
   double minSize = std::min(widthMm, heightMm);
   outInfo->startThreshold =
-      ((LininputDeviceHandler::mmToDpi(minSize) * START_PERCENTAGE) / 100);
+      ((mmToDpi(minSize) * START_PERCENTAGE) / 100);
   outInfo->finishThresholdHorizontal =
-      ((LininputDeviceHandler::mmToDpi(widthMm) * FINISH_PERCENTAGE) / 100);
+      ((mmToDpi(widthMm) * FINISH_PERCENTAGE) / 100);
   outInfo->finishThresholdVertical =
-      ((LininputDeviceHandler::mmToDpi(heightMm) * FINISH_PERCENTAGE) / 100);
+      ((mmToDpi(heightMm) * FINISH_PERCENTAGE) / 100);
 }
 
-double LininputDeviceHandler::mmToDpi(double mm) {
-  constexpr double mmInOneInch = 25.4;  // 1 inch == 25.4 mm
-  double inches = mm / mmInOneInch;
-  double dpi = (inches * 1000);
-  return dpi;
-}
+//double LininputDeviceHandler::mmToDpi(double mm) {
+//  constexpr double mmInOneInch = 25.4;  // 1 inch == 25.4 mm
+//  double inches = mm / mmInOneInch;
+//  double dpi = (inches * 1000);
+//  return dpi;
+//}
 
 void LininputDeviceHandler::calculateTouchscreenThreshold(
     double widthMm, double heightMm, LibinputDeviceInfo *outInfo) {

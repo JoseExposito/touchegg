@@ -151,6 +151,13 @@ class WindowSystem {
   virtual void sendMouseUp(int button) const = 0;
 
   /**
+   * Directly positions cursor.
+   * Only one movement event should be triggered.
+   * No button click events should be sent.
+   */
+  virtual void positionCursor(double x, double y) const = 0;
+
+  /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not
    * used by system elements like docks, panels, etc.
    */

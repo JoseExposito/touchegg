@@ -115,15 +115,60 @@ void DaemonServer::send(const std::string &signalName,
   std::vector<GDBusConnection *> closedConnections{};
 
   // Copy every gesture field into the signal parameters for serialization
-  GVariant *signalParams =
-      g_variant_new("(uudiut)",                              // NOLINT
-                    static_cast<int>(gesture->type()),       // u
-                    static_cast<int>(gesture->direction()),  // u
-                    gesture->percentage(),                   // d
-                    gesture->fingers(),                      // i
-                    static_cast<int>(gesture->performedOnDeviceType()),  // u
-                    gesture->elapsedTime());                             // t
-  g_variant_ref_sink(signalParams);
+  // Offer signal versions in order from oldest to newest
+  //signalParams[i] = {
+  //    //g_variant_new("(uudiutuu)",                              // NOLINT
+  //    //g_variant_new("(uudiutx)",                              // NOLINT
+  //    g_variant_new("(uudiutdd)",                              // NOLINT
+  //    //g_variant_new("(uudiut(dd))",                              // NOLINT
+  //                  static_cast<int>(gesture->type()),                  // u
+  //                  static_cast<int>(gesture->direction()),             // u
+  //                  gesture->percentage(),                              // d
+  //                  gesture->fingers(),                                 // i
+  //                  static_cast<int>(gesture->performedOnDeviceType()), // u
+  //                  gesture->elapsedTime(),                             // t
+  //                  gesture->endPosition())};                           // uu
+  //g_variant_ref_sink(signalParams[i++]);
+  //if (gesture->endPosition().x > -1 || gesture->endPosition().y > -1) {
+  if (signalName == DBUS_ON_GESTURE_END) {
+	  std::cout << "Emitting signal with endPosition: " << gesture->endPosition().x << ", " << gesture->endPosition().y << std::endl;
+	  signalParams[i] = {
+	      //g_variant_new("(uuudiutuu)",                              // NOLINT
+	      //g_variant_new("(uuudiutx)",                              // NOLINT
+	      g_variant_new("(uuudiutdd)",                              // NOLINT
+	      //g_variant_new("(uuudiut(dd))",                              // NOLINT
+	      //g_variant_new("(uuudiutm@(dd))",                              // NOLINT
+	      //g_variant_new("(uuudiutm(dd))",                              // NOLINT
+			    static_cast<int>(gesture->type()),                  // u
+			    static_cast<int>(gesture->direction()),             // u
+			    static_cast<int>(gesture->axis()),                  // u
+			    gesture->percentage(),                              // d
+			    gesture->fingers(),                                 // i
+			    static_cast<int>(gesture->performedOnDeviceType()), // u
+			    gesture->elapsedTime(),                             // t
+			    //gesture->endPosition())};                           // dd
+			    //gesture->endPosition())};                           // m@(dd)	// Currently always send. Make optional.
+			    //TRUE,                                               // m	// Currently always send. Make optional.
+			    gesture->endPosition().x,                           // d
+			    gesture->endPosition().y)};                         // d
+  } else {
+	  signalParams[i] = {
+	      g_variant_new("(uuudiut)",                              // NOLINT
+	      //g_variant_new("(uuudiutm@(dd))",                              // NOLINT
+	      //g_variant_new("(uuudiutm(dd))",                              // NOLINT
+			    static_cast<int>(gesture->type()),                  // u
+			    static_cast<int>(gesture->direction()),             // u
+			    static_cast<int>(gesture->axis()),                  // u
+			    gesture->percentage(),                              // d
+			    gesture->fingers(),                                 // i
+			    static_cast<int>(gesture->performedOnDeviceType()), // u
+			    gesture->elapsedTime())};                           // t
+			    //gesture->elapsedTime(),                             // t
+			    //NULL)};                                             // m@(dd)
+			    //FALSE, NULL, NULL)};                                // m(dd)
+			    //FALSE, -1, -1)};                                // m(dd)
+  }
+  g_variant_ref_sink(signalParams[i++]);
 
   // Send the message to every client
   for (auto *connection : this->connections) {

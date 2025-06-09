@@ -23,6 +23,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <iostream>	// Debugging.
 
 #include "gesture/device-type.h"
 #include "gesture/gesture.h"
@@ -90,9 +91,19 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
             : LininputHandler::calculatePinchAnimationPercentage(
                   this->state.direction, this->getPinchDelta());
 
+    std::cout << "Assigning current XY values: " << this->state.currentX[slot] << ", " << this->state.currentY[slot] << std::endl;
+    //Rectangle screenSize = 
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
-        this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime);
+        this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime,
+        XYPosition{this->state.currentX[slot], this->state.currentY[slot]});
+        //Rectangle {
+        //XYPosition{
+        //  libinput_event_touch_get_x(tEvent),
+        //  libinput_event_touch_get_y(tEvent)
+        //  libinput_event_touch_get_x_transformed(tEvent, ),
+        //  libinput_event_touch_get_y_transformed(tEvent, )
+        //});
     this->gestureController->onGestureEnd(std::move(gesture));
 
     this->state.reset();

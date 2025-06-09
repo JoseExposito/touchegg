@@ -476,6 +476,60 @@ void X11::sendMouseUp(int button) const {
   XFlush(this->display);
 }
 
+void X11::positionCursor(double xMm, double yMm) const {
+  std::cout << "Attempting to reposition cursor." << std::endl;
+  int screen = DefaultScreen(this->display);
+
+  // Note: These values are subject to system configuration (e.g. D.P.I.).
+  // https://bbs.archlinux.org/viewtopic.php?id=227324
+  double dwMM = DisplayWidthMM(this->display, screen);
+  double dhMM = DisplayHeightMM(this->display, screen);
+  double dwPixels = DisplayWidth(this->display, screen);
+  double dhPixels = DisplayHeight(this->display, screen);
+  std::cout
+	<< "  Gesture offset X (mm): " << xMm << '\n'
+	<< "  Gesture offset Y (mm): " << yMm << '\n'
+  	<< "     Display width (mm): " << dwMM << '\n'
+  	<< "    Display height (mm): " << dhMM << '\n'
+  	<< " Display width (pixels): " << dwPixels << '\n'
+  	<< "Display height (pixels): " << dhPixels << '\n'
+  << std::endl;
+  //
+  // These need the screen structure, not I.D. integer.
+  //if (dwMM != WidthMMOfScreen(screen)) std::cout << "Width (mm) of screen and display do not match. Screen claims: " << WidthMMOfScreen(screen) << std::endl;
+  //if (dhMM != HeightMMOfScreen(screen)) std::cout << "Height (mm) of screen and display do not match. Screen claims: " << HeightMMOfScreen(screen) << std::endl;
+  //if (dwMM != WidthOfScreen(screen)) std::cout << "Width (pixels) of screen and display do not match. Screen claims: " << WidthOfScreen(screen) << std::endl;
+  //if (dhMM != HeightOfScreen(screen)) std::cout << "Height (pixels) of screen and display do not match. Screen claims: " << HeightOfScreen(screen) << std::endl;
+
+  int targetX = (xMm / dwMM) * dwPixels;
+  int targetY = (yMm / dhMM) * dhPixels;
+  std::cout << "          Cursor target: " << targetX << ", " << targetY << std::endl;
+
+  // Get current cursor position.
+  Window rootWindow = None;
+  Window childWindow = None;
+  int pointerX = 0;
+  int pointerY = 0;
+  int childX = 0;
+  int childY = 0;
+  unsigned int mask = 0;
+  int success = XQueryPointer(this->display, XDefaultRootWindow(this->display), &rootWindow,
+                &childWindow, &pointerX, &pointerY, &childX, &childY, &mask);
+  if (!success) {
+    std::cout << "Failed to query pointer. Cursor will not be repositioned." << std::endl;
+    return;
+  }
+  std::cout << "Current cursor position: " << pointerX << ", " << pointerY << std::endl;
+
+  // Not sure if useful.
+  // Move cursor to origin (0, 0). This is necessary because we are warping with relative positioning, irrespective of windows.
+  //XWarpPointer(this->display, None, None, 0, 0, 0, 0, -pointerX, -pointerY);
+  //XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
+
+  XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX - pointerX, targetY - pointerY);
+  XFlush(this->display);
+}
+
 Rectangle X11::getDesktopWorkarea() const {
   // When multiple physical screens are connected, the root window's size is the
   // sum of all of them. Use Xrandr to get the screen size of the physical

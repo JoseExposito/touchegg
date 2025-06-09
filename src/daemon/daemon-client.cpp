@@ -126,11 +126,73 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
   int fingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t elapsedTime = -1;
+  XYPosition endPosition = {-1, -1};
+  double endPositionX = -2, endPositionY = -2;
 
-  g_variant_get(signalParameters,  // NOLINT
-                "(uudiut)", &type, &direction, &percentage, &fingers,
-                &deviceType, &elapsedTime);
+  if (g_variant_check_format_string(signalParameters, "(uuudiut)", false)) {
+    g_variant_get(signalParameters,  // NOLINT
+  		"(uuudiut)", &type, &direction, &axis, &percentage, &fingers,
+  		&deviceType, &elapsedTime);
+  } else {
+    //GVariant *maybeEndPosition;
+    gboolean maybeEndPosition;
+    g_variant_get(signalParameters,  // NOLINT
+  		//"(uuudiutuu)", &type, &direction, &axis, &percentage, &fingers,
+  		//"(uuudiutx)", &type, &direction, &axis, &percentage, &fingers,
+  		"(uuudiutdd)", &type, &direction, &axis, &percentage, &fingers,
+  		//"(uuudiut(dd))", &type, &direction, &axis, &percentage, &fingers,
+  		//&deviceType, &elapsedTime, &endPosition);
+  		//&deviceType, &elapsedTime, &(endPosition.x), &(endPosition.y));
+  		&deviceType, &elapsedTime, &endPositionX, &endPositionY);
+  		//"(uuudiutm*)", &type, &direction, &axis, &percentage, &fingers,
+  		//&deviceType, &elapsedTime, &maybeEndPosition);
+  		//"(uuudiutm(dd))", &type, &direction, &axis, &percentage, &fingers,
+  		//&deviceType, &elapsedTime, &maybeEndPosition, &endPositionX, &endPositionY);
+    //if (maybeEndPosition != NULL) {
+    //  g_variant_get(maybeEndPosition, "(dd)", &endPositionX, &endPositionY);
+    //  endPosition.x = endPositionX;
+    //  endPosition.y = endPositionY;
+    //  g_variant_unref(maybeEndPosition);
+    //}
+    //if (maybeEndPosition) {
+      endPosition.x = endPositionX;
+      endPosition.y = endPositionY;
+    //}
+    std::cout << "Got endPosition (from signal): " << endPosition.x << ", " << endPosition.y << std::endl;
+  }
+  //if (g_variant_check_format_string(signalParameters, "(uuudiutdd)", false)) {
+  ////if (!g_variant_check_format_string(signalParameters, "(uuudiutdd)", false)) {
+	//  //GVariant *maybeEndPosition;
+	//  gboolean maybeEndPosition;
+	//  g_variant_get(signalParameters,  // NOLINT
+	//		//"(uuudiutuu)", &type, &direction, &axis, &percentage, &fingers,
+	//		//"(uuudiutx)", &type, &direction, &axis, &percentage, &fingers,
+	//		"(uuudiutdd)", &type, &direction, &axis, &percentage, &fingers,
+	//		//"(uuudiut(dd))", &type, &direction, &axis, &percentage, &fingers,
+	//		//&deviceType, &elapsedTime, &endPosition);
+	//		//&deviceType, &elapsedTime, &(endPosition.x), &(endPosition.y));
+	//		&deviceType, &elapsedTime, &endPositionX, &endPositionY);
+	//		//"(uuudiutm*)", &type, &direction, &axis, &percentage, &fingers,
+	//		//&deviceType, &elapsedTime, &maybeEndPosition);
+	//		//"(uuudiutm(dd))", &type, &direction, &axis, &percentage, &fingers,
+	//		//&deviceType, &elapsedTime, &maybeEndPosition, &endPositionX, &endPositionY);
+	//  //if (maybeEndPosition != NULL) {
+	//  //  g_variant_get(maybeEndPosition, "(dd)", &endPositionX, &endPositionY);
+	//  //  endPosition.x = endPositionX;
+	//  //  endPosition.y = endPositionY;
+	//  //  g_variant_unref(maybeEndPosition);
+	//  //}
+	//  //if (maybeEndPosition) {
+	//    endPosition.x = endPositionX;
+	//    endPosition.y = endPositionY;
+	//  //}
+	//  std::cout << "Got endPosition (from signal): " << endPosition.x << ", " << endPosition.y << std::endl;
+  //} else {
+	//  g_variant_get(signalParameters,  // NOLINT
+	//		"(uuudiut)", &type, &direction, &axis, &percentage, &fingers,
+	//		&deviceType, &elapsedTime);
+  //}
 
-  return std::make_unique<Gesture>(type, direction, percentage, fingers,
-                                   deviceType, elapsedTime);
+  return std::make_unique<Gesture>(type, direction, axis, percentage, fingers,
+                                   deviceType, elapsedTime, endPosition);
 }

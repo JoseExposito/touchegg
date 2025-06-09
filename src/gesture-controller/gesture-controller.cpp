@@ -33,7 +33,7 @@
 
 GestureController::GestureController(const Config &config,
                                      const WindowSystem &windowSystem)
-    : config(config), windowSystem(windowSystem) {}
+    : config(config), windowSystem(windowSystem), repositionCursor(config.getGlobalSetting("reposition_cursor") == "true") {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   tlg::debug << "Gesture begin detected" << std::endl;
@@ -88,7 +88,10 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   XYPosition curPos = gesture->endPosition();
   std::cout << "cursorEndPosition: {" << curPos.x << ", " << curPos.y << "}"
             << std::endl;
-  if (curPos.x >= 0 && curPos.y >= 0) {
+  if (
+    repositionCursor &&
+    curPos.x >= 0 && curPos.y >= 0
+  ) {
     // Move cursor to position where gesture ended.
     this->windowSystem.positionCursor(curPos.x, curPos.y);
   }

@@ -44,6 +44,8 @@ class GestureController : public GestureControllerDelegate {
   const Config &config;
   const WindowSystem &windowSystem;
 
+  bool repositionCursor;
+
   /**
    * The action to perform.
    */

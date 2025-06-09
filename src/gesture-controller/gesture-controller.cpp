@@ -34,29 +34,7 @@
 GestureController::GestureController(const Config &config,
                                      const WindowSystem &windowSystem)
     : config(config), windowSystem(windowSystem),
-    //repositionCursor(std::stoi(config.getGlobalSetting("reposition_cursor"))) {}
-    repositionCursor(static_cast<RepositionCursorOpt>(std::stoi(config.getGlobalSetting("reposition_cursor")))) {}
-//    : config(config), windowSystem(windowSystem) {
-//  // Aggregate bitmask values for repositionCursor.
-//  const RepositionCursorOpt buffer = static_cast<RepositionCursorOpt>(std::stoi(config.getGlobalSetting("reposition_cursor")));
-//  for (auto i = 0; i < 8*sizeof(RepositionCursorOpt); i++) {
-//  //for (RepositionCursorOpt i = static_cast<RepositionCursorOpt>(0); i < 8*sizeof(RepositionCursorOpt); i++) {
-//    //repositionCursor += (buffer & i);
-//    //repositionCursor += static_cast<RepositionCursorOpt>(buffer & i);
-//    //repositionCursor = static_cast<RepositionCursorOpt>(buffer & i) | repositionCursor;
-//    //repositionCursor += reinterpret_cast<RepositionCursorOpt>(buffer & i);
-//    //repositionCursor += (RepositionCursorOpt)(buffer & i);
-//    //repositionCursor += (RepositionCursorOpt)((buffer & i) | RepositionCursorOpt::NEVER);
-//    //repositionCursor += buffer & (1<<i);
-//    //repositionCursor += buffer;
-//    //repositionCursor += static_cast<RepositionCursorOpt>(1);
-//    //repositionCursor |= static_cast<RepositionCursorOpt>(buffer & i);
-//    //repositionCursor |= reinterpret_cast<RepositionCursorOpt>(buffer & i);
-//    //repositionCursor |= (RepositionCursorOpt)(buffer & i);
-//    //repositionCursor <<= (buffer & i);
-//    //repositionCursor <<= (RepositionCursorOpt)((buffer & (RepositionCursorOpt)(i)));
-//  }
-//}
+    repositionCursor(repositionCursorOptFromStr(config.getGlobalSetting("reposition_cursor"))) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   tlg::debug << "Gesture begin detected" << std::endl;

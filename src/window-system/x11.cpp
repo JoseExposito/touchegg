@@ -539,7 +539,7 @@ void X11::positionCursor(double xMm, double yMm) const {
   //targetY = targetY > pointerY ? targetY - pointerY : pointerY - targetY;
   targetX = targetX - pointerX;
   targetY = targetY - pointerY;
-  std::cout << "          Relative distance: " << targetX << ", " << targetY
+  std::cout << "      Relative distance: " << targetX << ", " << targetY
             << std::endl;
   XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
   XFlush(this->display);

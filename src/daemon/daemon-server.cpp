@@ -115,11 +115,15 @@ void DaemonServer::send(const std::string &signalName,
   std::vector<GDBusConnection *> closedConnections{};
 
   // Copy every gesture field into the signal parameters for serialization
-  // if (gesture->endPosition().x > -1 || gesture->endPosition().y > -1) {
+  // if (gesture->cursorPosition().x > -1 || gesture->cursorPosition().y > -1) {
   GVariant *signalParams;
-  if (signalName == DBUS_ON_GESTURE_END) {
-    std::cout << "Emitting signal with endPosition: "
-              << gesture->endPosition().x << ", " << gesture->endPosition().y
+  //if (signalName == DBUS_ON_GESTURE_END) {
+  if (
+    signalName == DBUS_ON_GESTURE_END
+    || signalName == DBUS_ON_GESTURE_UPDATE
+  ) {
+    std::cout << "Emitting signal with cursorPosition: "
+              << gesture->cursorPosition().x << ", " << gesture->cursorPosition().y
               << std::endl;
     signalParams = {
         // g_variant_new("(uudiutuu)", // NOLINT
@@ -135,13 +139,13 @@ void DaemonServer::send(const std::string &signalName,
             gesture->fingers(),                                  // i
             static_cast<int>(gesture->performedOnDeviceType()),  // u
             gesture->elapsedTime(),                              // t
-                                     // gesture->endPosition())}; // dd
-                                     // gesture->endPosition())}; // m@(dd)
+                                     // gesture->cursorPosition())}; // dd
+                                     // gesture->cursorPosition())}; // m@(dd)
                                      // // Currently always send. Make optional.
                                      // TRUE, // m	// Currently always
                                      // send. Make optional.
-            gesture->endPosition().x,    // d
-            gesture->endPosition().y)};  // d
+            gesture->cursorPosition().x,    // d
+            gesture->cursorPosition().y)};  // d
   } else {
     signalParams = {g_variant_new(
         "(uudiut)",  // NOLINT

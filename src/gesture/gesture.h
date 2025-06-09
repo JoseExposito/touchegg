@@ -24,10 +24,6 @@
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
-// struct XYPosition {
-//   int x;
-//   int y;
-// };
 struct XYPosition {
   double x;
   double y;
@@ -97,7 +93,7 @@ class Gesture {
    * Position to set cursor when gesture ends..
    * @returns A struct containing X and Y position integers.
    */
-  XYPosition endPosition() const { return this->gestureEndPosition; }
+  XYPosition cursorPosition() const { return this->gestureEndPosition; }
 
   /**
    * Set the gesture direction.

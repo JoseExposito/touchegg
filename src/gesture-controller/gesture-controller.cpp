@@ -33,7 +33,30 @@
 
 GestureController::GestureController(const Config &config,
                                      const WindowSystem &windowSystem)
-    : config(config), windowSystem(windowSystem), repositionCursor(config.getGlobalSetting("reposition_cursor") == "true") {}
+    : config(config), windowSystem(windowSystem),
+    //repositionCursor(std::stoi(config.getGlobalSetting("reposition_cursor"))) {}
+    repositionCursor(static_cast<RepositionCursorOpt>(std::stoi(config.getGlobalSetting("reposition_cursor")))) {}
+//    : config(config), windowSystem(windowSystem) {
+//  // Aggregate bitmask values for repositionCursor.
+//  const RepositionCursorOpt buffer = static_cast<RepositionCursorOpt>(std::stoi(config.getGlobalSetting("reposition_cursor")));
+//  for (auto i = 0; i < 8*sizeof(RepositionCursorOpt); i++) {
+//  //for (RepositionCursorOpt i = static_cast<RepositionCursorOpt>(0); i < 8*sizeof(RepositionCursorOpt); i++) {
+//    //repositionCursor += (buffer & i);
+//    //repositionCursor += static_cast<RepositionCursorOpt>(buffer & i);
+//    //repositionCursor = static_cast<RepositionCursorOpt>(buffer & i) | repositionCursor;
+//    //repositionCursor += reinterpret_cast<RepositionCursorOpt>(buffer & i);
+//    //repositionCursor += (RepositionCursorOpt)(buffer & i);
+//    //repositionCursor += (RepositionCursorOpt)((buffer & i) | RepositionCursorOpt::NEVER);
+//    //repositionCursor += buffer & (1<<i);
+//    //repositionCursor += buffer;
+//    //repositionCursor += static_cast<RepositionCursorOpt>(1);
+//    //repositionCursor |= static_cast<RepositionCursorOpt>(buffer & i);
+//    //repositionCursor |= reinterpret_cast<RepositionCursorOpt>(buffer & i);
+//    //repositionCursor |= (RepositionCursorOpt)(buffer & i);
+//    //repositionCursor <<= (buffer & i);
+//    //repositionCursor <<= (RepositionCursorOpt)((buffer & (RepositionCursorOpt)(i)));
+//  }
+//}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   tlg::debug << "Gesture begin detected" << std::endl;
@@ -76,6 +99,18 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
+  // Move cursor to gesture update position, if setting is enabled.
+  XYPosition curPos = gesture->cursorPosition();
+  if (
+    (repositionCursor & RepositionCursorOpt::GESTURE_UPDATE)
+    && (curPos.x >= 0 && curPos.y >= 0)
+  ) {
+    tlg::debug << "cursorPosition (GestureUpdate): {"
+               << curPos.x << ", " << curPos.y
+               << "}" << std::endl;
+    this->windowSystem.positionCursor(curPos.x, curPos.y);
+  }
+
   if (this->executeAction) {
     tlg::debug << "Gesture update detected (" << gesture->percentage() << "%)"
                << std::endl;
@@ -85,14 +120,15 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
-  XYPosition curPos = gesture->endPosition();
-  std::cout << "cursorEndPosition: {" << curPos.x << ", " << curPos.y << "}"
-            << std::endl;
+  // Move cursor to position where gesture ended, if setting is enabled.
+  XYPosition curPos = gesture->cursorPosition();
   if (
-    repositionCursor &&
-    curPos.x >= 0 && curPos.y >= 0
+    (repositionCursor & RepositionCursorOpt::GESTURE_END)
+    && (curPos.x >= 0 && curPos.y >= 0)
   ) {
-    // Move cursor to position where gesture ended.
+    tlg::debug << "cursorPosition (GestureEnd): {"
+               << curPos.x << ", " << curPos.y
+               << "}" << std::endl;
     this->windowSystem.positionCursor(curPos.x, curPos.y);
   }
 
@@ -105,24 +141,6 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
   this->action.reset();
   this->rotatedDirection = GestureDirection::UNKNOWN;
 }
-// void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture, int
-// cur_x, int cur_y) {
-//   if (this->executeAction) {
-//     tlg::debug << "Gesture end detected" << std::endl;
-//     gesture->setDirection(this->rotatedDirection);
-//     this->action->onGestureEnd(*gesture);
-//   }
-//
-//   this->action.reset();
-//   this->rotatedDirection = GestureDirection::UNKNOWN;
-//
-//   switch (gesture->type()) {
-//     case GestureType::SWIPE :
-//     case GestureType::TAP :
-//       this->windowSystem.positionCursor(cur_x, cur_y);
-//       break;
-//   }
-// }
 
 std::unique_ptr<Action> GestureController::getActionForGesture(
     const Gesture &gesture, const WindowT &window) const {
@@ -156,13 +174,6 @@ std::unique_ptr<Action> GestureController::getActionForGesture(
                                             direction);
   ActionType actionType = pair.first;
   std::unordered_map<std::string, std::string> actionSettings = pair.second;
-
-  // switch (gesture.type()) {
-  //   case GestureType::SWIPE :
-  //   case GestureType::TAP :
-  //     this.windowSystem.positionCursor();
-  //     break;
-  // }
 
   return ActionFactory::buildAction(actionType, std::move(actionSettings),
                                     this->windowSystem, *this->window,

@@ -73,7 +73,7 @@ Config::getGestureConfig(const std::string &application,
 void Config::loadDefaultGlobalSettings() {
   this->globalSettings["animation_delay"] = "150";
   this->globalSettings["action_execute_threshold"] = "20";
-  this->globalSettings["reposition_cursor"] = "false";
+  this->globalSettings["reposition_cursor"] = "0";	// Never (none).
 }
 
 std::string Config::getConfigKey(const std::string &application,

@@ -481,7 +481,6 @@ void X11::positionCursor(double xMm, double yMm) const {
   int screen = DefaultScreen(this->display);
 
   // Note: These values are subject to system configuration (e.g. D.P.I.).
-  // https://bbs.archlinux.org/viewtopic.php?id=227324
   double dwMM = DisplayWidthMM(this->display, screen);
   double dhMM = DisplayHeightMM(this->display, screen);
   double dwPixels = DisplayWidth(this->display, screen);
@@ -493,17 +492,6 @@ void X11::positionCursor(double xMm, double yMm) const {
             << " Display width (pixels): " << dwPixels << '\n'
             << "Display height (pixels): " << dhPixels << '\n'
             << std::endl;
-  //
-  // These need the screen structure, not I.D. integer.
-  // if (dwMM != WidthMMOfScreen(screen)) std::cout << "Width (mm) of screen and
-  // display do not match. Screen claims: " << WidthMMOfScreen(screen) <<
-  // std::endl; if (dhMM != HeightMMOfScreen(screen)) std::cout << "Height (mm)
-  // of screen and display do not match. Screen claims: " <<
-  // HeightMMOfScreen(screen) << std::endl; if (dwMM != WidthOfScreen(screen))
-  // std::cout << "Width (pixels) of screen and display do not match. Screen
-  // claims: " << WidthOfScreen(screen) << std::endl; if (dhMM !=
-  // HeightOfScreen(screen)) std::cout << "Height (pixels) of screen and display
-  // do not match. Screen claims: " << HeightOfScreen(screen) << std::endl;
 
   int targetX = (xMm / dwMM) * dwPixels;
   int targetY = (yMm / dhMM) * dhPixels;
@@ -529,14 +517,6 @@ void X11::positionCursor(double xMm, double yMm) const {
   std::cout << "Current cursor position: " << pointerX << ", " << pointerY
             << std::endl;
 
-  // Not sure if useful.
-  // Move cursor to origin (0, 0). This is necessary because we are warping with
-  // relative positioning, irrespective of windows.
-  // XWarpPointer(this->display, None, None, 0, 0, 0, 0, -pointerX, -pointerY);
-  // XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
-
-  //targetX = targetX > pointerX ? targetX - pointerX : pointerX - targetX;
-  //targetY = targetY > pointerY ? targetY - pointerY : pointerY - targetY;
   targetX = targetX - pointerX;
   targetY = targetY - pointerY;
   std::cout << "      Relative distance: " << targetX << ", " << targetY

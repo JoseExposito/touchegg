@@ -75,7 +75,8 @@ class LibinputGestureGatherer : public GestureGatherer {
    */
   struct libinput_interface libinputInterface{
       LibinputGestureGatherer::openRestricted,
-      LibinputGestureGatherer::closeRestricted};
+      LibinputGestureGatherer::closeRestricted
+  };
   static int openRestricted(const char *path, int flags, void *userData);
   static void closeRestricted(int fd, void *userData);
 };

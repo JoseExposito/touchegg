@@ -46,7 +46,6 @@ class GestureController : public GestureControllerDelegate {
   const WindowSystem &windowSystem;
 
   // Setting values cached for efficient access:
-  //RepositionCursorOpt repositionCursor;
   RepositionCursorOpt repositionCursor;	// Bitmask.
 
   /**

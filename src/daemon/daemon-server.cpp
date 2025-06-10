@@ -115,52 +115,33 @@ void DaemonServer::send(const std::string &signalName,
   std::vector<GDBusConnection *> closedConnections{};
 
   // Copy every gesture field into the signal parameters for serialization
-  // if (gesture->cursorPosition().x > -1 || gesture->cursorPosition().y > -1) {
   GVariant *signalParams;
-  //if (signalName == DBUS_ON_GESTURE_END) {
   if (
-    signalName == DBUS_ON_GESTURE_END
-    || signalName == DBUS_ON_GESTURE_UPDATE
+    signalName == DBUS_ON_GESTURE_UPDATE
+    || signalName == DBUS_ON_GESTURE_END
   ) {
     std::cout << "Emitting signal with cursorPosition: "
               << gesture->cursorPosition().x << ", " << gesture->cursorPosition().y
               << std::endl;
     signalParams = {
-        // g_variant_new("(uudiutuu)", // NOLINT
-        // g_variant_new("(uudiutx)", // NOLINT
-        g_variant_new(
-            "(uudiutdd)",  // NOLINT
-                            // g_variant_new("(uuudiut(dd))", // NOLINT
-                            // g_variant_new("(uuudiutm@(dd))", // NOLINT
-                            // g_variant_new("(uuudiutm(dd))", // NOLINT
+      g_variant_new(
+            "(uudiut(dd))",  // NOLINT
             static_cast<int>(gesture->type()),                   // u
             static_cast<int>(gesture->direction()),              // u
             gesture->percentage(),                               // d
             gesture->fingers(),                                  // i
             static_cast<int>(gesture->performedOnDeviceType()),  // u
             gesture->elapsedTime(),                              // t
-                                     // gesture->cursorPosition())}; // dd
-                                     // gesture->cursorPosition())}; // m@(dd)
-                                     // // Currently always send. Make optional.
-                                     // TRUE, // m	// Currently always
-                                     // send. Make optional.
-            gesture->cursorPosition().x,    // d
-            gesture->cursorPosition().y)};  // d
+	    gesture->cursorPosition())};                         // dd
   } else {
     signalParams = {g_variant_new(
         "(uudiut)",  // NOLINT
-                      // g_variant_new("(uuudiutm@(dd))", // NOLINT
-                      // g_variant_new("(uuudiutm(dd))", // NOLINT
         static_cast<int>(gesture->type()),                   // u
         static_cast<int>(gesture->direction()),              // u
         gesture->percentage(),                               // d
         gesture->fingers(),                                  // i
         static_cast<int>(gesture->performedOnDeviceType()),  // u
         gesture->elapsedTime())};                            // t
-    // gesture->elapsedTime(),                             // t
-    // NULL)};                                             // m@(dd)
-    // FALSE, NULL, NULL)};                                // m(dd)
-    // FALSE, -1, -1)};                                // m(dd)
   }
   g_variant_ref_sink(signalParams);
 

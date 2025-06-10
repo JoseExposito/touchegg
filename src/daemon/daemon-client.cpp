@@ -127,85 +127,17 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t elapsedTime = -1;
   XYPosition cursorPosition = {-1, -1};
-  double cursorPositionX = -2, cursorPositionY = -2;
 
   if (g_variant_check_format_string(signalParameters, "(uudiut)", false)) {
     g_variant_get(signalParameters,  // NOLINT
                   "(uudiut)", &type, &direction, &percentage, &fingers,
                   &deviceType, &elapsedTime);
   } else {
-    // GVariant *maybeEndPosition;
-    gboolean maybeEndPosition;
     g_variant_get(
         signalParameters,  // NOLINT
-                           //"(uudiutuu)", &type, &direction,
-                           //&percentage, &fingers,
-                           //"(uudiutx)", &type, &direction,
-                           //&percentage, &fingers,
-        "(uudiutdd)", &type, &direction, &percentage, &fingers,
-        //"(uudiut(dd))", &type, &direction, &percentage, &fingers,
-        //&deviceType, &elapsedTime, &cursorPosition);
-        //&deviceType, &elapsedTime, &(cursorPosition.x), &(cursorPosition.y));
-        &deviceType, &elapsedTime, &cursorPositionX, &cursorPositionY);
-    //"(uudiutm*)", &type, &direction, &percentage, &fingers,
-    //&deviceType, &elapsedTime, &maybeEndPosition);
-    //"(uudiutm(dd))", &type, &direction, &percentage, &fingers
-    //&deviceType, &elapsedTime, &maybeEndPosition, &cursorPositionX,
-    //&cursorPositionY);
-    // if (maybeEndPosition != NULL) {
-    //   g_variant_get(maybeEndPosition, "(dd)", &cursorPositionX, &cursorPositionY);
-    //   cursorPosition.x = cursorPositionX;
-    //   cursorPosition.y = cursorPositionY;
-    //   g_variant_unref(maybeEndPosition);
-    // }
-    // if (maybeEndPosition) {
-    cursorPosition.x = cursorPositionX;
-    cursorPosition.y = cursorPositionY;
-    //}
-    std::cout << "Got cursorPosition (from signal): " << cursorPosition.x << ", "
-              << cursorPosition.y << std::endl;
+        "(uudiut(dd))", &type, &direction, &percentage, &fingers,
+        &deviceType, &elapsedTime, &(cursorPosition.x), &(cursorPosition.y));
   }
-  // if (g_variant_check_format_string(signalParameters, "(uudiutdd)", false))
-  // {
-  ////if (!g_variant_check_format_string(signalParameters, "(uudiutdd)",
-  /// false)) {
-  //  //GVariant *maybeEndPosition;
-  //  gboolean maybeEndPosition;
-  //  g_variant_get(signalParameters,  // NOLINT
-  //		//"(uudiutuu)", &type, &direction, &percentage,
-  //&fingers,
-  //		//"(uudiutx)", &type, &direction, &percentage, &fingers,
-  //		"(uudiutdd)", &type, &direction, &percentage, &fingers,
-  //		//"(uudiut(dd))", &type, &direction, &percentage,
-  //&fingers,
-  //		//&deviceType, &elapsedTime, &cursorPosition);
-  //		//&deviceType, &elapsedTime, &(cursorPosition.x),
-  //&(cursorPosition.y)); 		&deviceType, &elapsedTime, &cursorPositionX,
-  //&cursorPositionY);
-  //		//"(uudiutm*)", &type, &direction, &percentage,
-  //&fingers,
-  //		//&deviceType, &elapsedTime, &maybeEndPosition);
-  //		//"(uudiutm(dd))", &type, &direction, &percentage,
-  //&fingers,
-  //		//&deviceType, &elapsedTime, &maybeEndPosition, &cursorPositionX,
-  //&cursorPositionY);
-  //  //if (maybeEndPosition != NULL) {
-  //  //  g_variant_get(maybeEndPosition, "(dd)", &cursorPositionX, &cursorPositionY);
-  //  //  cursorPosition.x = cursorPositionX;
-  //  //  cursorPosition.y = cursorPositionY;
-  //  //  g_variant_unref(maybeEndPosition);
-  //  //}
-  //  //if (maybeEndPosition) {
-  //    cursorPosition.x = cursorPositionX;
-  //    cursorPosition.y = cursorPositionY;
-  //  //}
-  //  std::cout << "Got cursorPosition (from signal): " << cursorPosition.x << ", " <<
-  //  cursorPosition.y << std::endl;
-  //} else {
-  //  g_variant_get(signalParameters,  // NOLINT
-  //		"(uudiut)", &type, &direction, &percentage, &fingers,
-  //		&deviceType, &elapsedTime);
-  //}
 
   return std::make_unique<Gesture>(type, direction, percentage, fingers,
                                    deviceType, elapsedTime, cursorPosition);

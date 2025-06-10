@@ -24,11 +24,14 @@
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
+/**
+ * Intended to store absolute position on display in millimeters.
+ * Useful to export position from Libinput, which seems unaware of pixels.
+ */
 struct XYPosition {
   double x;
   double y;
 };
-// #include "utils/rectangle.h"
 
 /**
  * Gestures implementations change depending on the driver/backend. This is the
@@ -111,7 +114,6 @@ class Gesture {
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;
   XYPosition gestureEndPosition{-1, -1};
-  // Rectangle cursorPosition {0, 0, 0, 0};
 };
 
 #endif  // GESTURE_GESTURE_H_

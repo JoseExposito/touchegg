@@ -132,7 +132,7 @@ void DaemonServer::send(const std::string &signalName,
             gesture->fingers(),                                  // i
             static_cast<int>(gesture->performedOnDeviceType()),  // u
             gesture->elapsedTime(),                              // t
-	    gesture->cursorPosition())};                         // dd
+            gesture->cursorPosition())};                         // dd
   } else {
     signalParams = {g_variant_new(
         "(uudiut)",  // NOLINT

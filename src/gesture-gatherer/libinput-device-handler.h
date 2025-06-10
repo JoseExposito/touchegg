@@ -23,7 +23,6 @@
 #include "gesture-controller/gesture-controller-delegate.h"
 #include "gesture-gatherer/libinput-handler.h"
 #include "gesture/gesture-direction.h"
-#include "utils/pixel-conversions.h"
 
 /**
  * Class to handle libinput devices:
@@ -57,7 +56,7 @@ class LininputDeviceHandler : public LininputHandler {
    */
   static void calculateTouchpadThreshold(double widthMm, double heightMm,
                                          LibinputDeviceInfo *outInfo);
-  // static double mmToDpi(double mm);
+  static double mmToDpi(double mm);
 
   /**
    * Calculates LibinputDeviceInfo on touchscreens.

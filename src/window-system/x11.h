@@ -28,7 +28,6 @@
 #include <utility>
 #include <vector>
 
-#include "utils/pixel-conversions.h"
 #include "window-system/window-system.h"
 
 /**

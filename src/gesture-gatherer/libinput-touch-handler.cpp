@@ -20,7 +20,6 @@
 #include <libinput.h>
 
 #include <algorithm>
-#include <iostream>  // Debugging.
 #include <memory>
 #include <utility>
 #include <vector>
@@ -91,8 +90,6 @@ void LibinputTouchHandler::handleTouchUp(struct libinput_event *event) {
             : LininputHandler::calculatePinchAnimationPercentage(
                   this->state.direction, this->getPinchDelta());
 
-    std::cout << "Assigning current XY values: " << this->state.currentX[slot]
-              << ", " << this->state.currentY[slot] << std::endl;
     auto gesture = std::make_unique<Gesture>(
         this->state.type, this->state.direction, percentage,
         this->state.startFingers, DeviceType::TOUCHSCREEN, elapsedTime,

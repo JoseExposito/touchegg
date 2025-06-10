@@ -120,9 +120,6 @@ void DaemonServer::send(const std::string &signalName,
     signalName == DBUS_ON_GESTURE_UPDATE
     || signalName == DBUS_ON_GESTURE_END
   ) {
-    std::cout << "Emitting signal with cursorPosition: "
-              << gesture->cursorPosition().x << ", " << gesture->cursorPosition().y
-              << std::endl;
     signalParams = {
       g_variant_new(
             "(uudiut(dd))",  // NOLINT

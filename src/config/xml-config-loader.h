@@ -64,13 +64,13 @@ class XmlConfigLoader {
   /**
    * Parse the XML configuration file placed in path.
    */
-  void parseConfig();
+  void parseConfig(bool isReload = false);
 
   /**
    * Parse the global settings.
    * @param rootNode XML root node, usually named "touchégg".
    */
-  void parseGlobalSettings(const pugi::xml_node &rootNode);
+  void parseGlobalSettings(const pugi::xml_node &rootNode, bool isReload);
 
   /**
    * Parse the "application" nodes in the XML.

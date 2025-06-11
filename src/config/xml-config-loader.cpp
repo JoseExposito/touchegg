@@ -101,6 +101,7 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
       const std::string gestureType = gestureNode.attribute("type").value();
       const std::string fingers = gestureNode.attribute("fingers").value();
       const std::string direction = gestureNode.attribute("direction").value();
+      const std::string axis = gestureNode.attribute("axis").value();
 
       pugi::xml_node actionNode = gestureNode.child("action");
       const std::string actionType = actionNode.attribute("type").value();
@@ -116,8 +117,8 @@ void XmlConfigLoader::parseApplicationXmlNodes(const pugi::xml_node &rootNode) {
       for (const std::string &application : applications) {
         this->config->saveGestureConfig(
             trim(application), gestureTypeFromStr(gestureType), fingers,
-            gestureDirectionFromStr(direction), actionTypeFromStr(actionType),
-            actionSettings);
+            gestureDirectionFromStr(direction), gestureAxisFromStr(axis),
+            actionTypeFromStr(actionType), actionSettings);
       }
     }
   }

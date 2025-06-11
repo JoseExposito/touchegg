@@ -155,7 +155,7 @@ class WindowSystem {
    * Only one movement event should be triggered.
    * No button click events should be sent.
    */
-  virtual void positionCursor(double x, double y) const = 0;
+  virtual void positionCursor(double x, double y, bool verboseDebug = false) const = 0;
 
   /**
    * @returns The size of the desktop workarea, ie, the area of the desktop not

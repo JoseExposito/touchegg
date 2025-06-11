@@ -68,7 +68,7 @@ class X11 : public WindowSystem {
                 bool isPress) const override;
   void sendMouseDown(int button) const override;
   void sendMouseUp(int button) const override;
-  void positionCursor(double x, double y) const override;
+  void positionCursor(double xMm, double yMm, bool verboseDebug = false) const override;
 
   Rectangle getDesktopWorkarea() const override;
   void changeDesktop(ActionDirection direction, bool cyclic) const override;

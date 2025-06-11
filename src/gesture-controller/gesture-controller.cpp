@@ -107,7 +107,9 @@ void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
     tlg::debug << "cursorPosition (GestureEnd): {"
                << curPos.x << ", " << curPos.y
                << "}" << std::endl;
-    this->windowSystem.positionCursor(curPos.x, curPos.y);
+    this->windowSystem.positionCursor(curPos.x, curPos.y,
+      // Extra verbose debugging if set to *only* GESTURE_END.
+      (repositionCursor == RepositionCursorOpt::GESTURE_END));
   }
 
   if (this->executeAction) {

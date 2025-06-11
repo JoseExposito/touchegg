@@ -477,7 +477,7 @@ void X11::sendMouseUp(int button) const {
   XFlush(this->display);
 }
 
-void X11::positionCursor(double xMm, double yMm) const {
+void X11::positionCursor(double xMm, double yMm, bool verboseDebug) const {
   int screen = DefaultScreen(this->display);
 
   // Note: These values are subject to system configuration (e.g. D.P.I.).
@@ -485,18 +485,9 @@ void X11::positionCursor(double xMm, double yMm) const {
   double dhMM = DisplayHeightMM(this->display, screen);
   double dwPixels = DisplayWidth(this->display, screen);
   double dhPixels = DisplayHeight(this->display, screen);
-  tlg::debug << "  Gesture offset X (mm): " << xMm << '\n'
-             << "  Gesture offset Y (mm): " << yMm << '\n'
-             << "     Display width (mm): " << dwMM << '\n'
-             << "    Display height (mm): " << dhMM << '\n'
-             << " Display width (pixels): " << dwPixels << '\n'
-             << "Display height (pixels): " << dhPixels << '\n'
-             << std::endl;
 
   int targetX = (xMm / dwMM) * dwPixels;
   int targetY = (yMm / dhMM) * dhPixels;
-  tlg::debug << "          Cursor target: " << targetX << ", " << targetY
-            << std::endl;
 
   // Get current cursor position.
   Window rootWindow = None;
@@ -514,13 +505,21 @@ void X11::positionCursor(double xMm, double yMm) const {
               << std::endl;
     return;
   }
-  tlg::debug << "Current cursor position: " << pointerX << ", " << pointerY
-            << std::endl;
 
   targetX = targetX - pointerX;
   targetY = targetY - pointerY;
-  tlg::debug << "      Relative distance: " << targetX << ", " << targetY
-            << std::endl;
+
+  if (verboseDebug) tlg::debug
+	  << "  Gesture offset X (mm): " << xMm << '\n'
+          << "  Gesture offset Y (mm): " << yMm << '\n'
+          << "     Display width (mm): " << dwMM << '\n'
+          << "    Display height (mm): " << dhMM << '\n'
+          << " Display width (pixels): " << dwPixels << '\n'
+          << "Display height (pixels): " << dhPixels << '\n'
+          << "          Cursor target: " << targetX << ", " << targetY
+          << "Current cursor position: " << pointerX << ", " << pointerY
+          << "      Relative distance: " << targetX << ", " << targetY
+          << std::endl;
   XWarpPointer(this->display, None, None, 0, 0, 0, 0, targetX, targetY);
   XFlush(this->display);
 }

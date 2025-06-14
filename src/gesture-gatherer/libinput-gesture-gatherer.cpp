@@ -44,7 +44,9 @@ LibinputGestureGatherer::LibinputGestureGatherer(
       deviceHandler(gestureController, startThreshold, finishThreshold),
       swipeHandler(gestureController),
       pinchHandler(gestureController),
-      touchHandler(gestureController) {
+      touchHandler(gestureController),
+      libinputInterface({LibinputGestureGatherer::openRestricted,
+                         LibinputGestureGatherer::closeRestricted}) {
   this->udevContext = udev_new();
   if (this->udevContext == nullptr) {
     throw std::runtime_error{"Error initialising Touchégg: udev"};

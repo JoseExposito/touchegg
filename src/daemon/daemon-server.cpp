@@ -115,14 +115,31 @@ void DaemonServer::send(const std::string &signalName,
   std::vector<GDBusConnection *> closedConnections{};
 
   // Copy every gesture field into the signal parameters for serialization
-  GVariant *signalParams =
-      g_variant_new("(uudiut)",                              // NOLINT
-                    static_cast<int>(gesture->type()),       // u
-                    static_cast<int>(gesture->direction()),  // u
-                    gesture->percentage(),                   // d
-                    gesture->fingers(),                      // i
-                    static_cast<int>(gesture->performedOnDeviceType()),  // u
-                    gesture->elapsedTime());                             // t
+  GVariant *signalParams;
+  if (
+    signalName == DBUS_ON_GESTURE_UPDATE
+    || signalName == DBUS_ON_GESTURE_END
+  ) {
+    signalParams = {
+      g_variant_new(
+            "(uudiut(dd))",  // NOLINT
+            static_cast<int>(gesture->type()),                   // u
+            static_cast<int>(gesture->direction()),              // u
+            gesture->percentage(),                               // d
+            gesture->fingers(),                                  // i
+            static_cast<int>(gesture->performedOnDeviceType()),  // u
+            gesture->elapsedTime(),                              // t
+            gesture->cursorPosition())};                         // dd
+  } else {
+    signalParams = {g_variant_new(
+        "(uudiut)",  // NOLINT
+        static_cast<int>(gesture->type()),                   // u
+        static_cast<int>(gesture->direction()),              // u
+        gesture->percentage(),                               // d
+        gesture->fingers(),                                  // i
+        static_cast<int>(gesture->performedOnDeviceType()),  // u
+        gesture->elapsedTime())};                            // t
+  }
   g_variant_ref_sink(signalParams);
 
   // Send the message to every client

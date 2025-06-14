@@ -33,7 +33,8 @@
 
 GestureController::GestureController(const Config &config,
                                      const WindowSystem &windowSystem)
-    : config(config), windowSystem(windowSystem) {}
+    : config(config), windowSystem(windowSystem),
+    repositionCursor(repositionCursorOptFromStr(config.getGlobalSetting("reposition_cursor"))) {}
 
 void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
   tlg::debug << "Gesture begin detected" << std::endl;
@@ -76,6 +77,18 @@ void GestureController::onGestureBegin(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
+  // Move cursor to gesture update position, if setting is enabled.
+  XYPosition curPos = gesture->cursorPosition();
+  if (
+    (repositionCursor & RepositionCursorOpt::GESTURE_UPDATE)
+    && gestureTypeSupportsCursorReposition(gesture->type())
+  ) {
+    tlg::debug << "cursorPosition (GestureUpdate): {"
+               << curPos.x << ", " << curPos.y
+               << "}" << std::endl;
+    this->windowSystem.positionCursor(curPos.x, curPos.y);
+  }
+
   if (this->executeAction) {
     tlg::debug << "Gesture update detected (" << gesture->percentage() << "%)"
                << std::endl;
@@ -85,6 +98,20 @@ void GestureController::onGestureUpdate(std::unique_ptr<Gesture> gesture) {
 }
 
 void GestureController::onGestureEnd(std::unique_ptr<Gesture> gesture) {
+  // Move cursor to position where gesture ended, if setting is enabled.
+  XYPosition curPos = gesture->cursorPosition();
+  if (
+    (repositionCursor & RepositionCursorOpt::GESTURE_END)
+    && gestureTypeSupportsCursorReposition(gesture->type())
+  ) {
+    tlg::debug << "cursorPosition (GestureEnd): {"
+               << curPos.x << ", " << curPos.y
+               << "}" << std::endl;
+    this->windowSystem.positionCursor(curPos.x, curPos.y,
+      // Extra verbose debugging if set to *only* GESTURE_END.
+      (repositionCursor == RepositionCursorOpt::GESTURE_END));
+  }
+
   if (this->executeAction) {
     tlg::debug << "Gesture end detected" << std::endl;
     gesture->setDirection(this->rotatedDirection);

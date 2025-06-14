@@ -59,35 +59,39 @@ std::filesystem::path XmlConfigLoader::getConfigFilePath() {
 
   if (!std::filesystem::exists(usrConfigFile)) {
     throw std::runtime_error{
-        "File /usr/share/touchegg/touchegg.conf not found.\n"
-        "Reinstall Touchégg to solve this issue"};
+        "File \"/usr/share/touchegg/touchegg.conf\" not found.\n"
+        "\tReinstall Touchégg to solve this issue."};
   }
 
   return std::filesystem::exists(homeConfigFile) ? homeConfigFile
                                                  : usrConfigFile;
 }
 
-void XmlConfigLoader::parseConfig() {
+void XmlConfigLoader::parseConfig(bool isReload) {
   std::filesystem::path configPath = XmlConfigLoader::getConfigFilePath();
-  tlg::info << "Using configuration file " << configPath << std::endl;
+  tlg::info << "\tUsing configuration file: " << configPath << std::endl;
 
   pugi::xml_document doc;
   pugi::xml_parse_result parsedSuccessfully = doc.load_file(configPath.c_str());
 
   if (!parsedSuccessfully) {
-    throw std::runtime_error{"Error parsing configuration file"};
+    throw std::runtime_error{"Error parsing configuration file."};
   }
 
   pugi::xml_node rootNode = doc.document_element();
-  this->parseGlobalSettings(rootNode);
+  this->parseGlobalSettings(rootNode, isReload);
   this->parseApplicationXmlNodes(rootNode);
 }
 
-void XmlConfigLoader::parseGlobalSettings(const pugi::xml_node &rootNode) {
+void XmlConfigLoader::parseGlobalSettings(const pugi::xml_node &rootNode, bool isReload) {
   pugi::xml_node settingsNode = rootNode.child("settings");
   for (pugi::xml_node propertyNode : settingsNode.children("property")) {
     const std::string property = propertyNode.attribute("name").value();
     const std::string value = propertyNode.child_value();
+    if (isReload && property == "reposition_cursor") {
+      tlg::info << "\tNote: Changing \"reposition_cursor\" currently requires"
+                   " restarting the client service.\n" << std::endl;
+    }
     this->config->saveGlobalSetting(property, value);
   }
 }
@@ -168,10 +172,10 @@ void XmlConfigLoader::watchConfig() {
       }
 
       if (reloadSettings) {
-        tlg::info << "Your configuration file changed, reloading your settings"
+        tlg::info << "Your configuration file changed. Reloading your settings..."
                   << std::endl;
         this->config->clear();
-        this->parseConfig();
+        this->parseConfig(true);
       }
     }
   }};

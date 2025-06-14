@@ -22,6 +22,7 @@
 
 #include "actions/action.h"
 #include "gesture-controller/gesture-controller-delegate.h"
+#include "utils/reposition-cursor.h"
 class Config;
 class Gesture;
 class WindowSystem;
@@ -43,6 +44,9 @@ class GestureController : public GestureControllerDelegate {
  private:
   const Config &config;
   const WindowSystem &windowSystem;
+
+  // Setting values cached for efficient access:
+  RepositionCursorOpt repositionCursor;	// Bitmask.
 
   /**
    * The action to perform.

@@ -126,11 +126,19 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
   int fingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t elapsedTime = -1;
+  XYPosition cursorPosition = {-1, -1};
 
-  g_variant_get(signalParameters,  // NOLINT
-                "(uudiut)", &type, &direction, &percentage, &fingers,
-                &deviceType, &elapsedTime);
+  if (g_variant_check_format_string(signalParameters, "(uudiut)", false)) {
+    g_variant_get(signalParameters,  // NOLINT
+                  "(uudiut)", &type, &direction, &percentage, &fingers,
+                  &deviceType, &elapsedTime);
+  } else {
+    g_variant_get(
+        signalParameters,  // NOLINT
+        "(uudiut(dd))", &type, &direction, &percentage, &fingers,
+        &deviceType, &elapsedTime, &(cursorPosition.x), &(cursorPosition.y));
+  }
 
   return std::make_unique<Gesture>(type, direction, percentage, fingers,
-                                   deviceType, elapsedTime);
+                                   deviceType, elapsedTime, cursorPosition);
 }

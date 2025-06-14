@@ -25,6 +25,15 @@
 #include "gesture/gesture-type.h"
 
 /**
+ * Intended to store absolute position on display in millimeters.
+ * Useful to export position from Libinput, which seems unaware of pixels.
+ */
+struct XYPosition {
+  double x;
+  double y;
+};
+
+/**
  * Gestures implementations change depending on the driver/backend. This is the
  * basic interface of a gesture.
  */
@@ -38,6 +47,16 @@ class Gesture {
         gestureFingers(fingers),
         deviceType(performedOnDeviceType),
         gestureElapsedTime(elapsedTime) {}
+  Gesture(GestureType type, GestureDirection direction, double percentage,
+          int fingers, DeviceType performedOnDeviceType, uint64_t elapsedTime,
+          XYPosition cursorEndPosition)
+      : gestureType(type),
+        gestureDirection(direction),
+        gesturePercentage(percentage),
+        gestureFingers(fingers),
+        deviceType(performedOnDeviceType),
+        gestureElapsedTime(elapsedTime),
+        gestureEndPosition(cursorEndPosition) {}
 
   /**
    * @returns The gesture type.
@@ -74,6 +93,12 @@ class Gesture {
   uint64_t elapsedTime() const { return this->gestureElapsedTime; }
 
   /**
+   * Position to set cursor when gesture ends..
+   * @returns A struct containing X and Y position integers.
+   */
+  XYPosition cursorPosition() const { return this->gestureEndPosition; }
+
+  /**
    * Set the gesture direction.
    * @see GestureDirection
    */
@@ -88,6 +113,7 @@ class Gesture {
   int gestureFingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t gestureElapsedTime = -1;
+  XYPosition gestureEndPosition{-1, -1};
 };
 
 #endif  // GESTURE_GESTURE_H_

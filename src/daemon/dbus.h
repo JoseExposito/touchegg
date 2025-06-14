@@ -50,6 +50,7 @@ constexpr auto DBUS_INTROSPECTION_XML =
     "      <arg name='fingers' type='i' />"
     "      <arg name='performed_on_device_type' type='u' />"
     "      <arg name='elapsed_time' type='t' />"
+    "      <arg name='cursor_end_position' type='(dd)' />"
     "    </signal>"
     "    <signal name='OnGestureEnd'>"
     "      <arg name='gesture_type' type='u' />"
@@ -58,6 +59,7 @@ constexpr auto DBUS_INTROSPECTION_XML =
     "      <arg name='fingers' type='i' />"
     "      <arg name='performed_on_device_type' type='u' />"
     "      <arg name='elapsed_time' type='t' />"
+    "      <arg name='cursor_end_position' type='(dd)' />"
     "    </signal>"
     "  </interface>"
     "</node>";

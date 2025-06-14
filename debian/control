@@ -13,7 +13,8 @@ Build-Depends: cmake,
                libx11-dev,
                libxi-dev (>= 2:1.7.0),
                libxrandr-dev (>= 2:1.2.0),
-               libxtst-dev
+               libxtst-dev,
+               systemd-dev
 Standards-Version: 4.5.0
 Homepage: https://github.com/JoseExposito/touchegg
 Vcs-Browser: https://github.com/JoseExposito/touchegg

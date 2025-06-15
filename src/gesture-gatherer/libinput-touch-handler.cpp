@@ -124,10 +124,12 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
       this->state.startFingers = this->state.currentFingers;
       this->state.startTimestamp = LininputHandler::getTimestamp();
       this->state.type = this->getGestureType();
-      this->state.direction =
-          (this->state.type == GestureType::SWIPE)
-              ? LininputHandler::calculateSwipeDirection(deltaX, deltaY)
-              : this->calculatePinchDirection();
+      if (this->state.type == GestureType::SWIPE) {
+          this->state.direction = LininputHandler::calculateSwipeDirection(deltaX, deltaY);
+      } else {
+          this->state.direction = this->calculatePinchDirection();
+	  this->state.axis = this->calculatePinchAxis(deltaX, deltaY);
+      }
 
       // Once the direction is calculated, save the currentX/Y as startX/Y so
       // the startThreshold is not included in the percentage calculations
@@ -136,8 +138,9 @@ void LibinputTouchHandler::handleTouchMotion(struct libinput_event *event) {
       this->state.startY = this->state.currentY;
 
       auto gesture = std::make_unique<Gesture>(
-          this->state.type, this->state.direction, percentage,
-          this->state.startFingers, DeviceType::TOUCHSCREEN, 0);
+          this->state.type, this->state.direction, this->state.axis,
+          percentage, this->state.startFingers, DeviceType::TOUCHSCREEN,
+          0);
       this->gestureController->onGestureBegin(std::move(gesture));
     }
   } else {

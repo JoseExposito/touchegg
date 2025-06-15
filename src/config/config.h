@@ -23,6 +23,7 @@
 #include <utility>
 
 #include "actions/action-type.h"
+#include "gesture/gesture-axis.h"
 #include "gesture/gesture-direction.h"
 #include "gesture/gesture-type.h"
 
@@ -66,22 +67,23 @@ class Config {
   void saveGestureConfig(
       const std::string &application, GestureType gestureType,
       const std::string &numFingers, GestureDirection gestureDirection,
-      ActionType actionType,
+      GestureAxis gestureAxis, ActionType actionType,
       const std::unordered_map<std::string, std::string> &actionSettings);
 
   /**
    * @returns If there is an action configured for the gesture.
    */
   bool hasGestureConfig(const std::string &application, GestureType gestureType,
-                        int numFingers,
-                        GestureDirection gestureDirection) const;
+                        int numFingers, GestureDirection gestureDirection,
+                        GestureAxis gestureAxis) const;
 
   /**
    * @returns The action configured for the gesture.
    */
   std::pair<ActionType, std::unordered_map<std::string, std::string>>
   getGestureConfig(const std::string &application, GestureType gestureType,
-                   int numFingers, GestureDirection gestureDirection) const;
+                   int numFingers, GestureDirection gestureDirection,
+                   GestureAxis gestureAxis) const;
 
  private:
   /**
@@ -113,7 +115,8 @@ class Config {
   static std::string getConfigKey(const std::string &application,
                                   GestureType gestureType,
                                   const std::string &numFingers,
-                                  GestureDirection gestureDirection);
+                                  GestureDirection gestureDirection,
+                                  GestureAxis gestureAxis);
 };
 
 #endif  // CONFIG_CONFIG_H_

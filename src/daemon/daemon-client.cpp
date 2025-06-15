@@ -56,10 +56,12 @@ void DaemonClient::connect() {
       std::this_thread::sleep_for(std::chrono::seconds(5));
     } else {
       tlg::info << "Connection with Touchégg established" << std::endl;
+      auto interfaceVersion = (sizeof(DBUS_INTERFACE_NAMES)/sizeof(DBUS_INTERFACE_NAMES[0])) - 1;
+      auto objectPathVersion = (sizeof(DBUS_OBJECT_PATHS)/sizeof(DBUS_OBJECT_PATHS[0])) - 1;
       g_dbus_connection_signal_subscribe(
-          connection, nullptr, DBUS_INTERFACE_NAME, nullptr, DBUS_OBJECT_PATH,
-          nullptr, G_DBUS_SIGNAL_FLAGS_NONE, DaemonClient::onNewMessage, this,
-          nullptr);
+          connection, nullptr, DBUS_INTERFACE_NAMES[interfaceVersion], nullptr,
+          DBUS_OBJECT_PATHS[objectPathVersion], nullptr, G_DBUS_SIGNAL_FLAGS_NONE,
+          DaemonClient::onNewMessage, this, nullptr);
 
       g_signal_connect(
           connection, "closed",
@@ -122,15 +124,16 @@ std::unique_ptr<Gesture> DaemonClient::makeGestureFromSignalParams(
     GVariant *signalParameters) {
   GestureType type = GestureType::NOT_SUPPORTED;
   GestureDirection direction = GestureDirection::UNKNOWN;
+  GestureAxis axis = GestureAxis::UNKNOWN;
   double percentage = -1;
   int fingers = -1;
   DeviceType deviceType = DeviceType::UNKNOWN;
   uint64_t elapsedTime = -1;
 
   g_variant_get(signalParameters,  // NOLINT
-                "(uudiut)", &type, &direction, &percentage, &fingers,
+                "(uuudiut)", &type, &direction, &axis, &percentage, &fingers,
                 &deviceType, &elapsedTime);
 
-  return std::make_unique<Gesture>(type, direction, percentage, fingers,
+  return std::make_unique<Gesture>(type, direction, axis, percentage, fingers,
                                    deviceType, elapsedTime);
 }

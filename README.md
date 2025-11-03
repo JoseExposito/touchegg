@@ -72,9 +72,9 @@ On Ubuntu, it is recommended to use the
 receive updates:
 
 ```bash
-$ sudo add-apt-repository ppa:touchegg/stable
-$ sudo apt update
-$ sudo apt install touchegg
+sudo add-apt-repository ppa:touchegg/stable
+sudo apt update
+sudo apt install touchegg
 ```
 
 Running `add-apt-repository` may fail because of temporary server issues; try again a few times, it should work.
@@ -87,8 +87,8 @@ If PPAs are not available on your operating system,
 Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
-$ cd ~/Downloads # Or to the path where the deb package is placed at
-$ sudo apt-get install ./touchegg_*.deb # Install the package
+cd ~/Downloads # Or to the path where the deb package is placed at
+sudo apt-get install ./touchegg_*.deb # Install the package
 ```
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
@@ -100,10 +100,10 @@ Included by default on elementary OS 6, Zorin OS 16, Pop!\_OS 21.04+ and Linux M
 On Fedora, Touchegg is available in the [official repository](https://src.fedoraproject.org/rpms/touchegg):
 
 ```bash
-$ dnf install touchegg
+dnf install touchegg
 # You may also need to manually start the service
-$ sudo systemctl start touchegg
-$ sudo systemctl enable touchegg
+sudo systemctl start touchegg
+sudo systemctl enable touchegg
 ```
 
 On CentOS (EPEL) it is recommended to use the
@@ -111,8 +111,8 @@ On CentOS (EPEL) it is recommended to use the
 receive updates.
 
 ```bash
-$ sudo dnf copr enable joseexposito/touchegg
-$ sudo dnf install touchegg
+sudo dnf copr enable joseexposito/touchegg
+sudo dnf install touchegg
 ```
 
 On other RPM based operating systems,
@@ -120,8 +120,8 @@ On other RPM based operating systems,
 Double click on the package may work, otherwise install it from the terminal:
 
 ```bash
-$ cd ~/Downloads # Or to the path where the rpm package is placed at
-$ sudo dnf install touchegg-*.rpm # Install the package
+cd ~/Downloads # Or to the path where the rpm package is placed at
+sudo dnf install touchegg-*.rpm # Install the package
 ```
 
 Run Touchégg manually by running the command `touchegg` or reboot to get started.
@@ -133,8 +133,8 @@ Install the `touchegg` package from [Arch Linux Packages Registry](https://archl
 Notice that on Arch services are not enabled or started by default, so you'll have to do it manually:
 
 ```bash
-$ sudo systemctl enable touchegg.service
-$ sudo systemctl start touchegg
+sudo systemctl enable touchegg.service
+sudo systemctl start touchegg
 ```
 
 Once the service is enabled, run Touchégg manually by running the command `touchegg` or reboot to get started.
@@ -146,9 +146,9 @@ A version for Arch based distributions without systemd support, like Artix, is a
 Touchégg is available in the [official repositories](https://software.opensuse.org/package/touchegg).
 
 ```bash
-$ sudo zypper install touchegg
-$ sudo systemctl enable touchegg.service
-$ sudo systemctl start touchegg
+sudo zypper install touchegg
+sudo systemctl enable touchegg.service
+sudo systemctl start touchegg
 ```
 
 If the version of Touchégg included for your distro is too old (v1.x)
@@ -161,20 +161,20 @@ receive updates.
 Uncomment the url for the testing repository in /etc/apk/repositories, then install:
 
 ```bash
-$ sudo apk update
-$ sudo apk add touchegg
+sudo apk update
+sudo apk add touchegg
 ```
 
 The Touchégg package includes an Openrc init script for starting the Touchégg daemon at boot. To enable:
 
 ```bash
-$ sudo rc-update add touchegg
+sudo rc-update add touchegg
 ```
 The init script can also be used to manually start and stop the Touchégg daemon as required:
 
 ```bash
-$ sudo rc-service touchegg start
-$ sudo rc-service touchegg stop
+sudo rc-service touchegg start
+sudo rc-service touchegg stop
 ```
 
 ## Void Linux
@@ -182,8 +182,8 @@ $ sudo rc-service touchegg stop
 Touchégg is available from the main repository. To use it, you have to enable its service after installing.
 
 ```bash
-$ sudo xbps-install touchegg
-$ sudo ln -s /etc/sv/touchegg /var/service
+sudo xbps-install touchegg
+sudo ln -s /etc/sv/touchegg /var/service
 ```
 
 ## NixOS
@@ -240,7 +240,7 @@ Start by copying the default configuration from `/usr/share/touchegg/touchegg.co
 in your terminal:
 
 ```bash
-$ mkdir -p ~/.config/touchegg && cp -n /usr/share/touchegg/touchegg.conf ~/.config/touchegg/touchegg.conf
+mkdir -p ~/.config/touchegg && cp -n /usr/share/touchegg/touchegg.conf ~/.config/touchegg/touchegg.conf
 ```
 
 Now open `~/.config/touchegg/touchegg.conf` with your favorite text editor.
@@ -252,7 +252,7 @@ It is a XML document with 3 main sections:
 
     The application name can be obtained by running this command and clicking on the target application window:
     ```bash
-    $ xprop | grep WM_CLASS
+    xprop | grep WM_CLASS
     ```
 
 Find more information in the sections below.
@@ -734,7 +734,7 @@ is calculated for you.
 However, if your device size is unknown, you will need to set their values manually:
 
 ```
-$ journalctl -u touchegg -b
+journalctl -u touchegg -b
 [...]
 It wasn't possible to get your device physical size, falling back to default start_threshold and finish_threshold. You can tune this values in your service file:
 https://github.com/JoseExposito/touchegg#daemon-configuration
@@ -755,9 +755,9 @@ ExecStart=/usr/bin/touchegg --daemon 3 15
 Finally, restart the daemon and make sure the right values are printed:
 
 ```bash
-$ sudo systemctl daemon-reload && sudo systemctl restart touchegg
+sudo systemctl daemon-reload && sudo systemctl restart touchegg
 
-$ journalctl -u touchegg -b -f
+journalctl -u touchegg -b -f
 Compatible device detected:
   [...]
   Calculating threshold and animation_finish_threshold. You can tune this values in your service file

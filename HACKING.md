@@ -6,12 +6,14 @@ Before you start coding, you will need to install some dependencies:
 # Ubuntu, Debian and derivatives:
 $ sudo apt-get install git build-essential gdb cmake debhelper \
   libudev-dev libinput-dev libpugixml-dev libcairo2-dev libx11-dev libxtst-dev libxrandr-dev libxi-dev libglib2.0-dev \
+  libwayland-dev wayland-protocols libxkbcommon-dev \
   libgtk-3-dev # GTK is optional, see "Compilation flags"
 
 # Red Hat, Fedora, CentOS and derivatives:
 $ sudo dnf group install "development-tools"
 $ sudo dnf install git gcc gcc-c++ gdb cmake rpm-build \
   libudev-devel libinput-devel pugixml-devel cairo-devel libX11-devel libXtst-devel libXrandr-devel libXi-devel glib2-devel \
+  wayland-devel wayland-protocols-devel libxkbcommon-devel \
   gtk3-devel # GTK is optional, see "Compilation flags"
 ```
 
@@ -81,6 +83,16 @@ Install or not systemd related files.
 By default this flag is set to `ON`, i.e., systemd will be used.
 
 Set it to `OFF` if your distribution doesn't use systemd.
+
+## cmake -DKWIN_WAYLAND=[ON|OFF]
+
+Build the KDE Plasma Wayland backend. It requires the Wayland client library,
+wayland-protocols and xkbcommon.
+
+By default this flag is set to `ON`. The backend is only used when running in a
+KDE Plasma Wayland session, otherwise the X11 backend is used.
+
+Set it to `OFF` to build Touchégg with X11 support only.
 
 # Code Style
 

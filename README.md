@@ -770,7 +770,34 @@ Compatible device detected:
 
 #### Does Touchégg work on Wayland?
 
-No, Touchégg only works on X11.
+On KDE Plasma 6 (Wayland session), yes. Touchégg detects the session and uses
+KDE specific APIs instead of X11:
+
+ - KWin's scripting API (over D-Bus) to find the window under the cursor and
+   to minimize, maximize, close, tile, etc.
+ - The `org_kde_kwin_fake_input` Wayland protocol to emulate keyboard
+   shortcuts and mouse clicks. KWin only allows programs listed in a `.desktop`
+   file with `X-KDE-Wayland-Interfaces=org_kde_kwin_fake_input` to use it.
+   Touchégg installs `/usr/share/applications/touchegg-kwin-wayland.desktop`
+   for this purpose. If you install Touchégg in a different location, make
+   sure the `Exec` path in that file matches the `touchegg` executable.
+ - The `wlr_layer_shell` protocol to draw animations.
+
+Application names in your configuration are matched against the Wayland
+`app_id` (or `WM_CLASS` for X11 apps running in Xwayland). You can find them
+running `qdbus6 org.kde.KWin /KWin queryWindowInfo` and clicking on a window
+(`resourceClass` field).
+
+Please note that KWin handles touchpad gestures with 3 or more fingers itself
+(switch virtual desktop, Overview, Grid) and they can not be disabled from the
+settings. If you configure the same gestures in Touchégg, both actions will be
+executed.
+
+The backend can be forced setting the `TOUCHEGG_WINDOW_SYSTEM` environment
+variable to `x11` or `kwin-wayland`. Build Touchégg with `-DKWIN_WAYLAND=OFF`
+to disable it.
+
+On other Wayland desktops Touchégg only works with X11 apps (Xwayland).
 
 #### What hardware is supported?
 

@@ -15,7 +15,10 @@
  * You should have received a copy of the  GNU General Public License along with
  * Touchégg. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cstdlib>
 #include <iostream>
+#include <memory>
+#include <stdexcept>
 #include <string>
 
 #include "config/config.h"
@@ -29,6 +32,35 @@
 #include "utils/logger.h"
 #include "window-system/window-system.h"
 #include "window-system/x11.h"
+
+#ifdef KWIN_WAYLAND
+#include "window-system/kwin-wayland.h"
+#endif
+
+/**
+ * Pick the window system backend. It can be forced with the
+ * TOUCHEGG_WINDOW_SYSTEM environment variable ("x11" or "kwin-wayland").
+ */
+static std::unique_ptr<WindowSystem> createWindowSystem() {
+  const char* forcedEnv = std::getenv("TOUCHEGG_WINDOW_SYSTEM");
+  std::string forced = (forcedEnv != nullptr) ? forcedEnv : "";
+
+#ifdef KWIN_WAYLAND
+  if (forced == "kwin-wayland" ||
+      (forced.empty() && KWinWayland::isAvailable())) {
+    tlg::info << "Using the KDE Plasma (KWin) Wayland backend" << std::endl;
+    return std::make_unique<KWinWayland>();
+  }
+#else
+  if (forced == "kwin-wayland") {
+    throw std::runtime_error(
+        "Touchégg was built without KDE Plasma Wayland support");
+  }
+#endif
+
+  tlg::info << "Using the X11 backend" << std::endl;
+  return std::make_unique<X11>();
+}
 
 int main(int argc, char** argv) {
   // Parse the command line arguments
@@ -66,8 +98,14 @@ int main(int argc, char** argv) {
                                             args.finishThreshold);
     gestureGatherer.run();
   } else {  // clientMode
-    // Use X11 as window system
-    X11 windowSystem;
+    std::unique_ptr<WindowSystem> windowSystemPtr;
+    try {
+      windowSystemPtr = createWindowSystem();
+    } catch (const std::runtime_error& error) {
+      tlg::error << error.what() << std::endl;
+      return -1;
+    }
+    const WindowSystem& windowSystem = *windowSystemPtr;
 
     try {
       // Avoid running multiple client instances in parallel

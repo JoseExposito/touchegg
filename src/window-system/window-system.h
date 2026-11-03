@@ -41,10 +41,8 @@ class WindowT {
 
 /**
  * High level abstract interface to the underlying window system.
- * For the moment, and most likely forever, only X11 is supported.
- * However, if in the future it is possible to implement this methods in another
- * window system, like for example Wayland, all the platform specified logic is
- * encapsulated here.
+ * X11 and KDE Plasma Wayland (KWin) are supported. All the platform specific
+ * logic is encapsulated here.
  */
 class WindowSystem {
  public:

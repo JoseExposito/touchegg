@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Touchégg (KDE Plasma Wayland permissions)
+Comment=Allows Touchégg to emulate keyboard shortcuts and mouse clicks on KDE Plasma Wayland
+Exec=@CMAKE_INSTALL_FULL_BINDIR@/touchegg --client
+Terminal=false
+NoDisplay=true
+X-KDE-Wayland-Interfaces=org_kde_kwin_fake_input

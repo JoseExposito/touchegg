@@ -10,11 +10,14 @@ Build-Depends: cmake,
                libinput-dev (>= 0.21.0),
                libpugixml-dev (>= 1.4),
                libudev-dev (>= 183),
+               libwayland-dev,
                libx11-dev,
                libxi-dev (>= 2:1.7.0),
+               libxkbcommon-dev,
                libxrandr-dev (>= 2:1.2.0),
                libxtst-dev,
-               systemd-dev
+               systemd-dev,
+               wayland-protocols
 Standards-Version: 4.5.0
 Homepage: https://github.com/JoseExposito/touchegg
 Vcs-Browser: https://github.com/JoseExposito/touchegg

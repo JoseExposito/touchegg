@@ -12,6 +12,7 @@ BuildRequires: git gcc gcc-c++ cmake rpm-build
 BuildRequires: libudev-devel libinput-devel pugixml-devel cairo-devel
 BuildRequires: libX11-devel libXtst-devel libXrandr-devel libXi-devel
 BuildRequires: glib2-devel gtk3-devel
+BuildRequires: wayland-devel wayland-protocols-devel libxkbcommon-devel
 
 Autoreq:        1
 Prefix:         %{_prefix}
@@ -81,6 +82,7 @@ fi
 %{_unitdir}/touchegg.service
 
 %config %{_sysconfdir}/xdg/autostart/touchegg.desktop
+%{_datadir}/applications/touchegg-kwin-wayland.desktop
 
 
 %changelog

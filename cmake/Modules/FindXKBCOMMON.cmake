@@ -1,0 +1,5 @@
+find_package(PkgConfig)
+pkg_check_modules(XKBCOMMON REQUIRED xkbcommon)
+
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(XKBCOMMON DEFAULT_MSG XKBCOMMON_FOUND)

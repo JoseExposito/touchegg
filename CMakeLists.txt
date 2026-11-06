@@ -37,6 +37,39 @@ endif()
 include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${PROJECT_SOURCE_DIR} src/*.h src/*.cpp)
 
+# KDE Plasma Wayland backend
+set(KWIN_WAYLAND_SOURCES_REGEX "src/window-system/(kwin-|wayland-)")
+if(NOT DEFINED KWIN_WAYLAND OR KWIN_WAYLAND)
+  set(KWIN_WAYLAND ON)
+  find_package(WAYLAND_CLIENT REQUIRED)
+  find_package(XKBCOMMON REQUIRED)
+
+  set(PROTOCOLS_DIR "${PROJECT_BINARY_DIR}/protocols")
+  file(MAKE_DIRECTORY ${PROTOCOLS_DIR})
+  set(PROTOCOL_SOURCES "")
+  set(PROTOCOL_XMLS
+    "${PROJECT_SOURCE_DIR}/protocols/fake-input.xml"
+    "${PROJECT_SOURCE_DIR}/protocols/wlr-layer-shell-unstable-v1.xml"
+    "${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell/xdg-shell.xml"
+  )
+  foreach(PROTOCOL_XML ${PROTOCOL_XMLS})
+    get_filename_component(PROTOCOL ${PROTOCOL_XML} NAME_WE)
+    add_custom_command(
+      OUTPUT "${PROTOCOLS_DIR}/${PROTOCOL}-client-protocol.h" "${PROTOCOLS_DIR}/${PROTOCOL}-protocol.c"
+      COMMAND ${WAYLAND_SCANNER_BIN} client-header "${PROTOCOL_XML}" "${PROTOCOLS_DIR}/${PROTOCOL}-client-protocol.h"
+      COMMAND ${WAYLAND_SCANNER_BIN} private-code "${PROTOCOL_XML}" "${PROTOCOLS_DIR}/${PROTOCOL}-protocol.c"
+      DEPENDS "${PROTOCOL_XML}"
+      VERBATIM
+    )
+    list(APPEND PROTOCOL_SOURCES "${PROTOCOLS_DIR}/${PROTOCOL}-client-protocol.h" "${PROTOCOLS_DIR}/${PROTOCOL}-protocol.c")
+  endforeach()
+  list(APPEND SOURCE_FILES ${PROTOCOL_SOURCES})
+  add_definitions(-DKWIN_WAYLAND=ON)
+else()
+  list(FILTER SOURCE_FILES EXCLUDE REGEX ${KWIN_WAYLAND_SOURCES_REGEX})
+  message(WARNING "KWIN_WAYLAND OFF: KDE Plasma Wayland support will NOT be available")
+endif()
+
 add_executable(touchegg ${SOURCE_FILES})
 target_include_directories(touchegg PUBLIC
   ${LIBUDEV_INCLUDE_DIRS}
@@ -50,6 +83,10 @@ target_include_directories(touchegg PUBLIC
   ${GLIB_INCLUDE_DIRS}
   ${GIO_INCLUDE_DIRS}
 )
+if(KWIN_WAYLAND)
+  target_include_directories(touchegg PUBLIC ${PROJECT_BINARY_DIR} ${WAYLAND_CLIENT_INCLUDE_DIRS} ${XKBCOMMON_INCLUDE_DIRS})
+  target_link_libraries(touchegg ${WAYLAND_CLIENT_LIBRARIES} ${XKBCOMMON_LIBRARIES})
+endif()
 target_link_libraries(touchegg
   stdc++fs # std::filesystem
   Threads::Threads # std::thread
@@ -89,6 +126,14 @@ target_compile_definitions(touchegg PUBLIC SYSTEM_CONFIG_FILE_PATH=\"${SYSTEM_CO
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.conf DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/touchegg) # /usr/share/touchegg/touchegg.conf
 install(FILES ${PROJECT_SOURCE_DIR}/installation/touchegg.desktop DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/xdg/autostart)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/touchegg DESTINATION ${CMAKE_INSTALL_BINDIR}) # /usr/bin/touchegg
+
+if(KWIN_WAYLAND)
+  # KWin only exposes the org_kde_kwin_fake_input protocol (used to emulate
+  # keyboard shortcuts and mouse clicks) to executables listed in a .desktop
+  # file with "X-KDE-Wayland-Interfaces"
+  configure_file(${PROJECT_SOURCE_DIR}/installation/touchegg-kwin-wayland.desktop.in ${PROJECT_BINARY_DIR}/touchegg-kwin-wayland.desktop @ONLY)
+  install(FILES ${PROJECT_BINARY_DIR}/touchegg-kwin-wayland.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications) # /usr/share/applications/touchegg-kwin-wayland.desktop
+endif()
 
 if(NOT DEFINED USE_SYSTEMD OR USE_SYSTEMD)
   # configure systemd service unit to use the right path, e.g. @CMAKE_INSTALL_BINDIR@/touchegg
